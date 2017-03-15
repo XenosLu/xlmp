@@ -18,13 +18,13 @@ def get_size(file):
 	if size<0:
 		return 'Out of Range'
 	if size<1024:
-		return str(size)+'B'
+		return '%dB'%size
 	else:
-		unit=['B','KB','MB','GB','TB']
-		l=math.floor(math.log(size,1024))
-		if(l>4):
-			l=4
-		return str(round(size/1024**l,1))+unit[l]
+		unit=['B','KB','MB','GB','TB','PB','EB','ZB','YB','BB']
+		l=int(math.floor(math.log(size,1024)))
+		if(l>9):
+			l=9
+		return '%.1f%s'%(size/1024.0**l,unit[l])
 
 def InitDB():#initialize database by create history table
 	conn = db()
@@ -70,7 +70,7 @@ def list_history_from_db():
 	conn = db()
 	cursor=conn.execute("select * from history order by LATEST_DATE desc")
 	html=''
-	for s in cursor:#将来考虑加入排除已不存在的文件
+	for s in cursor:
 		html+="<tr><td><i onclick=\"ajax('/%s')\"class='icono-video'></i></td><td class='filelist'><a href='?src=%s'>%s</a><br><small>%s | %s/%s</small></td><td><i class='icono-trash' onclick=\"ajax('?action=del&src=%s')\"></i></td></tr>"%(os.path.dirname(s[0]),s[0],s[0],s[3],time_format(s[1]),time_format(s[2]),s[0])
 	conn.close()
 	if html:
@@ -78,7 +78,7 @@ def list_history_from_db():
 	else:
 		return '<tr><td>Empty...</td></tr>'
 
-@route('/player.php')#主页
+@route('/player.php')#index
 def videoplayer():
 	action = request.query.action
 	src = request.query.src
@@ -101,7 +101,7 @@ def videoplayer():
 		if not os.path.exists(dir_old):
 			os.mkdir(dir_old)
 		try:
-			shutil.move(file,dir_old)#文件占用中的移动处理
+			shutil.move(file,dir_old)#gonna do something when file is occupied
 		except Exception as e:
 			abort(404,str(e))
 		return folder(os.path.dirname(src))
