@@ -6,7 +6,7 @@ You can play mp4 video from other device through any html5 web browser in your L
 install steps:
 1. install Python3.4(suggested)
 2. run 'python player.py' as a debug demo server
-3. use adapter.wsgi as a standard wsgi programme
+3. use adapter.wsgi as a standard wsgi program
 
 filelist:
 LICENSE 	
