@@ -1,11 +1,12 @@
 ﻿#!/usr/bin/python3
 # -*- conding:utf-8 -*-
-from bottle import *#pip install bottle
 import os
 import shutil
 import sqlite3
 import sys
 import math
+
+from bottle import *#pip install bottle
 
 db = lambda: sqlite3.connect('player.db')#define DB connection
 def time_format(time):#turn seconds into hh:mm:ss time format
@@ -14,17 +15,17 @@ def time_format(time):#turn seconds into hh:mm:ss time format
 	return "%02d:%02d:%02d" % (h, m, s)
 
 def get_size(file):
-	size = os.path.getsize('./static/mp4/'+file)
-	if size<0:
+	size = os.path.getsize('./static/mp4/%s' % file)
+	if size < 0:
 		return 'Out of Range'
-	if size<1024:
-		return '%dB'%size
+	if size < 1024:
+		return '%dB' % size
 	else:
-		unit=['B','KB','MB','GB','TB','PB','EB','ZB','YB','BB']
-		l=int(math.floor(math.log(size,1024)))
-		if(l>9):
+		unit = ['B','KB','MB','GB','TB','PB','EB','ZB','YB','BB']
+		l = int(math.floor(math.log(size,1024)))
+		if l > 9:
 			l=9
-		return '%.1f%s'%(size/1024.0**l,unit[l])
+		return '%.1f%s' % (size/1024.0**l,unit[l])
 
 def InitDB():#initialize database by create history table
 	conn = db()
@@ -38,16 +39,18 @@ def InitDB():#initialize database by create history table
 
 def update_history_from_db(filename, time, duration):
 	conn = db()
-	conn.execute("replace into history (FILENAME, TIME, DURATION, LATEST_DATE) VALUES(? , ?, ?, DateTime('now'));",(filename, time, duration))
+	conn.execute('''replace into history 
+		(FILENAME, TIME, DURATION, LATEST_DATE)
+		VALUES(? , ?, ?, DateTime('now'));''',(filename, time, duration))
 	conn.commit()
 	conn.close()
 	return
 
-def load_history_from_db(filename):
-	if not filename:
+def load_history_from_db(name):
+	if not name:
 		return
 	conn = db()
-	cursor=conn.execute("select TIME from history where FILENAME=?",(filename,))
+	cursor=conn.execute("select TIME from history where FILENAME=?",(name,))
 	try:
 		time = cursor.fetchone()[0]
 	except Exception as e:
@@ -56,25 +59,39 @@ def load_history_from_db(filename):
 	conn.close()
 	return time
 
-def remove_history_from_db(filename=''):
+def remove_history_from_db(name=None):
 	conn = db()
-	if filename=='':
-		conn.execute("delete from history")#clearall
+	if name:
+		conn.execute("delete from history where FILENAME=?",(name,))
 	else:
-		conn.execute("delete from history where FILENAME=?",(filename,))
+		conn.execute("delete from history")#clearall
 	conn.commit()
 	conn.close()
 	return
 
 def list_history_from_db():
 	conn = db()
-	cursor=conn.execute("select * from history order by LATEST_DATE desc")
-	html=''
-	for s in cursor:
-		html+="<tr><td><i onclick=\"ajax('/%s')\"class='icono-video'></i></td><td class='filelist'><a href='?src=%s'>%s</a><br><small>%s | %s/%s</small></td><td><i class='icono-trash' onclick=\"ajax('?action=del&src=%s')\"></i></td></tr>"%(os.path.dirname(s[0]),s[0],s[0],s[3],time_format(s[1]),time_format(s[2]),s[0])
+	historys=conn.execute('''
+		select * from history order by LATEST_DATE desc''').fetchall()
 	conn.close()
+	html=['''
+		<tr>
+		  <td><i onclick="ajax('/%s')"class='icono-video'></i></td>
+		  <td class='filelist'><a href='?src=%s'>%s</a>
+		  <br><small>%s | %s/%s</small></td>
+		  <td><i class='icono-trash del'>%s</i></td>
+		</tr>''' % (#<td><i class='icono-trash' onclick="ajax('?action=del&src=%s')"></i></td>
+		os.path.dirname(s[0]),s[0],s[0],s[3],time_format(s[1]),time_format(s[2]),s[0])
+		for s in historys]
+	
 	if html:
-		return html+"<tr><td colspan=3><button style='font-size: 1.2em;' onClick=\"if(confirm('Are you sure you want to clear all history?'))ajax('?action=clear')\">Clear History</button></td></tr>"
+		return '''%s
+		<tr>
+		  <td colspan=3>
+			<button id='clear' style='font-size: 1.2em;'>Clear History</button>
+		  </td>
+		</tr>''' % ''.join(html)
+		#</tr>''' % html
 	else:
 		return '<tr><td>Empty...</td></tr>'
 
@@ -96,8 +113,8 @@ def videoplayer():
 	elif action == 'list':
 		return list_history_from_db()
 	elif action == 'move':
-		file='./static/mp4/'+src
-		dir_old='./static/mp4/'+os.path.dirname(src)+'/old'
+		file='./static/mp4/%s' % src
+		dir_old='./static/mp4/%s/old' % os.path.dirname(src)
 		if not os.path.exists(dir_old):
 			os.mkdir(dir_old)
 		try:
@@ -105,27 +122,27 @@ def videoplayer():
 		except Exception as e:
 			abort(404,str(e))
 		return folder(os.path.dirname(src))
-	elif not os.path.exists('./static/mp4/'+src):
+	elif not os.path.exists('./static/mp4/%s' % src):
 		#remove_history_from_db(src)
 		redirect('/player.php')
 	if src:
 		title=os.path.basename(src)
 	else:
 		title='Light mp4 Player'
-	return template('player',src=src, progress=load_history_from_db(src), title=title)
+	return template('player', src=src, progress=load_history_from_db(src), title=title)
 
 @route('/suspend.php')
 def suspend():
 	if sys.platform == 'win32':
 		import ctypes
 		dll = ctypes.WinDLL('powrprof.dll')
-		#os.system("psshutdown.exe /accepteula -d -t 0")
+		# os.system("psshutdown.exe /accepteula -d -t 0")
 		if dll.SetSuspendState(0,1,0):
 			return 'Suspending...'
 		else:
 			return 'Suspend Failure!'
 	else:
-		#os.system("sudo /sbin/shutdown -h now")
+		# os.system("sudo /sbin/shutdown -h now")
 		return 'OS not supported!'
 
 @route('/<file:re:.*\.((?i)mp)4$>')#mp4 static files access. to support larger files(>2GB), you should use apache "AliasMatch"
@@ -137,16 +154,41 @@ def folder(dir):
 	try:
 		html_dir,html_mp4,html_files='','',''
 		if dir!='':
-			dir=dir.strip('/')+'/'
-			html_dir+='<tr><td><i class="icono-folder"></i></td><td colspan=2 onclick="ajax(\'/%s..\')">..</td></tr>'%dir
-		for file in os.listdir('./static/mp4/'+dir):
-			if os.path.isdir('./static/mp4/'+dir+file):
-				html_dir+='<tr><td><i class="icono-folder"></i></td><td class="filelist" onclick="ajax(\'/%s\')">%s</td><td><i class="icono-trash" onclick="if(confirm(\'Would you want to move %s to old?\'))ajax(\'?action=move&src=%s\');"></i></td></tr>'%(dir+file,file,file,dir+file)
+			dir='%s/' % dir.strip('/')
+			html_dir+='''
+			<tr>
+			  <td><i class="icono-folder"></i></td>
+			  <td colspan=2 onclick="ajax('/%s..')">..</td>
+			</tr>''' % dir
+		for file in os.listdir('./static/mp4/%s' % dir):
+			if os.path.isdir('./static/mp4/%s%s' % (dir,file)):
+				html_dir+='''
+				<tr>
+				  <td><i class="icono-folder"></i></td>
+				  <td class="filelist" title="/%s%s">%s</td>
+				  <td><i class="icono-trash move">%s%s</i></td>
+				</tr>''' % (dir,file,file,dir,file)
 			elif re.match('.*\.((?i)mp)4$',file):
-				html_mp4+='<tr><td><i class="icono-video"></i></td><td><a href="/player.php?src=%s">%s</a><br><small>%s</small></td><td><i class="icono-trash" onclick="if(confirm(\'Would you want to move %s to old?\'))ajax(\'?action=move&src=%s\');"></i></td></tr>'%(dir+file,file,get_size(dir+file),file,dir+file)
+				html_mp4+='''
+				<tr>
+				  <td><i class="icono-video"></i></td>
+				  <td>
+					<a href="/player.php?src=%s%s">%s</a>
+					<br><small>%s</small>
+				  </td>
+				  <td><i class="icono-trash move">%s%s</i></td>
+				</tr>''' % (dir,file,file,get_size(dir+file),dir,file)
 			else:
-				html_files+='<tr><td></td><td><span style="color:grey">%s</span><br><small>%s</small></td><td><i class="icono-trash" onclick="if(confirm(\'Would you want to move %s to old?\'))ajax(\'?action=move&src=%s\');"></i></td></tr>'%(file,get_size(dir+file),file,dir+file)
-		return html_dir+html_mp4+html_files
+				html_files+='''
+				<tr>
+				  <td></td>
+				  <td>
+					<span style="color:grey">%s</span>
+					<br><small>%s</small>
+				  </td>
+				  <td><i class="icono-trash move">%s%s</i></td>
+				</tr>''' % (file,get_size(dir+file),dir,file)
+		return "".join([html_dir,html_mp4,html_files])
 	except Exception as e:
 		abort(404,str(e))
 
@@ -154,5 +196,5 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))#set file path as current pa
 InitDB()
 
 if __name__=="__main__":
-	os.system('start http://127.0.0.1:8081/player.php')#open the player page automatic
-	run(host='0.0.0.0', port=8081, debug=True)#
+	os.system('start http://127.0.0.1:8081/player.php')#open the page automatic
+	run(host='0.0.0.0', port=8081, debug=True)#you can change port here

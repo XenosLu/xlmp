@@ -267,22 +267,77 @@ button:hover {
 	width:100%;
 }
 </style>
+</head>
+<body>
+%if src:
+  <article>
+    <video id="player" src="{{src}}" onprogress="showBuff()" onerror="out('error')" onseeking="showProgress()" ontimeupdate="saveprogress()" onloadeddata="loadprogress()" poster controls preload="meta">No video support!</video>
+  </article>
+%end
+<div id="sidebar" class="outside">
+  <span id="auto" onClick="adapt()">auto</span>
+  <span id="orign" onClick="orign()">orign</span>
+  <hr/>
+  <span id="playrate" onClick="playrate()">1.8X</span> 
+  <hr/>
+  <span onClick="ajax('?action=list');document.getElementById('dialog').style.display = '';">history</span>
+</div>
+<div id="dialog" style="display:none">
+  <div style="font-size:1.4em">
+	<span id="tab_his" class="highlight" style="padding:0 0.75em;float:left" onclick="ajax('?action=list')">History</span>
+	<span id="tab_dir" style="padding:0 0.75em;float:left" onclick="ajax('/')">Home dir</span>
+	<button onClick="document.getElementById('dialog').style.display='none';" style="float:right">&#10060;</button>
+  </div>
+  <div id="mainframe">
+    <table>
+      <tbody id="list">
+	  </tbody>
+    </table>
+  </div>
+  <div>
+    <span class="icono-power" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"></span>
+  </div>
+</div>
+</body>
 <script language="javascript">
 window.addEventListener('load', onload, false);
 window.addEventListener('resize', adapt, false);
 window.addEventListener('mousemove', showsidebar, false);
-var range = 14; //minimum move range in pxs
+var range = 12; //minimum move range in pxs
 var video = document.getElementsByTagName("video");
 var text="";
 var lastsavetime = 0;//in seconds
 var lastplaytime = 0;//in seconds
+
+//document.getElementById("test").onclick=function(){alert('test');}
+
+document.getElementById("mainframe").onclick = function (event)
+{
+	event = event || window.event;
+	var target = event.target || event.srcElement;
+
+	if (target.className == "filelist")
+		ajax(target.title);
+	else if (target.className == "icono-trash del")
+		ajax('?action=del&src=' + target.innerHTML);
+	else if (target.className == "icono-trash move")
+	{
+		if (confirm('Would you want to move ' + target.innerHTML + ' to old?'))
+			ajax('?action=move&src=' + target.innerHTML);
+	}
+	else if (target.id == "clear")
+	{
+		if (confirm('Are you sure you want to clear all history?'))
+			ajax('?action=clear');
+	}
+}
+
 function onload() {
 %if src=='':
 	ajax('?action=list');
 	document.getElementById('dialog').style.display = '';
 %end
 	adapt();
-	
 	document.addEventListener('touchstart', touch, false);
 	document.addEventListener('touchend', touch, false);
 }
@@ -299,9 +354,9 @@ function touch(event) {
 
 		if (Math.abs(y / x) < 0.25) {
 			if (x > range)
-				playward(Math.floor(x / 10));
+				playward(Math.floor(x / 11));
 			else if (x < -range)
-				playward(Math.floor(x / 10));
+				playward(Math.floor(x / 11));
 		} else
 			showsidebar();
 		break;
@@ -324,7 +379,9 @@ function showsidebar() {
 	sidebar.addEventListener('animationend', resetsidebar);
 	sidebar.addEventListener('webkitAnimationEnd', resetsidebar);
 }
-function resetsidebar() {document.getElementById('sidebar').className = "outside";}
+function resetsidebar() {
+	document.getElementById('sidebar').className = "outside";
+}
 function playrate() {
 	var rate = document.getElementById('playrate');
 	if (video[0].playbackRate != 1.0) {
@@ -335,7 +392,9 @@ function playrate() {
 		rate.innerHTML = "1.0X";
 	}
 }
-function format_time(time) {return Math.floor(time / 60) + ":" + (time % 60 / 100).toFixed(2).slice(-2);}
+function format_time(time) {
+	return Math.floor(time / 60) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
+}
 function playward(time) {
 	if (isNaN(video[0].duration))return;
 	if (time > 60)time = 60;
@@ -388,7 +447,7 @@ function orign() {
 		video[0].style.height = video[0].videoHeight + "px";
 	}
 }
-function showBuff() {//get buffering
+function showBuff() {
 	var str="";
 	for(i=0;i<video[0].buffered.length;i++)
 	{
@@ -446,36 +505,4 @@ function ajax(url)
 	}
 }
 </script>
-</head>
-<body>
-%if src:
-  <article>
-    <video id="player" src="{{src}}" onprogress="showBuff()" onerror="out('error')" onseeking="showProgress()" ontimeupdate="saveprogress()" onloadeddata="loadprogress()" poster controls preload="meta">No video support!</video>
-  </article>
-%end
-<div id="sidebar" class="outside">
-  <span id="auto" onClick="adapt()">auto</span>
-  <span id="orign" onClick="orign()">orign</span>
-  <hr/>
-  <span id="playrate" onClick="playrate()">1.8X</span> 
-  <hr/>
-  <span onClick="ajax('?action=list');document.getElementById('dialog').style.display = '';">history</span> 
-</div>
-<div id="dialog" style="display:none">
-  <div style="font-size:1.4em">
-	<span id="tab_his" class="highlight" style="padding:0 0.75em;float:left" onclick="ajax('?action=list')">History</span>
-	<span id="tab_dir" style="padding:0 0.75em;float:left" onclick="ajax('/')">Home dir</span>
-	<button onClick="document.getElementById('dialog').style.display='none';" style="float:right">&#10060;</button>
-  </div>
-  <div id="mainframe">
-    <table>
-      <tbody id="list">
-	  </tbody>
-    </table>
-  </div>
-  <div>
-    <span class="icono-power" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"></span>
-  </div>
-</div>
-</body>
 </html>
