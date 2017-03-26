@@ -81,7 +81,8 @@ def list_history_from_db():
 		  <br><small>%s | %s/%s</small></td>
 		  <td><i class='icono-trash del'>%s</i></td>
 		</tr>''' % (#<td><i class='icono-trash' onclick="ajax('?action=del&src=%s')"></i></td>
-		os.path.dirname(s[0]),s[0],s[0],s[3],time_format(s[1]),time_format(s[2]),s[0])
+		os.path.dirname(s[0]), s[0], s[0], s[3], time_format(s[1]),\
+		time_format(s[2]),s[0])
 		for s in historys]
 	
 	if html:
@@ -129,7 +130,8 @@ def videoplayer():
 		title=os.path.basename(src)
 	else:
 		title='Light mp4 Player'
-	return template('player', src=src, progress=load_history_from_db(src), title=title)
+	return template(
+	'player', src=src, progress=load_history_from_db(src), title=title)
 
 @route('/suspend.php')
 def suspend():

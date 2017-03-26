@@ -333,7 +333,7 @@ document.getElementById("mainframe").onclick = function (event)
 }
 
 function onload() {
-%if src=='':
+%if not src:
 	ajax('?action=list');
 	document.getElementById('dialog').style.display = '';
 %end
