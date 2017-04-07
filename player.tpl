@@ -106,7 +106,7 @@ td{
 	height: 20px;
 	border-radius: 0 0 3px 3px;
 	border-top: none;
-	margin: 9px 6px 3px
+	margin: 9px 12px 3px
 }
 .icono-trash:before {
 	width: 7px;
