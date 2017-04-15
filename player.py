@@ -160,14 +160,14 @@ def folder(dir):
 			html_dir+='''
 			<tr>
 			  <td><i class="icono-folder"></i></td>
-			  <td colspan=2 onclick="ajax('/%s..')">..</td>
+			  <td class="filelist" colspan=2 onclick="ajax('/%s..')">..</td>
 			</tr>''' % dir
 		for file in os.listdir('./static/mp4/%s' % dir):
 			if os.path.isdir('./static/mp4/%s%s' % (dir,file)):
 				html_dir+='''
 				<tr>
 				  <td><i class="icono-folder"></i></td>
-				  <td class="filelist" title="/%s%s">%s</td>
+				  <td class="filelist folder" title="/%s%s">%s</td>
 				  <td><i class="icono-trash move">%s%s</i></td>
 				</tr>''' % (dir,file,file,dir,file)
 			elif re.match('.*\.((?i)mp)4$',file):

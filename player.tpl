@@ -309,14 +309,11 @@ var text="";
 var lastsavetime = 0;//in seconds
 var lastplaytime = 0;//in seconds
 
-//document.getElementById("test").onclick=function(){alert('test');}
-
 document.getElementById("mainframe").onclick = function (event)
 {
 	event = event || window.event;
 	var target = event.target || event.srcElement;
-
-	if (target.className == "filelist")
+	if (target.className == "filelist folder")
 		ajax(target.title);
 	else if (target.className == "icono-trash del")
 		ajax('?action=del&src=' + target.innerHTML);
