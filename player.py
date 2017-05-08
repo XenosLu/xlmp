@@ -138,7 +138,6 @@ def suspend():
 	if sys.platform == 'win32':
 		import ctypes
 		dll = ctypes.WinDLL('powrprof.dll')
-		# os.system("psshutdown.exe /accepteula -d -t 0")
 		if dll.SetSuspendState(0,1,0):
 			return 'Suspending...'
 		else:
@@ -154,8 +153,12 @@ def shutdown():
 	else:
 		os.system("sudo /sbin/shutdown -h now")
 
-@route('/<file:re:.*\.((?i)mp)4$>')#mp4 static files access. to support larger files(>2GB), you should use apache "AliasMatch"
+@route('/static/<file:re:.*>')#static files
 def static(file):
+    return static_file(file, root='./static')
+
+@route('/<file:re:.*\.((?i)mp)4$>')#mp4 static files access. to support larger files(>2GB), you should use apache "AliasMatch"
+def mp4(file):
 	return static_file(file, root='./static/mp4')
 
 @route('/<dir:re:.*>')#static folder access

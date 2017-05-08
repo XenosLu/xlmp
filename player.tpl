@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=1.0, user-scalable=1">
 <title>{{title}}</title>
+<!-- Bootstrap -->
+<link href="static/css/bootstrap.min.css" rel="stylesheet">
 <style>
 html, body {
 	height: 100%
@@ -299,6 +301,8 @@ button:hover {
   </div>
 </div>
 </body>
+<script src="static/js/jquery-3.2.1.min.js"></script>
+<script src="static/js/bootstrap.min.js"></script>
 <script language="javascript">
 window.addEventListener('load', onload, false);
 window.addEventListener('resize', adapt, false);
