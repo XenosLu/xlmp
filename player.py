@@ -147,6 +147,13 @@ def suspend():
 		# os.system("sudo /sbin/shutdown -h now")
 		return 'OS not supported!'
 
+@route('/shutdown.php')
+def shutdown():
+	if sys.platform == 'win32':
+		os.system("shutdown.exe -f -s -t 0")
+	else:
+		os.system("sudo /sbin/shutdown -h now")
+
 @route('/<file:re:.*\.((?i)mp)4$>')#mp4 static files access. to support larger files(>2GB), you should use apache "AliasMatch"
 def static(file):
 	return static_file(file, root='./static/mp4')
