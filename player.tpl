@@ -501,7 +501,7 @@ function ajax(url)
 			}
 			if(url.indexOf("?action=save") < 0)
 				document.getElementById('list').innerHTML = pajax.responseText;
-			//setTimeout("start()",1000);
+			setTimeout("out('Timeout')",1000);
 		}
 	}
 }
