@@ -76,7 +76,7 @@ def list_history_from_db():
 	conn.close()
 	html=['''
 		<tr>
-		  <td><i onclick="ajax('/%s')"class='icono-video'></i></td>
+		  <td><i onclick="ajax('/%s')" class='glyphicon glyphicon-film'></i></td>
 		  <td class='filelist'><a href='?src=%s'>%s</a>
 		  <br><small>%s | %s/%s</small></td>
 		  <td><i class='icono-trash del'>%s</i></td>
@@ -89,10 +89,10 @@ def list_history_from_db():
 		return '''%s
 		<tr>
 		  <td colspan=3>
-			<button id='clear' style='font-size: 1.2em;'>Clear History</button>
+			<button type="button" class="btn btn-default btn-xs" id='clear' style="background: 0 0;">Clear History</button>
+			<!-- button type="button" class="btn btn-default btn-xs" id='clear' style='font-size: 1.2em;'>Clear History</button-->
 		  </td>
 		</tr>''' % ''.join(html)
-		#</tr>''' % html
 	else:
 		return '<tr><td>Empty...</td></tr>'
 
@@ -153,7 +153,7 @@ def shutdown():
 	else:
 		os.system("sudo /sbin/shutdown -h now")
 
-@route('/static/<file:re:.*>')#static files
+@route('/static/<file:re:.*>')#static files access
 def static(file):
     return static_file(file, root='./static')
 
@@ -169,21 +169,21 @@ def folder(dir):
 			dir='%s/' % dir.strip('/')
 			html_dir+='''
 			<tr>
-			  <td><i class="icono-folder"></i></td>
+			  <td><i class="glyphicon glyphicon-folder-close"></i></td>
 			  <td class="filelist" colspan=2 onclick="ajax('/%s..')">..</td>
 			</tr>''' % dir
 		for file in os.listdir('./static/mp4/%s' % dir):
 			if os.path.isdir('./static/mp4/%s%s' % (dir,file)):
 				html_dir+='''
 				<tr>
-				  <td><i class="icono-folder"></i></td>
+				  <td><i class="glyphicon glyphicon-folder-close"></i></td>
 				  <td class="filelist folder" title="/%s%s">%s</td>
 				  <td><i class="icono-trash move">%s%s</i></td>
 				</tr>''' % (dir,file,file,dir,file)
 			elif re.match('.*\.((?i)mp)4$',file):
 				html_mp4+='''
 				<tr>
-				  <td><i class="icono-video"></i></td>
+				  <td><i class="glyphicon glyphicon-film"></i></td>
 				  <td>
 					<a href="/player.php?src=%s%s">%s</a>
 					<br><small>%s</small>

@@ -7,6 +7,9 @@
 <!-- Bootstrap -->
 <link href="static/css/bootstrap.min.css" rel="stylesheet">
 <style>
+.glyphicon-film,.glyphicon-folder-close,.glyphicon-off,.glyphicon-remove-circle{
+    font-size:2em;
+}
 html, body {
 	height: 100%
 }
@@ -21,12 +24,11 @@ body {
 article{
 	left:0%;
 }
-table{
-	border-collapse: collapse;
-}
+/*
 td{
 	border-bottom: 1px solid #DDD;
 }
+*/
 .filelist{
 	min-width:8em;
 }
@@ -51,57 +53,6 @@ td{
 	-webkit-transform: translateX(-50%);
 	transform: translateX(-50%)
 }
-.icono-video:after {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	-webkit-transform: translate(-50%, -50%);
-	transform: translate(-50%, -50%)
-}
-.icono-power {
-	color: #333333;
-	width: 22px;
-	height: 22px;
-	border-radius: 50%;
-	border-top-color: transparent;
-	margin: 6px
-}
-.icono-power:before {
-	position: absolute;
-	top: -15%;
-	left: 8px;
-	width: 2px;
-	height: 60%;
-	box-shadow: inset 0 0 0 32px
-}
-.icono-folder {
-	color: #B05820;
-	width: 15px;
-	height: 18px;
-	border-left-width: 0;
-	border-radius: 0 3px 3px 0;
-	margin: 8px 2px 4px 14px
-}
-.icono-folder:before {
-	position: absolute;
-	width: 12px;
-	height: 20px;
-	left: -12px;
-	bottom: -2px;
-	border-width: 0 0 2px 2px;
-	border-style: solid;
-	border-radius: 0 0 0 3px
-}
-.icono-folder:after {
-	position: absolute;
-	width: 8px;
-	height: 5px;
-	left: -12px;
-	top: -7px;
-	border-width: 2px 2px 0;
-	border-style: solid;
-	border-radius: 3px 3px 0 0
-}
 .icono-trash {
 	color: red;
 	width: 20px;
@@ -116,20 +67,7 @@ td{
 	top: -6px;
 	box-shadow: inset 0 0 0 32px, -10px 3px 0 0, -6px 3px 0 0, 0 3px 0 0, 6px 3px 0 0, 10px 3px 0 0
 }
-.icono-video {
-	color: blue;
-	width: 24px;
-	height: 22px;
-	margin: 5px
-}
-.icono-video:after {
-	width: 0;
-	height: 0;
-	border-width: 4px 0 4px 6px;
-	border-style: solid;
-	border-top-color: transparent;
-	border-bottom-color: transparent
-}
+
 video {
 	clear: both;
 	display: block;
@@ -148,7 +86,7 @@ a:visited, a:link{
 span {
 	width: auto;
 }
-
+/*
 @keyframes fade {
  0% {opacity: 0.65;}
  9% {opacity: 0.7;}
@@ -161,6 +99,7 @@ span {
  75% {opacity: 0.7;}
  100% {opacity: 0;}
 }
+*/
 @keyframes slide {
  0% {left:-8%}
  9% {left:0%}
@@ -173,13 +112,32 @@ span {
  75% {left:0%}
  100% {left:-9%}
 }
-#output.fading {
-	top: 50%;
+output{
+    top: 50%;
 	font-size: 1.8em;
-	border-radius: 0.2em;
 	pointer-events: none;
-	padding: 0.2em;
-	opacity: 0;
+	border-radius: 0.2em;
+    padding: 0.2em;
+    opacity: 0.4;
+    z-index: 99;
+}
+#output{
+    z-index: 99;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+	transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%, -50%);
+	font-size: 1.8em;
+	pointer-events: none;
+	border-radius: 0.2em;
+    padding: 0.2em;
+    opacity: 0.4;
+	font-weight: 500;
+}
+/*
+output.fading {
+    opacity: 0;
 	-webkit-animation-name: fade;
 	-webkit-animation-duration: 2.5s;
 	-webkit-animation-iteration-count: 1;
@@ -188,8 +146,8 @@ span {
 	animation-duration: 2.5s;
 	animation-iteration-count: 1;
 	animation-delay: 0s;
-	z-index: 99;
 }
+*/
 #sidebar.sliding {
 	top: 35%;
 	left: 0%;
@@ -235,7 +193,7 @@ div, output {
 	float:top;
 	opacity: 0.75;
 	top: 48%;
-	box-shadow: 2px 2px 5px #333333;
+	/* box-shadow: 2px 2px 5px #333333; */
 	max-width:100%
 }
 output, #dialog {
@@ -247,16 +205,18 @@ output, #dialog {
 #dialog div {
 	border: 1px solid #777777;
 }
-button {
+buttonx {
 	background-color: #CCCCCC;
 	color: #1F1F1F;
 	border: 1px solid #777777;
 	box-shadow: 1em 1em 2em #777777 inset;
 	text-shadow: 0.1em 0.1em 0.4em #444;
 }
+/*
 button:hover {
 	background-color: #FFFFFF;
 }
+*/
 .highlight {
 	color: #CCCCCC;
 	background-color: #333333;
@@ -283,21 +243,50 @@ button:hover {
   <span id="playrate" onClick="playrate()">1.8X</span> 
   <hr/>
   <span onClick="ajax('?action=list');document.getElementById('dialog').style.display = '';">history</span>
+  <hr/>
+  <!-- <span onClick="out('test<small>buffering...</small><span style=\'font-size:0.75em;\'>buffering...</span>');">test</span>  -->
+  <span onClick="out('test buffering buffering');">test</span> 
+
+  <!-- <div class="btn-group-vertical"> -->
+  <!-- <button id="auto" onClick="adapt()" type="button" class="btn btn-default">auto</button> -->
+  <!-- <button id="orign" onClick="orign()" type="button" class="btn btn-default">orign</button> -->
+  <!-- <button id="playrate" onClick="playrate()" type="button" class="btn btn-default">1.8X</button> -->
+  <!-- <button onClick="ajax('?action=list');document.getElementById('dialog').style.display = '';" type="button" class="btn btn-default">history</button> -->
+  <!-- </div> -->
 </div>
-<div id="dialog" style="display:none">
-  <div style="font-size:1.4em">
-	<span id="tab_his" class="highlight" style="padding:0 0.75em;float:left" onclick="ajax('?action=list')">History</span>
-	<span id="tab_dir" style="padding:0 0.75em;float:left" onclick="ajax('/')">Home dir</span>
-	<button onClick="document.getElementById('dialog').style.display='none';" style="float:right">&#10060;</button>
+<div id="dialog" class="panel panel-default" style="display:none">
+<!-- <div class="panel-body"> -->
+<div>
+  <div class="panel-heading">
+	<!-- <span id="tab_his" class="highlight" style="padding:0 0.75em;float:left" onclick="ajax('?action=list')">History</span> -->
+	<span id="tab_his" class="highlight" onclick="ajax('?action=list')"><i class="glyphicon glyphicon-list-alt"></i>History</span>
+	<!-- <span id="tab_dir" style="padding:0 0.75em;float:left" onclick="ajax('/')">Home dir</span> -->
+	<span id="tab_dir" onclick="ajax('/')"><i class="glyphicon glyphicon-home"></i>Home dir</span>
+	<!-- <button onClick="document.getElementById('dialog').style.display='none';" style="float:right">&#10060;</button> -->
+    <button onClick="document.getElementById('dialog').style.display='none';" type="button" class="close">×</button>
   </div>
   <div id="mainframe">
-    <table>
+    <table class="table">
       <tbody id="list">
 	  </tbody>
     </table>
   </div>
-  <div>
-    <span class="icono-power" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"></span>
+  <div class="panel-footer">
+    <!-- <span class="icono-power" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"></span> -->
+    <span class="glyphicon glyphicon-off" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"></span>
+
+<!--     <div class="btn-group" style="font-size:2em;">
+      <button type="button" class="btn btn-default btn-xs" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"><i class="glyphicon glyphicon-off"></i></button>
+      <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li><a onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"><i class="glyphicon glyphicon-off"></i>suspend</a></li>
+        <li><a onClick="if(confirm('Are you sure you want to shutdown?'))ajax('/shutdown.php');"><i class="glyphicon glyphicon-off"></i>shutdown</a></li>
+      </ul>
+    </div> -->
+
+  </div>
   </div>
 </div>
 </body>
@@ -307,8 +296,11 @@ button:hover {
 window.addEventListener('load', onload, false);
 window.addEventListener('resize', adapt, false);
 window.addEventListener('mousemove', showsidebar, false);
+//$(document).ready(onload());
+//$(window).load(onload());
+//$(window).resize(adapt());
 var range = 12; //minimum move range in pxs
-var video = document.getElementsByTagName("video");
+var video = document.getElementsByTagName("video");//$("video")
 var text="";
 var lastsavetime = 0;//in seconds
 var lastplaytime = 0;//in seconds
@@ -323,6 +315,7 @@ document.getElementById("mainframe").onclick = function (event)
 		ajax('?action=del&src=' + target.innerHTML);
 	else if (target.className == "icono-trash move")
 	{
+        //alert(target.attr("cmd"));
 		if (confirm('Would you want to move ' + target.innerHTML + ' to old?'))
 			ajax('?action=move&src=' + target.innerHTML);
 	}
@@ -363,7 +356,7 @@ function touch(event) {
 		break;
 	}
 }
-function out(str) {
+function out1(str) {//old one
 	if(str=="")return;
 	var output_del = document.getElementById("output");
 	if (output_del != null)
@@ -373,6 +366,12 @@ function out(str) {
 	output_new.className = "fading";
 	output_new.innerHTML = str;
 	document.body.appendChild(output_new);
+}
+function out(str) {
+    if(str=="")return;
+    $("#output").remove();
+    $(document.body).append("<div id='output'>"+str+"</div>");
+    $("#output").fadeTo(250,0.7).delay(1625).fadeOut(625);
 }
 function showsidebar() {
 	var sidebar = document.getElementById('sidebar');
@@ -406,6 +405,7 @@ function playward(time) {
 }
 function showProgress(){
 	out(text+format_time(video[0].currentTime)+ '/' + format_time(video[0].duration));
+	//out(text+format_time($("video").currentTime)+ '/' + format_time($("video").duration));
 	text="";
 }
 function saveprogress(){
@@ -451,12 +451,14 @@ function orign() {
 function showBuff() {
 	var str="";
 	for(i=0;i<video[0].buffered.length;i++)
+	//for(i=0,t=video[0].buffered.length; i<t; i++)
 	{
 		if (video[0].currentTime>=video[0].buffered.start(i) && video[0].currentTime<=video[0].buffered.end(i))
 			str +=format_time(video[0].buffered.start(i))+"-"+format_time(video[0].buffered.end(i))+"<br>";
 	}
 	if (new Date().getTime()-lastplaytime > 1000)
-		out(str+"<span style='font-size:0.75em;'>buffering...</span>");
+		out(str+"<small>buffering...</small>");
+		//out(str+"<span style='font-size:0.75em;'>buffering...</span>");
 }
 function ajax(url)
 {
