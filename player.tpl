@@ -67,7 +67,6 @@ td{
 	top: -6px;
 	box-shadow: inset 0 0 0 32px, -10px 3px 0 0, -6px 3px 0 0, 0 3px 0 0, 6px 3px 0 0, 10px 3px 0 0
 }
-
 video {
 	clear: both;
 	display: block;
@@ -243,9 +242,8 @@ button:hover {
   <span id="playrate" onClick="playrate()">1.8X</span> 
   <hr/>
   <span onClick="ajax('?action=list');document.getElementById('dialog').style.display = '';">history</span>
-  <hr/>
+  <!-- <hr/> -->
   <!-- <span onClick="out('test<small>buffering...</small><span style=\'font-size:0.75em;\'>buffering...</span>');">test</span>  -->
-  <span onClick="out('test buffering buffering');">test</span> 
 
   <!-- <div class="btn-group-vertical"> -->
   <!-- <button id="auto" onClick="adapt()" type="button" class="btn btn-default">auto</button> -->
