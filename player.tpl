@@ -85,20 +85,6 @@ a:visited, a:link{
 span {
 	width: auto;
 }
-/*
-@keyframes fade {
- 0% {opacity: 0.65;}
- 9% {opacity: 0.7;}
- 75% {opacity: 0.7;}
- 100% {opacity: 0;}
-}
-@-webkit-keyframes fade {
- 0% {opacity: 0.65;}
- 9% {opacity: 0.7;}
- 75% {opacity: 0.7;}
- 100% {opacity: 0;}
-}
-*/
 @keyframes slide {
  0% {left:-8%}
  9% {left:0%}
@@ -110,15 +96,6 @@ span {
  9% {left:0%}
  75% {left:0%}
  100% {left:-9%}
-}
-output{
-    top: 50%;
-	font-size: 1.8em;
-	pointer-events: none;
-	border-radius: 0.2em;
-    padding: 0.2em;
-    opacity: 0.4;
-    z-index: 99;
 }
 #output{
     z-index: 99;
@@ -134,28 +111,18 @@ output{
     opacity: 0.4;
 	font-weight: 500;
 }
-/*
-output.fading {
-    opacity: 0;
-	-webkit-animation-name: fade;
-	-webkit-animation-duration: 2.5s;
-	-webkit-animation-iteration-count: 1;
-	-webkit-animation-delay: 0s;
-	animation-name: fade;
-	animation-duration: 2.5s;
-	animation-iteration-count: 1;
-	animation-delay: 0s;
-}
-*/
+
 #sidebar.sliding {
 	top: 35%;
 	left: 0%;
 	-webkit-transform: translateX(0%);
+	/*
 	border-top-right-radius: 0.6em;
 	border-bottom-right-radius: 0.6em;
-	opacity: 0.66;
-	padding: 0.04em;
 	font-size: 1.5em;
+	padding: 0.04em;
+	*/
+	opacity: 0.66;
 	-webkit-animation-name: slide;
 	-webkit-animation-duration: 5s;
 	-webkit-animation-iteration-count: 1;
@@ -201,21 +168,9 @@ output, #dialog {
 	transform: translate(-50%, -50%);
 	-webkit-transform: translate(-50%, -50%);
 }
-#dialog div {
-	border: 1px solid #777777;
+.btn-default{
+	background: 0 0;
 }
-buttonx {
-	background-color: #CCCCCC;
-	color: #1F1F1F;
-	border: 1px solid #777777;
-	box-shadow: 1em 1em 2em #777777 inset;
-	text-shadow: 0.1em 0.1em 0.4em #444;
-}
-/*
-button:hover {
-	background-color: #FFFFFF;
-}
-*/
 .highlight {
 	color: #CCCCCC;
 	background-color: #333333;
@@ -236,21 +191,20 @@ button:hover {
   </article>
 %end
 <div id="sidebar" class="outside">
-  <span id="auto" onClick="adapt()">auto</span>
+<!--   <span id="auto" onClick="adapt()">auto</span>
   <span id="orign" onClick="orign()">orign</span>
   <hr/>
   <span id="playrate" onClick="playrate()">1.8X</span> 
   <hr/>
-  <span onClick="ajax('?action=list');document.getElementById('dialog').style.display = '';">history</span>
+  <span onClick="ajax('?action=list');document.getElementById('dialog').style.display = '';">history</span> -->
   <!-- <hr/> -->
   <!-- <span onClick="out('test<small>buffering...</small><span style=\'font-size:0.75em;\'>buffering...</span>');">test</span>  -->
 
-  <!-- <div class="btn-group-vertical"> -->
-  <!-- <button id="auto" onClick="adapt()" type="button" class="btn btn-default">auto</button> -->
-  <!-- <button id="orign" onClick="orign()" type="button" class="btn btn-default">orign</button> -->
-  <!-- <button id="playrate" onClick="playrate()" type="button" class="btn btn-default">1.8X</button> -->
-  <!-- <button onClick="ajax('?action=list');document.getElementById('dialog').style.display = '';" type="button" class="btn btn-default">history</button> -->
-  <!-- </div> -->
+  <button id="auto" onClick="adapt()" type="button" class="btn btn-default">auto</button>
+  <button id="orign" onClick="orign()" type="button" class="btn btn-default">orign</button>
+  <button id="playrate" onClick="playrate()" type="button" class="btn btn-default">1.8X</button>
+  <button onClick="ajax('?action=list');document.getElementById('dialog').style.display = '';" type="button" class="btn btn-default">history</button>
+  </div>
 </div>
 <div id="dialog" class="panel panel-default" style="display:none">
 <!-- <div class="panel-body"> -->
@@ -271,7 +225,9 @@ button:hover {
   </div>
   <div class="panel-footer">
     <!-- <span class="icono-power" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"></span> -->
-    <span class="glyphicon glyphicon-off" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"></span>
+    <!-- <span class="glyphicon glyphicon-off" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"></span> -->
+    <!-- <button class="glyphicon glyphicon-off" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"></button> -->
+    <button class="btn btn-default" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"><i class="glyphicon glyphicon-off"></i></button>
 
 <!--     <div class="btn-group" style="font-size:2em;">
       <button type="button" class="btn btn-default btn-xs" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"><i class="glyphicon glyphicon-off"></i></button>
@@ -313,7 +269,6 @@ document.getElementById("mainframe").onclick = function (event)
 		ajax('?action=del&src=' + target.innerHTML);
 	else if (target.className == "icono-trash move")
 	{
-        //alert(target.attr("cmd"));
 		if (confirm('Would you want to move ' + target.innerHTML + ' to old?'))
 			ajax('?action=move&src=' + target.innerHTML);
 	}
@@ -353,17 +308,6 @@ function touch(event) {
 			showsidebar();
 		break;
 	}
-}
-function out1(str) {//old one
-	if(str=="")return;
-	var output_del = document.getElementById("output");
-	if (output_del != null)
-		output_del.parentNode.removeChild(output_del);
-	var output_new = document.createElement("output");
-	output_new.id = "output";
-	output_new.className = "fading";
-	output_new.innerHTML = str;
-	document.body.appendChild(output_new);
 }
 function out(str) {
     if(str=="")return;
@@ -501,7 +445,7 @@ function ajax(url)
 			}
 			if(url.indexOf("?action=save") < 0)
 				document.getElementById('list').innerHTML = pajax.responseText;
-			setTimeout("out('Timeout')",1000);
+			//setTimeout("out('Timeout')",2000);
 		}
 	}
 }
