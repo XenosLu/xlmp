@@ -331,6 +331,13 @@ function playward(time) {
 	if (time > 0)text=time + "S>><br>";
 	else if (time < 0)text="<<" + -time + "S<br>";	
 }
+function loadprogress() {
+	var marktime = {{progress}} - 1;
+	if (marktime > 0) {
+		video[0].currentTime = marktime;
+		text="Back to<br>";
+	}
+}
 function showProgress(){
 	out(text+format_time(video[0].currentTime)+ '/' + format_time(video[0].duration));
 	//out(text+format_time($("video").currentTime)+ '/' + format_time($("video").duration));
@@ -340,18 +347,14 @@ function saveprogress(){
 	lastplaytime = new Date().getTime();
 	if (video[0].readyState == 4 && video[0].currentTime < video[0].duration + 1)
 	{
-		if (Math.abs(video[0].currentTime - lastsavetime) > 3)
+		if (Math.abs(video[0].currentTime - lastsavetime) > 3)//save play progress in every 3 seconds
 		{
 			lastsavetime = video[0].currentTime;
-			ajax("?action=save&src={{src}}&time=" + video[0].currentTime + "&duration=" + video[0].duration);
+			//ajax("?action=save&src={{src}}&time=" + video[0].currentTime + "&duration=" + video[0].duration);
+			//$.get("?action=save&src={{src}}&time=" + video[0].currentTime + "&duration=" + video[0].duration);
+			$("#list").load("?action=save&src={{src}}&time=" + video[0].currentTime + "&duration=" + video[0].duration);
+            //to be test
 		}
-	}
-}
-function loadprogress() {
-	var marktime = {{progress}} - 1;
-	if (marktime > 0) {
-		video[0].currentTime = marktime;
-		text="Back to<br>";
 	}
 }
 function adapt() {
