@@ -2,12 +2,12 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=1">
+<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=1.0, user-scalable=1">
 <title>{{title}}</title>
 <link href="static/css/bootstrap.min.css" rel="stylesheet">
 <style>
 /*** modified bootstrap style ***/
-.glyphicon-film, .glyphicon-folder-close, .glyphicon-off, .glyphicon-remove-circle, .glyphicon-file {
+.glyphicon-film, .glyphicon-folder-close, .glyphicon-off, .glyphicon-remove-circle, .glyphicon-file .caret{
   font-size: 1.75em;
 }
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus {
@@ -117,9 +117,9 @@ div {
   float:top;
   opacity: 0.75;
   left: 50%;
-  top: 48%;
+  top: 50%;
   /* box-shadow: 2px 2px 5px #333333; */
-  max-width:100%
+  max-width: 100%;
 }
 #dialog {
   position: fixed;
@@ -127,10 +127,10 @@ div {
   -webkit-transform: translate(-50%, -50%);
 }
 #mainframe {
-  overflow:auto;
-  min-height:9em;
-  min-width:10em;
-  width:100%;
+  overflow: auto;
+  min-height: 9em;
+  min-width: 10em;
+  width: 100%;
 }
 </style>
 </head>
@@ -169,19 +169,19 @@ div {
     </table>
   </div>
   <div class="panel-footer">
-    <button type="button" class="btn btn-default" onClick="if(confirm('Suspend?'))$.get('/suspend.php');">
+    <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.get('/suspend.php');">
       <i class="glyphicon glyphicon-off"></i>
     </button>
     <!-- <div class="btn-group"> -->
-      <!-- <button type="button" class="btn btn-default btn-xs" onClick="if(confirm('Are you sure you want to suspend?'))$.get('/suspend.php');"><i class="glyphicon glyphicon-off"></i></button> -->
-      <!-- <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown"> -->
+      <!-- <button type="button" class="btn btn-default" onClick="if(confirm('Are you sure you want to suspend?'))$.get('/suspend.php');"><i class="glyphicon glyphicon-off"></i></button> -->
+      <!-- <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"> -->
         <!-- <span class="caret"></span> -->
       <!-- </button> -->
       <!-- <ul class="dropdown-menu" role="menu"> -->
-        <!-- <li><a onClick="if(confirm('Are you sure you want to suspend?'))$.get('/suspend.php');"><i class="glyphicon glyphicon-off"></i>suspend</a></li> -->
-        <!-- <li><a onClick="if(confirm('Are you sure you want to shutdown?'))$.get('/shutdown.php');"><i class="glyphicon glyphicon-off"></i>shutdown</a></li> -->
+        <!-- <li><a onClick="if(confirm('Suspend ?'))$.get('/suspend.php');"><i class="glyphicon glyphicon-off"></i>suspend</a></li> -->
+        <!-- <li><a onClick="if(confirm('Shutdown ?'))$.get('/shutdown.php');"><i class="glyphicon glyphicon-off"></i>shutdown</a></li> -->
       <!-- </ul> -->
-    <!-- </div> -->
+   <!--  </div> -->
   </div>
 </div>
 </body>
@@ -200,18 +200,18 @@ var text="";
 var lastsavetime = 0;//in seconds
 var lastplaytime = 0;//in seconds
 
-$("#mainframe").on("click",".filelist.folder,.glyphicon.glyphicon-film.dir",function(e){
+$("#mainframe").on("click",".filelist.folder,.glyphicon.glyphicon-film.dir", function(e){
     tabshow(e.target.title, 1);
 });
-$("#mainframe").on("click",".glyphicon.glyphicon-remove-circle.move",function(e){
+$("#mainframe").on("click",".glyphicon.glyphicon-remove-circle.move", function(e){
     if (confirm('Move ' + e.target.getAttribute('file') + ' to old?'))
         tabshow('?action=move&src=' + e.target.getAttribute('file'), 1);
 });
-$("#mainframe").on("click",".glyphicon.glyphicon-remove-circle.del",function(e){
+$("#mainframe").on("click",".glyphicon.glyphicon-remove-circle.del", function(e){
     if (confirm('Clear ' + e.target.title + '?'))
         tabshow('?action=del&src=' + e.target.title, 0);
 });
-$("#mainframe").on("click","#clear",function(){
+$("#mainframe").on("click","#clear", function(){
     if (confirm('Clear all history?'))
         tabshow('?action=clear', 0);
 });
@@ -325,7 +325,12 @@ function videosizetoggle() {
 }
 function adapt() {
     $("#videosize").text("orign");
-    document.getElementById("mainframe").style.maxHeight=document.body.clientHeight*.8 + "px";
+    //document.getElementById("mainframe").style.maxHeight=(document.body.clientHeight - 240) + "px";
+    $("#mainframe").css("max-height", (document.body.clientHeight - 240) + "px"); 
+    if (document.body.clientHeight<=480)
+        $("#dialog").width("100%");
+    else
+        $("#dialog").width("auto");
     video_ratio = video[0].videoWidth / video[0].videoHeight;
     page_ratio = document.body.clientWidth / document.body.clientHeight;
     if (page_ratio < video_ratio) {
@@ -346,10 +351,6 @@ function showBuff() {
     }
     if (new Date().getTime()-lastplaytime > 1000)
         out(str+"<small>buffering...</small>");
-}
-function tabshow1(str, n) {
-    $("#list").load(str);
-    $("#navtab li:eq(" + n + ") a").tab("show");
 }
 function tabshow(str, n) {
     $("#list").load(encodeURI(str), function(responseTxt,statusTxt,xhr) {

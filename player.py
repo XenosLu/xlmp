@@ -168,7 +168,7 @@ def folder(dir):
             html_dir='''
             <tr><td colspan=3>
             <ol class="breadcrumb">
-              <li><span class="filelist folder" title="/">root</span></li>
+              <li><span class="filelist folder"><i class="glyphicon glyphicon-home" title="/"></i></span></li>
               '''
             for n,i in enumerate(dirs[:-1:],1):
                 print("/%s %s"%('/'.join(dirs[0:n]),i))
