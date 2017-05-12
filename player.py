@@ -194,7 +194,7 @@ def folder(dir):
 				<tr>
 				  <td></td>
 				  <td>
-					<span style="color:grey">%s</span>
+					<span class="filelist other">%s</span>
 					<br><small>%s</small>
 				  </td>
 				  <td><i class="glyphicon glyphicon-remove-circle move" file="%s%s"></i></td>

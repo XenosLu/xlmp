@@ -16,6 +16,9 @@
 .close {
   font-size: 3em;
 }
+.btn-default{
+  background: 0 0;
+}
 /*** modified bootstrap style ***/
 html, body {
   height: 100%
@@ -39,27 +42,17 @@ td{
 .filelist{
   min-width:14em;
 }
+.filelist.other{
+  color:grey;
+}
 video {
   clear: both;
   display: block;
   margin: auto;
 }
-/*
-hr {
-  margin: 0
-}
-*/
 a {
   text-decoration: none;
   cursor: default;
-}
-/*
-a:visited, a:link{
-  color: blue
-}
-*/
-span {
-  width: auto;
 }
 @keyframes slide {
   0% {left:-8%}
@@ -114,15 +107,6 @@ span {
 #sidebar.outside {
   left: -30%
 }
-/*
-#sidebar span:active {
-  color: #FFFFFF
-}
-#sidebar span:hover {
-  background-color: #1F1F1F;
-  box-shadow: 1em 1em 2em #CCCCCC inset;
-}
-*/
 div {
   background-color: #CCCCCC;
   color: #1F1F1F;
@@ -145,16 +129,6 @@ div {
   transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
 }
-.btn-default{
-  background: 0 0;
-}
-/*
-.highlight {
-  color: #CCCCCC;
-  background-color: #333333;
-  box-shadow: 1em 1em 3em #777777 inset;
-}
-*/
 #mainframe {
   overflow:auto;
   min-height:9em;
@@ -174,7 +148,7 @@ div {
   <button id="auto" onClick="adapt()" type="button" class="btn btn-default">auto</button>
   <button id="orign" onClick="orign()" type="button" class="btn btn-default">orign</button>
   <button id="playrate" onClick="playrate()" type="button" class="btn btn-default">1.8X</button>
-  <button onClick="tabshow('?action=list',0);document.getElementById('dialog').style.display = '';" type="button" class="btn btn-default">history</button>
+  <button onClick="tabshow('?action=list',0);$('#dialog').show();" type="button" class="btn btn-default">history</button>
   </div>
 </div>
 <div id="dialog" style="display:none">
@@ -201,7 +175,7 @@ div {
     <button type="button" class="btn btn-default" onClick="if(confirm('Suspend?'))$.get('/suspend.php');">
       <i class="glyphicon glyphicon-off"></i>
     </button>
-    <!-- <div class="btn-group" style="font-size:2em;"> -->
+    <!-- <div class="btn-group"> -->
       <!-- <button type="button" class="btn btn-default btn-xs" onClick="if(confirm('Are you sure you want to suspend?'))$.get('/suspend.php');"><i class="glyphicon glyphicon-off"></i></button> -->
       <!-- <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown"> -->
         <!-- <span class="caret"></span> -->
