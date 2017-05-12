@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=1.0, user-scalable=1">
+<meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=1">
 <title>{{title}}</title>
 <link href="static/css/bootstrap.min.css" rel="stylesheet">
 <style>
@@ -16,7 +16,10 @@
 .close {
   font-size: 2.8em;
 }
-.btn-default{
+.btn-default {
+  background: 0 0;
+}
+.breadcrumb {
   background: 0 0;
 }
 /*** modified bootstrap style ***/
@@ -154,7 +157,7 @@ div {
   <!-- <div class="panel-heading"> -->
   <div>
   <button onClick="$('#dialog').hide();" type="button" class="close">×</button> <!-- &#10060; -->
-    <ul id="myTab" class="nav nav-tabs">
+    <ul id="navtab" class="nav nav-tabs">
       <li class="active">
         <a href="#mainframe" data-toggle="tab" onclick="tabshow('?action=list', 0)"><i class="glyphicon glyphicon-list-alt"></i>History</a>
       </li>
@@ -257,7 +260,7 @@ function out(str) {
 function showsidebar() {
     //$("#sidebar").removeClass("outside");
     //$("#sidebar").show().animate({left:"0"},500).delay(3250).animate({left:"-10%"},1250);
-    $("#sidebar").show().fadeTo(300,0.65).delay(3000).fadeOut(800);
+    $("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
     //$("#sidebar").addClass("outside");
     //var sidebar = document.getElementById('sidebar');
     //sidebar.className = "sliding";
@@ -352,7 +355,7 @@ function showBuff() {
 }
 function tabshow(str, n) {
     $("#list").load(str);
-    $("#myTab li:eq(" + n + ") a").tab("show");
+    $("#navtab li:eq(" + n + ") a").tab("show");
 }
 </script>
 </html>
