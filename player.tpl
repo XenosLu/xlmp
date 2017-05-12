@@ -32,7 +32,7 @@ td{
 .filelist{
 	min-width:8em;
 }
-.icono-folder, .icono-power, .icono-trash, .icono-video {
+.icono-power, .icono-trash {
 	border: 2px solid;
 	box-sizing: border-box;
 	display: inline-block;
@@ -45,7 +45,7 @@ td{
 }
 [class*=icono-]:after, [class*=icono-]:before {
 	content: '';
-	pointer-events: none
+	/*pointer-events: none*/
 }
 .icono-trash:before {
 	position: absolute;
@@ -111,7 +111,6 @@ span {
     opacity: 0.4;
 	font-weight: 500;
 }
-
 #sidebar.sliding {
 	top: 35%;
 	left: 0%;
@@ -146,7 +145,7 @@ span {
 	background-color: #1F1F1F;
 	box-shadow: 1em 1em 2em #CCCCCC inset;
 }
-div, output {
+div {
 	background-color: #CCCCCC;
 	color: #1F1F1F;
 	font-weight: 500;
@@ -158,13 +157,13 @@ div, output {
 #dialog {
 	float:top;
 	opacity: 0.75;
+    left: 50%;
 	top: 48%;
 	/* box-shadow: 2px 2px 5px #333333; */
 	max-width:100%
 }
-output, #dialog {
+#dialog {
 	position: fixed;
-	left: 50%;
 	transform: translate(-50%, -50%);
 	-webkit-transform: translate(-50%, -50%);
 }
@@ -191,31 +190,29 @@ output, #dialog {
   </article>
 %end
 <div id="sidebar" class="outside">
-<!--   <span id="auto" onClick="adapt()">auto</span>
-  <span id="orign" onClick="orign()">orign</span>
-  <hr/>
-  <span id="playrate" onClick="playrate()">1.8X</span> 
-  <hr/>
-  <span onClick="ajax('?action=list');document.getElementById('dialog').style.display = '';">history</span> -->
+  <!-- <span id="auto" onClick="adapt()">auto</span> -->
+  <!-- <span id="orign" onClick="orign()">orign</span> -->
   <!-- <hr/> -->
-  <!-- <span onClick="out('test<small>buffering...</small><span style=\'font-size:0.75em;\'>buffering...</span>');">test</span>  -->
+  <!-- <span id="playrate" onClick="playrate()">1.8X</span>  -->
+  <!-- <hr/> -->
+  <!-- <span onClick="ajax('?action=list');document.getElementById('dialog').style.display = '';">history</span> -->
 
+  <div class="btn-group-vertical btn-group-lg">
   <button id="auto" onClick="adapt()" type="button" class="btn btn-default">auto</button>
   <button id="orign" onClick="orign()" type="button" class="btn btn-default">orign</button>
   <button id="playrate" onClick="playrate()" type="button" class="btn btn-default">1.8X</button>
   <button onClick="ajax('?action=list');document.getElementById('dialog').style.display = '';" type="button" class="btn btn-default">history</button>
   </div>
 </div>
-<div id="dialog" class="panel panel-default" style="display:none">
-<!-- <div class="panel-body"> -->
-<div>
+<div id="dialog" style="display:none">
   <div class="panel-heading">
 	<!-- <span id="tab_his" class="highlight" style="padding:0 0.75em;float:left" onclick="ajax('?action=list')">History</span> -->
 	<span id="tab_his" class="highlight" onclick="ajax('?action=list')"><i class="glyphicon glyphicon-list-alt"></i>History</span>
 	<!-- <span id="tab_dir" style="padding:0 0.75em;float:left" onclick="ajax('/')">Home dir</span> -->
 	<span id="tab_dir" onclick="ajax('/')"><i class="glyphicon glyphicon-home"></i>Home dir</span>
 	<!-- <button onClick="document.getElementById('dialog').style.display='none';" style="float:right">&#10060;</button> -->
-    <button onClick="document.getElementById('dialog').style.display='none';" type="button" class="close">×</button>
+    <!-- <button onClick="document.getElementById('dialog').style.display='none';" type="button" class="close">×</button> -->
+    <button onClick="$('#dialog').hide();" type="button" class="close">×</button>
   </div>
   <div id="mainframe">
     <table class="table">
@@ -224,23 +221,19 @@ output, #dialog {
     </table>
   </div>
   <div class="panel-footer">
-    <!-- <span class="icono-power" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"></span> -->
-    <!-- <span class="glyphicon glyphicon-off" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"></span> -->
-    <!-- <button class="glyphicon glyphicon-off" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"></button> -->
-    <button class="btn btn-default" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"><i class="glyphicon glyphicon-off"></i></button>
+    <button type="button" class="btn btn-default" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"><i class="glyphicon glyphicon-off"></i></button>
 
-<!--     <div class="btn-group" style="font-size:2em;">
-      <button type="button" class="btn btn-default btn-xs" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"><i class="glyphicon glyphicon-off"></i></button>
-      <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu">
-        <li><a onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"><i class="glyphicon glyphicon-off"></i>suspend</a></li>
-        <li><a onClick="if(confirm('Are you sure you want to shutdown?'))ajax('/shutdown.php');"><i class="glyphicon glyphicon-off"></i>shutdown</a></li>
-      </ul>
-    </div> -->
+    <!-- <div class="btn-group" style="font-size:2em;"> -->
+      <!-- <button type="button" class="btn btn-default btn-xs" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"><i class="glyphicon glyphicon-off"></i></button> -->
+      <!-- <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown"> -->
+        <!-- <span class="caret"></span> -->
+      <!-- </button> -->
+      <!-- <ul class="dropdown-menu" role="menu"> -->
+        <!-- <li><a onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"><i class="glyphicon glyphicon-off"></i>suspend</a></li> -->
+        <!-- <li><a onClick="if(confirm('Are you sure you want to shutdown?'))ajax('/shutdown.php');"><i class="glyphicon glyphicon-off"></i>shutdown</a></li> -->
+      <!-- </ul> -->
+    <!-- </div> -->
 
-  </div>
   </div>
 </div>
 </body>
@@ -259,8 +252,7 @@ var text="";
 var lastsavetime = 0;//in seconds
 var lastplaytime = 0;//in seconds
 
-document.getElementById("mainframe").onclick = function (event)
-{
+document.getElementById("mainframe").onclick = function (event) {
 	event = event || window.event;
 	var target = event.target || event.srcElement;
 	if (target.className == "filelist folder")
@@ -402,8 +394,7 @@ function showBuff() {
 		out(str+"<small>buffering...</small>");
 		//out(str+"<span style='font-size:0.75em;'>buffering...</span>");
 }
-function ajax(url)
-{
+function ajax(url) {
 	var pajax;
 	if (window.XMLHttpRequest)
 	{
