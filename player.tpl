@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=1.0, user-scalable=1">
 <title>{{title}}</title>
-<!-- Bootstrap -->
 <link href="static/css/bootstrap.min.css" rel="stylesheet">
 <style>
 .glyphicon-film,.glyphicon-folder-close,.glyphicon-off,.glyphicon-remove-circle{
@@ -72,9 +71,11 @@ video {
 	display: block;
 	margin: auto;
 }
+/*
 hr {
 	margin: 0
 }
+*/
 a {
 	text-decoration: none;
 	cursor: default;
@@ -190,13 +191,6 @@ div {
   </article>
 %end
 <div id="sidebar" class="outside">
-  <!-- <span id="auto" onClick="adapt()">auto</span> -->
-  <!-- <span id="orign" onClick="orign()">orign</span> -->
-  <!-- <hr/> -->
-  <!-- <span id="playrate" onClick="playrate()">1.8X</span>  -->
-  <!-- <hr/> -->
-  <!-- <span onClick="ajax('?action=list');document.getElementById('dialog').style.display = '';">history</span> -->
-
   <div class="btn-group-vertical btn-group-lg">
   <button id="auto" onClick="adapt()" type="button" class="btn btn-default">auto</button>
   <button id="orign" onClick="orign()" type="button" class="btn btn-default">orign</button>
@@ -274,7 +268,8 @@ document.getElementById("mainframe").onclick = function (event) {
 function onload() {
 %if not src:
 	ajax('?action=list');
-	document.getElementById('dialog').style.display = '';
+	//document.getElementById('dialog').style.display = '';
+    $("#dialog").show();
 %end
 	adapt();
 	document.addEventListener('touchstart', touch, false);
