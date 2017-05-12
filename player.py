@@ -113,8 +113,8 @@ def videoplayer():
 	elif action == 'list':
 		return list_history_from_db()
 	elif action == 'move':
-		file='./static/mp4/%s' % src
-		dir_old='./static/mp4/%s/old' % os.path.dirname(src)
+		file = './static/mp4/%s' % src
+		dir_old = './static/mp4/%s/old' % os.path.dirname(src)
 		if not os.path.exists(dir_old):
 			os.mkdir(dir_old)
 		try:
@@ -123,14 +123,13 @@ def videoplayer():
 			abort(404,str(e))
 		return folder(os.path.dirname(src))
 	elif not os.path.exists('./static/mp4/%s' % src):
-		#remove_history_from_db(src)
 		redirect('/player.php')
 	if src:
-		title=os.path.basename(src)
+		title = os.path.basename(src)
 	else:
-		title='Light mp4 Player'
+		title = 'Light mp4 Player'
 	return template(
-	'player', src=src, progress=load_history_from_db(src), title=title)
+	'player', src = src, progress = load_history_from_db(src), title = title)
 
 @route('/suspend.php')
 def suspend():
@@ -166,21 +165,21 @@ def folder(dir):
 		html_dir,html_mp4,html_files='','',''
 		if dir!='':
 			dir='%s/' % dir.strip('/')
-			html_dir+='''
+			html_dir += '''
 			<tr>
 			  <td><i class="glyphicon glyphicon-folder-close"></i></td>
 			  <td class="filelist folder" colspan=2 title="/%s..">..</td>
 			</tr>''' % dir
 		for file in os.listdir('./static/mp4/%s' % dir):
 			if os.path.isdir('./static/mp4/%s%s' % (dir,file)):
-				html_dir+='''
+				html_dir += '''
 				<tr>
 				  <td><i class="glyphicon glyphicon-folder-close"></i></td>
 				  <td class="filelist folder" title="/%s%s">%s</td>
 				  <td><i class="glyphicon glyphicon-remove-circle move" file="%s%s"></i></td>
 				</tr>''' % (dir,file,file,dir,file)
 			elif re.match('.*\.((?i)mp)4$',file):
-				html_mp4+='''
+				html_mp4 += '''
 				<tr>
 				  <td><i class="glyphicon glyphicon-film"></i></td>
 				  <td>
@@ -190,7 +189,7 @@ def folder(dir):
 				  <td><i class="glyphicon glyphicon-remove-circle move" file="%s%s"></i></td>
 				</tr>''' % (dir,file,file,get_size(dir+file),dir,file)
 			else:
-				html_files+='''
+				html_files += '''
 				<tr>
 				  <td></td>
 				  <td>

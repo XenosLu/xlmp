@@ -11,10 +11,10 @@
   font-size: 2em;
 }
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus {
-  background-color: #cccccc;
+  background-color: #CCCCCC;
 }
 .close {
-  font-size: 3em;
+  font-size: 2.8em;
 }
 .btn-default{
   background: 0 0;
@@ -24,7 +24,7 @@ html, body {
   height: 100%
 }
 body {
-  /*background-color: #101010;*/
+  /* background-color: #101010; */
   cursor: default;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -51,7 +51,6 @@ video {
   margin: auto;
 }
 a {
-  text-decoration: none;
   cursor: default;
 }
 @keyframes slide {
@@ -105,14 +104,14 @@ a {
   border-radius: 0.2em;
   padding: 0.2em;
   opacity: 0.4;
-  font-weight: 500;
+  /* font-weight: 500; */
 }
 div {
   background-color: #CCCCCC;
   color: #1F1F1F;
-  font-weight: 500;
+  /* font-weight: 500; */
   text-align: center;
-  border: 2px solid #777777;
+  border: 1px solid #777777;
   box-shadow: 1em 1em 3em #777777 inset;
   text-shadow: 0.1em 0.1em 0.4em #444;
 }
@@ -258,16 +257,16 @@ function out(str) {
 function showsidebar() {
     //$("#sidebar").removeClass("outside");
     //$("#sidebar").show().animate({left:"0"},500).delay(3250).animate({left:"-10%"},1250);
-    $("#sidebar").show().fadeTo(500,0.7).delay(3000).fadeOut(1000);
+    $("#sidebar").show().fadeTo(300,0.65).delay(3000).fadeOut(800);
     //$("#sidebar").addClass("outside");
     //var sidebar = document.getElementById('sidebar');
     //sidebar.className = "sliding";
     //sidebar.addEventListener('animationend', resetsidebar);
     //sidebar.addEventListener('webkitAnimationEnd', resetsidebar);
 }
-function resetsidebar() {
-    document.getElementById('sidebar').className = "outside";
-}
+//function resetsidebar() {
+    //document.getElementById('sidebar').className = "outside";
+//}
 function playrate() {
     var rate = document.getElementById('playrate');
     if (video[0].playbackRate != 1.0) {
