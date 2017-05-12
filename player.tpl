@@ -205,7 +205,6 @@ div {
 	<!-- <span id="tab_dir" style="padding:0 0.75em;float:left" onclick="ajax('/')">Home dir</span> -->
 	<span id="tab_dir" onclick="ajax('/')"><i class="glyphicon glyphicon-home"></i>Home dir</span>
 	<!-- <button onClick="document.getElementById('dialog').style.display='none';" style="float:right">&#10060;</button> -->
-    <!-- <button onClick="document.getElementById('dialog').style.display='none';" type="button" class="close">×</button> -->
     <button onClick="$('#dialog').hide();" type="button" class="close">×</button>
   </div>
   <div id="mainframe">
@@ -387,7 +386,6 @@ function showBuff() {
 	}
 	if (new Date().getTime()-lastplaytime > 1000)
 		out(str+"<small>buffering...</small>");
-		//out(str+"<span style='font-size:0.75em;'>buffering...</span>");
 }
 function ajax(url) {
 	var pajax;
