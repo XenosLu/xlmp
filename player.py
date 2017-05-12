@@ -173,7 +173,6 @@ def folder(dir):
             for n,i in enumerate(dirs[:-1:],1):
                 print("/%s %s"%('/'.join(dirs[0:n]),i))
                 html_dir += '<li><span class="filelist folder" title="/%s">%s</span></li>'%('/'.join(dirs[0:n]),i)
-            # html_x=''.join(['<li><span class="filelist folder" title="%s">%s</span></li>'%(i,i) for i in dirs[:-1:]])
             html_dir += '''
               <li class="active">%s</li>
             </ol>
@@ -205,7 +204,7 @@ def folder(dir):
             else:
                 html_files += '''
                 <tr>
-                  <td></td>
+                  <td><i class="glyphicon glyphicon-file"></i></td>
                   <td>
                     <span class="filelist other">%s</span>
                     <br><small>%s</small>

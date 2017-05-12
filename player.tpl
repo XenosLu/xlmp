@@ -7,14 +7,14 @@
 <link href="static/css/bootstrap.min.css" rel="stylesheet">
 <style>
 /*** modified bootstrap style ***/
-.glyphicon-film, .glyphicon-folder-close, .glyphicon-off, .glyphicon-remove-circle {
-  font-size: 2em;
+.glyphicon-film, .glyphicon-folder-close, .glyphicon-off, .glyphicon-remove-circle, .glyphicon-file {
+  font-size: 1.75em;
 }
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus {
   background-color: #CCCCCC;
 }
 .close {
-  font-size: 2.8em;
+  font-size: 2.5em;
 }
 .btn-default {
   background: 0 0;
@@ -22,7 +22,8 @@
 .breadcrumb {
   background: 0 0;
   margin: 0;
-  padding: 0;
+  font-size: 1.3em;
+  /* padding: 0; */
 }
 /*** modified bootstrap style ***/
 html, body {
@@ -73,12 +74,6 @@ a {
 #sidebar.sliding {
   left: 0%;
   -webkit-transform: translateX(0%);
-  /*
-  border-top-right-radius: 0.6em;
-  border-bottom-right-radius: 0.6em;
-  font-size: 1.5em;
-  padding: 0.04em;
-  */
   -webkit-animation-name: slide;
   -webkit-animation-duration: 5s;
   -webkit-animation-iteration-count: 1;
@@ -89,7 +84,7 @@ a {
   animation-delay: 0s;
 }
 #sidebar{
-  opacity: 0;
+  opacity: 0.65;
   position: fixed;
   float:top;
   top: 35%;
@@ -109,12 +104,10 @@ a {
   border-radius: 0.2em;
   padding: 0.2em;
   opacity: 0.4;
-  /* font-weight: 500; */
 }
 div {
   background-color: #CCCCCC;
   /* color: #1F1F1F; */
-  /* font-weight: 500; */
   text-align: center;
   border: 1px solid #777777;
   box-shadow: 1em 1em 3em #777777 inset;
@@ -147,8 +140,8 @@ div {
     <video id="player" src="{{src}}" onprogress="showBuff()" onerror="out('error')" onseeking="showProgress()" ontimeupdate="saveprogress()" onloadeddata="loadprogress()" poster controls preload="meta">No video support!</video>
   </article>
 %end
-<!-- <div id="sidebar" class="outside"> -->
-<div id="sidebar">
+<div id="sidebar" class="outside">
+<!-- <div id="sidebar"> -->
   <div class="btn-group-vertical btn-group-lg">
   <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">orign</button>
   <button id="playrate" onClick="playrate()" type="button" class="btn btn-default">1.8X</button>
@@ -262,16 +255,17 @@ function out(str) {
 function showsidebar() {
     //$("#sidebar").removeClass("outside");
     //$("#sidebar").show().animate({left:"0"},500).delay(3250).animate({left:"-10%"},1250);
-    $("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
+    //$("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
+    //$("#sidebar").show().fadeTo(300,0.65).delay(3000).fadeOut(800);
     //$("#sidebar").addClass("outside");
-    //var sidebar = document.getElementById('sidebar');
-    //sidebar.className = "sliding";
-    //sidebar.addEventListener('animationend', resetsidebar);
-    //sidebar.addEventListener('webkitAnimationEnd', resetsidebar);
+    var sidebar = document.getElementById('sidebar');
+    sidebar.className = "sliding";
+    sidebar.addEventListener('animationend', resetsidebar);
+    sidebar.addEventListener('webkitAnimationEnd', resetsidebar);
 }
-//function resetsidebar() {
-    //document.getElementById('sidebar').className = "outside";
-//}
+function resetsidebar() {
+    document.getElementById('sidebar').className = "outside";
+}
 function playrate() {
     var rate = document.getElementById('playrate');
     if (video[0].playbackRate != 1.0) {
@@ -358,8 +352,11 @@ function tabshow1(str, n) {
     $("#navtab li:eq(" + n + ") a").tab("show");
 }
 function tabshow(str, n) {
-    $("#list").load(str, function() {
-        $("#navtab li:eq(" + n + ") a").tab("show");
+    $("#list").load(encodeURI(str), function(responseTxt,statusTxt,xhr) {
+        if(xhr.statusText=="OK")
+            $("#navtab li:eq(" + n + ") a").tab("show");
+        else
+            out(xhr.statusText);
     });
 }
 </script>
