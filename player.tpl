@@ -6,8 +6,9 @@
 <title>{{title}}</title>
 <link href="static/css/bootstrap.min.css" rel="stylesheet">
 <style>
-.glyphicon-film,.glyphicon-folder-close,.glyphicon-off,.glyphicon-remove-circle{
-    font-size:2em;
+/*** modified bootstrap style ***/
+.glyphicon-film, .glyphicon-folder-close, .glyphicon-off, .glyphicon-remove-circle {
+    font-size: 2em;
 }
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus {
     background-color: #cccccc;
@@ -15,6 +16,7 @@
 .close {
     font-size: 3em;
 }
+/*** modified bootstrap style ***/
 html, body {
 	height: 100%
 }
@@ -179,11 +181,13 @@ div {
 .btn-default{
 	background: 0 0;
 }
+/*
 .highlight {
 	color: #CCCCCC;
 	background-color: #333333;
 	box-shadow: 1em 1em 3em #777777 inset;
 }
+*/
 #mainframe {
 	overflow:auto;
 	min-height:9em;
@@ -209,11 +213,7 @@ div {
 <div id="dialog" style="display:none">
   <!-- <div class="panel-heading"> -->
   <div>
-    <!-- <span id="tab_his" class="highlight" onclick="ajax('?action=list')"><i class="glyphicon glyphicon-list-alt"></i>History</span> -->
-    <!-- <span id="tab_dir" onclick="ajax('/')"><i class="glyphicon glyphicon-home"></i>Home dir</span> -->
-    <button onClick="$('#dialog').hide();" type="button" class="close">×</button> <!-- &#10060; -->
-  </div>
-  <div>
+  <button onClick="$('#dialog').hide();" type="button" class="close">×</button> <!-- &#10060; -->
       <ul id="myTab" class="nav nav-tabs">
       <li class="active">
         <a href="#mainframe" data-toggle="tab" onclick="tabshow('?action=list', 0)"><i class="glyphicon glyphicon-list-alt"></i>History</a>
@@ -283,7 +283,6 @@ document.getElementById("mainframe").onclick = function (event) {
 
 function onload() {
 %if not src:
-	//ajax('?action=list');
     tabshow("?action=list", 0);
     $("#dialog").show();
 %end
