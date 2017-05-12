@@ -23,7 +23,6 @@
   background: 0 0;
   margin: 0;
   font-size: 1.3em;
-  /* padding: 0; */
 }
 /*** modified bootstrap style ***/
 html, body {
@@ -90,20 +89,7 @@ a {
   top: 35%;
 }
 #sidebar.outside {
-  left: -30%
-}
-#output{
-  z-index: 99;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-  font-size: 1.8em;
-  pointer-events: none;
-  border-radius: 0.2em;
-  padding: 0.2em;
-  opacity: 0.4;
+  left: -25%
 }
 div {
   background-color: #CCCCCC;
@@ -113,16 +99,24 @@ div {
   box-shadow: 1em 1em 3em #777777 inset;
   text-shadow: 0.1em 0.1em 0.4em #666;
 }
+#output{
+  z-index: 99;
+  font-size: 1.8em;
+  pointer-events: none;
+  border-radius: 0.2em;
+  padding: 0.2em;
+  opacity: 0.4;
+}
 #dialog {
   float:top;
   opacity: 0.75;
-  left: 50%;
-  top: 50%;
   /* box-shadow: 2px 2px 5px #333333; */
   max-width: 100%;
 }
-#dialog {
+#output, #dialog {
   position: fixed;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
 }
@@ -204,8 +198,8 @@ $("#mainframe").on("click",".filelist.folder,.glyphicon.glyphicon-film.dir", fun
     tabshow(e.target.title, 1);
 });
 $("#mainframe").on("click",".glyphicon.glyphicon-remove-circle.move", function(e){
-    if (confirm('Move ' + e.target.getAttribute('file') + ' to old?'))
-        tabshow('?action=move&src=' + e.target.getAttribute('file'), 1);
+    if (confirm('Move ' + e.target.title + ' to old?'))
+        tabshow('?action=move&src=' + e.target.title, 1);
 });
 $("#mainframe").on("click",".glyphicon.glyphicon-remove-circle.del", function(e){
     if (confirm('Clear ' + e.target.title + '?'))
@@ -314,8 +308,7 @@ function saveprogress(){
 function videosizetoggle() {
     if ($("#videosize").text()=="auto")
         adapt();
-    else
-    {
+    else {
         $("#videosize").text("auto");
         if (video[0].width < document.body.clientWidth && video[0].height < document.body.clientHeight) {
             video[0].style.width = video[0].videoWidth + "px";
@@ -326,7 +319,8 @@ function videosizetoggle() {
 function adapt() {
     $("#videosize").text("orign");
     //document.getElementById("mainframe").style.maxHeight=(document.body.clientHeight - 240) + "px";
-    $("#mainframe").css("max-height", (document.body.clientHeight - 240) + "px"); 
+    //out(document.body.clientHeight +"|"+ $(window).height() +"|"+ $(document).height() +"|"+ $(document.body).height()  +"|"+  $(document.body).outerHeight(true));
+    $("#mainframe").css("max-height", ($(document.body).height() - 240) + "px"); 
     if (document.body.clientHeight<=480)
         $("#dialog").width("100%");
     else

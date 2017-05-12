@@ -189,7 +189,7 @@ def folder(dir):
                 <tr>
                   <td><i class="glyphicon glyphicon-folder-close"></i></td>
                   <td class="filelist folder" title="/%s%s">%s</td>
-                  <td><i class="glyphicon glyphicon-remove-circle move" file="%s%s"></i></td>
+                  <td><i class="glyphicon glyphicon-remove-circle move" title="%s%s"></i></td>
                 </tr>''' % (dir,file,file,dir,file)
             elif re.match('.*\.((?i)mp)4$',file):
                 html_mp4 += '''
@@ -199,7 +199,7 @@ def folder(dir):
                     <a href="/player.php?src=%s%s">%s</a>
                     <br><small>%s</small>
                   </td>
-                  <td><i class="glyphicon glyphicon-remove-circle move" file="%s%s"></i></td>
+                  <td><i class="glyphicon glyphicon-remove-circle move" title="%s%s"></i></td>
                 </tr>''' % (dir,file,file,get_size(dir+file),dir,file)
             else:
                 html_files += '''
@@ -209,7 +209,7 @@ def folder(dir):
                     <span class="filelist other">%s</span>
                     <br><small>%s</small>
                   </td>
-                  <td><i class="glyphicon glyphicon-remove-circle move" file="%s%s"></i></td>
+                  <td><i class="glyphicon glyphicon-remove-circle move" title="%s%s"></i></td>
                 </tr>''' % (file,get_size(dir+file),dir,file)
         return "".join([html_dir,html_mp4,html_files])
     except Exception as e:
