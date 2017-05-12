@@ -66,6 +66,33 @@ a {
   75% {left:0%}
   100% {left:-9%}
 }
+#sidebar.sliding {
+  left: 0%;
+  -webkit-transform: translateX(0%);
+  /*
+  border-top-right-radius: 0.6em;
+  border-bottom-right-radius: 0.6em;
+  font-size: 1.5em;
+  padding: 0.04em;
+  */
+  -webkit-animation-name: slide;
+  -webkit-animation-duration: 5s;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-delay: 0s;
+  animation-name: slide;
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+  animation-delay: 0s;
+}
+#sidebar{
+  opacity: 0;
+  position: fixed;
+  float:top;
+  top: 35%;
+}
+#sidebar.outside {
+  left: -30%
+}
 #output{
   z-index: 99;
   position: fixed;
@@ -79,33 +106,6 @@ a {
   padding: 0.2em;
   opacity: 0.4;
   font-weight: 500;
-}
-#sidebar.sliding {
-  top: 35%;
-  left: 0%;
-  -webkit-transform: translateX(0%);
-  /*
-  border-top-right-radius: 0.6em;
-  border-bottom-right-radius: 0.6em;
-  font-size: 1.5em;
-  padding: 0.04em;
-  */
-  opacity: 0.66;
-  -webkit-animation-name: slide;
-  -webkit-animation-duration: 5s;
-  -webkit-animation-iteration-count: 1;
-  -webkit-animation-delay: 0s;
-  animation-name: slide;
-  animation-duration: 5s;
-  animation-iteration-count: 1;
-  animation-delay: 0s;
-}
-#sidebar{
-  position: fixed;
-  float:top;
-}
-#sidebar.outside {
-  left: -30%
 }
 div {
   background-color: #CCCCCC;
@@ -143,10 +143,9 @@ div {
     <video id="player" src="{{src}}" onprogress="showBuff()" onerror="out('error')" onseeking="showProgress()" ontimeupdate="saveprogress()" onloadeddata="loadprogress()" poster controls preload="meta">No video support!</video>
   </article>
 %end
-<div id="sidebar" class="outside">
+<!-- <div id="sidebar" class="outside"> -->
+<div id="sidebar">
   <div class="btn-group-vertical btn-group-lg">
-  <!-- <button id="auto" onClick="adapt()" type="button" class="btn btn-default">auto</button> -->
-  <!-- <button id="orign" onClick="orign()" type="button" class="btn btn-default">orign</button> -->
   <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">orign</button>
   <button id="playrate" onClick="playrate()" type="button" class="btn btn-default">1.8X</button>
   <button onClick="tabshow('?action=list',0);$('#dialog').show();" type="button" class="btn btn-default">history</button>
@@ -257,10 +256,14 @@ function out(str) {
     $("#output").fadeTo(250,0.7).delay(1625).fadeOut(625);
 }
 function showsidebar() {
-    var sidebar = document.getElementById('sidebar');
-    sidebar.className = "sliding";
-    sidebar.addEventListener('animationend', resetsidebar);
-    sidebar.addEventListener('webkitAnimationEnd', resetsidebar);
+    //$("#sidebar").removeClass("outside");
+    //$("#sidebar").show().animate({left:"0"},500).delay(3250).animate({left:"-10%"},1250);
+    $("#sidebar").show().fadeTo(500,0.7).delay(3000).fadeOut(1000);
+    //$("#sidebar").addClass("outside");
+    //var sidebar = document.getElementById('sidebar');
+    //sidebar.className = "sliding";
+    //sidebar.addEventListener('animationend', resetsidebar);
+    //sidebar.addEventListener('webkitAnimationEnd', resetsidebar);
 }
 function resetsidebar() {
     document.getElementById('sidebar').className = "outside";
