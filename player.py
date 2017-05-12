@@ -165,15 +165,19 @@ def folder(dir):
         html_dir,html_mp4,html_files='','',''
         if dir!='':
             dirs=dir.split('/')
-            html_x=''.join(['<li><span class="filelist folder" title="%s">%s</span></li>'%(i,i) for i in dirs[:-1:]])
             html_dir='''
-            <tr><td>
+            <tr><td colspan=3>
             <ol class="breadcrumb">
               <li><span class="filelist folder" title="/">root</span></li>
-              %s
+              '''
+            for n,i in enumerate(dirs[:-1:],1):
+                print("/%s %s"%('/'.join(dirs[0:n]),i))
+                html_dir += '<li><span class="filelist folder" title="/%s">%s</span></li>'%('/'.join(dirs[0:n]),i)
+            # html_x=''.join(['<li><span class="filelist folder" title="%s">%s</span></li>'%(i,i) for i in dirs[:-1:]])
+            html_dir += '''
               <li class="active">%s</li>
             </ol>
-            </td></tr>''' % (html_x,dirs[-1])
+            </td></tr>''' % dirs[-1]
             dir='%s/' % dir.strip('/')
             html_dir += '''
             <tr>

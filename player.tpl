@@ -21,6 +21,8 @@
 }
 .breadcrumb {
   background: 0 0;
+  margin: 0;
+  padding: 0;
 }
 /*** modified bootstrap style ***/
 html, body {
@@ -111,12 +113,12 @@ a {
 }
 div {
   background-color: #CCCCCC;
-  color: #1F1F1F;
+  /* color: #1F1F1F; */
   /* font-weight: 500; */
   text-align: center;
   border: 1px solid #777777;
   box-shadow: 1em 1em 3em #777777 inset;
-  text-shadow: 0.1em 0.1em 0.4em #444;
+  text-shadow: 0.1em 0.1em 0.4em #666;
 }
 #dialog {
   float:top;
@@ -311,9 +313,7 @@ function saveprogress(){
         if (Math.abs(video[0].currentTime - lastsavetime) > 3)//save play progress in every 3 seconds
         {
             lastsavetime = video[0].currentTime;
-            //ajax("?action=save&src={{src}}&time=" + video[0].currentTime + "&duration=" + video[0].duration);
             $.get("?action=save&src={{src}}&time=" + video[0].currentTime + "&duration=" + video[0].duration);
-            //to be test
         }
     }
 }
@@ -344,8 +344,8 @@ function adapt() {
 }
 function showBuff() {
     var str="";
-    for(i=0;i<video[0].buffered.length;i++)
-    //for(i=0,t=video[0].buffered.length; i<t; i++)
+    //for(i=0;i<video[0].buffered.length;i++)
+    for(i=0,t=video[0].buffered.length; i<t; i++)
     {
         if (video[0].currentTime>=video[0].buffered.start(i) && video[0].currentTime<=video[0].buffered.end(i))
             str +=format_time(video[0].buffered.start(i))+"-"+format_time(video[0].buffered.end(i))+"<br>";
@@ -353,9 +353,14 @@ function showBuff() {
     if (new Date().getTime()-lastplaytime > 1000)
         out(str+"<small>buffering...</small>");
 }
-function tabshow(str, n) {
+function tabshow1(str, n) {
     $("#list").load(str);
     $("#navtab li:eq(" + n + ") a").tab("show");
+}
+function tabshow(str, n) {
+    $("#list").load(str, function() {
+        $("#navtab li:eq(" + n + ") a").tab("show");
+    });
 }
 </script>
 </html>
