@@ -30,6 +30,7 @@ html, body {
 }
 body {
   /* background-color: #101010; */
+  background-color: #DDD9DD;
   cursor: default;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -96,7 +97,8 @@ div {
   /* color: #1F1F1F; */
   text-align: center;
   border: 1px solid #777777;
-  box-shadow: 1em 1em 3em #777777 inset;
+  /* box-shadow: 0.5em 0.5em 4em #666666 inset; */
+  box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
   text-shadow: 0.1em 0.1em 0.4em #666;
 }
 #output{
@@ -110,7 +112,7 @@ div {
 #dialog {
   float:top;
   opacity: 0.75;
-  /* box-shadow: 2px 2px 5px #333333; */
+  box-shadow: 2px 2px 5px #333333;
   max-width: 100%;
 }
 #output, #dialog {
