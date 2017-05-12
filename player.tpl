@@ -7,7 +7,7 @@
 <link href="static/css/bootstrap.min.css" rel="stylesheet">
 <style>
 /*** modified bootstrap style ***/
-.glyphicon-film, .glyphicon-folder-close, .glyphicon-off, .glyphicon-remove-circle, .glyphicon-file .caret{
+.glyphicon-film, .glyphicon-folder-close, .glyphicon-off, .glyphicon-remove-circle, .glyphicon-file, .caret{
   font-size: 1.75em;
 }
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus {
