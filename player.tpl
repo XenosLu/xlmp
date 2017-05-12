@@ -203,7 +203,7 @@ div {
   <button id="auto" onClick="adapt()" type="button" class="btn btn-default">auto</button>
   <button id="orign" onClick="orign()" type="button" class="btn btn-default">orign</button>
   <button id="playrate" onClick="playrate()" type="button" class="btn btn-default">1.8X</button>
-  <button onClick="showhistory('?action=list');document.getElementById('dialog').style.display = '';" type="button" class="btn btn-default">history</button>
+  <button onClick="tabshow('?action=list',0);document.getElementById('dialog').style.display = '';" type="button" class="btn btn-default">history</button>
   </div>
 </div>
 <div id="dialog" style="display:none">
@@ -216,10 +216,10 @@ div {
   <div>
       <ul id="myTab" class="nav nav-tabs">
       <li class="active">
-        <a href="#mainframe" data-toggle="tab" onclick="showhistory('?action=list')"><i class="glyphicon glyphicon-list-alt"></i>History</a>
+        <a href="#mainframe" data-toggle="tab" onclick="tabshow('?action=list', 0)"><i class="glyphicon glyphicon-list-alt"></i>History</a>
       </li>
       <li>
-        <a href="#mainframe" data-toggle="tab" onclick="showdir('/')"><i class="glyphicon glyphicon-home"></i>Home dir</a>
+        <a href="#mainframe" data-toggle="tab" onclick="tabshow('/', 1)"><i class="glyphicon glyphicon-home"></i>Home dir</a>
       </li>
     </ul>
   </div>
@@ -266,13 +266,13 @@ document.getElementById("mainframe").onclick = function (event) {
 	event = event || window.event;
 	var target = event.target || event.srcElement;
 	if (target.className == "filelist folder")
-		showdir(target.title);
+		tabshow(target.title, 1);
 	else if (target.className == "icono-trash del")
-		showhistory('?action=del&src=' + target.innerHTML);
+		tabshow('?action=del&src=' + target.innerHTML, 0);
 	else if (target.className == "icono-trash move")
 	{
 		if (confirm('Would you want to move ' + target.innerHTML + ' to old?'))
-			showdir('?action=move&src=' + target.innerHTML);
+			tabshow('?action=move&src=' + target.innerHTML, 1);
 	}
 	else if (target.id == "clear")
 	{
@@ -284,7 +284,7 @@ document.getElementById("mainframe").onclick = function (event) {
 function onload() {
 %if not src:
 	//ajax('?action=list');
-    showhistory("?action=list");
+    tabshow("?action=list", 0);
     $("#dialog").show();
 %end
 	adapt();
@@ -407,61 +407,9 @@ function showBuff() {
 	if (new Date().getTime()-lastplaytime > 1000)
 		out(str+"<small>buffering...</small>");
 }
-function ajax(url) {
-	var pajax;
-	if (window.XMLHttpRequest)
-	{
-		pajax = new XMLHttpRequest();
-	}
-	else if (window.ActiveXObject)
-	{
-		try
-		{
-			pajax = new ActiveXObject("Msxml2.XMLHTTP"); 
-		}
-		catch (e)
-		{
-			try
-			{
-				pajax = new ActiveXObject("Microsoft.XMLHTTP");
-			}
-			catch (e)
-			{}
-		}
-	}
-	pajax.open("GET", url, true);
-	pajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	pajax.onreadystatechange = processResponse;
-	pajax.send(null);
-	function processResponse()
-	{
-		if (pajax.readyState == 4 && pajax.status == 200)
-		{
-			if (url.indexOf("?action") >= 0)
-			{
-				//document.getElementById('tab_his').className = "highlight";
-				//document.getElementById('tab_dir').className = "";
-                $('#myTab li:eq(0) a').tab('show');
-			}
-			else
-			{
-				//document.getElementById('tab_his').className = "";
-				//document.getElementById('tab_dir').className = "highlight";
-                $('#myTab li:eq(1) a').tab('show');
-			}
-			//if(url.indexOf("?action=save") < 0)
-				document.getElementById('list').innerHTML = pajax.responseText;
-			//setTimeout("out('Timeout')",2000);
-		}
-	}
-}
-function showhistory(str) {
+function tabshow(str, n) {
     $("#list").load(str);
-    $('#myTab li:eq(0) a').tab('show');
-}
-function showdir(str) {
-    $("#list").load(str);
-    $('#myTab li:eq(1) a').tab('show');
+    $("#myTab li:eq(" + n + ") a").tab("show");
 }
 </script>
 </html>
