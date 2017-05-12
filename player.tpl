@@ -145,9 +145,9 @@ div {
 %end
 <div id="sidebar" class="outside">
   <div class="btn-group-vertical btn-group-lg">
-  <button id="auto" onClick="adapt()" type="button" class="btn btn-default">auto</button>
-  <button id="orign" onClick="orign()" type="button" class="btn btn-default">orign</button>
-  <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">AUTO</button>
+  <!-- <button id="auto" onClick="adapt()" type="button" class="btn btn-default">auto</button> -->
+  <!-- <button id="orign" onClick="orign()" type="button" class="btn btn-default">orign</button> -->
+  <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">orign</button>
   <button id="playrate" onClick="playrate()" type="button" class="btn btn-default">1.8X</button>
   <button onClick="tabshow('?action=list',0);$('#dialog').show();" type="button" class="btn btn-default">history</button>
   </div>
@@ -313,17 +313,19 @@ function saveprogress(){
     }
 }
 function videosizetoggle() {
-    if ($("#videosize").text()=="AUTO")
+    if ($("#videosize").text()=="auto")
         adapt();
     else
-        orign();
+    {
+        $("#videosize").text("auto");
+        if (video[0].width < document.body.clientWidth && video[0].height < document.body.clientHeight) {
+            video[0].style.width = video[0].videoWidth + "px";
+            video[0].style.height = video[0].videoHeight + "px";
+        }
+    }
 }
 function adapt() {
-    $("#orign").show();
-    $("#auto").hide();
-    $("#videosize").text("ORIGN");
-    //document.getElementById('orign').style.display = '';
-    //document.getElementById('auto').style.display = 'none';
+    $("#videosize").text("orign");
     document.getElementById("mainframe").style.maxHeight=document.body.clientHeight*.8 + "px";
     video_ratio = video[0].videoWidth / video[0].videoHeight;
     page_ratio = document.body.clientWidth / document.body.clientHeight;
@@ -333,17 +335,6 @@ function adapt() {
     } else {
         video[0].style.width = Math.floor(document.body.clientHeight * video_ratio) + "px";
         video[0].style.height = document.body.clientHeight + "px";
-    }
-}
-function orign() {
-    $("#auto").show();
-    $("#orign").hide();
-    $("#videosize").text("AUTO");
-    //document.getElementById('auto').style.display = '';
-    //document.getElementById('orign').style.display = 'none';
-    if (video[0].width < document.body.clientWidth && video[0].height < document.body.clientHeight) {
-        video[0].style.width = video[0].videoWidth + "px";
-        video[0].style.height = video[0].videoHeight + "px";
     }
 }
 function showBuff() {
