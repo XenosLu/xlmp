@@ -76,7 +76,7 @@ def list_history_from_db():
 	conn.close()
 	html=['''
 		<tr>
-		  <td><i onclick="ajax('/%s')" class='glyphicon glyphicon-film'></i></td>
+		  <td><i onclick="showdir('/%s')" class='glyphicon glyphicon-film'></i></td>
 		  <td class='filelist'><a href='?src=%s'>%s</a>
 		  <br><small>%s | %s/%s</small></td>
 		  <td><i class='icono-trash del'>%s</i></td>
@@ -170,7 +170,7 @@ def folder(dir):
 			html_dir+='''
 			<tr>
 			  <td><i class="glyphicon glyphicon-folder-close"></i></td>
-			  <td class="filelist" colspan=2 onclick="ajax('/%s..')">..</td>
+			  <td class="filelist" colspan=2 onclick="showdir('/%s..')">..</td>
 			</tr>''' % dir
 		for file in os.listdir('./static/mp4/%s' % dir):
 			if os.path.isdir('./static/mp4/%s%s' % (dir,file)):

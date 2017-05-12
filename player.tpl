@@ -9,6 +9,12 @@
 .glyphicon-film,.glyphicon-folder-close,.glyphicon-off,.glyphicon-remove-circle{
     font-size:2em;
 }
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus {
+    background-color: #cccccc;
+}
+.close {
+    font-size: 3em;
+}
 html, body {
 	height: 100%
 }
@@ -29,7 +35,7 @@ td{
 }
 */
 .filelist{
-	min-width:8em;
+	min-width:14em;
 }
 .icono-power, .icono-trash {
 	border: 2px solid;
@@ -80,9 +86,11 @@ a {
 	text-decoration: none;
 	cursor: default;
 }
+/*
 a:visited, a:link{
 	color: blue
 }
+*/
 span {
 	width: auto;
 }
@@ -179,7 +187,7 @@ div {
 #mainframe {
 	overflow:auto;
 	min-height:9em;
-	min-width:9em;
+	min-width:10em;
 	width:100%;
 }
 </style>
@@ -195,35 +203,44 @@ div {
   <button id="auto" onClick="adapt()" type="button" class="btn btn-default">auto</button>
   <button id="orign" onClick="orign()" type="button" class="btn btn-default">orign</button>
   <button id="playrate" onClick="playrate()" type="button" class="btn btn-default">1.8X</button>
-  <button onClick="ajax('?action=list');document.getElementById('dialog').style.display = '';" type="button" class="btn btn-default">history</button>
+  <button onClick="showhistory('?action=list');document.getElementById('dialog').style.display = '';" type="button" class="btn btn-default">history</button>
   </div>
 </div>
 <div id="dialog" style="display:none">
-  <div class="panel-heading">
-	<!-- <span id="tab_his" class="highlight" style="padding:0 0.75em;float:left" onclick="ajax('?action=list')">History</span> -->
-	<span id="tab_his" class="highlight" onclick="ajax('?action=list')"><i class="glyphicon glyphicon-list-alt"></i>History</span>
-	<!-- <span id="tab_dir" style="padding:0 0.75em;float:left" onclick="ajax('/')">Home dir</span> -->
-	<span id="tab_dir" onclick="ajax('/')"><i class="glyphicon glyphicon-home"></i>Home dir</span>
-	<!-- <button onClick="document.getElementById('dialog').style.display='none';" style="float:right">&#10060;</button> -->
-    <button onClick="$('#dialog').hide();" type="button" class="close">×</button>
+  <!-- <div class="panel-heading"> -->
+  <div>
+    <!-- <span id="tab_his" class="highlight" onclick="ajax('?action=list')"><i class="glyphicon glyphicon-list-alt"></i>History</span> -->
+    <!-- <span id="tab_dir" onclick="ajax('/')"><i class="glyphicon glyphicon-home"></i>Home dir</span> -->
+    <button onClick="$('#dialog').hide();" type="button" class="close">×</button> <!-- &#10060; -->
   </div>
-  <div id="mainframe">
+  <div>
+      <ul id="myTab" class="nav nav-tabs">
+      <li class="active">
+        <a href="#mainframe" data-toggle="tab" onclick="showhistory('?action=list')"><i class="glyphicon glyphicon-list-alt"></i>History</a>
+      </li>
+      <li>
+        <a href="#mainframe" data-toggle="tab" onclick="showdir('/')"><i class="glyphicon glyphicon-home"></i>Home dir</a>
+      </li>
+    </ul>
+  </div>
+  <div id="mainframe" class="tab-pane fade in">
+  <!-- <div id="mainframe"> -->
     <table class="table">
       <tbody id="list">
 	  </tbody>
     </table>
   </div>
   <div class="panel-footer">
-    <button type="button" class="btn btn-default" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"><i class="glyphicon glyphicon-off"></i></button>
+    <button type="button" class="btn btn-default" onClick="if(confirm('Are you sure you want to suspend?'))$.get('/suspend.php');"><i class="glyphicon glyphicon-off"></i></button>
 
     <!-- <div class="btn-group" style="font-size:2em;"> -->
-      <!-- <button type="button" class="btn btn-default btn-xs" onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"><i class="glyphicon glyphicon-off"></i></button> -->
+      <!-- <button type="button" class="btn btn-default btn-xs" onClick="if(confirm('Are you sure you want to suspend?'))$.get('/suspend.php');"><i class="glyphicon glyphicon-off"></i></button> -->
       <!-- <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown"> -->
         <!-- <span class="caret"></span> -->
       <!-- </button> -->
       <!-- <ul class="dropdown-menu" role="menu"> -->
-        <!-- <li><a onClick="if(confirm('Are you sure you want to suspend?'))ajax('/suspend.php');"><i class="glyphicon glyphicon-off"></i>suspend</a></li> -->
-        <!-- <li><a onClick="if(confirm('Are you sure you want to shutdown?'))ajax('/shutdown.php');"><i class="glyphicon glyphicon-off"></i>shutdown</a></li> -->
+        <!-- <li><a onClick="if(confirm('Are you sure you want to suspend?'))$.get('/suspend.php');"><i class="glyphicon glyphicon-off"></i>suspend</a></li> -->
+        <!-- <li><a onClick="if(confirm('Are you sure you want to shutdown?'))$.get('/shutdown.php');"><i class="glyphicon glyphicon-off"></i>shutdown</a></li> -->
       <!-- </ul> -->
     <!-- </div> -->
 
@@ -249,25 +266,25 @@ document.getElementById("mainframe").onclick = function (event) {
 	event = event || window.event;
 	var target = event.target || event.srcElement;
 	if (target.className == "filelist folder")
-		ajax(target.title);
+		showdir(target.title);
 	else if (target.className == "icono-trash del")
-		ajax('?action=del&src=' + target.innerHTML);
+		showhistory('?action=del&src=' + target.innerHTML);
 	else if (target.className == "icono-trash move")
 	{
 		if (confirm('Would you want to move ' + target.innerHTML + ' to old?'))
-			ajax('?action=move&src=' + target.innerHTML);
+			showdir('?action=move&src=' + target.innerHTML);
 	}
 	else if (target.id == "clear")
 	{
 		if (confirm('Are you sure you want to clear all history?'))
-			ajax('?action=clear');
+			showhis('?action=clear');
 	}
 }
 
 function onload() {
 %if not src:
-	ajax('?action=list');
-	//document.getElementById('dialog').style.display = '';
+	//ajax('?action=list');
+    showhistory("?action=list");
     $("#dialog").show();
 %end
 	adapt();
@@ -333,7 +350,8 @@ function playward(time) {
 }
 function loadprogress() {
 	var marktime = {{progress}} - 1;
-	if (marktime > 0) {
+	//if (marktime > 0) {
+	if (!!marktime) {
 		video[0].currentTime = marktime;
 		text="Back to<br>";
 	}
@@ -351,8 +369,7 @@ function saveprogress(){
 		{
 			lastsavetime = video[0].currentTime;
 			//ajax("?action=save&src={{src}}&time=" + video[0].currentTime + "&duration=" + video[0].duration);
-			//$.get("?action=save&src={{src}}&time=" + video[0].currentTime + "&duration=" + video[0].duration);
-			$("#list").load("?action=save&src={{src}}&time=" + video[0].currentTime + "&duration=" + video[0].duration);
+			$.get("?action=save&src={{src}}&time=" + video[0].currentTime + "&duration=" + video[0].duration);
             //to be test
 		}
 	}
@@ -422,19 +439,29 @@ function ajax(url) {
 		{
 			if (url.indexOf("?action") >= 0)
 			{
-				document.getElementById('tab_his').className = "highlight";
-				document.getElementById('tab_dir').className = "";
+				//document.getElementById('tab_his').className = "highlight";
+				//document.getElementById('tab_dir').className = "";
+                $('#myTab li:eq(0) a').tab('show');
 			}
-			else if(url!='/suspend.php')
+			else
 			{
-				document.getElementById('tab_his').className = "";
-				document.getElementById('tab_dir').className = "highlight";
+				//document.getElementById('tab_his').className = "";
+				//document.getElementById('tab_dir').className = "highlight";
+                $('#myTab li:eq(1) a').tab('show');
 			}
-			if(url.indexOf("?action=save") < 0)
+			//if(url.indexOf("?action=save") < 0)
 				document.getElementById('list').innerHTML = pajax.responseText;
 			//setTimeout("out('Timeout')",2000);
 		}
 	}
+}
+function showhistory(str) {
+    $("#list").load(str);
+    $('#myTab li:eq(0) a').tab('show');
+}
+function showdir(str) {
+    $("#list").load(str);
+    $('#myTab li:eq(1) a').tab('show');
 }
 </script>
 </html>
