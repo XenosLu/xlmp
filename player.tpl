@@ -39,43 +39,6 @@ td{
 .filelist{
 	min-width:14em;
 }
-/*
-.icono-power, .icono-trash {
-	border: 2px solid;
-	box-sizing: border-box;
-	display: inline-block;
-	vertical-align: middle;
-	position: relative;
-	font-style: normal;
-	text-align: left;
-	text-indent: -9999px;
-	direction: ltr
-}
-[class*=icono-]:after, [class*=icono-]:before {
-	content: '';
-	/*pointer-events: none*/
-}
-.icono-trash:before {
-	position: absolute;
-	left: 50%;
-	-webkit-transform: translateX(-50%);
-	transform: translateX(-50%)
-}
-.icono-trash {
-	color: red;
-	width: 20px;
-	height: 20px;
-	border-radius: 0 0 3px 3px;
-	border-top: none;
-	margin: 9px 12px 3px
-}
-.icono-trash:before {
-	width: 7px;
-	height: 2px;
-	top: -6px;
-	box-shadow: inset 0 0 0 32px, -10px 3px 0 0, -6px 3px 0 0, 0 3px 0 0, 6px 3px 0 0, 10px 3px 0 0
-}
-*/
 video {
 	clear: both;
 	display: block;
@@ -264,29 +227,17 @@ var text="";
 var lastsavetime = 0;//in seconds
 var lastplaytime = 0;//in seconds
 
-$("#mainframe").on("click",".filelist.folder",function(e){
+$("#mainframe").on("click",".filelist.folder,.glyphicon.glyphicon-film.dir",function(e){
     tabshow(e.target.title, 1);
 });
-/*
-$("#mainframe").on("click",".icono-trash.move",function(e){
-    if (confirm('Move ' + e.target.getAttribute('file') + ' to old?'))
-        tabshow('?action=move&src=' + e.target.getAttribute('file'), 1);
-});
-*/
 $("#mainframe").on("click",".glyphicon.glyphicon-remove-circle.move",function(e){
     if (confirm('Move ' + e.target.getAttribute('file') + ' to old?'))
         tabshow('?action=move&src=' + e.target.getAttribute('file'), 1);
 });
 $("#mainframe").on("click",".glyphicon.glyphicon-remove-circle.del",function(e){
-    if (confirm('Clear ' + e.target.getAttribute('file') + '?'))
-        tabshow('?action=del&src=' + e.target.getAttribute('file'), 0);
+    if (confirm('Clear ' + e.target.title + '?'))
+        tabshow('?action=del&src=' + e.target.title, 0);
 });
-/*
-$("#mainframe").on("click",".icono-trash.del",function(e){
-    if (confirm('Clear ' + e.target.getAttribute('file') + '?'))
-        tabshow('?action=del&src=' + e.target.getAttribute('file'), 0);
-});
-*/
 $("#mainframe").on("click","#clear",function(){
     if (confirm('Clear all history?'))
 		tabshow('?action=clear', 0);

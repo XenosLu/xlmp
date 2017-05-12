@@ -76,10 +76,10 @@ def list_history_from_db():
 	conn.close()
 	html=['''
 		<tr>
-		  <td><i onclick="tabshow('/%s', 1)" class='glyphicon glyphicon-film'></i></td>
+		  <td><i class='glyphicon glyphicon-film dir' title="/%s"></i></td>
 		  <td class='filelist'><a href='?src=%s'>%s</a>
 		  <br><small>%s | %s/%s</small></td>
-		  <td><i class='glyphicon glyphicon-remove-circle del' file="%s"></i></td>
+		  <td><i class='glyphicon glyphicon-remove-circle del' title="%s"></i></td>
 		</tr>''' % (
 		os.path.dirname(s[0]), s[0], s[0], s[3], time_format(s[1]),\
 		time_format(s[2]),s[0])
@@ -169,7 +169,7 @@ def folder(dir):
 			html_dir+='''
 			<tr>
 			  <td><i class="glyphicon glyphicon-folder-close"></i></td>
-			  <td class="filelist" colspan=2 onclick="tabshow('/%s..', 1)">..</td>
+			  <td class="filelist folder" colspan=2 title="/%s..">..</td>
 			</tr>''' % dir
 		for file in os.listdir('./static/mp4/%s' % dir):
 			if os.path.isdir('./static/mp4/%s%s' % (dir,file)):
