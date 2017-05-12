@@ -79,8 +79,8 @@ def list_history_from_db():
 		  <td><i onclick="tabshow('/%s', 1)" class='glyphicon glyphicon-film'></i></td>
 		  <td class='filelist'><a href='?src=%s'>%s</a>
 		  <br><small>%s | %s/%s</small></td>
-		  <td><i class='icono-trash del'>%s</i></td>
-		</tr>''' % (#<td><i class='icono-trash' onclick="tabshow('?action=del&src=%s',0)"></i></td>
+		  <td><i class='glyphicon glyphicon-remove-circle del' file="%s"></i></td>
+		</tr>''' % (
 		os.path.dirname(s[0]), s[0], s[0], s[3], time_format(s[1]),\
 		time_format(s[2]),s[0])
 		for s in historys]
@@ -89,8 +89,7 @@ def list_history_from_db():
 		return '''%s
 		<tr>
 		  <td colspan=3>
-			<button type="button" class="btn btn-default btn-xs" id='clear' style="background: 0 0;">Clear History</button>
-			<!-- button type="button" class="btn btn-default btn-xs" id='clear' style='font-size: 1.2em;'>Clear History</button-->
+			<button type="button" class="btn btn-default btn-xs" id='clear'>Clear History</button>
 		  </td>
 		</tr>''' % ''.join(html)
 	else:
@@ -178,7 +177,7 @@ def folder(dir):
 				<tr>
 				  <td><i class="glyphicon glyphicon-folder-close"></i></td>
 				  <td class="filelist folder" title="/%s%s">%s</td>
-				  <td><i class="icono-trash move">%s%s</i></td>
+				  <td><i class="glyphicon glyphicon-remove-circle move" file="%s%s"></i></td>
 				</tr>''' % (dir,file,file,dir,file)
 			elif re.match('.*\.((?i)mp)4$',file):
 				html_mp4+='''
@@ -188,7 +187,7 @@ def folder(dir):
 					<a href="/player.php?src=%s%s">%s</a>
 					<br><small>%s</small>
 				  </td>
-				  <td><i class="icono-trash move">%s%s</i></td>
+				  <td><i class="glyphicon glyphicon-remove-circle move" file="%s%s"></i></td>
 				</tr>''' % (dir,file,file,get_size(dir+file),dir,file)
 			else:
 				html_files+='''
@@ -198,7 +197,7 @@ def folder(dir):
 					<span style="color:grey">%s</span>
 					<br><small>%s</small>
 				  </td>
-				  <td><i class="icono-trash move">%s%s</i></td>
+				  <td><i class="glyphicon glyphicon-remove-circle move" file="%s%s"></i></td>
 				</tr>''' % (file,get_size(dir+file),dir,file)
 		return "".join([html_dir,html_mp4,html_files])
 	except Exception as e:

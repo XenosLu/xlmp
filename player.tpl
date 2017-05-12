@@ -39,6 +39,7 @@ td{
 .filelist{
 	min-width:14em;
 }
+/*
 .icono-power, .icono-trash {
 	border: 2px solid;
 	box-sizing: border-box;
@@ -74,6 +75,7 @@ td{
 	top: -6px;
 	box-shadow: inset 0 0 0 32px, -10px 3px 0 0, -6px 3px 0 0, 0 3px 0 0, 6px 3px 0 0, 10px 3px 0 0
 }
+*/
 video {
 	clear: both;
 	display: block;
@@ -262,24 +264,33 @@ var text="";
 var lastsavetime = 0;//in seconds
 var lastplaytime = 0;//in seconds
 
-document.getElementById("mainframe").onclick = function (event) {
-	event = event || window.event;
-	var target = event.target || event.srcElement;
-	if (target.className == "filelist folder")
-		tabshow(target.title, 1);
-	else if (target.className == "icono-trash del")
-		tabshow('?action=del&src=' + target.innerHTML, 0);
-	else if (target.className == "icono-trash move")
-	{
-		if (confirm('Would you want to move ' + target.innerHTML + ' to old?'))
-			tabshow('?action=move&src=' + target.innerHTML, 1);
-	}
-	else if (target.id == "clear")
-	{
-		if (confirm('Are you sure you want to clear all history?'))
-			showhis('?action=clear');
-	}
-}
+$("#mainframe").on("click",".filelist.folder",function(e){
+    tabshow(e.target.title, 1);
+});
+/*
+$("#mainframe").on("click",".icono-trash.move",function(e){
+    if (confirm('Move ' + e.target.getAttribute('file') + ' to old?'))
+        tabshow('?action=move&src=' + e.target.getAttribute('file'), 1);
+});
+*/
+$("#mainframe").on("click",".glyphicon.glyphicon-remove-circle.move",function(e){
+    if (confirm('Move ' + e.target.getAttribute('file') + ' to old?'))
+        tabshow('?action=move&src=' + e.target.getAttribute('file'), 1);
+});
+$("#mainframe").on("click",".glyphicon.glyphicon-remove-circle.del",function(e){
+    if (confirm('Clear ' + e.target.getAttribute('file') + '?'))
+        tabshow('?action=del&src=' + e.target.getAttribute('file'), 0);
+});
+/*
+$("#mainframe").on("click",".icono-trash.del",function(e){
+    if (confirm('Clear ' + e.target.getAttribute('file') + '?'))
+        tabshow('?action=del&src=' + e.target.getAttribute('file'), 0);
+});
+*/
+$("#mainframe").on("click","#clear",function(){
+    if (confirm('Clear all history?'))
+		tabshow('?action=clear', 0);
+});
 
 function onload() {
 %if not src:
