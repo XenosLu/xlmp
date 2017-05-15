@@ -7,7 +7,7 @@
 <link href="static/css/bootstrap.min.css" rel="stylesheet">
 <style>
 /*** modified bootstrap style ***/
-.glyphicon-film, .glyphicon-folder-close, .glyphicon-off, .glyphicon-remove-circle, .glyphicon-file, .caret{
+.glyphicon-film, .glyphicon-folder-close, .glyphicon-off, .glyphicon-remove-circle, .glyphicon-file, .caret {
   font-size: 1.75em;
 }
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus {
@@ -37,19 +37,19 @@ body {
   user-select: none;
   font-family: AppleSDGothicNeo-Regular;
 }
-article{
-  left:0%;
+article {
+  left: 0%;
 }
 /*
-td{
+td {
   border-bottom: 1px solid #DDD;
 }
 */
-.filelist{
-  min-width:14em;
+.filelist {
+  min-width: 14em;
 }
-.filelist.other{
-  color:grey;
+.filelist.other {
+  color: grey;
 }
 video {
   clear: both;
@@ -86,7 +86,7 @@ a {
 #sidebar{
   opacity: 0.65;
   position: fixed;
-  float:top;
+  float: top;
   top: 35%;
 }
 #sidebar.outside {
@@ -101,7 +101,7 @@ div {
   box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
   text-shadow: 0.1em 0.1em 0.4em #666;
 }
-#output{
+#output {
   z-index: 99;
   font-size: 1.8em;
   pointer-events: none;
@@ -110,7 +110,7 @@ div {
   opacity: 0.4;
 }
 #dialog {
-  float:top;
+  float: top;
   opacity: 0.75;
   box-shadow: 2px 2px 5px #333333;
   max-width: 100%;
@@ -323,7 +323,7 @@ function adapt() {
     //document.getElementById("mainframe").style.maxHeight=(document.body.clientHeight - 240) + "px";
     //out(document.body.clientHeight +"|"+ $(window).height() +"|"+ $(document).height() +"|"+ $(document.body).height()  +"|"+  $(document.body).outerHeight(true));
     $("#mainframe").css("max-height", ($(document.body).height() - 240) + "px"); 
-    if (document.body.clientHeight<=480)
+    if ($(document.body).height() <= 480)
         $("#dialog").width("100%");
     else
         $("#dialog").width("auto");
@@ -333,7 +333,7 @@ function adapt() {
         video[0].style.width = document.body.clientWidth + "px";
         video[0].style.height = Math.floor(document.body.clientWidth / video_ratio) + "px";
     } else {
-        video[0].style.width = Math.floor(document.body.clientHeight * video_ratio) + "px";
+        video[0].style.width = Math.floor($(document.body).height() * video_ratio) + "px";
         video[0].style.height = document.body.clientHeight + "px";
     }
 }
