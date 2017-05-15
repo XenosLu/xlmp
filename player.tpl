@@ -203,12 +203,12 @@ $("#mainframe").on("click",".glyphicon.glyphicon-remove-circle.move", function(e
         tabshow("?action=move&src=" + e.target.title, 1);
 });
 $("#mainframe").on("click",".glyphicon.glyphicon-remove-circle.del", function(e){
-    if (confirm('Clear ' + e.target.title + '?'))
-        tabshow('?action=del&src=' + e.target.title, 0);
+    if (confirm("Clear " + e.target.title + "?"))
+        tabshow("?action=del&src=" + e.target.title, 0);
 });
 $("#mainframe").on("click","#clear", function(){
-    if (confirm('Clear all history?'))
-        tabshow('?action=clear', 0);
+    if (confirm("Clear all history?"))
+        tabshow("?action=clear", 0);
 });
 
 function onload() {
@@ -217,8 +217,8 @@ function onload() {
     $("#dialog").show();
 %end
     adapt();
-    document.addEventListener('touchstart', touch, false);
-    document.addEventListener('touchend', touch, false);
+    document.addEventListener("touchstart", touch, false);
+    document.addEventListener("touchend", touch, false);
 }
 function touch(event) {
     var event = event || window.event;
@@ -253,13 +253,13 @@ function showsidebar() {
     //$("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
     //$("#sidebar").show().fadeTo(300,0.65).delay(3000).fadeOut(800);
     //$("#sidebar").addClass("outside");
-    var sidebar = document.getElementById('sidebar');
+    var sidebar = document.getElementById("sidebar");
     sidebar.className = "sliding";
     sidebar.addEventListener('animationend', resetsidebar);
     sidebar.addEventListener('webkitAnimationEnd', resetsidebar);
 }
 function resetsidebar() {
-    document.getElementById('sidebar').className = "outside";
+    document.getElementById("sidebar").className = "outside";
     //$("#sidebar").attr("className", "outside");
 }
 function playrate() {
