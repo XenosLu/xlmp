@@ -27,7 +27,7 @@ def get_size(file):
             l=9
         return '%.1f%s' % (size/1024.0**l,unit[l])
 
-def InitDB():#initialize database by create history table
+def initdb():#initialize database by create history table
     conn = db()
     conn.execute('''create table if not exists history
         (FILENAME TEXT PRIMARY KEY    NOT NULL,
@@ -59,7 +59,7 @@ def load_history_from_db(name):
     conn.close()
     return time
 
-def remove_history_from_db(name=None):
+def remove_history_from_db(name = None):
     conn = db()
     if name:
         conn.execute("delete from history where FILENAME=?",(name,))
@@ -216,7 +216,7 @@ def folder(dir):
         abort(404,str(e))
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))#set file path as current path
-InitDB()
+initdb()
 
 if __name__=="__main__":
     os.system('start http://127.0.0.1:8081/player.php')#open the page automatic

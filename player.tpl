@@ -40,6 +40,23 @@ body {
 article {
   left: 0%;
 }
+div {
+  background-color: #CCCCCC;
+  /* color: #1F1F1F; */
+  text-align: center;
+  border: 1px solid #777777;
+  /* box-shadow: 0.5em 0.5em 4em #666666 inset; */
+  box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
+  text-shadow: 0.1em 0.1em 0.4em #666;
+}
+video {
+  clear: both;
+  display: block;
+  margin: auto;
+}
+a {
+  cursor: default;
+}
 /*
 td {
   border-bottom: 1px solid #DDD;
@@ -50,14 +67,6 @@ td {
 }
 .filelist.other {
   color: grey;
-}
-video {
-  clear: both;
-  display: block;
-  margin: auto;
-}
-a {
-  cursor: default;
 }
 @keyframes slide {
   0% {left:-8%}
@@ -91,15 +100,6 @@ a {
 }
 #sidebar.outside {
   left: -25%
-}
-div {
-  background-color: #CCCCCC;
-  /* color: #1F1F1F; */
-  text-align: center;
-  border: 1px solid #777777;
-  /* box-shadow: 0.5em 0.5em 4em #666666 inset; */
-  box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
-  text-shadow: 0.1em 0.1em 0.4em #666;
 }
 #output {
   z-index: 99;
@@ -340,16 +340,16 @@ function adapt() {
 function showBuff() {
     var str="";
     //for(i=0;i<video[0].buffered.length;i++)
-    for(i=0,t=video[0].buffered.length; i<t; i++)
+    for(i=0, t=video[0].buffered.length; i < t; i++)
     {
         if (video[0].currentTime>=video[0].buffered.start(i) && video[0].currentTime<=video[0].buffered.end(i))
             str +=format_time(video[0].buffered.start(i))+"-"+format_time(video[0].buffered.end(i))+"<br>";
     }
-    if (new Date().getTime()-lastplaytime > 1000)
+    if (new Date().getTime() - lastplaytime > 1000)
         out(str+"<small>buffering...</small>");
 }
 function tabshow(str, n) {
-    $("#list").load(encodeURI(str), function(responseTxt,statusTxt,xhr) {
+    $("#list").load(encodeURI(str), function(responseTxt, statusTxt, xhr) {
         if(xhr.statusText=="OK")
             $("#navtab li:eq(" + n + ") a").tab("show");
         else
