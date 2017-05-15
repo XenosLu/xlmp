@@ -41,9 +41,9 @@ article {
   left: 0%;
 }
 div {
+  text-align: center;
   background-color: #CCCCCC;
   /* color: #1F1F1F; */
-  text-align: center;
   border: 1px solid #777777;
   /* box-shadow: 0.5em 0.5em 4em #666666 inset; */
   box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
@@ -145,8 +145,8 @@ td {
   </div>
 </div>
 <div id="dialog" style="display:none">
-  <!-- <div class="panel-heading"> -->
-  <div>
+  <div class="panel-heading">
+  <!-- <div> -->
   <button onClick="$('#dialog').hide();" type="button" class="close">×</button> <!-- &#10060; -->
     <ul id="navtab" class="nav nav-tabs">
       <li class="active">
@@ -184,24 +184,23 @@ td {
 <script src="static/js/jquery-3.2.1.min.js"></script>
 <script src="static/js/bootstrap.min.js"></script>
 <script language="javascript">
-window.addEventListener('load', onload, false);
-window.addEventListener('resize', adapt, false);
-window.addEventListener('mousemove', showsidebar, false);
-//$(document).ready(onload());
-//$(window).load(onload());
-//$(window).resize(adapt());
-var range = 12; //minimum move range in pxs
-var video = document.getElementsByTagName("video");//$("video")
+var range = 12; //minimum touch move range in pxs
 var text="";
 var lastsavetime = 0;//in seconds
 var lastplaytime = 0;//in seconds
+var video = document.getElementsByTagName("video");//$("video")
+window.addEventListener("load", onload, false);
+window.addEventListener("resize", adapt, false);
+window.addEventListener("mousemove", showsidebar, false);
+//$(document).ready(onload());
+//$(window).load(onload());
 
 $("#mainframe").on("click",".filelist.folder,.glyphicon.glyphicon-film.dir", function(e){
     tabshow(e.target.title, 1);
 });
 $("#mainframe").on("click",".glyphicon.glyphicon-remove-circle.move", function(e){
-    if (confirm('Move ' + e.target.title + ' to old?'))
-        tabshow('?action=move&src=' + e.target.title, 1);
+    if (confirm("Move " + e.target.title + " to old?"))
+        tabshow("?action=move&src=" + e.target.title, 1);
 });
 $("#mainframe").on("click",".glyphicon.glyphicon-remove-circle.del", function(e){
     if (confirm('Clear ' + e.target.title + '?'))
@@ -261,6 +260,7 @@ function showsidebar() {
 }
 function resetsidebar() {
     document.getElementById('sidebar').className = "outside";
+    //$("#sidebar").attr("className", "outside");
 }
 function playrate() {
     var rate = document.getElementById('playrate');
