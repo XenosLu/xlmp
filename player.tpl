@@ -7,7 +7,7 @@
 <link href="static/css/bootstrap.min.css" rel="stylesheet">
 <style>
 /*** modified bootstrap style ***/
-.glyphicon-film, .glyphicon-folder-close, .glyphicon-off, .glyphicon-remove-circle, .glyphicon-file, .caret {
+.glyphicon-film, .glyphicon-folder-close, .glyphicon-off, .glyphicon-remove-circle, .glyphicon-file, .glyphicon-list-alt, .caret {
   font-size: 1.75em;
 }
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus {
@@ -84,11 +84,11 @@ td {
   left: 0%;
   -webkit-transform: translateX(0%);
   -webkit-animation-name: slide;
-  -webkit-animation-duration: 5s;
+  -webkit-animation-duration: 5.5s;
   -webkit-animation-iteration-count: 1;
   -webkit-animation-delay: 0s;
   animation-name: slide;
-  animation-duration: 5s;
+  animation-duration: 5.5s;
   animation-iteration-count: 1;
   animation-delay: 0s;
 }
@@ -138,11 +138,12 @@ td {
 %end
 <div id="sidebar" class="outside">
 <!-- <div id="sidebar"> -->
-  <div class="btn-group-vertical btn-group-lg">
-  <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">orign</button>
-  <button id="playrate" onClick="playrate()" type="button" class="btn btn-default">1.8X</button>
-  <button onClick="tabshow('?action=list',0);$('#dialog').show();" type="button" class="btn btn-default">history</button>
-  </div>
+  <!-- <div class="btn-group-vertical btn-group-lg"> -->
+  <!-- <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">orign</button> -->
+  <!-- <button id="playrate" onClick="playrate()" type="button" class="btn btn-default">1.8X</button> -->
+  <!-- <button onClick="tabshow('?action=list',0);$('#dialog').show();" type="button" class="btn btn-default">history</button> -->
+  <button onClick="tabshow('?action=list',0);$('#dialog').show();" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list-alt"></i></button>
+  <!-- </div> -->
 </div>
 <div id="dialog" style="display:none">
   <div class="panel-heading">
@@ -150,7 +151,7 @@ td {
   <button onClick="$('#dialog').hide();" type="button" class="close">×</button> <!-- &#10060; -->
     <ul id="navtab" class="nav nav-tabs">
       <li class="active">
-        <a href="#mainframe" data-toggle="tab" onclick="tabshow('?action=list', 0)"><i class="glyphicon glyphicon-list-alt"></i>History</a>
+        <a href="#mainframe" data-toggle="tab" onclick="tabshow('?action=list', 0)"><i class="glyphicon glyphicon-list"></i>History</a>
       </li>
       <li>
         <a href="#mainframe" data-toggle="tab" onclick="tabshow('/', 1)"><i class="glyphicon glyphicon-home"></i>Home dir</a>
@@ -165,6 +166,8 @@ td {
     </table>
   </div>
   <div class="panel-footer">
+    <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">orign</button>
+    <button id="playrate" onClick="playrate()" type="button" class="btn btn-default">1.8X</button>
     <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.get('/suspend.php');">
       <i class="glyphicon glyphicon-off"></i>
     </button>
