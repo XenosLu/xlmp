@@ -96,7 +96,7 @@ td {
   opacity: 0.65;
   position: fixed;
   float: top;
-  top: 35%;
+  top: 40%;
 }
 #sidebar.outside {
   left: -25%
@@ -142,7 +142,8 @@ td {
   <!-- <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">orign</button> -->
   <!-- <button id="playrate" onClick="playrate()" type="button" class="btn btn-default">1.8X</button> -->
   <!-- <button onClick="tabshow('?action=list',0);$('#dialog').show();" type="button" class="btn btn-default">history</button> -->
-  <button onClick="tabshow('?action=list',0);$('#dialog').show();" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list-alt"></i></button>
+  <!-- <button onClick="$('#dialog').show();" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list-alt"></i></button> -->
+  <button onClick="$('#dialog').show();" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list-alt"></i></button>
   <!-- </div> -->
 </div>
 <div id="dialog" style="display:none">
@@ -197,8 +198,8 @@ window.addEventListener("resize", adapt, false);
 window.addEventListener("mousemove", showsidebar, false);
 //$(document).ready(onload());
 //$(window).load(onload());
+tabshow("?action=list", 0);
 %if not src:
-    tabshow("?action=list", 0);
     $("#dialog").show();
 %end
 
