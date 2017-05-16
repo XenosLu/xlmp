@@ -57,6 +57,9 @@ video {
 a {
   cursor: default;
 }
+input {
+  width: 3em;
+}
 /*
 td {
   border-bottom: 1px solid #DDD;
@@ -167,8 +170,12 @@ td {
     </table>
   </div>
   <div class="panel-footer">
+    <span>screen:</span>
     <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">orign</button>
-    <button id="playrate" onClick="playrate()" type="button" class="btn btn-default">1.8X</button>
+    <!-- <button id="playrate" onClick="playrate()" type="button" class="btn btn-default">1.8X</button> -->
+    <br>
+    <span>play rate: </span><span id="range">1X</span>
+    <input id="rate" value="1" min="0.5" max="2" step="0.1" type="range" onchange="rate()"/>
     <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.get('/suspend.php');">
       <i class="glyphicon glyphicon-off"></i>
     </button>
@@ -275,6 +282,11 @@ function playrate() {
         video[0].playbackRate = 1.8;
         rate.innerHTML = "1.0X";
     }
+}
+function rate() {
+    out($("#rate").val()+"X");
+    $("#range").html($("#rate").val()+"X");
+    video[0].playbackRate = $("#rate").val();
 }
 function format_time(time) {
     return Math.floor(time / 60) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
