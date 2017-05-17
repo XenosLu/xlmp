@@ -171,17 +171,13 @@ input {
         <!-- </ul> -->
       <!-- </li> -->
     <!-- </ul> -->
-    <!-- <span>screen:</span> -->
     <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">orign</button>
-    <!-- <span>play rate: </span><span id="range">1X</span> -->
-    <!-- <input id="rate" value="1" min="0.5" max="2" step="0.1" onchange="rate()" type="range"> -->
     <!-- <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.get('/suspend.php');"> -->
       <!-- <i class="glyphicon glyphicon-off"></i> -->
     <!-- </button> -->
     <div class="btn-group dropup">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        Rate
-        <span class="caret"></span>
+        Rate<span class="caret"></span>
       </button>
       <ul class="dropdown-menu" role="menu">
         <li><a href="#" onclick="rate(0.5)">0.5X</a></li>
@@ -226,7 +222,6 @@ tabshow("?action=list", 0);
 $("#mainframe").on("click",".dir", function(e){
     tabshow(e.target.title, 1);
 });
-//$("#mainframe").on("click",".glyphicon.glyphicon-remove-circle.move", function(e){
 $("#mainframe").on("click",".move", function(e){
     if (confirm("Move " + e.target.title + " to old?"))
         tabshow("?action=move&src=" + e.target.title, 1);
@@ -291,13 +286,6 @@ function rate(x) {
     out(x + "X");
     video[0].playbackRate = x;
 }
-/*
-function rate2() {
-    out($("#rate").val()+"X");
-    $("#range").html($("#rate").val()+"X");
-    video[0].playbackRate = $("#rate").val();
-}
-*/
 function format_time(time) {
     return Math.floor(time / 60) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
 }
