@@ -7,7 +7,7 @@
 <link href="static/css/bootstrap.min.css" rel="stylesheet">
 <style>
 /*** modified bootstrap style ***/
-.glyphicon-film, .glyphicon-folder-close, .glyphicon-off, .glyphicon-remove-circle, .glyphicon-file, .glyphicon-list-alt, .caret {
+.glyphicon-film, .glyphicon-folder-close, .glyphicon-remove-circle, .glyphicon-file, .glyphicon-list-alt, .caret {
   font-size: 1.75em;
 }
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus {
@@ -16,9 +16,11 @@
 .close {
   font-size: 2.5em;
 }
+/*
 .btn-default {
   background: 0 0;
 }
+*/
 .breadcrumb {
   background: 0 0;
   margin: 0;
@@ -42,12 +44,14 @@ article {
 }
 div {
   text-align: center;
-  background-color: #CCCCCC;
+  /* background-color: #CCCCCC; */
   /* color: #1F1F1F; */
-  border: 1px solid #777777;
   /* box-shadow: 0.5em 0.5em 4em #666666 inset; */
+  /*
+  border: 1px solid #777777;
   box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
   text-shadow: 0.1em 0.1em 0.4em #666;
+  */
 }
 video {
   clear: both;
@@ -58,7 +62,7 @@ a {
   cursor: default;
 }
 input {
-  width: 3em;
+  height: 3em;
 }
 /*
 td {
@@ -98,7 +102,7 @@ td {
 #sidebar{
   opacity: 0.65;
   position: fixed;
-  float: top;
+  /* float: top; */
   top: 40%;
 }
 #sidebar.outside {
@@ -113,7 +117,7 @@ td {
   opacity: 0.4;
 }
 #dialog {
-  float: top;
+  /*float: top;*/
   opacity: 0.75;
   box-shadow: 2px 2px 5px #333333;
   max-width: 100%;
@@ -150,9 +154,9 @@ td {
   <!-- </div> -->
 </div>
 <div id="dialog" style="display:none">
-  <div class="panel-heading">
-  <!-- <div> -->
-  <button onClick="$('#dialog').hide();" type="button" class="close">×</button> <!-- &#10060; -->
+  <!-- <div class="panel-heading"> -->
+  <div>
+  <button onClick="$('#dialog').hide();" type="button" class="close">&times;</button> <!-- &#10060; -->
     <ul id="navtab" class="nav nav-tabs">
       <li class="active">
         <a href="#mainframe" data-toggle="tab" onclick="tabshow('?action=list', 0)"><i class="glyphicon glyphicon-list"></i>History</a>
@@ -170,25 +174,54 @@ td {
     </table>
   </div>
   <div class="panel-footer">
-    <span>screen:</span>
+    <!-- <ul class="nav nav-pills"> -->
+      <!-- <li class="dropup"> -->
+        <!-- <a href="#" class="dropdown-toggle text-muted" data-toggle="dropdown"> -->
+          <!-- Play rate -->
+          <!-- <b class="caret"></b> -->
+        <!-- </a> -->
+        <!-- <ul class="dropdown-menu"> -->
+          <!-- <li><a href="#" onclick="rate(0.5)">0.5X</a></li> -->
+          <!-- <li><a href="#" onclick="rate(0.75)">0.75X</a></li> -->
+          <!-- <li class="divider"/> -->
+          <!-- <li><a href="#" onclick="rate(1)">1X</a></li> -->
+          <!-- <li class="divider"/> -->
+          <!-- <li><a href="#" onclick="rate(1.5)">1.5X</a></li> -->
+          <!-- <li><a href="#" onclick="rate(2)">2X</a></li> -->
+        <!-- </ul> -->
+      <!-- </li> -->
+    <!-- </ul> -->
+    <!-- <span>screen:</span> -->
     <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">orign</button>
-    <!-- <button id="playrate" onClick="playrate()" type="button" class="btn btn-default">1.8X</button> -->
-    <br>
-    <span>play rate: </span><span id="range">1X</span>
-    <input id="rate" value="1" min="0.5" max="2" step="0.1" type="range" onchange="rate()"/>
-    <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.get('/suspend.php');">
-      <i class="glyphicon glyphicon-off"></i>
-    </button>
-    <!-- <div class="btn-group"> -->
-      <!-- <button type="button" class="btn btn-default" onClick="if(confirm('Are you sure you want to suspend?'))$.get('/suspend.php');"><i class="glyphicon glyphicon-off"></i></button> -->
-      <!-- <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"> -->
-        <!-- <span class="caret"></span> -->
-      <!-- </button> -->
-      <!-- <ul class="dropdown-menu" role="menu"> -->
-        <!-- <li><a onClick="if(confirm('Suspend ?'))$.get('/suspend.php');"><i class="glyphicon glyphicon-off"></i>suspend</a></li> -->
-        <!-- <li><a onClick="if(confirm('Shutdown ?'))$.get('/shutdown.php');"><i class="glyphicon glyphicon-off"></i>shutdown</a></li> -->
-      <!-- </ul> -->
-   <!--  </div> -->
+    <!-- <span>play rate: </span><span id="range">1X</span> -->
+    <!-- <input id="rate" value="1" min="0.5" max="2" step="0.1" onchange="rate()" type="range"> -->
+    <!-- <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.get('/suspend.php');"> -->
+      <!-- <i class="glyphicon glyphicon-off"></i> -->
+    <!-- </button> -->
+    <div class="btn-group dropup">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        Rate
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="#" onclick="rate(0.5)">0.5X</a></li>
+        <li><a href="#" onclick="rate(0.75)">0.75X</a></li>
+        <li class="divider"/>
+        <li><a href="#" onclick="rate(1)">1X</a></li>
+        <li class="divider"/>
+        <li><a href="#" onclick="rate(1.5)">1.5X</a></li>
+        <li><a href="#" onclick="rate(2)">2X</a></li>
+      </ul>
+    </div>
+    <div class="btn-group dropup">
+      <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.get('/suspend.php');"><i class="glyphicon glyphicon-off"></i></button>
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li><a onClick="if(confirm('Shutdown ?'))$.get('/shutdown.php');"><i class="glyphicon glyphicon-off"></i>shutdown</a></li>
+      </ul>
+    </div>
   </div>
 </div>
 </body>
@@ -273,21 +306,17 @@ function resetsidebar() {
     document.getElementById("sidebar").className = "outside";
     //$("#sidebar").attr("className", "outside");
 }
-function playrate() {
-    var rate = document.getElementById("playrate");
-    if (video[0].playbackRate != 1.0) {
-        video[0].playbackRate = 1.0;
-        rate.innerHTML = "1.8X";
-    } else {
-        video[0].playbackRate = 1.8;
-        rate.innerHTML = "1.0X";
-    }
+function rate(x) {
+    out(x + "X");
+    video[0].playbackRate = x;
 }
-function rate() {
+/*
+function rate2() {
     out($("#rate").val()+"X");
     $("#range").html($("#rate").val()+"X");
     video[0].playbackRate = $("#rate").val();
 }
+*/
 function format_time(time) {
     return Math.floor(time / 60) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
 }
