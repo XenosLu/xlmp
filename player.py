@@ -77,7 +77,7 @@ def list_history_from_db():
     html=['''
         <tr>
           <td><i class='glyphicon glyphicon-film dir' title="/%s"></i></td>
-          <td class='filelist'><a href='?src=%s'>%s</a>
+          <td class="filelist"><a href="?src=%s">%s</a>
           <br><small>%s | %s/%s</small></td>
           <td><i class='glyphicon glyphicon-remove-circle del' title="%s"></i></td>
         </tr>''' % (
@@ -168,11 +168,11 @@ def folder(dir):
             html_dir='''
             <tr><td colspan=3>
             <ol class="breadcrumb">
-              <li><span class="filelist folder"><i class="glyphicon glyphicon-home" title="/"></i></span></li>
+              <li><span class="filelist dir"><i class="glyphicon glyphicon-home" title="/"></i></span></li>
               '''
             for n,i in enumerate(dirs[:-1:],1):
                 print("/%s %s"%('/'.join(dirs[0:n]),i))
-                html_dir += '<li><span class="filelist folder" title="/%s">%s</span></li>'%('/'.join(dirs[0:n]),i)
+                html_dir += '<li><span class="filelist dir" title="/%s">%s</span></li>'%('/'.join(dirs[0:n]),i)
             html_dir += '''
               <li class="active">%s</li>
             </ol>
@@ -181,14 +181,14 @@ def folder(dir):
             html_dir += '''
             <tr>
               <td><i class="glyphicon glyphicon-folder-close"></i></td>
-              <td class="filelist folder" colspan=2 title="/%s..">..</td>
+              <td class="filelist dir" colspan=2 title="/%s..">..</td>
             </tr>''' % dir
         for file in os.listdir('./static/mp4/%s' % dir):
             if os.path.isdir('./static/mp4/%s%s' % (dir,file)):
                 html_dir += '''
                 <tr>
                   <td><i class="glyphicon glyphicon-folder-close"></i></td>
-                  <td class="filelist folder" title="/%s%s">%s</td>
+                  <td class="filelist dir" title="/%s%s">%s</td>
                   <td><i class="glyphicon glyphicon-remove-circle move" title="%s%s"></i></td>
                 </tr>''' % (dir,file,file,dir,file)
             elif re.match('.*\.((?i)mp)4$',file):

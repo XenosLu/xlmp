@@ -10,17 +10,15 @@
 .glyphicon-film, .glyphicon-folder-close, .glyphicon-remove-circle, .glyphicon-file, .glyphicon-list-alt, .caret {
   font-size: 1.75em;
 }
-.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus {
-  background-color: #CCCCCC;
+.glyphicon-remove-circle {
+    color: gray;
 }
 .close {
   font-size: 2.5em;
 }
-/*
-.btn-default {
-  background: 0 0;
+.dropdown-menu {
+  opacity: 0.75;
 }
-*/
 .breadcrumb {
   background: 0 0;
   margin: 0;
@@ -31,8 +29,7 @@ html, body {
   height: 100%
 }
 body {
-  /* background-color: #101010; */
-  background-color: #DDD9DD;
+  background-color: #DDD9DD; /* #101010; */
   cursor: default;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -44,14 +41,6 @@ article {
 }
 div {
   text-align: center;
-  /* background-color: #CCCCCC; */
-  /* color: #1F1F1F; */
-  /* box-shadow: 0.5em 0.5em 4em #666666 inset; */
-  /*
-  border: 1px solid #777777;
-  box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
-  text-shadow: 0.1em 0.1em 0.4em #666;
-  */
 }
 video {
   clear: both;
@@ -64,11 +53,6 @@ a {
 input {
   height: 3em;
 }
-/*
-td {
-  border-bottom: 1px solid #DDD;
-}
-*/
 .filelist {
   min-width: 14em;
 }
@@ -115,12 +99,16 @@ td {
   border-radius: 0.2em;
   padding: 0.2em;
   opacity: 0.4;
+  border: 1px solid #777777;
+  box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
+  text-shadow: 0.1em 0.1em 0.4em #666;
 }
 #dialog {
   /*float: top;*/
   opacity: 0.75;
   box-shadow: 2px 2px 5px #333333;
   max-width: 100%;
+  /* background-color: #CCCCCC; */
 }
 #output, #dialog {
   position: fixed;
@@ -130,6 +118,7 @@ td {
   -webkit-transform: translate(-50%, -50%);
 }
 #mainframe {
+  
   overflow: auto;
   min-height: 9em;
   min-width: 10em;
@@ -144,19 +133,11 @@ td {
   </article>
 %end
 <div id="sidebar" class="outside">
-<!-- <div id="sidebar"> -->
-  <!-- <div class="btn-group-vertical btn-group-lg"> -->
-  <!-- <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">orign</button> -->
-  <!-- <button id="playrate" onClick="playrate()" type="button" class="btn btn-default">1.8X</button> -->
-  <!-- <button onClick="tabshow('?action=list',0);$('#dialog').show();" type="button" class="btn btn-default">history</button> -->
-  <!-- <button onClick="$('#dialog').show();" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list-alt"></i></button> -->
   <button onClick="$('#dialog').show();" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list-alt"></i></button>
-  <!-- </div> -->
 </div>
 <div id="dialog" style="display:none">
-  <!-- <div class="panel-heading"> -->
-  <div>
-  <button onClick="$('#dialog').hide();" type="button" class="close">&times;</button> <!-- &#10060; -->
+  <div class="bg-info">
+  <button onClick="$('#dialog').hide();" type="button" class="close">&times;&nbsp;</button> <!-- &#10060; -->
     <ul id="navtab" class="nav nav-tabs">
       <li class="active">
         <a href="#mainframe" data-toggle="tab" onclick="tabshow('?action=list', 0)"><i class="glyphicon glyphicon-list"></i>History</a>
@@ -166,8 +147,7 @@ td {
       </li>
     </ul>
   </div>
-  <div id="mainframe" class="tab-pane fade in">
-  <!-- <div id="mainframe"> -->
+  <div id="mainframe" class="tab-pane fade in bg-warning">
     <table class="table">
       <tbody id="list">
       </tbody>
@@ -243,14 +223,15 @@ tabshow("?action=list", 0);
     $("#dialog").show();
 %end
 
-$("#mainframe").on("click",".filelist.folder,.glyphicon.glyphicon-film.dir", function(e){
+$("#mainframe").on("click",".dir", function(e){
     tabshow(e.target.title, 1);
 });
-$("#mainframe").on("click",".glyphicon.glyphicon-remove-circle.move", function(e){
+//$("#mainframe").on("click",".glyphicon.glyphicon-remove-circle.move", function(e){
+$("#mainframe").on("click",".move", function(e){
     if (confirm("Move " + e.target.title + " to old?"))
         tabshow("?action=move&src=" + e.target.title, 1);
 });
-$("#mainframe").on("click",".glyphicon.glyphicon-remove-circle.del", function(e){
+$("#mainframe").on("click",".del", function(e){
     if (confirm("Clear " + e.target.title + "?"))
         tabshow("?action=del&src=" + e.target.title, 0);
 });
