@@ -7,6 +7,9 @@
 <link href="static/css/bootstrap.min.css" rel="stylesheet">
 <style>
 /*** modified bootstrap style ***/
+.dropup:hover .dropdown-menu {
+  display: block;
+}
 .glyphicon-film, .glyphicon-folder-close, .glyphicon-remove-circle, .glyphicon-file, .glyphicon-list-alt, .caret {
   font-size: 1.75em;
 }
@@ -15,9 +18,12 @@
 }
 .close {
   font-size: 2.5em;
+  margin-right: 0.25em;
+  margin-top: 0.05em;
 }
 .dropdown-menu {
   opacity: 0.75;
+  min-width: 6em;
 }
 .breadcrumb {
   background: 0 0;
@@ -137,7 +143,7 @@ input {
 </div>
 <div id="dialog" style="display:none">
   <div class="bg-info">
-  <button onClick="$('#dialog').hide();" type="button" class="close">&times;&nbsp;</button> <!-- &#10060; -->
+  <button onClick="$('#dialog').hide();" type="button" class="close">&times;</button> <!-- &#10060; -->
     <ul id="navtab" class="nav nav-tabs">
       <li class="active">
         <a href="#mainframe" data-toggle="tab" onclick="tabshow('?action=list', 0)"><i class="glyphicon glyphicon-list"></i>History</a>
