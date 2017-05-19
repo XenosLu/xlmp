@@ -139,7 +139,7 @@ input {
   </article>
 %end
 <div id="sidebar" class="outside">
-  <button onClick="$('#dialog').show();" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list-alt"></i></button>
+  <button onClick="$('#dialog').show();if($('#navtab li:eq(0)').attr('class')=='active')tabshow('?action=list', 0);" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list-alt"></i></button>
 </div>
 <div id="dialog" style="display:none">
   <div class="bg-info">
