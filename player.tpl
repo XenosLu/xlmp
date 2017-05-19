@@ -124,7 +124,6 @@ input {
   -webkit-transform: translate(-50%, -50%);
 }
 #mainframe {
-  
   overflow: auto;
   min-height: 9em;
   min-width: 10em;
@@ -139,7 +138,7 @@ input {
   </article>
 %end
 <div id="sidebar" class="outside">
-  <button onClick="$('#dialog').show();if($('#navtab li:eq(0)').attr('class')=='active')tabshow('?action=list', 0);" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list-alt"></i></button>
+  <button onClick="if($('#navtab li:eq(0)').attr('class')=='active')tabshow('?action=list', 0);$('#dialog').show();" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list-alt"></i></button>
 </div>
 <div id="dialog" style="display:none">
   <div class="bg-info">
@@ -160,23 +159,6 @@ input {
     </table>
   </div>
   <div class="panel-footer">
-    <!-- <ul class="nav nav-pills"> -->
-      <!-- <li class="dropup"> -->
-        <!-- <a href="#" class="dropdown-toggle text-muted" data-toggle="dropdown"> -->
-          <!-- Play rate -->
-          <!-- <b class="caret"></b> -->
-        <!-- </a> -->
-        <!-- <ul class="dropdown-menu"> -->
-          <!-- <li><a href="#" onclick="rate(0.5)">0.5X</a></li> -->
-          <!-- <li><a href="#" onclick="rate(0.75)">0.75X</a></li> -->
-          <!-- <li class="divider"/> -->
-          <!-- <li><a href="#" onclick="rate(1)">1X</a></li> -->
-          <!-- <li class="divider"/> -->
-          <!-- <li><a href="#" onclick="rate(1.5)">1.5X</a></li> -->
-          <!-- <li><a href="#" onclick="rate(2)">2X</a></li> -->
-        <!-- </ul> -->
-      <!-- </li> -->
-    <!-- </ul> -->
     <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">orign</button>
     <!-- <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.get('/suspend.php');"> -->
       <!-- <i class="glyphicon glyphicon-off"></i> -->
@@ -220,8 +202,8 @@ window.addEventListener("resize", adapt, false);
 window.addEventListener("mousemove", showsidebar, false);
 //$(document).ready(onload());
 //$(window).load(onload());
-tabshow("?action=list", 0);
 %if not src:
+    tabshow("?action=list", 0);
     $("#dialog").show();
 %end
 
@@ -348,7 +330,6 @@ function videosizetoggle() {
 }
 function adapt() {
     $("#videosize").text("orign");
-    //document.getElementById("mainframe").style.maxHeight=(document.body.clientHeight - 240) + "px";
     //out($(window).height() +"|"+ $(document).height() +"|"+ $(document.body).height()  +"|"+  $(document.body).outerHeight(true));
     $("#mainframe").css("max-height", ($(document.body).height() - 240) + "px"); 
     if ($(document.body).height() <= 480)
