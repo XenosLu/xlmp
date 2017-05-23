@@ -106,7 +106,7 @@ input {
   text-shadow: 0.1em 0.1em 0.4em #666;
 }
 #dialog {
-  opacity: 0.75;
+  opacity: 0.8;
   box-shadow: 2px 2px 5px #333333;
   max-width: 100%;
   /* background-color: #CCCCCC; */
@@ -241,7 +241,7 @@ $("#mainframe").on("click","#clear", function() {
     if (confirm("Clear all history?"))
         tabshow("?action=clear", 0);
 });
-
+/*
 function touch(event) {
     var event = event || window.event;
     switch (event.type) {
@@ -263,6 +263,7 @@ function touch(event) {
         break;
     }
 }
+*/
 function out(str) {
     if (str=="")
         return;
@@ -311,11 +312,11 @@ function playward(time) {
     video[0].currentTime += time;
 }
 function loadprogress() {
-    var marktime = {{progress}};
-    if (!!marktime) {
-        video[0].currentTime = marktime - 1;
+    //var marktime = {{progress}} - 0.5;
+    //if (marktime > 0) {
+        video[0].currentTime = Math.max({{progress}} - 0.5, 0);
         text="Back to<br>";
-    }
+    //}
 }
 function showProgress() {
     out(text+format_time(video[0].currentTime)+ '/' + format_time(video[0].duration));
