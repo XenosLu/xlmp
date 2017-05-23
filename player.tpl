@@ -7,9 +7,6 @@
 <link href="static/css/bootstrap.min.css" rel="stylesheet">
 <style>
 /*** modified bootstrap style ***/
-.dropup:hover .dropdown-menu {
-  display: block;
-}
 .glyphicon-film, .glyphicon-folder-close, .glyphicon-remove-circle, .glyphicon-file, .glyphicon-list-alt, .caret {
   font-size: 1.75em;
 }
@@ -35,7 +32,7 @@ html, body {
   height: 100%
 }
 body {
-  background-color: #DDD9DD; /* #101010; */
+  background-color: #F1F2F6; /* #DDD9DD #101010; */
   cursor: default;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -90,13 +87,12 @@ input {
   animation-delay: 0s;
 }
 #sidebar{
-  opacity: 0.65;
+  opacity: 0;
   position: fixed;
-  /* float: top; */
   top: 40%;
 }
 #sidebar.outside {
-  left: -25%
+  /*left: -25%*/
 }
 #output {
   z-index: 99;
@@ -110,7 +106,6 @@ input {
   text-shadow: 0.1em 0.1em 0.4em #666;
 }
 #dialog {
-  /*float: top;*/
   opacity: 0.75;
   box-shadow: 2px 2px 5px #333333;
   max-width: 100%;
@@ -202,32 +197,51 @@ window.addEventListener("resize", adapt, false);
 window.addEventListener("mousemove", showsidebar, false);
 //$(document).ready(onload());
 //$(window).load(onload());
+
+function onload() {
+    adapt();
+    //document.addEventListener("touchstart", touch, false);
+    //document.addEventListener("touchend", touch, false);
+}
+
+$(document).on('touchstart',function(e) {
+    x0 = e.originalEvent.touches[0].screenX;
+    y0 = e.originalEvent.touches[0].screenY;
+});
+$(document).on('touchend',function(e) {
+    x = event.changedTouches[0].screenX - x0;
+    y = event.changedTouches[0].screenY - y0;
+
+    if (Math.abs(y / x) < 0.25) {
+        if (x > range)
+            playward(Math.floor(x / 11));
+        else if (x < -range)
+            playward(Math.floor(x / 11));
+    } else
+        showsidebar();
+});
+
 %if not src:
     tabshow("?action=list", 0);
     $("#dialog").show();
 %end
 
-$("#mainframe").on("click",".dir", function(e){
+$("#mainframe").on("click",".dir", function(e) {
     tabshow(e.target.title, 1);
 });
-$("#mainframe").on("click",".move", function(e){
+$("#mainframe").on("click",".move", function(e) {
     if (confirm("Move " + e.target.title + " to old?"))
         tabshow("?action=move&src=" + e.target.title, 1);
 });
-$("#mainframe").on("click",".del", function(e){
+$("#mainframe").on("click",".del", function(e) {
     if (confirm("Clear " + e.target.title + "?"))
         tabshow("?action=del&src=" + e.target.title, 0);
 });
-$("#mainframe").on("click","#clear", function(){
+$("#mainframe").on("click","#clear", function() {
     if (confirm("Clear all history?"))
         tabshow("?action=clear", 0);
 });
 
-function onload() {
-    adapt();
-    document.addEventListener("touchstart", touch, false);
-    document.addEventListener("touchend", touch, false);
-}
 function touch(event) {
     var event = event || window.event;
     switch (event.type) {
@@ -250,25 +264,27 @@ function touch(event) {
     }
 }
 function out(str) {
-    if(str=="")return;
+    if (str=="")
+        return;
     $("#output").remove();
-    $(document.body).append("<div id='output'>"+str+"</div>");
+    $(document.body).append("<div id='output'>" + str + "</div>");
     $("#output").fadeTo(250,0.7).delay(1625).fadeOut(625);
 }
 function showsidebar() {
     //$("#sidebar").removeClass("outside");
     //$("#sidebar").show().animate({left:"0"},500).delay(3250).animate({left:"-10%"},1250);
     //$("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
-    //$("#sidebar").show().fadeTo(300,0.65).delay(3000).fadeOut(800);
+    //$("#sidebar").show().fadeTo(300,0.3).delay(32000).fadeOut(800);
+    $("#sidebar").show().fadeTo(300,0.3).delay(15000).fadeOut(800);
     //$("#sidebar").addClass("outside");
-    var sidebar = document.getElementById("sidebar");
-    sidebar.className = "sliding";
-    sidebar.addEventListener("animationend", resetsidebar);
-    sidebar.addEventListener("webkitAnimationEnd", resetsidebar);
+    ////////////////////////////////////////////////////////////////
+    //var sidebar = document.getElementById("sidebar");
+    //sidebar.className = "sliding";
+    //sidebar.addEventListener("animationend", resetsidebar);
+    //sidebar.addEventListener("webkitAnimationEnd", resetsidebar);
 }
 function resetsidebar() {
-    document.getElementById("sidebar").className = "outside";
-    //$("#sidebar").attr("className", "outside");
+    $("#sidebar").attr("class", "outside");
 }
 function rate(x) {
     out(x + "X");
@@ -280,37 +296,38 @@ function format_time(time) {
 function playward(time) {
     if (isNaN(video[0].duration))
         return;
-    if (time > 60)
-        time = 60;
-    else if (time < -60)
-        time = -60;
-    video[0].currentTime += time;
-    if (time > 0)
+    //if (time > 60)
+        //time = 60;
+    //else if (time < -60)
+        //time = -60;
+    if (time > 0) {
+        time=Math.min(60,time);
         text=time + "S>><br>";
-    else if (time < 0)
-        text="<<" + -time + "S<br>";    
+    }
+    else if (time < 0) {
+        time=Math.max(-60,time);
+        text="<<" + -time + "S<br>";
+    }
+    video[0].currentTime += time;
 }
 function loadprogress() {
-    var marktime = {{progress}} - 1;
-    //if (marktime > 0) {
+    var marktime = {{progress}};
     if (!!marktime) {
-        video[0].currentTime = marktime;
+        video[0].currentTime = marktime - 1;
         text="Back to<br>";
     }
 }
-function showProgress(){
+function showProgress() {
     out(text+format_time(video[0].currentTime)+ '/' + format_time(video[0].duration));
-    //out(text+format_time($("video").currentTime)+ '/' + format_time($("video").duration));
     text="";
 }
-function saveprogress(){
+function saveprogress() {
     lastplaytime = new Date().getTime();
-    if (video[0].readyState == 4 && video[0].currentTime < video[0].duration + 1)
-    {
+    if (video[0].readyState == 4 && video[0].currentTime < video[0].duration + 1) {
         if (Math.abs(video[0].currentTime - lastsavetime) > 3)//save play progress in every 3 seconds
         {
             lastsavetime = video[0].currentTime;
-            $.get("?action=save&src={{src}}&time=" + video[0].currentTime + "&duration=" + video[0].duration ,function(data, status, xhr){
+            $.get("?action=save&src={{src}}&time=" + video[0].currentTime + "&duration=" + video[0].duration ,function(data, status, xhr) {
                 if(xhr.statusText!="OK")
                     out(xhr.statusText);
             });
@@ -331,7 +348,7 @@ function videosizetoggle() {
 function adapt() {
     $("#videosize").text("orign");
     //out($(window).height() +"|"+ $(document).height() +"|"+ $(document.body).height()  +"|"+  $(document.body).outerHeight(true));
-    $("#mainframe").css("max-height", ($(document.body).height() - 240) + "px"); 
+    $("#mainframe").css("max-height", ($(document.body).height() - 240) + "px");
     if ($(document.body).height() <= 480)
         $("#dialog").width("100%");
     else
@@ -348,18 +365,17 @@ function adapt() {
 }
 function showBuff() {
     var str="";
-    //for(i=0;i<video[0].buffered.length;i++)
-    for(i=0, t=video[0].buffered.length; i < t; i++)
+    for(i = 0, t = video[0].buffered.length; i < t; i++)
     {
         if (video[0].currentTime>=video[0].buffered.start(i) && video[0].currentTime<=video[0].buffered.end(i))
-            str +=format_time(video[0].buffered.start(i))+"-"+format_time(video[0].buffered.end(i))+"<br>";
+            str += format_time(video[0].buffered.start(i)) + "-" + format_time(video[0].buffered.end(i)) + "<br>";
     }
     if (new Date().getTime() - lastplaytime > 1000)
-        out(str+"<small>buffering...</small>");
+        out(str + "<small>buffering...</small>");
 }
 function tabshow(str, n) {
     $("#list").load(encodeURI(str), function(responseTxt, status, xhr) {
-        if(xhr.statusText=="OK")
+        if (xhr.statusText=="OK")
             $("#navtab li:eq(" + n + ") a").tab("show");
         else
             out(xhr.statusText);
