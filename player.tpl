@@ -274,8 +274,8 @@ function showsidebar() {
     //$("#sidebar").removeClass("outside");
     //$("#sidebar").show().animate({left:"0"},500).delay(3250).animate({left:"-10%"},1250);
     //$("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
-    //$("#sidebar").show().fadeTo(300,0.3).delay(32000).fadeOut(800);
-    $("#sidebar").show().fadeTo(300,0.3).delay(15000).fadeOut(800);
+    //$("#sidebar").show().fadeTo(300,0.3).delay(3200).fadeOut(800);
+    $("#sidebar").show().fadeTo(500,0.35).delay(9999).fadeOut(800);
     //$("#sidebar").addClass("outside");
     ////////////////////////////////////////////////////////////////
     //var sidebar = document.getElementById("sidebar");
@@ -367,7 +367,7 @@ function showBuff() {
     var str="";
     for(i = 0, t = video[0].buffered.length; i < t; i++)
     {
-        if (video[0].currentTime>=video[0].buffered.start(i) && video[0].currentTime<=video[0].buffered.end(i))
+        if (video[0].currentTime >= video[0].buffered.start(i) && video[0].currentTime <= video[0].buffered.end(i))
             str += format_time(video[0].buffered.start(i)) + "-" + format_time(video[0].buffered.end(i)) + "<br>";
     }
     if (new Date().getTime() - lastplaytime > 1000)

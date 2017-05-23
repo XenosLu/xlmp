@@ -79,7 +79,9 @@ def list_history_from_db():
           <td><i class='glyphicon glyphicon-film dir' title="/%s"></i></td>
           <td class="filelist"><a href="?src=%s">%s</a>
           <br><small>%s | %s/%s</small></td>
-          <td><i class='glyphicon glyphicon-remove-circle del' title="%s"></i></td>
+          <td>
+            <i class='glyphicon glyphicon-remove-circle del' title="%s"></i>
+          </td>
         </tr>''' % (
         os.path.dirname(s[0]), s[0], s[0], s[3], time_format(s[1]),\
         time_format(s[2]),s[0])
@@ -89,7 +91,9 @@ def list_history_from_db():
         return '''%s
         <tr>
           <td colspan=3>
-            <button type="button" class="btn btn-default btn-xs" id='clear'>Clear History</button>
+            <button type="button" class="btn btn-default btn-xs" id='clear'>
+              Clear History
+            </button>
           </td>
         </tr>''' % ''.join(html)
     else:
@@ -168,11 +172,17 @@ def folder(dir):
             html_dir='''
             <tr><td colspan=3>
             <ol class="breadcrumb">
-              <li><span class="filelist dir"><i class="glyphicon glyphicon-home" title="/"></i></span></li>
+              <li>
+                <span class="filelist dir">
+                  <i class="glyphicon glyphicon-home" title="/"></i>
+                </span>
+              </li>
               '''
             for n,i in enumerate(dirs[:-1:],1):
                 print("/%s %s"%('/'.join(dirs[0:n]),i))
-                html_dir += '<li><span class="filelist dir" title="/%s">%s</span></li>'%('/'.join(dirs[0:n]),i)
+                html_dir += '''
+                <li><span class="filelist dir" title="/%s">%s</span>
+                </li>''' % ('/'.join(dirs[0:n]),i)
             html_dir += '''
               <li class="active">%s</li>
             </ol>
@@ -189,7 +199,10 @@ def folder(dir):
                 <tr>
                   <td><i class="glyphicon glyphicon-folder-close"></i></td>
                   <td class="filelist dir" title="/%s%s">%s</td>
-                  <td><i class="glyphicon glyphicon-remove-circle move" title="%s%s"></i></td>
+                  <td>
+                    <i class="glyphicon glyphicon-remove-circle move" title="%s%s">
+                    </i>
+                  </td>
                 </tr>''' % (dir,file,file,dir,file)
             elif re.match('.*\.((?i)mp)4$',file):
                 html_mp4 += '''
@@ -199,7 +212,10 @@ def folder(dir):
                     <a href="/player.php?src=%s%s">%s</a>
                     <br><small>%s</small>
                   </td>
-                  <td><i class="glyphicon glyphicon-remove-circle move" title="%s%s"></i></td>
+                  <td>
+                    <i class="glyphicon glyphicon-remove-circle move" title="%s%s">
+                    </i>
+                  </td>
                 </tr>''' % (dir,file,file,get_size(dir+file),dir,file)
             else:
                 html_files += '''
@@ -209,7 +225,10 @@ def folder(dir):
                     <span class="filelist other">%s</span>
                     <br><small>%s</small>
                   </td>
-                  <td><i class="glyphicon glyphicon-remove-circle move" title="%s%s"></i></td>
+                  <td>
+                    <i class="glyphicon glyphicon-remove-circle move" title="%s%s">
+                    </i>
+                  </td>
                 </tr>''' % (file,get_size(dir+file),dir,file)
         return "".join([html_dir,html_mp4,html_files])
     except Exception as e:
