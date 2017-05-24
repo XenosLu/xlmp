@@ -195,11 +195,10 @@ var video = document.getElementsByTagName("video");//$("video")
 window.addEventListener("load", onload, false);
 window.addEventListener("resize", adapt, false);
 window.addEventListener("mousemove", showsidebar, false);
-//$(document).ready(onload());
-//$(window).load(onload());
 
+adapt();
 function onload() {
-    adapt();
+    
     //document.addEventListener("touchstart", touch, false);
     //document.addEventListener("touchend", touch, false);
 }
