@@ -29,7 +29,7 @@
 }
 /*** modified bootstrap style ***/
 html, body {
-  /*height: 100%;*/
+  height: 100%;
 }
 body {
   background-color: #F1F2F6; /* #DDD9DD #101010; */
@@ -132,7 +132,8 @@ input {
 </head>
 <body>
 <div>
-  <video src="{{src}}" onprogress="showBuff()" onerror="out('error')" onseeking="showProgress()" ontimeupdate="saveprogress()" onloadeddata="loadprogress()" poster controls preload="meta">No video support!</video>
+  <!-- <video src="{{src}}" onprogress="showBuff()" onerror="out('error')" onseeking="showProgress()" ontimeupdate="saveprogress()" onloadeddata="loadprogress()" poster controls preload="meta">No video support!</video> -->
+  <video onprogress="showBuff()" onseeking="showProgress()" ontimeupdate="saveprogress()" poster controls preload="meta">No video support!</video>
 </div>
 <!-- <div id="sidebar" class="outside"> -->
 <div id="sidebar">
@@ -140,7 +141,7 @@ input {
 </div>
 <div id="dialog" style="display:none">
   <div class="bg-info">
-  <button onClick="$('#dialog').hide();" type="button" class="close">&times;</button> <!-- &#10060; -->
+  <button onClick="$('#dialog').hide();" type="button" class="close">&times;</button>
     <ul id="navtab" class="nav nav-tabs">
       <li class="active">
         <a href="#mainframe" data-toggle="tab" onclick="tabshow('?action=list', 0)"><i class="glyphicon glyphicon-list"></i>History</a>
@@ -220,7 +221,7 @@ $(document).on('touchend',function(e) {
         showsidebar();
 });
 
-if (isNaN({{src}})) {
+if (("{{src}}"=="")) {
     $("video").remove();
     //test start
     //$(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");
@@ -229,8 +230,12 @@ if (isNaN({{src}})) {
     $("#dialog").show();
 } else {
     //$(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");
+    $("video").attr("src", "{{src}}");
     $("video").on("error", function() {
         out("error");
+    });
+    $("video").on("loadeddata", function() {
+        loadprogress();
     });
 };
 $("#mainframe").on("click",".dir", function(e) {
@@ -291,7 +296,7 @@ function playward(time) {
 }
 function loadprogress() {
     video[0].currentTime = Math.max({{progress}} - 0.5, 0);
-    text="Start from<br>";
+    text="Play from<br>";
 }
 function showProgress() {
     out(text+format_time(video[0].currentTime)+ '/' + format_time(video[0].duration));
