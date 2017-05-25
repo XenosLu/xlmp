@@ -200,6 +200,8 @@ window.addEventListener("mousemove", showsidebar, false);
 
 function onload() {
     adapt();
+    //document.addEventListener("touchstart", touch, false);
+    //document.addEventListener("touchend", touch, false);
 }
 
 $(document).on('touchstart',function(e) {
@@ -221,23 +223,20 @@ $(document).on('touchend',function(e) {
 
 if (isNaN({{src}})) {
     $("video").remove();
-    //test start
-    $(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");
+    $(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");//test
     $("video").on("click", function() {//test
-        $("video").attr("src","testcc.mp4");
-        out($("video").attr("src"));
+        
+        $("video").src="testcc.mp4";
+        out($("video").src);
     });
-    //test end
     tabshow("?action=list", 0);
     $("#dialog").show();
 } else {
-/*
     $(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");
     $("video").on("error", function() {
         out("error");
     });
-    */
-};
+}
 
 $("#mainframe").on("click",".dir", function(e) {
     tabshow(e.target.title, 1);
@@ -254,6 +253,29 @@ $("#mainframe").on("click","#clear", function() {
     if (confirm("Clear all history?"))
         tabshow("?action=clear", 0);
 });
+/*
+function touch(event) {
+    var event = event || window.event;
+    switch (event.type) {
+    case "touchstart":
+        x0 = event.touches[0].clientX;
+        y0 = event.touches[0].clientY;
+        break;
+    case "touchend":
+        x = event.changedTouches[0].clientX - x0;
+        y = event.changedTouches[0].clientY - y0;
+
+        if (Math.abs(y / x) < 0.25) {
+            if (x > range)
+                playward(Math.floor(x / 11));
+            else if (x < -range)
+                playward(Math.floor(x / 11));
+        } else
+            showsidebar();
+        break;
+    }
+}
+*/
 function out(str) {
     if (str=="")
         return;
@@ -262,8 +284,12 @@ function out(str) {
     $("#output").fadeTo(250,0.7).delay(1625).fadeOut(625);
 }
 function showsidebar() {
+    //$("#sidebar").removeClass("outside");
+    //$("#sidebar").show().animate({left:"0"},500).delay(3250).animate({left:"-10%"},1250);
     //$("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
+    //$("#sidebar").show().fadeTo(300,0.3).delay(3200).fadeOut(800);
     $("#sidebar").show().fadeTo(500,0.35).delay(9999).fadeOut(800);
+    //$("#sidebar").addClass("outside");
     ////////////////////////////////////////////////////////////////
     //var sidebar = document.getElementById("sidebar");
     //sidebar.className = "sliding";
