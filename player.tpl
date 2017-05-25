@@ -227,7 +227,7 @@ $(document).on('touchend',function(e) {
 if (isNaN({{src}})) {
     $("video").remove();
     //test start
-    $(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");
+    //$(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");
     //test end
     tabshow("?action=list", 0);
     $("#dialog").show();
