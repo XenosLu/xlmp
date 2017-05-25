@@ -29,17 +29,18 @@
 }
 /*** modified bootstrap style ***/
 html, body {
-/*
-  height: 100%
-  */
+  /*height: 100%;*/
 }
 body {
   background-color: #F1F2F6; /* #DDD9DD #101010; */
-  cursor: default;
+  /* cursor: default; */
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
   font-family: AppleSDGothicNeo-Regular;
+}
+body, a {
+  cursor: default;
 }
 /*
 article {
@@ -53,9 +54,6 @@ video {
   clear: both;
   display: block;
   margin: auto;
-}
-a {
-  cursor: default;
 }
 input {
   height: 3em;
