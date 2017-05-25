@@ -62,6 +62,7 @@ input {
 .filelist.other {
   color: grey;
 }
+/*
 @keyframes slide {
   0% {left:-8%}
   9% {left:0%}
@@ -86,6 +87,7 @@ input {
   animation-iteration-count: 1;
   animation-delay: 0s;
 }
+*/
 #sidebar{
   opacity: 0;
   position: fixed;
@@ -127,12 +129,11 @@ input {
 </style>
 </head>
 <body>
-%if src:
-  <article>
-    <video id="player" src="{{src}}" onprogress="showBuff()" onerror="out('error')" onseeking="showProgress()" ontimeupdate="saveprogress()" onloadeddata="loadprogress()" poster controls preload="meta">No video support!</video>
-  </article>
-%end
-<div id="sidebar" class="outside">
+<div>
+  <video src="{{src}}" onprogress="showBuff()" onerror="out('error')" onseeking="showProgress()" ontimeupdate="saveprogress()" onloadeddata="loadprogress()" poster controls preload="meta">No video support!</video>
+</div>
+<!-- <div id="sidebar" class="outside"> -->
+<div id="sidebar">
   <button onClick="if($('#navtab li:eq(0)').attr('class')=='active')tabshow('?action=list', 0);$('#dialog').show();" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list-alt"></i></button>
 </div>
 <div id="dialog" style="display:none">
@@ -196,9 +197,8 @@ window.addEventListener("load", onload, false);
 window.addEventListener("resize", adapt, false);
 window.addEventListener("mousemove", showsidebar, false);
 
-adapt();
 function onload() {
-    
+    adapt();
     //document.addEventListener("touchstart", touch, false);
     //document.addEventListener("touchend", touch, false);
 }
@@ -220,10 +220,12 @@ $(document).on('touchend',function(e) {
         showsidebar();
 });
 
-%if not src:
+if (isNaN({{src}})) {
+    $("video").remove();
     tabshow("?action=list", 0);
     $("#dialog").show();
-%end
+} else
+    out(2);
 
 $("#mainframe").on("click",".dir", function(e) {
     tabshow(e.target.title, 1);
