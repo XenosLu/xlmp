@@ -39,9 +39,11 @@ body {
   user-select: none;
   font-family: AppleSDGothicNeo-Regular;
 }
+/*
 article {
   left: 0%;
 }
+*/
 div {
   text-align: center;
 }
@@ -285,9 +287,11 @@ function showsidebar() {
     //sidebar.addEventListener("animationend", resetsidebar);
     //sidebar.addEventListener("webkitAnimationEnd", resetsidebar);
 }
+/*
 function resetsidebar() {
     $("#sidebar").attr("class", "outside");
 }
+*/
 function rate(x) {
     out(x + "X");
     video[0].playbackRate = x;
@@ -296,28 +300,21 @@ function format_time(time) {
     return Math.floor(time / 60) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
 }
 function playward(time) {
-    if (isNaN(video[0].duration))
-        return;
-    //if (time > 60)
-        //time = 60;
-    //else if (time < -60)
-        //time = -60;
-    if (time > 0) {
-        time=Math.min(60,time);
-        text=time + "S>><br>";
+    if (!isNaN(video[0].duration)) {
+        if (time > 0) {
+            time=Math.min(60,time);
+            text=time + "S>><br>";
+        }
+        else if (time < 0) {
+            time=Math.max(-60,time);
+            text="<<" + -time + "S<br>";
+        }
+        video[0].currentTime += time;
     }
-    else if (time < 0) {
-        time=Math.max(-60,time);
-        text="<<" + -time + "S<br>";
-    }
-    video[0].currentTime += time;
 }
 function loadprogress() {
-    //var marktime = {{progress}} - 0.5;
-    //if (marktime > 0) {
-        video[0].currentTime = Math.max({{progress}} - 0.5, 0);
-        text="Back to<br>";
-    //}
+    video[0].currentTime = Math.max({{progress}} - 0.5, 0);
+    text="Start from<br>";
 }
 function showProgress() {
     out(text+format_time(video[0].currentTime)+ '/' + format_time(video[0].duration));
