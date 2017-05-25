@@ -204,22 +204,7 @@ function onload() {
     adapt();
 }
 
-$(document).on('touchstart',function(e) {
-    x0 = e.originalEvent.touches[0].screenX;
-    y0 = e.originalEvent.touches[0].screenY;
-});
-$(document).on('touchend',function(e) {
-    x = event.changedTouches[0].screenX - x0;
-    y = event.changedTouches[0].screenY - y0;
 
-    if (Math.abs(y / x) < 0.25) {
-        if (x > range)
-            playward(Math.floor(x / 11));
-        else if (x < -range)
-            playward(Math.floor(x / 11));
-    } else
-        showsidebar();
-});
 
 if (("{{src}}"=="")) {
     $("video").remove();
@@ -238,27 +223,13 @@ if (("{{src}}"=="")) {
         loadprogress();
     });
 };
-$("#mainframe").on("click",".dir", function(e) {
-    tabshow(e.target.title, 1);
-});
-$("#mainframe").on("click",".move", function(e) {
-    if (confirm("Move " + e.target.title + " to old?"))
-        tabshow("?action=move&src=" + e.target.title, 1);
-});
-$("#mainframe").on("click",".del", function(e) {
-    if (confirm("Clear " + e.target.title + "?"))
-        tabshow("?action=del&src=" + e.target.title, 0);
-});
-$("#mainframe").on("click","#clear", function() {
-    if (confirm("Clear all history?"))
-        tabshow("?action=clear", 0);
-});
+
 function out(str) {
-    if (str=="")
-        return;
-    $("#output").remove();
-    $(document.body).append("<div id='output'>" + str + "</div>");
-    $("#output").fadeTo(250,0.7).delay(1625).fadeOut(625);
+    if (str!="") {
+        $("#output").remove();
+        $(document.body).append("<div id='output'>" + str + "</div>");
+        $("#output").fadeTo(250,0.7).delay(1625).fadeOut(625);
+    };
 }
 function showsidebar() {
     //$("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
@@ -354,9 +325,40 @@ function showBuff() {
     if (new Date().getTime() - lastplaytime > 1000)
         out(str + "<small>buffering...</small>");
 }
+$(document).on('touchstart',function(e) {
+    x0 = e.originalEvent.touches[0].screenX;
+    y0 = e.originalEvent.touches[0].screenY;
+});
+$(document).on('touchend',function(e) {
+    x = event.changedTouches[0].screenX - x0;
+    y = event.changedTouches[0].screenY - y0;
+
+    if (Math.abs(y / x) < 0.25) {
+        if (x > range)
+            playward(Math.floor(x / 11));
+        else if (x < -range)
+            playward(Math.floor(x / 11));
+    } else
+        showsidebar();
+});
+$("#mainframe").on("click",".dir", function(e) {
+    tabshow(e.target.title, 1);
+});
+$("#mainframe").on("click",".move", function(e) {
+    if (confirm("Move " + e.target.title + " to old?"))
+        tabshow("?action=move&src=" + e.target.title, 1);
+});
+$("#mainframe").on("click",".del", function(e) {
+    if (confirm("Clear " + e.target.title + "?"))
+        tabshow("?action=del&src=" + e.target.title, 0);
+});
+$("#mainframe").on("click","#clear", function() {
+    if (confirm("Clear all history?"))
+        tabshow("?action=clear", 0);
+});
 function tabshow(str, n) {
     $("#list").load(encodeURI(str), function(responseTxt, status, xhr) {
-        if (xhr.statusText=="OK")
+        if (xhr.statusText == "OK")
             $("#navtab li:eq(" + n + ") a").tab("show");
         else
             out(xhr.statusText);
