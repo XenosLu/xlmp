@@ -29,17 +29,15 @@
 }
 /*** modified bootstrap style ***/
 html, body {
-  /*height: 100%*/
+  height: 100%
 }
 body {
   background-color: #F1F2F6; /* #DDD9DD #101010; */
+  cursor: default;
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
   font-family: AppleSDGothicNeo-Regular;
-}
-body, a{
-  cursor: default;
 }
 /*
 article {
@@ -53,6 +51,9 @@ video {
   clear: both;
   display: block;
   margin: auto;
+}
+a {
+  cursor: default;
 }
 input {
   height: 3em;
@@ -223,20 +224,10 @@ $(document).on('touchend',function(e) {
 
 if (isNaN({{src}})) {
     $("video").remove();
-    $(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");//test
-    $("video").on("click", function() {//test
-        
-        $("video").src="testcc.mp4";
-        out($("video").src);
-    });
     tabshow("?action=list", 0);
     $("#dialog").show();
-} else {
-    $(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");
-    $("video").on("error", function() {
-        out("error");
-    });
-}
+} else
+    out(2);
 
 $("#mainframe").on("click",".dir", function(e) {
     tabshow(e.target.title, 1);
@@ -356,20 +347,19 @@ function videosizetoggle() {
 function adapt() {
     $("#videosize").text("orign");
     //out($(window).height() +"|"+ $(document).height() +"|"+ $(document.body).height()  +"|"+  $(document.body).outerHeight(true));
-    $("#mainframe").css("max-height", ($(document).height() - 240) + "px");
-    if ($(document).height() <= 480)
+    $("#mainframe").css("max-height", ($(document.body).height() - 240) + "px");
+    if ($(document.body).height() <= 480)
         $("#dialog").width("100%");
     else
         $("#dialog").width("auto");
     video_ratio = video[0].videoWidth / video[0].videoHeight;
-    //page_ratio = document.body.clientWidth / document.body.clientHeight;
-    page_ratio = $(document).width() / $(document).height();
+    page_ratio = document.body.clientWidth / document.body.clientHeight;
     if (page_ratio < video_ratio) {
-        video[0].style.width = $(document).width() + "px";
-        video[0].style.height = Math.floor($(document).width() / video_ratio) + "px";
+        video[0].style.width = document.body.clientWidth + "px";
+        video[0].style.height = Math.floor(document.body.clientWidth / video_ratio) + "px";
     } else {
-        video[0].style.width = Math.floor($(document).height() * video_ratio) + "px";
-        video[0].style.height = $(document).height() + "px";
+        video[0].style.width = Math.floor($(document.body).height() * video_ratio) + "px";
+        video[0].style.height = document.body.clientHeight + "px";
     }
 }
 function showBuff() {
