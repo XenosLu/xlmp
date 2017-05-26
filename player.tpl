@@ -133,7 +133,7 @@ input {
 <body>
 <div>
   <!-- <video src="{{src}}" onprogress="showBuff()" onerror="out('error')" onseeking="showProgress()" ontimeupdate="saveprogress()" onloadeddata="loadprogress()" poster controls preload="meta">No video support!</video> -->
-  <video onprogress="showBuff()" onseeking="showProgress()" ontimeupdate="saveprogress()" poster controls preload="meta">No video support!</video>
+  <video onseeking="showProgress()" ontimeupdate="saveprogress()" poster controls preload="meta">No video support!</video>
 </div>
 <!-- <div id="sidebar" class="outside"> -->
 <div id="sidebar">
@@ -204,8 +204,6 @@ function onload() {
     adapt();
 }
 
-
-
 if (("{{src}}"=="")) {
     $("video").remove();
     //test start
@@ -222,6 +220,10 @@ if (("{{src}}"=="")) {
     $("video").on("loadeddata", function() {
         loadprogress();
     });
+    $("video").on("progress", function() {
+        showBuff();
+    });
+    
 };
 
 function out(str) {
@@ -325,6 +327,7 @@ function showBuff() {
     if (new Date().getTime() - lastplaytime > 1000)
         out(str + "<small>buffering...</small>");
 }
+
 $(document).on('touchstart',function(e) {
     x0 = e.originalEvent.touches[0].screenX;
     y0 = e.originalEvent.touches[0].screenY;
