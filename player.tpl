@@ -227,8 +227,8 @@ if (("{{src}}"=="")) {
         var str="";
         if (new Date().getTime() - lastplaytime > 1000) {
             for(i = 0, t = $("video").get(0).buffered.length; i < t; i++) {
-                if (video[0].currentTime >= video[0].buffered.start(i) && video[0].currentTime <= video[0].buffered.end(i))
-                    str = format_time(video[0].buffered.start(i)) + "-" + format_time(video[0].buffered.end(i)) + "<br>";
+                if ($("video").get(0).currentTime >= $("video").get(0).buffered.start(i) && $("video").get(0).currentTime <= $("video").get(0).buffered.end(i))
+                    str = format_time($("video").get(0).buffered.start(i)) + "-" + format_time($("video").get(0).buffered.end(i)) + "<br>";
             };
             out(str + "<small>buffering...</small>");
         };
