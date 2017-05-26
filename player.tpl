@@ -159,9 +159,6 @@ input {
   </div>
   <div class="panel-footer">
     <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">orign</button>
-    <!-- <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.get('/suspend.php');"> -->
-      <!-- <i class="glyphicon glyphicon-off"></i> -->
-    <!-- </button> -->
     <div class="btn-group dropup">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
         Rate<span class="caret"></span>
@@ -201,7 +198,7 @@ window.addEventListener("resize", adapt, false);
 window.addEventListener("mousemove", showsidebar, false);
 
 if (("{{src}}"=="")) {
-    $("video").remove();
+    //$("video").remove();
     tabshow("?action=list", 0);
     $("#dialog").show();
 } else {
@@ -210,21 +207,22 @@ if (("{{src}}"=="")) {
     $("video").on("error", function() {
         out("error");
     });
-    $("video").on("loadeddata", function() {
+    $("video").on("loadeddata", function() {//auto load progress
         //video[0].currentTime = Math.max({{progress}} - 0.5, 0);
         $("video").get(0).currentTime= Math.max({{progress}} - 0.5, 0);
         //$("video")[0].currentTime= Math.max({{progress}} - 0.5, 0);
         text="Play from<br>";
     });
-    $("video").on("seeking", function() {
+    $("video").on("seeking", function() {//show progress when changed
         //out(text+format_time(video[0].currentTime)+ '/' + format_time(video[0].duration));
         out(text+format_time($("video").get(0).currentTime)+ '/' + format_time($("video").get(0).duration));
         text="";
     });
-    $("video").on("timeupdate", function() {
+    $("video").on("timeupdate", function() {//auto save play progress
         lastplaytime = new Date().getTime();//to dectect if video is playing
         if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
-            if (Math.abs($("video").get(0).currentTime - lastsavetime) > 3) {//save play progress in every 3 seconds
+            //if (Math.abs($("video").get(0).currentTime - lastsavetime) > 3) {//save play progress in every 3 seconds
+            if (Math.floor(Math.random()*10)==9) {//randomly save play progress
                 lastsavetime = video[0].currentTime;
                 $.get("?action=save&src={{src}}&time=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration ,function(data, status, xhr) {
                     if(xhr.statusText!="OK")
@@ -233,13 +231,13 @@ if (("{{src}}"=="")) {
             }
         }
     });
-    $("video").on("progress", function() {
+    $("video").on("progress", function() {//show buffered
         var str="";
         if (new Date().getTime() - lastplaytime > 1000) {
             for(i = 0, t = video[0].buffered.length; i < t; i++) {
                 if (video[0].currentTime >= video[0].buffered.start(i) && video[0].currentTime <= video[0].buffered.end(i))
                     str = format_time(video[0].buffered.start(i)) + "-" + format_time(video[0].buffered.end(i)) + "<br>";
-            }
+            };
             out(str + "<small>buffering...</small>");
         };
     });
@@ -359,19 +357,20 @@ $(document).on('touchstart',function(e) {
     x0 = e.originalEvent.touches[0].screenX;
     y0 = e.originalEvent.touches[0].screenY;
 });
-$(document).on('touchmove',function(e) {
+$(document).on('touchmove',function(e) {//beta function
     x = e.changedTouches[0].screenX - x0;
     y = e.changedTouches[0].screenY - y0;
     if (Math.abs(y / x) < 0.25) {
         if (x > range)
-            rate(2);
+            //rate(x / 11);
+            out(text+format_time($("video").get(0).currentTime)+ '/' + format_time($("video").get(0).duration));
     }
 });
 $(document).on('touchend',function(e) {
     x = e.changedTouches[0].screenX - x0;
     y = e.changedTouches[0].screenY - y0;
     if (Math.abs(y / x) < 0.25) {
-        if (Math.abs(x) > Math.abs(range)) {
+        if (Math.abs(x) > range) {
             playward(Math.floor(x / 11));
             rate(1);
         }
