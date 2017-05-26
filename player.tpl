@@ -187,13 +187,12 @@ var range = 12; //minimum touch move range in pxs
 var text="";
 var lastsavetime = 0;//in seconds
 var lastplaytime = 0;//in seconds
-var video = document.getElementsByTagName("video");//$("video")
+//var video = document.getElementsByTagName("video");//video[0]
 window.addEventListener("load", adapt, false);
 window.addEventListener("resize", adapt, false);
 window.addEventListener("mousemove", showsidebar, false);
 
 if (("{{src}}"=="")) {
-    //$("video").remove();
     tabshow("?action=list", 0);
     $("#dialog").show();
 } else {
@@ -234,33 +233,6 @@ if (("{{src}}"=="")) {
         };
     });
 };
-/*
-function saveprogress() {
-    lastplaytime = new Date().getTime();
-    if (video[0].readyState == 4 && video[0].currentTime < video[0].duration + 1) {
-        if (Math.abs(video[0].currentTime - lastsavetime) > 3)//save play progress in every 3 seconds
-        {
-            lastsavetime = video[0].currentTime;
-            $.get("?action=save&src={{src}}&time=" + video[0].currentTime + "&duration=" + video[0].duration ,function(data, status, xhr) {
-                if(xhr.statusText!="OK")
-                    out(xhr.statusText);
-            });
-        }
-    }
-}
-*/
-/*
-function showBuff() {
-    var str="";
-    for(i = 0, t = video[0].buffered.length; i < t; i++)
-    {
-        if (video[0].currentTime >= video[0].buffered.start(i) && video[0].currentTime <= video[0].buffered.end(i))
-            str += format_time(video[0].buffered.start(i)) + "-" + format_time(video[0].buffered.end(i)) + "<br>";
-    }
-    if (new Date().getTime() - lastplaytime > 1000)
-        out(str + "<small>buffering...</small>");
-}
-*/
 
 function showsidebar() {
     //$("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
@@ -284,7 +256,7 @@ function format_time(time) {
     return Math.floor(time / 60) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
 }
 function playward(time) {
-    if (!isNaN(video[0].duration)) {
+    if (!isNaN($("video").get(0).duration)) {
         if (time > 0) {
             time=Math.min(60,time);
             text=time + "S>><br>";
@@ -293,7 +265,7 @@ function playward(time) {
             time=Math.max(-60,time);
             text="<<" + -time + "S<br>";
         }
-        video[0].currentTime += time;
+        $("video").get(0).currentTime += time;
     }
 }
 function videosizetoggle() {
@@ -301,9 +273,9 @@ function videosizetoggle() {
         adapt();
     else {
         $("#videosize").text("auto");
-        if (video[0].width < $(window).width() && video[0].height < $(window).height()) {
-            video[0].style.width = video[0].videoWidth + "px";
-            video[0].style.height = video[0].videoHeight + "px";
+        if ($("video").get(0).width < $(window).width() && $("video").get(0).height < $(window).height()) {
+            $("video").get(0).style.width = $("video").get(0).videoWidth + "px";
+            $("video").get(0).style.height = $("video").get(0).videoHeight + "px";
         }
     }
 }
@@ -315,14 +287,14 @@ function adapt() {
         $("#dialog").width("100%");
     else
         $("#dialog").width("auto");
-    video_ratio = video[0].videoWidth / video[0].videoHeight;
+    video_ratio = $("video").get(0).videoWidth / $("video").get(0).videoHeight;
     page_ratio = $(window).width() / $(window).height();
     if (page_ratio < video_ratio) {
-        video[0].style.width = $(window).width() + "px";
-        video[0].style.height = Math.floor($(window).width() / video_ratio) + "px";
+        $("video").get(0).style.width = $(window).width() + "px";
+        $("video").get(0).style.height = Math.floor($(window).width() / video_ratio) + "px";
     } else {
-        video[0].style.width = Math.floor($(window).height() * video_ratio) + "px";
-        video[0].style.height = $(window).height() + "px";
+        $("video").get(0).style.width = Math.floor($(window).height() * video_ratio) + "px";
+        $("video").get(0).style.height = $(window).height() + "px";
     }
 }
 
@@ -330,7 +302,7 @@ function out(str) {
     if (str!="") {
         $("#output").remove();
         $(document.body).append("<div id='output'>" + str + "</div>");
-        $("#output").fadeTo(250,0.7).delay(1625).fadeOut(625);
+        $("#output").fadeTo(250,0.7).delay(1800).fadeOut(625);
     };
 }
 $(document).on('touchstart',function(e) {
@@ -343,11 +315,12 @@ $(document).on('touchmove',function(e) {//beta function
     y = e.changedTouches[0].screenY - y0;
     if (Math.abs(y / x) < 0.25) {
         if (x > range) {
-            $("video").get(0).playbackRate = 8;
+            $("video").get(0).muted = true;
+            $("video").get(0).playbackRate = 9;
             out(text+format_time($("video").get(0).currentTime)+ '/' + format_time($("video").get(0).duration));
         }
         else if (x < -range) {
-            $("video").get(0).playbackRate = -8;
+            $("video").get(0).playbackRate = -9;
             out(text+format_time($("video").get(0).currentTime)+ '/' + format_time($("video").get(0).duration));
         }
     }
@@ -357,9 +330,10 @@ $(document).on('touchend',function(e) {
     x = e.changedTouches[0].screenX - x0;
     y = e.changedTouches[0].screenY - y0;
     $("video").get(0).playbackRate = 1;
+    $("video").get(0).muted = false;
     if (Math.abs(y / x) < 0.25) {
         if (Math.abs(x) > range) {
-            //playward(Math.floor(x / 11));
+            playward(Math.floor(x / 11));
         }
     } else
         showsidebar();
