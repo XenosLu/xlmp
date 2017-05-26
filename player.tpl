@@ -223,7 +223,7 @@ if (("{{src}}"=="")) {
         if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
             //if (Math.abs($("video").get(0).currentTime - lastsavetime) > 3) {//save play progress in every 3 seconds
             if (Math.floor(Math.random()*10)==9) {//randomly save play progress
-                lastsavetime = video[0].currentTime;
+                lastsavetime = $("video").get(0).currentTime;
                 $.get("?action=save&src={{src}}&time=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration ,function(data, status, xhr) {
                     if(xhr.statusText!="OK")
                         out(xhr.statusText);
@@ -234,7 +234,7 @@ if (("{{src}}"=="")) {
     $("video").on("progress", function() {//show buffered
         var str="";
         if (new Date().getTime() - lastplaytime > 1000) {
-            for(i = 0, t = video[0].buffered.length; i < t; i++) {
+            for(i = 0, t = $("video").get(0).buffered.length; i < t; i++) {
                 if (video[0].currentTime >= video[0].buffered.start(i) && video[0].currentTime <= video[0].buffered.end(i))
                     str = format_time(video[0].buffered.start(i)) + "-" + format_time(video[0].buffered.end(i)) + "<br>";
             };
@@ -298,7 +298,7 @@ function resetsidebar() {
 */
 function rate(x) {
     out(x + "X");
-    video[0].playbackRate = x;
+    $("video").get(0).playbackRate = x;
 }
 function format_time(time) {
     return Math.floor(time / 60) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
@@ -362,17 +362,17 @@ $(document).on('touchmove',function(e) {//beta function
     y = e.changedTouches[0].screenY - y0;
     if (Math.abs(y / x) < 0.25) {
         if (x > range)
-            //rate(x / 11);
+            $("video").get(0).playbackRate = 10;
             out(text+format_time($("video").get(0).currentTime)+ '/' + format_time($("video").get(0).duration));
     }
 });
 $(document).on('touchend',function(e) {
     x = e.changedTouches[0].screenX - x0;
     y = e.changedTouches[0].screenY - y0;
+    $("video").get(0).playbackRate = 1;
     if (Math.abs(y / x) < 0.25) {
-        if (Math.abs(x) > range) {
+        if (x < -range) {
             playward(Math.floor(x / 11));
-            rate(1);
         }
     } else
         showsidebar();
