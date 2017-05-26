@@ -217,13 +217,31 @@ if (("{{src}}"=="")) {
         text="Play from<br>";
     });
     $("video").on("seeking", function() {
-        showProgress();
+        //out(text+format_time(video[0].currentTime)+ '/' + format_time(video[0].duration));
+        out(text+format_time($("video").get(0).currentTime)+ '/' + format_time($("video").get(0).duration));
+        text="";
     });
     $("video").on("timeupdate", function() {
-        saveprogress();
+        lastplaytime = new Date().getTime();//to dectect if video is playing
+        if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
+            if (Math.abs($("video").get(0).currentTime - lastsavetime) > 3) {//save play progress in every 3 seconds
+                lastsavetime = video[0].currentTime;
+                $.get("?action=save&src={{src}}&time=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration ,function(data, status, xhr) {
+                    if(xhr.statusText!="OK")
+                        out(xhr.statusText);
+                });
+            }
+        }
     });
     $("video").on("progress", function() {
-        showBuff();
+        var str="";
+        if (new Date().getTime() - lastplaytime > 1000) {
+            for(i = 0, t = video[0].buffered.length; i < t; i++) {
+                if (video[0].currentTime >= video[0].buffered.start(i) && video[0].currentTime <= video[0].buffered.end(i))
+                    str = format_time(video[0].buffered.start(i)) + "-" + format_time(video[0].buffered.end(i)) + "<br>";
+            }
+            out(str + "<small>buffering...</small>");
+        };
     });
 };
 /*
@@ -232,10 +250,13 @@ function loadprogress() {
     text="Play from<br>";
 }
 */
+/*
 function showProgress() {
     out(text+format_time(video[0].currentTime)+ '/' + format_time(video[0].duration));
     text="";
 }
+*/
+/*
 function saveprogress() {
     lastplaytime = new Date().getTime();
     if (video[0].readyState == 4 && video[0].currentTime < video[0].duration + 1) {
@@ -249,6 +270,8 @@ function saveprogress() {
         }
     }
 }
+*/
+/*
 function showBuff() {
     var str="";
     for(i = 0, t = video[0].buffered.length; i < t; i++)
@@ -259,13 +282,8 @@ function showBuff() {
     if (new Date().getTime() - lastplaytime > 1000)
         out(str + "<small>buffering...</small>");
 }
-function out(str) {
-    if (str!="") {
-        $("#output").remove();
-        $(document.body).append("<div id='output'>" + str + "</div>");
-        $("#output").fadeTo(250,0.7).delay(1625).fadeOut(625);
-    };
-}
+*/
+
 function showsidebar() {
     //$("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
     $("#sidebar").show().fadeTo(500,0.35).delay(9999).fadeOut(800);
@@ -330,15 +348,36 @@ function adapt() {
     }
 }
 
-
+function out(str) {
+    if (str!="") {
+        $("#output").remove();
+        $(document.body).append("<div id='output'>" + str + "</div>");
+        $("#output").fadeTo(250,0.7).delay(1625).fadeOut(625);
+    };
+}
 $(document).on('touchstart',function(e) {
     x0 = e.originalEvent.touches[0].screenX;
     y0 = e.originalEvent.touches[0].screenY;
 });
+$(document).on('touchmove',function(e) {
+    x = e.changedTouches[0].screenX - x0;
+    y = e.changedTouches[0].screenY - y0;
+    if (Math.abs(y / x) < 0.25) {
+        if (x > range)
+            rate(2);
+    }
+});
 $(document).on('touchend',function(e) {
-    x = event.changedTouches[0].screenX - x0;
-    y = event.changedTouches[0].screenY - y0;
-
+    x = e.changedTouches[0].screenX - x0;
+    y = e.changedTouches[0].screenY - y0;
+    if (Math.abs(y / x) < 0.25) {
+        if (Math.abs(x) > Math.abs(range)) {
+            playward(Math.floor(x / 11));
+            rate(1);
+        }
+    } else
+        showsidebar();
+/*
     if (Math.abs(y / x) < 0.25) {
         if (x > range)
             playward(Math.floor(x / 11));
@@ -346,6 +385,7 @@ $(document).on('touchend',function(e) {
             playward(Math.floor(x / 11));
     } else
         showsidebar();
+*/
 });
 $("#mainframe").on("click",".dir", function(e) {
     tabshow(e.target.title, 1);
