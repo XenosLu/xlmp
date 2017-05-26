@@ -133,7 +133,7 @@ input {
 <body>
 <div>
   <!-- <video src="{{src}}" onprogress="showBuff()" onerror="out('error')" onseeking="showProgress()" ontimeupdate="saveprogress()" onloadeddata="loadprogress()" poster controls preload="meta">No video support!</video> -->
-  <video onseeking="showProgress()" ontimeupdate="saveprogress()" poster controls preload="meta">No video support!</video>
+  <video poster controls preload="meta">No video support!</video>
 </div>
 <!-- <div id="sidebar" class="outside"> -->
 <div id="sidebar">
@@ -220,12 +220,48 @@ if (("{{src}}"=="")) {
     $("video").on("loadeddata", function() {
         loadprogress();
     });
+    $("video").on("seeking", function() {
+        showProgress();
+    });
+    $("video").on("timeupdate", function() {
+        saveprogress();
+    });
     $("video").on("progress", function() {
         showBuff();
     });
-    
 };
+function showBuff() {
+    var str="";
+    for(i = 0, t = video[0].buffered.length; i < t; i++)
+    {
+        if (video[0].currentTime >= video[0].buffered.start(i) && video[0].currentTime <= video[0].buffered.end(i))
+            str += format_time(video[0].buffered.start(i)) + "-" + format_time(video[0].buffered.end(i)) + "<br>";
+    }
+    if (new Date().getTime() - lastplaytime > 1000)
+        out(str + "<small>buffering...</small>");
+}
+function loadprogress() {
+    video[0].currentTime = Math.max({{progress}} - 0.5, 0);
+    text="Play from<br>";
+}
 
+function showProgress() {
+    out(text+format_time(video[0].currentTime)+ '/' + format_time(video[0].duration));
+    text="";
+}
+function saveprogress() {
+    lastplaytime = new Date().getTime();
+    if (video[0].readyState == 4 && video[0].currentTime < video[0].duration + 1) {
+        if (Math.abs(video[0].currentTime - lastsavetime) > 3)//save play progress in every 3 seconds
+        {
+            lastsavetime = video[0].currentTime;
+            $.get("?action=save&src={{src}}&time=" + video[0].currentTime + "&duration=" + video[0].duration ,function(data, status, xhr) {
+                if(xhr.statusText!="OK")
+                    out(xhr.statusText);
+            });
+        }
+    }
+}
 function out(str) {
     if (str!="") {
         $("#output").remove();
@@ -267,27 +303,7 @@ function playward(time) {
         video[0].currentTime += time;
     }
 }
-function loadprogress() {
-    video[0].currentTime = Math.max({{progress}} - 0.5, 0);
-    text="Play from<br>";
-}
-function showProgress() {
-    out(text+format_time(video[0].currentTime)+ '/' + format_time(video[0].duration));
-    text="";
-}
-function saveprogress() {
-    lastplaytime = new Date().getTime();
-    if (video[0].readyState == 4 && video[0].currentTime < video[0].duration + 1) {
-        if (Math.abs(video[0].currentTime - lastsavetime) > 3)//save play progress in every 3 seconds
-        {
-            lastsavetime = video[0].currentTime;
-            $.get("?action=save&src={{src}}&time=" + video[0].currentTime + "&duration=" + video[0].duration ,function(data, status, xhr) {
-                if(xhr.statusText!="OK")
-                    out(xhr.statusText);
-            });
-        }
-    }
-}
+
 function videosizetoggle() {
     if ($("#videosize").text()=="auto")
         adapt();
@@ -317,16 +333,7 @@ function adapt() {
         video[0].style.height = $(window).height() + "px";
     }
 }
-function showBuff() {
-    var str="";
-    for(i = 0, t = video[0].buffered.length; i < t; i++)
-    {
-        if (video[0].currentTime >= video[0].buffered.start(i) && video[0].currentTime <= video[0].buffered.end(i))
-            str += format_time(video[0].buffered.start(i)) + "-" + format_time(video[0].buffered.end(i)) + "<br>";
-    }
-    if (new Date().getTime() - lastplaytime > 1000)
-        out(str + "<small>buffering...</small>");
-}
+
 
 $(document).on('touchstart',function(e) {
     x0 = e.originalEvent.touches[0].screenX;
