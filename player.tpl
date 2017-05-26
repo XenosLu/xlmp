@@ -113,7 +113,6 @@ input {
   opacity: 0.8;
   box-shadow: 2px 2px 5px #333333;
   max-width: 100%;
-  /* background-color: #CCCCCC; */
 }
 #output, #dialog {
   position: fixed;
@@ -131,10 +130,6 @@ input {
 </style>
 </head>
 <body>
-<div>
-  <!-- <video src="{{src}}" onprogress="showBuff()" onerror="out('error')" onseeking="showProgress()" ontimeupdate="saveprogress()" onloadeddata="loadprogress()" poster controls preload="meta">No video support!</video> -->
-  <!-- <video poster controls preload="meta">No video support!</video> -->
-</div>
 <!-- <div id="sidebar" class="outside"> -->
 <div id="sidebar">
   <button onClick="if($('#navtab li:eq(0)').attr('class')=='active')tabshow('?action=list', 0);$('#dialog').show();" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list-alt"></i></button>
@@ -208,13 +203,10 @@ if (("{{src}}"=="")) {
         out("error");
     });
     $("video").on("loadeddata", function() {//auto load progress
-        //video[0].currentTime = Math.max({{progress}} - 0.5, 0);
         $("video").get(0).currentTime= Math.max({{progress}} - 0.5, 0);
-        //$("video")[0].currentTime= Math.max({{progress}} - 0.5, 0);
         text="Play from<br>";
     });
     $("video").on("seeking", function() {//show progress when changed
-        //out(text+format_time(video[0].currentTime)+ '/' + format_time(video[0].duration));
         out(text+format_time($("video").get(0).currentTime)+ '/' + format_time($("video").get(0).duration));
         text="";
     });
@@ -222,7 +214,7 @@ if (("{{src}}"=="")) {
         lastplaytime = new Date().getTime();//to dectect if video is playing
         if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
             //if (Math.abs($("video").get(0).currentTime - lastsavetime) > 3) {//save play progress in every 3 seconds
-            if (Math.floor(Math.random()*10)==9) {//randomly save play progress
+            if (Math.floor(Math.random()*8)==3) {//randomly save play progress
                 lastsavetime = $("video").get(0).currentTime;
                 $.get("?action=save&src={{src}}&time=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration ,function(data, status, xhr) {
                     if(xhr.statusText!="OK")
@@ -242,18 +234,6 @@ if (("{{src}}"=="")) {
         };
     });
 };
-/*
-function loadprogress() {
-    video[0].currentTime = Math.max({{progress}} - 0.5, 0);
-    text="Play from<br>";
-}
-*/
-/*
-function showProgress() {
-    out(text+format_time(video[0].currentTime)+ '/' + format_time(video[0].duration));
-    text="";
-}
-*/
 /*
 function saveprogress() {
     lastplaytime = new Date().getTime();
@@ -357,22 +337,29 @@ $(document).on('touchstart',function(e) {
     x0 = e.originalEvent.touches[0].screenX;
     y0 = e.originalEvent.touches[0].screenY;
 });
+/*
 $(document).on('touchmove',function(e) {//beta function
     x = e.changedTouches[0].screenX - x0;
     y = e.changedTouches[0].screenY - y0;
     if (Math.abs(y / x) < 0.25) {
-        if (x > range)
-            $("video").get(0).playbackRate = 10;
+        if (x > range) {
+            $("video").get(0).playbackRate = 8;
             out(text+format_time($("video").get(0).currentTime)+ '/' + format_time($("video").get(0).duration));
+        }
+        else if (x < -range) {
+            $("video").get(0).playbackRate = -8;
+            out(text+format_time($("video").get(0).currentTime)+ '/' + format_time($("video").get(0).duration));
+        }
     }
 });
+*/
 $(document).on('touchend',function(e) {
     x = e.changedTouches[0].screenX - x0;
     y = e.changedTouches[0].screenY - y0;
     $("video").get(0).playbackRate = 1;
     if (Math.abs(y / x) < 0.25) {
-        if (x < -range) {
-            playward(Math.floor(x / 11));
+        if (Math.abs(x) > range) {
+            //playward(Math.floor(x / 11));
         }
     } else
         showsidebar();
