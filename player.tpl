@@ -29,7 +29,7 @@
 }
 /*** modified bootstrap style ***/
 html, body {
-  height: 100%;
+  /*height: 100%;*/
 }
 body {
   background-color: #F1F2F6; /* #DDD9DD #101010; */
@@ -133,7 +133,7 @@ input {
 <body>
 <div>
   <!-- <video src="{{src}}" onprogress="showBuff()" onerror="out('error')" onseeking="showProgress()" ontimeupdate="saveprogress()" onloadeddata="loadprogress()" poster controls preload="meta">No video support!</video> -->
-  <video poster controls preload="meta">No video support!</video>
+  <!-- <video poster controls preload="meta">No video support!</video> -->
 </div>
 <!-- <div id="sidebar" class="outside"> -->
 <div id="sidebar">
@@ -196,29 +196,25 @@ var text="";
 var lastsavetime = 0;//in seconds
 var lastplaytime = 0;//in seconds
 var video = document.getElementsByTagName("video");//$("video")
-window.addEventListener("load", onload, false);
+window.addEventListener("load", adapt, false);
 window.addEventListener("resize", adapt, false);
 window.addEventListener("mousemove", showsidebar, false);
 
-function onload() {
-    adapt();
-}
-
 if (("{{src}}"=="")) {
     $("video").remove();
-    //test start
-    //$(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");
-    //test end
     tabshow("?action=list", 0);
     $("#dialog").show();
 } else {
-    //$(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");
+    $(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");
     $("video").attr("src", "{{src}}");
     $("video").on("error", function() {
         out("error");
     });
     $("video").on("loadeddata", function() {
-        loadprogress();
+        //video[0].currentTime = Math.max({{progress}} - 0.5, 0);
+        $("video").get(0).currentTime= Math.max({{progress}} - 0.5, 0);
+        //$("video")[0].currentTime= Math.max({{progress}} - 0.5, 0);
+        text="Play from<br>";
     });
     $("video").on("seeking", function() {
         showProgress();
@@ -230,21 +226,12 @@ if (("{{src}}"=="")) {
         showBuff();
     });
 };
-function showBuff() {
-    var str="";
-    for(i = 0, t = video[0].buffered.length; i < t; i++)
-    {
-        if (video[0].currentTime >= video[0].buffered.start(i) && video[0].currentTime <= video[0].buffered.end(i))
-            str += format_time(video[0].buffered.start(i)) + "-" + format_time(video[0].buffered.end(i)) + "<br>";
-    }
-    if (new Date().getTime() - lastplaytime > 1000)
-        out(str + "<small>buffering...</small>");
-}
+/*
 function loadprogress() {
     video[0].currentTime = Math.max({{progress}} - 0.5, 0);
     text="Play from<br>";
 }
-
+*/
 function showProgress() {
     out(text+format_time(video[0].currentTime)+ '/' + format_time(video[0].duration));
     text="";
@@ -261,6 +248,16 @@ function saveprogress() {
             });
         }
     }
+}
+function showBuff() {
+    var str="";
+    for(i = 0, t = video[0].buffered.length; i < t; i++)
+    {
+        if (video[0].currentTime >= video[0].buffered.start(i) && video[0].currentTime <= video[0].buffered.end(i))
+            str += format_time(video[0].buffered.start(i)) + "-" + format_time(video[0].buffered.end(i)) + "<br>";
+    }
+    if (new Date().getTime() - lastplaytime > 1000)
+        out(str + "<small>buffering...</small>");
 }
 function out(str) {
     if (str!="") {
@@ -303,7 +300,6 @@ function playward(time) {
         video[0].currentTime += time;
     }
 }
-
 function videosizetoggle() {
     if ($("#videosize").text()=="auto")
         adapt();
