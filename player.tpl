@@ -177,7 +177,7 @@ input {
 <script src="static/js/jquery-3.2.1.min.js"></script>
 <script src="static/js/bootstrap.min.js"></script>
 <script language="javascript">
-var range = 12; //minimum touch move range in pxs
+var RANGE = 12; //minimum touch move range in px
 var text="";
 var lastsavetime = 0;//in seconds
 var lastplaytime = 0;//in seconds
@@ -197,13 +197,13 @@ if (("{{src}}"=="")) {
     $("video").on("error", function () {
     	out("error");
     });
-    $("video").on("loadeddata", function() {//auto load progress
-        $("video").get(0).currentTime= Math.max({{progress}} - 0.5, 0);
-        text="Play from<br>";
+    $("video").on("loadeddata", function () { //auto load progress
+    	$("video").get(0).currentTime = Math.max({{progress}} - 0.5, 0);
+    	text = "Play from<br>";
     });
-    $("video").on("seeking", function() {//show progress when changed
-        out(text+format_time($("video").get(0).currentTime)+ '/' + format_time($("video").get(0).duration));
-        text="";
+    $("video").on("seeking", function () { //show progress when changed
+    	out(text + format_time($("video").get(0).currentTime) + '/' + format_time($("video").get(0).duration));
+    	text = "";
     });
     $("video").on("timeupdate", function() {//auto save play progress
         lastplaytime = new Date().getTime();//to dectect if video is playing
@@ -310,12 +310,12 @@ $(document).on('touchmove',function(e) {//beta function
     x = e.changedTouches[0].screenX - x0;
     y = e.changedTouches[0].screenY - y0;
     if (Math.abs(y / x) < 0.25) {
-        if (x > range) {
+        if (x > RANGE) {
             $("video").get(0).muted = true;
             $("video").get(0).playbackRate = 9;
             out(text+format_time($("video").get(0).currentTime)+ '/' + format_time($("video").get(0).duration));
         }
-        else if (x < -range) {
+        else if (x < -RANGE) {
             $("video").get(0).playbackRate = -9;
             out(text+format_time($("video").get(0).currentTime)+ '/' + format_time($("video").get(0).duration));
         }
@@ -328,16 +328,16 @@ $(document).on('touchend',function(e) {
     $("video").get(0).playbackRate = 1;
     $("video").get(0).muted = false;
     if (Math.abs(y / x) < 0.25) {
-        if (Math.abs(x) > range) {
+        if (Math.abs(x) > RANGE) {
             playward(Math.floor(x / 11));
         }
     } else
         showsidebar();
 /*
     if (Math.abs(y / x) < 0.25) {
-        if (x > range)
+        if (x > RANGE)
             playward(Math.floor(x / 11));
-        else if (x < -range)
+        else if (x < -RANGE)
             playward(Math.floor(x / 11));
     } else
         showsidebar();
