@@ -205,39 +205,39 @@ if (("{{src}}"=="")) {
     	out(text + format_time($("video").get(0).currentTime) + '/' + format_time($("video").get(0).duration));
     	text = "";
     });
-    $("video").on("timeupdate", function() {//auto save play progress
-        lastplaytime = new Date().getTime();//to dectect if video is playing
-        if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
-            //if (Math.abs($("video").get(0).currentTime - lastsavetime) > 3) {//save play progress in every 3 seconds
-            if (Math.floor(Math.random()*8)==3) {//randomly save play progress
-                lastsavetime = $("video").get(0).currentTime;
-                $.get("?action=save&src={{src}}&time=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration ,function(data, status, xhr) {
-                    if(xhr.statusText!="OK")
-                        out(xhr.statusText);
-                });
-            }
-        }
+    $("video").on("timeupdate", function () { //auto save play progress
+    	lastplaytime = new Date().getTime(); //to dectect if video is playing
+    	if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
+    		//if (Math.abs($("video").get(0).currentTime - lastsavetime) > 3) {//save play progress in every 3 seconds
+    		if (Math.floor(Math.random() * 8) == 3) { //randomly save play progress
+    			lastsavetime = $("video").get(0).currentTime;
+    			$.get("?action=save&src={{src}}&time=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
+    				if (xhr.statusText != "OK")
+    					out(xhr.statusText);
+    			});
+    		}
+    	}
     });
-    $("video").on("progress", function() {//show buffered
-        var str="";
-        if (new Date().getTime() - lastplaytime > 1000) {
-            for(i = 0, t = $("video").get(0).buffered.length; i < t; i++) {
-                if ($("video").get(0).currentTime >= $("video").get(0).buffered.start(i) && $("video").get(0).currentTime <= $("video").get(0).buffered.end(i))
-                    str = format_time($("video").get(0).buffered.start(i)) + "-" + format_time($("video").get(0).buffered.end(i)) + "<br>";
-            };
-            out(str + "<small>buffering...</small>");
-        };
+    $("video").on("progress", function () { //show buffered
+    	var str = "";
+    	if (new Date().getTime() - lastplaytime > 1000) {
+    		for (i = 0, t = $("video").get(0).buffered.length; i < t; i++) {
+    			if ($("video").get(0).currentTime >= $("video").get(0).buffered.start(i) && $("video").get(0).currentTime <= $("video").get(0).buffered.end(i))
+    				str = format_time($("video").get(0).buffered.start(i)) + "-" + format_time($("video").get(0).buffered.end(i)) + "<br>";
+    		};
+    		out(str + "<small>buffering...</small>");
+    	};
     });
 };
 
 function showsidebar() {
-    //$("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
-    $("#sidebar").show().fadeTo(500,0.35).delay(9999).fadeOut(800);
-    ////////////////////////////////////////////////////////////////
-    //var sidebar = document.getElementById("sidebar");
-    //sidebar.className = "sliding";
-    //sidebar.addEventListener("animationend", resetsidebar);
-    //sidebar.addEventListener("webkitAnimationEnd", resetsidebar);
+	//$("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
+	$("#sidebar").show().fadeTo(500, 0.35).delay(9999).fadeOut(800);
+	////////////////////////////////////////////////////////////////
+	//var sidebar = document.getElementById("sidebar");
+	//sidebar.className = "sliding";
+	//sidebar.addEventListener("animationend", resetsidebar);
+	//sidebar.addEventListener("webkitAnimationEnd", resetsidebar);
 }
 /*
 function resetsidebar() {
@@ -245,24 +245,23 @@ function resetsidebar() {
 }
 */
 function rate(x) {
-    out(x + "X");
-    $("video").get(0).playbackRate = x;
+	out(x + "X");
+	$("video").get(0).playbackRate = x;
 }
 function format_time(time) {
-    return Math.floor(time / 60) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
+	return Math.floor(time / 60) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
 }
 function playward(time) {
-    if (!isNaN($("video").get(0).duration)) {
-        if (time > 0) {
-            time=Math.min(60,time);
-            text=time + "S>><br>";
-        }
-        else if (time < 0) {
-            time=Math.max(-60,time);
-            text="<<" + -time + "S<br>";
-        }
-        $("video").get(0).currentTime += time;
-    }
+	if (!isNaN($("video").get(0).duration)) {
+		if (time > 0) {
+			time = Math.min(60, time);
+			text = time + "S>><br>";
+		} else if (time < 0) {
+			time = Math.max(-60, time);
+			text = "<<" + -time + "S<br>";
+		}
+		$("video").get(0).currentTime += time;
+	}
 }
 function videosizetoggle() {
     if ($("#videosize").text()=="auto")
