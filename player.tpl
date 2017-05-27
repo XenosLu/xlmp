@@ -11,7 +11,7 @@
   font-size: 1.75em;
 }
 .glyphicon-remove-circle {
-    color: gray;
+    color: grey;
 }
 .close {
   font-size: 2.5em;
@@ -25,7 +25,7 @@
 .breadcrumb {
   background: 0 0;
   margin: 0;
-  font-size: 1.3em;
+  font-size: 1.2em;
 }
 /*** modified bootstrap style ***/
 html, body {
@@ -45,12 +45,9 @@ div {
   text-align: center;
 }
 video {
-  clear: both;
+  /*clear: both;*/
   display: block;
   margin: auto;
-}
-input {
-  height: 3em;
 }
 .filelist {
   min-width: 14em;
@@ -83,14 +80,14 @@ input {
   animation-iteration-count: 1;
   animation-delay: 0s;
 }
+#sidebar.outside {
+  left: -25%;
+}
 */
 #sidebar{
   opacity: 0;
   position: fixed;
   top: 40%;
-}
-#sidebar.outside {
-  /*left: -25%*/
 }
 #output {
   z-index: 99;
@@ -182,8 +179,8 @@ var text="";
 var lastsavetime = 0;//in seconds
 var lastplaytime = 0;//in seconds
 //var video = document.getElementsByTagName("video");//video[0]
-window.addEventListener("load", adapt, false);
-window.addEventListener("resize", adapt, false);
+//window.addEventListener("load", adapt, false);
+//window.addEventListener("resize", adapt, false);
 //window.addEventListener("mousemove", showsidebar, false);
 $(document).mousemove(function () {
     showsidebar();
@@ -192,6 +189,12 @@ if (("{{src}}"=="")) {
     tabshow("?action=list", 0);
     $("#dialog").show();
 } else {
+    $(window).resize(function () {
+        adapt();
+    });
+    $(document).ready(function () {
+        adapt();
+    });
     $(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");
     $("video").attr("src", "{{src}}");
     $("video").on("error", function () {
@@ -209,7 +212,7 @@ if (("{{src}}"=="")) {
         lastplaytime = new Date().getTime(); //to dectect if video is playing
         if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
             //if (Math.abs($("video").get(0).currentTime - lastsavetime) > 3) {//save play progress in every 3 seconds
-            if (Math.floor(Math.random() * 8) == 3) { //randomly save play progress
+            if (Math.floor(Math.random() * 99) > 75) { //randomly save play progress
                 lastsavetime = $("video").get(0).currentTime;
                 $.get("?action=save&src={{src}}&time=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
                     if (xhr.statusText != "OK")
