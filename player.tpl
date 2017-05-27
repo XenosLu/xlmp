@@ -186,7 +186,7 @@ window.addEventListener("load", adapt, false);
 window.addEventListener("resize", adapt, false);
 //window.addEventListener("mousemove", showsidebar, false);
 $(document).mousemove(function () {
-	showsidebar();
+    showsidebar();
 });
 if (("{{src}}"=="")) {
     tabshow("?action=list", 0);
@@ -195,49 +195,49 @@ if (("{{src}}"=="")) {
     $(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");
     $("video").attr("src", "{{src}}");
     $("video").on("error", function () {
-    	out("error");
+        out("error");
     });
     $("video").on("loadeddata", function () { //auto load progress
-    	$("video").get(0).currentTime = Math.max({{progress}} - 0.5, 0);
-    	text = "Play from<br>";
+        $("video").get(0).currentTime = Math.max({{progress}} - 0.5, 0);
+        text = "Play from<br>";
     });
     $("video").on("seeking", function () { //show progress when changed
-    	out(text + format_time($("video").get(0).currentTime) + '/' + format_time($("video").get(0).duration));
-    	text = "";
+        out(text + format_time($("video").get(0).currentTime) + '/' + format_time($("video").get(0).duration));
+        text = "";
     });
     $("video").on("timeupdate", function () { //auto save play progress
-    	lastplaytime = new Date().getTime(); //to dectect if video is playing
-    	if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
-    		//if (Math.abs($("video").get(0).currentTime - lastsavetime) > 3) {//save play progress in every 3 seconds
-    		if (Math.floor(Math.random() * 8) == 3) { //randomly save play progress
-    			lastsavetime = $("video").get(0).currentTime;
-    			$.get("?action=save&src={{src}}&time=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
-    				if (xhr.statusText != "OK")
-    					out(xhr.statusText);
-    			});
-    		}
-    	}
+        lastplaytime = new Date().getTime(); //to dectect if video is playing
+        if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
+            //if (Math.abs($("video").get(0).currentTime - lastsavetime) > 3) {//save play progress in every 3 seconds
+            if (Math.floor(Math.random() * 8) == 3) { //randomly save play progress
+                lastsavetime = $("video").get(0).currentTime;
+                $.get("?action=save&src={{src}}&time=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
+                    if (xhr.statusText != "OK")
+                        out(xhr.statusText);
+                });
+            }
+        }
     });
     $("video").on("progress", function () { //show buffered
-    	var str = "";
-    	if (new Date().getTime() - lastplaytime > 1000) {
-    		for (i = 0, t = $("video").get(0).buffered.length; i < t; i++) {
-    			if ($("video").get(0).currentTime >= $("video").get(0).buffered.start(i) && $("video").get(0).currentTime <= $("video").get(0).buffered.end(i))
-    				str = format_time($("video").get(0).buffered.start(i)) + "-" + format_time($("video").get(0).buffered.end(i)) + "<br>";
-    		};
-    		out(str + "<small>buffering...</small>");
-    	};
+        var str = "";
+        if (new Date().getTime() - lastplaytime > 1000) {
+            for (i = 0, t = $("video").get(0).buffered.length; i < t; i++) {
+                if ($("video").get(0).currentTime >= $("video").get(0).buffered.start(i) && $("video").get(0).currentTime <= $("video").get(0).buffered.end(i))
+                    str = format_time($("video").get(0).buffered.start(i)) + "-" + format_time($("video").get(0).buffered.end(i)) + "<br>";
+            };
+            out(str + "<small>buffering...</small>");
+        };
     });
 };
 
 function showsidebar() {
-	//$("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
-	$("#sidebar").show().fadeTo(500, 0.35).delay(9999).fadeOut(800);
-	////////////////////////////////////////////////////////////////
-	//var sidebar = document.getElementById("sidebar");
-	//sidebar.className = "sliding";
-	//sidebar.addEventListener("animationend", resetsidebar);
-	//sidebar.addEventListener("webkitAnimationEnd", resetsidebar);
+    //$("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
+    $("#sidebar").show().fadeTo(500, 0.35).delay(9999).fadeOut(800);
+    ////////////////////////////////////////////////////////////////
+    //var sidebar = document.getElementById("sidebar");
+    //sidebar.className = "sliding";
+    //sidebar.addEventListener("animationend", resetsidebar);
+    //sidebar.addEventListener("webkitAnimationEnd", resetsidebar);
 }
 /*
 function resetsidebar() {
@@ -245,26 +245,26 @@ function resetsidebar() {
 }
 */
 function rate(x) {
-	out(x + "X");
-	$("video").get(0).playbackRate = x;
+    out(x + "X");
+    $("video").get(0).playbackRate = x;
 }
 function format_time(time) {
-	return Math.floor(time / 60) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
+    return Math.floor(time / 60) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
 }
 function playward(time) {
-	if (!isNaN($("video").get(0).duration)) {
-		if (time > 0) {
-			time = Math.min(60, time);
-			text = time + "S>><br>";
-		} else if (time < 0) {
-			time = Math.max(-60, time);
-			text = "<<" + -time + "S<br>";
-		}
-		$("video").get(0).currentTime += time;
-	}
+    if (!isNaN($("video").get(0).duration)) {
+        if (time > 0) {
+            time = Math.min(60, time);
+            text = time + "S>><br>";
+        } else if (time < 0) {
+            time = Math.max(-60, time);
+            text = "<<" + -time + "S<br>";
+        }
+        $("video").get(0).currentTime += time;
+    }
 }
 function videosizetoggle() {
-    if ($("#videosize").text()=="auto")
+    if ($("#videosize").text() == "auto")
         adapt();
     else {
         $("#videosize").text("auto");
@@ -294,13 +294,13 @@ function adapt() {
 }
 
 function out(str) {
-    if (str!="") {
+    if (str != "") {
         $("#output").remove();
         $(document.body).append("<div id='output'>" + str + "</div>");
-        $("#output").fadeTo(250,0.7).delay(1800).fadeOut(625);
+        $("#output").fadeTo(250, 0.7).delay(1800).fadeOut(625);
     };
 }
-$(document).on('touchstart',function(e) {
+$(document).on('touchstart', function (e) {
     x0 = e.originalEvent.touches[0].screenX;
     y0 = e.originalEvent.touches[0].screenY;
 });
@@ -321,7 +321,7 @@ $(document).on('touchmove',function(e) {//beta function
     }
 });
 */
-$(document).on('touchend',function(e) {
+$(document).on('touchend', function (e) {
     x = e.changedTouches[0].screenX - x0;
     y = e.changedTouches[0].screenY - y0;
     $("video").get(0).playbackRate = 1;
@@ -342,23 +342,23 @@ $(document).on('touchend',function(e) {
         showsidebar();
 */
 });
-$("#mainframe").on("click",".dir", function(e) {
+$("#mainframe").on("click", ".dir", function (e) {
     tabshow(e.target.title, 1);
 });
-$("#mainframe").on("click",".move", function(e) {
+$("#mainframe").on("click", ".move", function (e) {
     if (confirm("Move " + e.target.title + " to old?"))
         tabshow("?action=move&src=" + e.target.title, 1);
 });
-$("#mainframe").on("click",".del", function(e) {
+$("#mainframe").on("click", ".del", function (e) {
     if (confirm("Clear " + e.target.title + "?"))
         tabshow("?action=del&src=" + e.target.title, 0);
 });
-$("#mainframe").on("click","#clear", function() {
+$("#mainframe").on("click", "#clear", function () {
     if (confirm("Clear all history?"))
         tabshow("?action=clear", 0);
 });
 function tabshow(str, n) {
-    $("#list").load(encodeURI(str), function(responseTxt, status, xhr) {
+    $("#list").load(encodeURI(str), function (responseTxt, status, xhr) {
         if (xhr.statusText == "OK")
             $("#navtab li:eq(" + n + ") a").tab("show");
         else
