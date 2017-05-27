@@ -33,20 +33,14 @@ html, body {
 }
 body {
   background-color: #F1F2F6; /* #DDD9DD #101010; */
-  /* cursor: default; */
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
   font-family: AppleSDGothicNeo-Regular;
 }
-body, a {
+a {
   cursor: default;
 }
-/*
-article {
-  left: 0%;
-}
-*/
 div {
   text-align: center;
 }
@@ -190,16 +184,18 @@ var lastplaytime = 0;//in seconds
 //var video = document.getElementsByTagName("video");//video[0]
 window.addEventListener("load", adapt, false);
 window.addEventListener("resize", adapt, false);
-window.addEventListener("mousemove", showsidebar, false);
-
+//window.addEventListener("mousemove", showsidebar, false);
+$(document).mousemove(function () {
+	showsidebar();
+});
 if (("{{src}}"=="")) {
     tabshow("?action=list", 0);
     $("#dialog").show();
 } else {
     $(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");
     $("video").attr("src", "{{src}}");
-    $("video").on("error", function() {
-        out("error");
+    $("video").on("error", function () {
+    	out("error");
     });
     $("video").on("loadeddata", function() {//auto load progress
         $("video").get(0).currentTime= Math.max({{progress}} - 0.5, 0);
