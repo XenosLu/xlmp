@@ -182,6 +182,10 @@ var lastplaytime = 0;//in seconds
 //window.addEventListener("load", adapt, false);
 //window.addEventListener("resize", adapt, false);
 //window.addEventListener("mousemove", showsidebar, false);
+window.onload = adapt;
+$(window).resize(function () {
+    adapt();
+});
 $(document).mousemove(function () {
     showsidebar();
 });
@@ -189,12 +193,6 @@ if (("{{src}}"=="")) {
     tabshow("?action=list", 0);
     $("#dialog").show();
 } else {
-    $(window).resize(function () {
-        adapt();
-    });
-    $(document).ready(function () {
-        adapt();
-    });
     $(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");
     $("video").attr("src", "{{src}}");
     $("video").on("error", function () {
@@ -280,7 +278,7 @@ function videosizetoggle() {
 function adapt() {
     $("#videosize").text("orign");
     //out($(window).height() +"|"+ $(document).height() +"|"+ $(document.body).height()  +"|"+  $(document.body).outerHeight(true));
-    $("#mainframe").css("max-height", ($(window).height() - 240) + "px");
+    $("#mainframe").css("max-height", ($(window).height() - 200) + "px");
     if ($(window).height() <= 480)
         $("#dialog").width("100%");
     else
