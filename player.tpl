@@ -210,7 +210,7 @@ if (("{{src}}"=="")) {
         lastplaytime = new Date().getTime(); //to dectect if video is playing
         if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
             //if (Math.abs($("video").get(0).currentTime - lastsavetime) > 3) {//save play progress in every 3 seconds
-            if (Math.floor(Math.random() * 99) > 75) { //randomly save play progress
+            if (Math.floor(Math.random() * 99) > 80) { //randomly save play progress
                 lastsavetime = $("video").get(0).currentTime;
                 $.get("?action=save&src={{src}}&time=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
                     if (xhr.statusText != "OK")
