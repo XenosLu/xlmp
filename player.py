@@ -159,7 +159,8 @@ def shutdown():
 def static(file):
     return static_file(file, root='./static')
 
-@route('/<file:re:.*\.((?i)mp)4$>')#mp4 static files access. to support larger files(>2GB), you should use apache "AliasMatch"
+@route('/<file:re:.*\.((?i)mp)4$>')#mp4 static files access.
+#to support larger files(>2GB), you should use apache "AliasMatch"
 def mp4(file):
     return static_file(file, root='./static/mp4')
 
@@ -196,45 +197,45 @@ def folder(dir):
         for file in os.listdir('./static/mp4/%s' % dir):
             if os.path.isdir('./static/mp4/%s%s' % (dir,file)):
                 html_dir += '''
-                <tr>
-                  <td><i class="glyphicon glyphicon-folder-close"></i></td>
-                  <td class="filelist dir" title="/%s%s">%s</td>
-                  <td>
-                    <i class="glyphicon glyphicon-remove-circle move" title="%s%s">
-                    </i>
-                  </td>
-                </tr>''' % (dir,file,file,dir,file)
+			<tr>
+			  <td><i class="glyphicon glyphicon-folder-close"></i></td>
+			  <td class="filelist dir" title="/%s%s">%s</td>
+			  <td>
+				<i class="glyphicon glyphicon-remove-circle move" title="%s%s">
+				</i>
+			  </td>
+			</tr>''' % (dir,file,file,dir,file)
             elif re.match('.*\.((?i)mp)4$',file):
                 html_mp4 += '''
-                <tr>
-                  <td><i class="glyphicon glyphicon-film"></i></td>
-                  <td>
-                    <a href="/player.php?src=%s%s">%s</a>
-                    <br><small>%s</small>
-                  </td>
-                  <td>
-                    <i class="glyphicon glyphicon-remove-circle move" title="%s%s">
-                    </i>
-                  </td>
-                </tr>''' % (dir,file,file,get_size(dir+file),dir,file)
+			<tr>
+			  <td><i class="glyphicon glyphicon-film"></i></td>
+			  <td>
+				<a href="/player.php?src=%s%s">%s</a>
+				<br><small>%s</small>
+			  </td>
+			  <td>
+				<i class="glyphicon glyphicon-remove-circle move" title="%s%s">
+				</i>
+			  </td>
+             </tr>''' % (dir,file,file,get_size(dir+file),dir,file)
             else:
                 html_files += '''
-                <tr>
-                  <td><i class="glyphicon glyphicon-file"></i></td>
-                  <td>
-                    <span class="filelist other">%s</span>
-                    <br><small>%s</small>
-                  </td>
-                  <td>
-                    <i class="glyphicon glyphicon-remove-circle move" title="%s%s">
-                    </i>
-                  </td>
-                </tr>''' % (file,get_size(dir+file),dir,file)
+			<tr>
+			  <td><i class="glyphicon glyphicon-file"></i></td>
+			  <td>
+				<span class="filelist other">%s</span>
+				<br><small>%s</small>
+			  </td>
+			  <td>
+				<i class="glyphicon glyphicon-remove-circle move" title="%s%s">
+				</i>
+			  </td>
+			</tr>''' % (file,get_size(dir+file),dir,file)
         return "".join([html_dir,html_mp4,html_files])
     except Exception as e:
         abort(404,str(e))
 
-os.chdir(os.path.dirname(os.path.abspath(__file__)))#set file path as current path
+os.chdir(os.path.dirname(os.path.abspath(__file__)))#set file path as current
 initdb()
 
 if __name__=="__main__":
