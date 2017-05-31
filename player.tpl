@@ -133,10 +133,14 @@ video {
   <button onClick="$('#dialog').hide();" type="button" class="close">&times;</button>
     <ul id="navtab" class="nav nav-tabs">
       <li class="active">
-        <a href="#mainframe" data-toggle="tab" onclick="tabshow('?action=list', 0)"><i class="glyphicon glyphicon-list"></i>History</a>
+        <a href="#mainframe" data-toggle="tab" onclick="tabshow('?action=list', 0)">
+		  <i class="glyphicon glyphicon-list"></i>History
+		</a>
       </li>
       <li>
-        <a href="#mainframe" data-toggle="tab" onclick="tabshow('/', 1)"><i class="glyphicon glyphicon-home"></i>Home dir</a>
+        <a href="#mainframe" data-toggle="tab" onclick="tabshow('/', 1)">
+		  <i class="glyphicon glyphicon-home"></i>Home dir
+		</a>
       </li>
     </ul>
   </div>
