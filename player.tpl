@@ -123,7 +123,10 @@ video {
 <body>
 <!-- <div id="sidebar" class="outside"> -->
 <div id="sidebar">
-  <button onClick="if($('#navtab li:eq(0)').attr('class')=='active')tabshow('?action=list', 0);$('#dialog').show();" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list-alt"></i></button>
+  <!-- <button onClick="if($('#navtab li:eq(0)').attr('class')=='active')tabshow('?action=list', 0);$('#dialog').show();" type="button" class="btn btn-default"> -->
+  <button id="history" type="button" class="btn btn-default">
+    <i class="glyphicon glyphicon-list-alt"></i>
+  </button>
 </div>
 <div id="dialog" style="display:none">
   <div class="bg-info">
@@ -160,12 +163,17 @@ video {
       </ul>
     </div>
     <div class="btn-group dropup">
-      <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.get('/suspend.php');"><i class="glyphicon glyphicon-off"></i></button>
+      <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.get('/suspend.php');">
+	    <i class="glyphicon glyphicon-off"></i>
+	  </button>
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
       </button>
       <ul class="dropdown-menu" role="menu">
-        <li><a onClick="if(confirm('Shutdown ?'))$.get('/shutdown.php');"><i class="glyphicon glyphicon-off"></i>shutdown</a></li>
+        <li>
+		  <a onClick="if(confirm('Shutdown ?'))$.get('/shutdown.php');">
+		  <i class="glyphicon glyphicon-off"></i>shutdown</a>
+		</li>
       </ul>
     </div>
   </div>
@@ -182,6 +190,13 @@ var lastplaytime = 0;//in seconds
 //window.addEventListener("load", adapt, false);
 //window.addEventListener("resize", adapt, false);
 //window.addEventListener("mousemove", showsidebar, false);
+
+$("#history").on("click", function () {
+    if($('#navtab li:eq(0)').attr('class')=='active')
+		tabshow('?action=list', 0);
+	$('#dialog').show();
+});
+
 window.onload = adapt;
 $(window).resize(function () {
     adapt();
