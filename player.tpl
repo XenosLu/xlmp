@@ -95,7 +95,7 @@ video {
   pointer-events: none;
   border-radius: 0.2em;
   padding: 0.2em;
-  opacity: 0.4;
+  opacity: 0.7;
   border: 1px solid #777777;
   box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
   text-shadow: 0.1em 0.1em 0.4em #666;
@@ -193,7 +193,7 @@ if (("{{src}}"=="")) {
     tabshow("?action=list", 0);
     $("#dialog").show();
 } else {
-    $(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");
+    $(document.body).append("<div><video poster controls preload='auto'>No video support!</video></div>");//preload meta
     $("video").attr("src", "{{src}}");
     $("video").on("error", function () {
         out("error");
@@ -212,9 +212,11 @@ if (("{{src}}"=="")) {
             //if (Math.abs($("video").get(0).currentTime - lastsavetime) > 3) {//save play progress in every 3 seconds
             if (Math.floor(Math.random() * 99) > 80) { //randomly save play progress
                 lastsavetime = $("video").get(0).currentTime;
+				//dict={src:"{{src}}",time:$("video").get(0).currentTime,duration:"&duration=" + $("video").get(0).duration};
                 $.get("?action=save&src={{src}}&time=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
                     if (xhr.statusText != "OK")
                         out(xhr.statusText);
+					xhr = null;
                 });
             }
         }
@@ -305,28 +307,26 @@ $(document).on('touchstart', function (e) {
     x0 = e.originalEvent.touches[0].screenX;
     y0 = e.originalEvent.touches[0].screenY;
 });
-/*
+
 $(document).on('touchmove',function(e) {//beta function
     x = e.changedTouches[0].screenX - x0;
     y = e.changedTouches[0].screenY - y0;
     if (Math.abs(y / x) < 0.25) {
-        if (x > RANGE) {
+        if (Math.abs(x) > RANGE) {
             $("video").get(0).muted = true;
-            $("video").get(0).playbackRate = 9;
-            out(text+format_time($("video").get(0).currentTime)+ '/' + format_time($("video").get(0).duration));
-        }
-        else if (x < -RANGE) {
-            $("video").get(0).playbackRate = -9;
-            out(text+format_time($("video").get(0).currentTime)+ '/' + format_time($("video").get(0).duration));
-        }
+            $("video").get(0).playbackRate = 9 * x / Math.abs(x);
+			window.clearInterval(int);
+			var int = setInterval("out(text+format_time($('video').get(0).currentTime)+ '/' + format_time($('video').get(0).duration))", 50);
+       }
     }
 });
-*/
+
 $(document).on('touchend', function (e) {
     x = e.changedTouches[0].screenX - x0;
     y = e.changedTouches[0].screenY - y0;
     $("video").get(0).playbackRate = 1;
     $("video").get(0).muted = false;
+	window.clearInterval(int);
     if (Math.abs(y / x) < 0.25) {
         if (Math.abs(x) > RANGE) {
             playward(Math.floor(x / 11));
