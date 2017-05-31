@@ -229,7 +229,7 @@ if (("{{src}}"=="")) {
         lastplaytime = new Date().getTime(); //to dectect if video is playing
         if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
             //if (Math.abs($("video").get(0).currentTime - lastsavetime) > 3) {//save play progress in every 3 seconds
-            if (Math.floor(Math.random() * 99) > 80) { //randomly save play progress
+            if (Math.floor(Math.random() * 99) > 81) { //randomly save play progress
                 lastsavetime = $("video").get(0).currentTime;
 				//dict={src:"{{src}}",time:$("video").get(0).currentTime,duration:"&duration=" + $("video").get(0).duration};
                 $.get("?action=save&src={{src}}&time=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
@@ -326,8 +326,8 @@ $(document).on('touchstart', function (e) {
     x0 = e.originalEvent.touches[0].screenX;
     y0 = e.originalEvent.touches[0].screenY;
 });
-
-$(document).on('touchmove',function(e) {//beta function
+/*
+$(document).on('touchmove',function(e) {//test function
     x = e.changedTouches[0].screenX - x0;
     y = e.changedTouches[0].screenY - y0;
     if (Math.abs(y / x) < 0.25) {
@@ -339,13 +339,13 @@ $(document).on('touchmove',function(e) {//beta function
        }
     }
 });
-
+*/
 $(document).on('touchend', function (e) {
     x = e.changedTouches[0].screenX - x0;
     y = e.changedTouches[0].screenY - y0;
-    $("video").get(0).playbackRate = 1;
-    $("video").get(0).muted = false;
-	window.clearInterval(int);
+    //$("video").get(0).playbackRate = 1;
+    //$("video").get(0).muted = false;
+	//window.clearInterval(int);
     if (Math.abs(y / x) < 0.25) {
         if (Math.abs(x) > RANGE) {
             playward(Math.floor(x / 11));
