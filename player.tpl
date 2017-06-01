@@ -127,7 +127,8 @@ video {
     
   </div>
   <div class="panel-footer">
-    <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">orign</button>
+    <!-- <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">orign</button> -->
+    <button id="videosize" type="button" class="btn btn-default">orign</button>
     <div id="rate" class="btn-group dropup">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
         Rate<span class="caret"></span>
@@ -222,7 +223,6 @@ if (("{{src}}"=="")) {
         };
     });
 };
-
 function showSidebar() {
     //$("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
     $("#sidebar").show().fadeTo(500, 0.35).delay(9999).fadeOut(800);
@@ -232,7 +232,7 @@ function rate(x) {
     $("video").get(0).playbackRate = x;
 }
 function formatTime(time) {
-    return Math.floor(time / 3600) + ":" + (Math.floor(time / 60/ 100)).toFixed(2).slice(-2) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
+    return Math.floor(time / 3600) + ":" + ("0"+Math.floor(time / 60)).slice(-2) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
 }
 function playward(time) {
     if (!isNaN($("video").get(0).duration)) {
@@ -244,17 +244,6 @@ function playward(time) {
             text = "<<" + -time + "S<br>";
         }
         $("video").get(0).currentTime += time;
-    }
-}
-function videosizetoggle() {
-    if ($("#videosize").text() == "auto")
-        adapt();
-    else {
-        $("#videosize").text("auto");
-        if ($("video").get(0).width < $(window).width() && $("video").get(0).height < $(window).height()) {
-            $("video").get(0).style.width = $("video").get(0).videoWidth + "px";
-            $("video").get(0).style.height = $("video").get(0).videoHeight + "px";
-        }
     }
 }
 function adapt() {
@@ -333,15 +322,30 @@ $("#history").click(function () {
         history("list");
     $('#dialog').show();
 });
-function tabshow(str, n) {
-    $("#list").load(encodeURI(str), function (responseTxt, status, xhr) {
-        if (xhr.statusText == "OK") {
-            $("#navtab li:eq(1) a").tab("show");
-            $("#clear").hide();
-        } else
-            out(xhr.statusText);
-    });
+$("#videosize").click(function () {
+    if ($("#videosize").text() == "auto")
+        adapt();
+    else {
+        $("#videosize").text("auto");
+        if ($("video").get(0).width < $(window).width() && $("video").get(0).height < $(window).height()) {
+            $("video").get(0).style.width = $("video").get(0).videoWidth + "px";
+            $("video").get(0).style.height = $("video").get(0).videoHeight + "px";
+        }
+    }
+});
+/*
+function videosizetoggle() {
+    if ($("#videosize").text() == "auto")
+        adapt();
+    else {
+        $("#videosize").text("auto");
+        if ($("video").get(0).width < $(window).width() && $("video").get(0).height < $(window).height()) {
+            $("video").get(0).style.width = $("video").get(0).videoWidth + "px";
+            $("video").get(0).style.height = $("video").get(0).videoHeight + "px";
+        }
+    }
 }
+*/
 function filelist(str) {
     $("#list").load(encodeURI(str), function (responseTxt, status, xhr) {
         if (xhr.statusText == "OK") {
@@ -359,9 +363,9 @@ function history(str) {
             var html = "";
             $.each(data, function (i, n) {
                 html += "<tr>" + "<td class='dir' title='" + n["path"] + "'>" +
-                "<i class='glyphicon glyphicon-film' title='" + n["path"]
-                 + "'></i></td><td class='filelist'>" + "<a href='?src="
-                 + n["filename"] + "'>" + n["filename"] + "</a><br><small>"
+                "<i class='glyphicon glyphicon-film' title='" + n["path"] +
+                "'></i></td><td class='filelist'>" + "<a href='?src=" +
+                n["filename"] + "'>" + n["filename"] + "</a><br><small>"
                  + n["latest_date"] + " | " + formatTime(n["time"]) + "/"
                  + formatTime(n["duration"])
                  + "</small></td><td class='del' title='" + n["filename"]
@@ -373,6 +377,6 @@ function history(str) {
         } else
             out(xhr.statusText);
     });
-    }
+}
 </script>
 </html>
