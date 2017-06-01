@@ -365,12 +365,12 @@ function history(str) {
                 html += "<tr>" + "<td class='dir' title='" + n["path"] + "'>" +
                 "<i class='glyphicon glyphicon-film' title='" + n["path"] +
                 "'></i></td><td class='filelist'>" + "<a href='?src=" +
-                n["filename"] + "'>" + n["filename"] + "</a><br><small>"
-                 + n["latest_date"] + " | " + formatTime(n["time"]) + "/"
-                 + formatTime(n["duration"])
-                 + "</small></td><td class='del' title='" + n["filename"]
-                 + "'><i class='glyphicon glyphicon-remove-circle' title='"
-                 + n["filename"] + "'></i>" + "</td></tr>";
+                n["filename"] + "'>" + n["filename"] + "</a><br><small>" +
+                n["latest_date"] + " | " + formatTime(n["time"]) + "/" +
+                formatTime(n["duration"]) +
+                "</small></td><td class='del' title='" + n["filename"] +
+                "'><i class='glyphicon glyphicon-remove-circle' title='" +
+                n["filename"] + "'></i>" + "</td></tr>";
             });
             $('#list').empty();
             $('#list').append(html);
