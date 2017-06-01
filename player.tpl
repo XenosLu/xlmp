@@ -55,16 +55,13 @@ video {
   display: block;
   margin: auto;
 }
-small {
-  color: grey;
-}
 .filelist {
   min-width: 14em;
 }
 .filelist.link {
   color: #337AB7;
 }
-.filelist.other {
+.filelist.other, .filelist small {
   color: grey;
 }
 #sidebar{
@@ -112,7 +109,7 @@ small {
 </div>
 <div id="dialog" style="display:none">
   <div class="bg-info">
-  <button onClick="$('#dialog').hide(300);" type="button" class="close">&times;</button>
+  <button onClick="$('#dialog').hide(250);" type="button" class="close">&times;</button>
     <ul id="navtab" class="nav nav-tabs">
       <li class="active">
         <a href="#mainframe" data-toggle="tab" onclick="history('list')">
@@ -185,18 +182,18 @@ $(document).mousemove(function () {
 });
 if (("{{src}}"=="")) {
     history("list");
-    $("#dialog").show(500);
+    $("#dialog").show(250);
     $("#videosize").hide();
     $('#rate').hide();
 } else {
-    $(document.body).append("<div><video poster controls preload='auto'>No video support!</video></div>");//preload meta
+    $(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");
     $("video").attr("src", "{{src}}");
     $("video").on("error", function () {
         out("error");
     });
     $("video").on("loadeddata", function () { //auto load progress
         $("video").get(0).currentTime = Math.max({{progress}} - 0.5, 0);
-        text = "Play from<br>";
+        text = "<small>Play from</small><br>";
     });
     $("video").on("seeking", function () { //show progress when changed
         out(text + formatTime($("video").get(0).currentTime) + '/' + formatTime($("video").get(0).duration));
@@ -208,7 +205,6 @@ if (("{{src}}"=="")) {
             //if (Math.abs($("video").get(0).currentTime - lastsavetime) > 3) {//save play progress in every 3 seconds
             if (Math.floor(Math.random() * 99) > 81) { //randomly save play progress
                 //lastsavetime = $("video").get(0).currentTime;
-                //dict={src:"{{src}}",time:$("video").get(0).currentTime,duration:"&duration=" + $("video").get(0).duration};
                 $.get("?action=save&src={{src}}&time=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
                     if (xhr.statusText != "OK")
                         out(xhr.statusText);
@@ -310,7 +306,7 @@ $(document).on('touchend', function (e) {
 $("#history").click(function () {
     if ($('#navtab li:eq(0)').attr('class') == 'active')
         history("list");
-    $('#dialog').show(300);
+    $('#dialog').show(250);
 });
 $("#videosize").click(function () {
     if ($("#videosize").text() == "auto")
