@@ -88,16 +88,9 @@ def list_history_from_db():
 		''' % (os.path.dirname(s[0]), os.path.dirname(s[0]), s[0], s[0], s[3],
 		time_format(s[1]), time_format(s[2]), s[0], s[0])
         for s in historys]
-    
+
     if html:
-        return '''%s
-        <tr>
-          <td colspan=3>
-            <button type="button" class="btn btn-default btn-xs" id='clear'>
-              Clear History
-            </button>
-          </td>
-        </tr>''' % ''.join(html)
+        return ''.join(html)
     else:
         return '<tr><td>Empty...</td></tr>'
 

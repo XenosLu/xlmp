@@ -154,6 +154,7 @@ video {
       <tbody id="list">
       </tbody>
     </table>
+	
   </div>
   <div class="panel-footer">
     <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">orign</button>
@@ -171,6 +172,7 @@ video {
         <li><a href="#" onclick="rate(2)">2X</a></li>
       </ul>
     </div>
+	<button id="clear" type="button" class="btn btn-default">Clear History</button>
     <div class="btn-group dropup">
       <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.get('/suspend.php');">
 	    <i class="glyphicon glyphicon-off"></i>
@@ -384,8 +386,13 @@ $("#mainframe").on("click", "#clear", function () {
 });
 function tabshow(str, n) {
     $("#list").load(encodeURI(str), function (responseTxt, status, xhr) {
-        if (xhr.statusText == "OK")
+        if (xhr.statusText == "OK") {
             $("#navtab li:eq(" + n + ") a").tab("show");
+			if(n==0)
+				$("#clear").show();
+			else
+				$("#clear").hide();
+			}
         else
             out(xhr.statusText);
     });
