@@ -5,6 +5,7 @@ import shutil
 import sqlite3
 import sys
 import math
+import json
 
 from bottle import *#pip install bottle
 
@@ -69,33 +70,43 @@ def remove_history_from_db(name = None):
     conn.close()
     return
 
-def list_history_from_db():
+# def list_history_from_db():
+    # conn = db()
+    # historys=conn.execute('''
+        # select * from history order by LATEST_DATE desc''').fetchall()
+    # conn.close()
+    # html=['''
+        # <tr>
+          # <td class="dir" title="/%s">
+		    # <i class="glyphicon glyphicon-film" title="/%s"></i>
+		  # </td>
+          # <td class="filelist">
+		    # <a href="?src=%s">%s</a>
+            # <br><small>%s | %s/%s</small>
+		  # </td>
+          # <td class="del" title="%s">
+            # <i class="glyphicon glyphicon-remove-circle" title="%s"></i>
+          # </td>
+        # </tr>
+		# ''' % (os.path.dirname(s[0]), os.path.dirname(s[0]), s[0], s[0], 
+        # s[3], time_format(s[1]), time_format(s[2]), s[0], s[0])
+        # for s in historys]
+    # if html:
+        # return ''.join(html)
+    # else:
+        # return '<tr><td>Empty...</td></tr>'
+
+@route('/test')
+def history_list_json_from_db():
     conn = db()
     historys=conn.execute('''
         select * from history order by LATEST_DATE desc''').fetchall()
     conn.close()
-    html=['''
-        <tr>
-          <td class="dir" title="/%s">
-		    <i class="glyphicon glyphicon-film" title="/%s"></i>
-		  </td>
-          <td class="filelist">
-		    <a href="?src=%s">%s</a>
-            <br><small>%s | %s/%s</small>
-		  </td>
-          <td class="del" title="%s">
-            <i class="glyphicon glyphicon-remove-circle" title="%s"></i>
-          </td>
-        </tr>
-		''' % (os.path.dirname(s[0]), os.path.dirname(s[0]), s[0], s[0], 
-        s[3], time_format(s[1]), time_format(s[2]), s[0], s[0])
-        for s in historys]
+    dict=[{'filename':s[0], 'time':s[1], 'duration':s[2], 'latest_date':s[3],
+    'path':'/' + os.path.dirname(s[0])} for s in historys]
+    return json.dumps(dict)
 
-    if html:
-        return ''.join(html)
-    else:
-        return '<tr><td>Empty...</td></tr>'
-
+	
 @route('/player.php')#index
 def videoplayer():
     action = request.query.action
@@ -104,15 +115,16 @@ def videoplayer():
         time = request.GET.get('time')
         duration = request.GET.get('duration')
         update_history_from_db(src, time, duration)
-        return list_history_from_db()
+        return
     elif action == 'del':
         remove_history_from_db(src)
-        return list_history_from_db()
+        return history_list_json_from_db()
     elif action == 'clear':
         remove_history_from_db()
-        return list_history_from_db()
+        return history_list_json_from_db()
     elif action == 'list':
-        return list_history_from_db()
+        # return list_history_from_db()
+        return history_list_json_from_db()
     elif action == 'move':
         file = './static/mp4/%s' % src
         dir_old = './static/mp4/%s/old' % os.path.dirname(src)

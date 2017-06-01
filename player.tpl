@@ -61,35 +61,6 @@ video {
 .filelist.other {
   color: grey;
 }
-/*
-@keyframes slide {
-  0% {left:-8%}
-  9% {left:0%}
-  75% {left:0%}
-  100% {left:-9%}
-}
-@-webkit-keyframes slide {
-  0% {left:-8%}
-  9% {left:0%}
-  75% {left:0%}
-  100% {left:-9%}
-}
-#sidebar.sliding {
-  left: 0%;
-  -webkit-transform: translateX(0%);
-  -webkit-animation-name: slide;
-  -webkit-animation-duration: 5.5s;
-  -webkit-animation-iteration-count: 1;
-  -webkit-animation-delay: 0s;
-  animation-name: slide;
-  animation-duration: 5.5s;
-  animation-iteration-count: 1;
-  animation-delay: 0s;
-}
-#sidebar.outside {
-  left: -25%;
-}
-*/
 #sidebar{
   opacity: 0;
   position: fixed;
@@ -121,7 +92,7 @@ video {
 #mainframe {
   overflow: auto;
   min-height: 9em;
-  min-width: 10em;
+  min-width: 18em;
   width: 100%;
 }
 </style>
@@ -138,14 +109,15 @@ video {
   <button onClick="$('#dialog').hide();" type="button" class="close">&times;</button>
     <ul id="navtab" class="nav nav-tabs">
       <li class="active">
-        <a href="#mainframe" data-toggle="tab" onclick="tabshow('?action=list', 0)">
-		  <i class="glyphicon glyphicon-list"></i>History
-		</a>
+        <!-- <a href="#mainframe" data-toggle="tab" onclick="tabshow('?action=list', 0)"> -->
+        <a href="#mainframe" data-toggle="tab" onclick="history('list')">
+          <i class="glyphicon glyphicon-list"></i>History
+        </a>
       </li>
       <li>
         <a href="#mainframe" data-toggle="tab" onclick="tabshow('/', 1)">
-		  <i class="glyphicon glyphicon-home"></i>Home dir
-		</a>
+          <i class="glyphicon glyphicon-home"></i>Home dir
+        </a>
       </li>
     </ul>
   </div>
@@ -154,7 +126,7 @@ video {
       <tbody id="list">
       </tbody>
     </table>
-	
+    
   </div>
   <div class="panel-footer">
     <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">orign</button>
@@ -172,19 +144,19 @@ video {
         <li><a href="#" onclick="rate(2)">2X</a></li>
       </ul>
     </div>
-	<button id="clear" type="button" class="btn btn-default">Clear History</button>
+    <button id="clear" type="button" class="btn btn-default">Clear History</button>
     <div class="btn-group dropup">
       <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.get('/suspend.php');">
-	    <i class="glyphicon glyphicon-off"></i>
-	  </button>
+        <i class="glyphicon glyphicon-off"></i>
+      </button>
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
       </button>
       <ul class="dropdown-menu" role="menu">
         <li>
-		  <a onClick="if(confirm('Shutdown ?'))$.get('/shutdown.php');">
-		  <i class="glyphicon glyphicon-off"></i>shutdown</a>
-		</li>
+          <a onClick="if(confirm('Shutdown ?'))$.get('/shutdown.php');">
+          <i class="glyphicon glyphicon-off"></i>shutdown</a>
+        </li>
       </ul>
     </div>
   </div>
@@ -195,16 +167,13 @@ video {
 <script language="javascript">
 var RANGE = 12; //minimum touch move range in px
 var text="";
-var lastsavetime = 0;//in seconds
+//var lastsavetime = 0;//in seconds
 var lastplaytime = 0;//in seconds
-//var video = document.getElementsByTagName("video");//video[0]
-//window.addEventListener("load", adapt, false);
-//window.addEventListener("resize", adapt, false);
-//window.addEventListener("mousemove", showsidebar, false);
 
 $("#history").click(function () {
     if ($('#navtab li:eq(0)').attr('class') == 'active')
-        tabshow('?action=list', 0);
+        //tabshow('?action=list', 0);
+        history("list");
     $('#dialog').show();
 });
 
@@ -216,10 +185,11 @@ $(document).mousemove(function () {
     showsidebar();
 });
 if (("{{src}}"=="")) {
-    tabshow("?action=list", 0);
+    //tabshow("?action=list", 0);
+    history("list");
     $("#dialog").show();
-	$("#videosize").hide();
-	$('#rate').hide();
+    $("#videosize").hide();
+    $('#rate').hide();
 } else {
     $(document.body).append("<div><video poster controls preload='auto'>No video support!</video></div>");//preload meta
     $("video").attr("src", "{{src}}");
@@ -239,12 +209,12 @@ if (("{{src}}"=="")) {
         if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
             //if (Math.abs($("video").get(0).currentTime - lastsavetime) > 3) {//save play progress in every 3 seconds
             if (Math.floor(Math.random() * 99) > 81) { //randomly save play progress
-                lastsavetime = $("video").get(0).currentTime;
-				//dict={src:"{{src}}",time:$("video").get(0).currentTime,duration:"&duration=" + $("video").get(0).duration};
+                //lastsavetime = $("video").get(0).currentTime;
+                //dict={src:"{{src}}",time:$("video").get(0).currentTime,duration:"&duration=" + $("video").get(0).duration};
                 $.get("?action=save&src={{src}}&time=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
                     if (xhr.statusText != "OK")
                         out(xhr.statusText);
-					xhr = null;
+                    xhr = null;
                 });
             }
         }
@@ -343,8 +313,8 @@ $(document).on('touchmove',function(e) {//test function
         if (Math.abs(x) > RANGE) {
             $("video").get(0).muted = true;
             $("video").get(0).playbackRate = 9 * x / Math.abs(x);
-			window.clearInterval(int);
-			var int = setInterval("out(text+format_time($('video').get(0).currentTime)+ '/' + format_time($('video').get(0).duration))", 50);
+            window.clearInterval(int);
+            var int = setInterval("out(text+format_time($('video').get(0).currentTime)+ '/' + format_time($('video').get(0).duration))", 50);
        }
     }
 });
@@ -354,7 +324,7 @@ $(document).on('touchend', function (e) {
     y = e.changedTouches[0].screenY - y0;
     //$("video").get(0).playbackRate = 1;
     //$("video").get(0).muted = false;
-	//window.clearInterval(int);
+    //window.clearInterval(int);
     if (Math.abs(y / x) < 0.25) {
         if (Math.abs(x) > RANGE) {
             playward(Math.floor(x / 11));
@@ -380,24 +350,52 @@ $("#mainframe").on("click", ".move", function (e) {
 });
 $("#mainframe").on("click", ".del", function (e) {
     if (confirm("Clear " + e.target.title + "?"))
-        tabshow("?action=del&src=" + e.target.title, 0);
+        //tabshow("?action=del&src=" + e.target.title, 0);
+        history("del&src=" + e.target.title);
 });
-$("#mainframe").on("click", "#clear", function () {
+$("#clear").on("click", function () {
     if (confirm("Clear all history?"))
-        tabshow("?action=clear", 0);
+        //tabshow("?action=clear", 0);
+        history("clear");
 });
+
 function tabshow(str, n) {
     $("#list").load(encodeURI(str), function (responseTxt, status, xhr) {
         if (xhr.statusText == "OK") {
             $("#navtab li:eq(" + n + ") a").tab("show");
-			if(n==0)
-				$("#clear").show();
-			else
-				$("#clear").hide();
-			}
+            if(n==0) {
+                //$("#clear").show();
+                history("list");
+            }
+            else
+                $("#clear").hide();
+            }
         else
             out(xhr.statusText);
     });
 }
+function history(str) {
+    $.getJSON("?action=" + str, function (data, status, xhr) {
+        if (xhr.statusText == "OK") {
+            $("#navtab li:eq(0) a").tab("show");
+            $("#clear").show();
+            var html = "";
+            $.each(data, function (i, n) {
+                html += "<tr>" + "<td class='dir' title='" + n["path"] + "'>" +
+                "<i class='glyphicon glyphicon-film' title='" + n["path"]
+                 + "'></i></td><td class='filelist'>" + "<a href='?src="
+                 + n["filename"] + "'>" + n["filename"] + "</a><br><small>"
+                 + n["latest_date"] + " | " + format_time(n["time"]) + "/"
+                 + format_time(n["duration"])
+                 + "</small></td><td class='del' title='" + n["filename"]
+                 + "'><i class='glyphicon glyphicon-remove-circle' title='"
+                 + n["filename"] + "'></i>" + "</td></tr>";
+            });
+            $('#list').empty();
+            $('#list').append(html);
+        } else
+            out(xhr.statusText);
+    });
+    }
 </script>
 </html>
