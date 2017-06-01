@@ -217,9 +217,8 @@ def folder(dir):
                 html_mp4 += '''
 				<tr>
 				  <td><i class="glyphicon glyphicon-film"></i></td>
-				  <td>
-					<a href="/player.php?src=%s%s">%s</a>
-					<br><small>%s</small>
+				  <td class="filelist link" title="/player.php?src=%s%s">
+                    %s<br><small>%s</small>
 				  </td>
 				  <td class="move" title="%s%s">
 					<i class="glyphicon glyphicon-remove-circle" title="%s%s">

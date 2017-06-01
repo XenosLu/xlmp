@@ -55,14 +55,21 @@ video {
   display: block;
   margin: auto;
 }
+small {
+  color: grey;
+}
 .filelist {
   min-width: 14em;
+}
+.filelist.link {
+  color: #337AB7;
 }
 .filelist.other {
   color: grey;
 }
 #sidebar{
-  opacity: 0;
+  opacity: 0.4;
+  display: none;
   position: fixed;
   top: 40%;
 }
@@ -105,7 +112,7 @@ video {
 </div>
 <div id="dialog" style="display:none">
   <div class="bg-info">
-  <button onClick="$('#dialog').hide();" type="button" class="close">&times;</button>
+  <button onClick="$('#dialog').hide(300);" type="button" class="close">&times;</button>
     <ul id="navtab" class="nav nav-tabs">
       <li class="active">
         <a href="#mainframe" data-toggle="tab" onclick="history('list')">
@@ -169,8 +176,6 @@ var text="";
 //var lastsavetime = 0;//in seconds
 var lastplaytime = 0;//in seconds
 
-
-
 window.onload = adapt;
 $(window).resize(function () {
     adapt();
@@ -180,7 +185,7 @@ $(document).mousemove(function () {
 });
 if (("{{src}}"=="")) {
     history("list");
-    $("#dialog").show();
+    $("#dialog").show(500);
     $("#videosize").hide();
     $('#rate').hide();
 } else {
@@ -225,7 +230,7 @@ if (("{{src}}"=="")) {
 };
 function showSidebar() {
     //$("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
-    $("#sidebar").show().fadeTo(500, 0.35).delay(9999).fadeOut(800);
+    $("#sidebar").show(600).delay(9999).fadeOut(800);
 }
 function rate(x) {
     out(x + "X");
@@ -302,25 +307,10 @@ $(document).on('touchend', function (e) {
     } else
         showSidebar();
 });
-$("#mainframe").on("click", ".dir", function (e) {
-    filelist(e.target.title);
-});
-$("#mainframe").on("click", ".move", function (e) {
-    if (confirm("Move " + e.target.title + " to old?"))
-        filelist("?action=move&src=" + e.target.title);
-});
-$("#mainframe").on("click", ".del", function (e) {
-    if (confirm("Clear " + e.target.title + "?"))
-        history("del&src=" + e.target.title);
-});
-$("#clear").click(function () {
-    if (confirm("Clear all history?"))
-        history("clear");
-});
 $("#history").click(function () {
     if ($('#navtab li:eq(0)').attr('class') == 'active')
         history("list");
-    $('#dialog').show();
+    $('#dialog').show(300);
 });
 $("#videosize").click(function () {
     if ($("#videosize").text() == "auto")
@@ -333,6 +323,25 @@ $("#videosize").click(function () {
         }
     }
 });
+$("#clear").click(function () {
+    if (confirm("Clear all history?"))
+        history("clear");
+});
+$("#mainframe").on("click", ".dir", function (e) {
+    filelist(e.target.title);
+});
+$("#mainframe").on("click", ".move", function (e) {
+    if (confirm("Move " + e.target.title + " to old?"))
+        filelist("?action=move&src=" + e.target.title);
+});
+$("#mainframe").on("click", ".del", function (e) {
+    if (confirm("Clear " + e.target.title + "?"))
+        history("del&src=" + e.target.title);
+});
+$("#mainframe").on("click", ".link", function (e) {
+    window.location.href = e.target.title;
+});
+
 /*
 function videosizetoggle() {
     if ($("#videosize").text() == "auto")
@@ -364,8 +373,8 @@ function history(str) {
             $.each(data, function (i, n) {
                 html += "<tr>" + "<td class='dir' title='" + n["path"] + "'>" +
                 "<i class='glyphicon glyphicon-film' title='" + n["path"] +
-                "'></i></td><td class='filelist'>" + "<a href='?src=" +
-                n["filename"] + "'>" + n["filename"] + "</a><br><small>" +
+                "'></i></td><td class='filelist link' title='?src=" + 
+                n["filename"] + "'>" + n["filename"] + "<br><small>" +
                 n["latest_date"] + " | " + formatTime(n["time"]) + "/" +
                 formatTime(n["duration"]) +
                 "</small></td><td class='del' title='" + n["filename"] +
