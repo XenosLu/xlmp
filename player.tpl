@@ -316,15 +316,6 @@ $(document).on('touchend', function (e) {
         }
     } else
         showsidebar();
-/*
-    if (Math.abs(y / x) < 0.25) {
-        if (x > RANGE)
-            playward(Math.floor(x / 11));
-        else if (x < -RANGE)
-            playward(Math.floor(x / 11));
-    } else
-        showsidebar();
-*/
 });
 $("#mainframe").on("click", ".dir", function (e) {
     tabshow(e.target.title, 1);
