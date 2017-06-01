@@ -27,6 +27,9 @@
   margin: 0;
   font-size: 1.2em;
 }
+.table > tbody > tr > td {
+  vertical-align: middle;
+}
 /*** modified bootstrap style ***/
 html, body {
   /*height: 100%;*/
@@ -43,9 +46,6 @@ a {
 }
 div {
   text-align: center;
-}
-td {
-  vertical-align: middle;
 }
 td:hover {
   background: white;
