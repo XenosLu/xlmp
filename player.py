@@ -76,15 +76,17 @@ def list_history_from_db():
     conn.close()
     html=['''
         <tr>
-          <td><i class='glyphicon glyphicon-film dir' title="/%s"></i></td>
+          <td class="dir" title="/%s">
+		    <i class="glyphicon glyphicon-film" title="/%s"></i>
+		  </td>
           <td class="filelist"><a href="?src=%s">%s</a>
           <br><small>%s | %s/%s</small></td>
           <td>
-            <i class='glyphicon glyphicon-remove-circle del' title="%s"></i>
+            <i class="glyphicon glyphicon-remove-circle del" title="%s"></i>
           </td>
-        </tr>''' % (
-        os.path.dirname(s[0]), s[0], s[0], s[3], time_format(s[1]),\
-        time_format(s[2]),s[0])
+        </tr>
+		''' % (os.path.dirname(s[0]), os.path.dirname(s[0]), s[0], s[0], s[3],
+		time_format(s[1]), time_format(s[2]), s[0])
         for s in historys]
     
     if html:
@@ -220,17 +222,17 @@ def folder(dir):
              </tr>''' % (dir,file,file,get_size(dir+file),dir,file)
             else:
                 html_files += '''
-			<tr>
-			  <td><i class="glyphicon glyphicon-file"></i></td>
-			  <td>
-				<span class="filelist other">%s</span>
-				<br><small>%s</small>
-			  </td>
-			  <td>
-				<i class="glyphicon glyphicon-remove-circle move" title="%s%s">
-				</i>
-			  </td>
-			</tr>''' % (file,get_size(dir+file),dir,file)
+				<tr>
+				  <td><i class="glyphicon glyphicon-file"></i></td>
+				  <td>
+					<span class="filelist other">%s</span>
+					<br><small>%s</small>
+				  </td>
+				  <td class="move" title="%s%s">
+					<i class="glyphicon glyphicon-remove-circle" title="%s%s">
+					</i>
+				  </td>
+				</tr>''' % (file, get_size(dir+file), dir, file, dir, file)
         return "".join([html_dir,html_mp4,html_files])
     except Exception as e:
         abort(404,str(e))
