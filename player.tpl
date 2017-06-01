@@ -48,7 +48,7 @@ div {
   text-align: center;
 }
 td:hover {
-  background: white;
+  background: #EEEEF3;
 }
 video {
   /*clear: both;*/
