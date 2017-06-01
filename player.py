@@ -76,11 +76,11 @@ def list_history_from_db():
     conn.close()
     html=['''
         <tr>
-          <td class="dir" title="/%s"><i class="glyphicon glyphicon-film"></i></td>
+          <td><i class='glyphicon glyphicon-film dir' title="/%s"></i></td>
           <td class="filelist"><a href="?src=%s">%s</a>
           <br><small>%s | %s/%s</small></td>
-          <td class="del" title="%s">
-            <i class="glyphicon glyphicon-remove-circle"></i>
+          <td>
+            <i class='glyphicon glyphicon-remove-circle del' title="%s"></i>
           </td>
         </tr>''' % (
         os.path.dirname(s[0]), s[0], s[0], s[3], time_format(s[1]),\
@@ -197,40 +197,40 @@ def folder(dir):
         for file in os.listdir('./static/mp4/%s' % dir):
             if os.path.isdir('./static/mp4/%s%s' % (dir,file)):
                 html_dir += '''
-				<tr>
-				  <td><i class="glyphicon glyphicon-folder-close"></i></td>
-				  <td class="filelist dir" title="/%s%s">%s</td>
-				  <td class="move" title="%s%s">
-					<i class="glyphicon glyphicon-remove-circle">
-					</i>
-				  </td>
-				</tr>''' % (dir,file,file,dir,file)
+			<tr>
+			  <td><i class="glyphicon glyphicon-folder-close"></i></td>
+			  <td class="filelist dir" title="/%s%s">%s</td>
+			  <td>
+				<i class="glyphicon glyphicon-remove-circle move" title="%s%s">
+				</i>
+			  </td>
+			</tr>''' % (dir,file,file,dir,file)
             elif re.match('.*\.((?i)mp)4$',file):
                 html_mp4 += '''
-				<tr>
-				  <td><i class="glyphicon glyphicon-film"></i></td>
-				  <td>
-					<a href="/player.php?src=%s%s">%s</a>
-					<br><small>%s</small>
-				  </td>
-				  <td class="move" title="%s%s">
-					<i class="glyphicon glyphicon-remove-circle">
-					</i>
-				  </td>
-				 </tr>''' % (dir,file,file,get_size(dir+file),dir,file)
+			<tr>
+			  <td><i class="glyphicon glyphicon-film"></i></td>
+			  <td>
+				<a href="/player.php?src=%s%s">%s</a>
+				<br><small>%s</small>
+			  </td>
+			  <td>
+				<i class="glyphicon glyphicon-remove-circle move" title="%s%s">
+				</i>
+			  </td>
+             </tr>''' % (dir,file,file,get_size(dir+file),dir,file)
             else:
                 html_files += '''
-				<tr>
-				  <td><i class="glyphicon glyphicon-file"></i></td>
-				  <td>
-					<span class="filelist other">%s</span>
-					<br><small>%s</small>
-				  </td>
-				  <td class="move" title="%s%s">
-					<i class="glyphicon glyphicon-remove-circle">
-					</i>
-				  </td>
-				</tr>''' % (file,get_size(dir+file),dir,file)
+			<tr>
+			  <td><i class="glyphicon glyphicon-file"></i></td>
+			  <td>
+				<span class="filelist other">%s</span>
+				<br><small>%s</small>
+			  </td>
+			  <td>
+				<i class="glyphicon glyphicon-remove-circle move" title="%s%s">
+				</i>
+			  </td>
+			</tr>''' % (file,get_size(dir+file),dir,file)
         return "".join([html_dir,html_mp4,html_files])
     except Exception as e:
         abort(404,str(e))
