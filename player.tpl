@@ -158,7 +158,7 @@ video {
   </div>
   <div class="panel-footer">
     <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">orign</button>
-    <div class="btn-group dropup">
+    <div id="rate" class="btn-group dropup">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
         Rate<span class="caret"></span>
       </button>
@@ -218,6 +218,8 @@ $(document).mousemove(function () {
 if (("{{src}}"=="")) {
     tabshow("?action=list", 0);
     $("#dialog").show();
+	$("#videosize").hide();
+	$('#rate').hide();
 } else {
     $(document.body).append("<div><video poster controls preload='auto'>No video support!</video></div>");//preload meta
     $("video").attr("src", "{{src}}");
