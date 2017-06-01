@@ -10,10 +10,10 @@ import json
 from bottle import *#pip install bottle
 
 db = lambda: sqlite3.connect('player.db')#define DB connection
-def time_format(time):#turn seconds into hh:mm:ss time format
-    m, s = divmod(time, 60)
-    h, m = divmod(time/60, 60)
-    return "%02d:%02d:%02d" % (h, m, s)
+# def time_format(time):#turn seconds into hh:mm:ss time format
+    # m, s = divmod(time, 60)
+    # h, m = divmod(time/60, 60)
+    # return "%02d:%02d:%02d" % (h, m, s)
 
 def get_size(file):
     size = os.path.getsize('./static/mp4/%s' % file)
@@ -96,7 +96,6 @@ def remove_history_from_db(name = None):
     # else:
         # return '<tr><td>Empty...</td></tr>'
 
-@route('/test')
 def history_list_json_from_db():
     conn = db()
     historys=conn.execute('''

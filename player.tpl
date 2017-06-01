@@ -113,7 +113,7 @@ video {
         </a>
       </li>
       <li>
-        <a href="#mainframe" data-toggle="tab" onclick="tabshow('/', 1)">
+        <a href="#mainframe" data-toggle="tab" onclick="filelist('/')">
           <i class="glyphicon glyphicon-home"></i>Home dir
         </a>
       </li>
@@ -168,18 +168,14 @@ var text="";
 //var lastsavetime = 0;//in seconds
 var lastplaytime = 0;//in seconds
 
-$("#history").click(function () {
-    if ($('#navtab li:eq(0)').attr('class') == 'active')
-        history("list");
-    $('#dialog').show();
-});
+
 
 window.onload = adapt;
 $(window).resize(function () {
     adapt();
 });
 $(document).mousemove(function () {
-    showsidebar();
+    showSidebar();
 });
 if (("{{src}}"=="")) {
     history("list");
@@ -197,7 +193,7 @@ if (("{{src}}"=="")) {
         text = "Play from<br>";
     });
     $("video").on("seeking", function () { //show progress when changed
-        out(text + format_time($("video").get(0).currentTime) + '/' + format_time($("video").get(0).duration));
+        out(text + formatTime($("video").get(0).currentTime) + '/' + formatTime($("video").get(0).duration));
         text = "";
     });
     $("video").on("timeupdate", function () { //auto save play progress
@@ -220,14 +216,14 @@ if (("{{src}}"=="")) {
         if (new Date().getTime() - lastplaytime > 1000) {
             for (i = 0, t = $("video").get(0).buffered.length; i < t; i++) {
                 if ($("video").get(0).currentTime >= $("video").get(0).buffered.start(i) && $("video").get(0).currentTime <= $("video").get(0).buffered.end(i))
-                    str = format_time($("video").get(0).buffered.start(i)) + "-" + format_time($("video").get(0).buffered.end(i)) + "<br>";
+                    str = formatTime($("video").get(0).buffered.start(i)) + "-" + formatTime($("video").get(0).buffered.end(i)) + "<br>";
             };
             out(str + "<small>buffering...</small>");
         };
     });
 };
 
-function showsidebar() {
+function showSidebar() {
     //$("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
     $("#sidebar").show().fadeTo(500, 0.35).delay(9999).fadeOut(800);
 }
@@ -235,8 +231,8 @@ function rate(x) {
     out(x + "X");
     $("video").get(0).playbackRate = x;
 }
-function format_time(time) {
-    return Math.floor(time / 60) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
+function formatTime(time) {
+    return Math.floor(time / 3600) + ":" + (Math.floor(time / 60/ 100)).toFixed(2).slice(-2) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
 }
 function playward(time) {
     if (!isNaN($("video").get(0).duration)) {
@@ -299,7 +295,7 @@ $(document).on('touchmove',function(e) {//test function
             $("video").get(0).muted = true;
             $("video").get(0).playbackRate = 9 * x / Math.abs(x);
             window.clearInterval(int);
-            var int = setInterval("out(text+format_time($('video').get(0).currentTime)+ '/' + format_time($('video').get(0).duration))", 50);
+            var int = setInterval("out(text+formatTime($('video').get(0).currentTime)+ '/' + formatTime($('video').get(0).duration))", 50);
        }
     }
 });
@@ -315,36 +311,43 @@ $(document).on('touchend', function (e) {
             playward(Math.floor(x / 11));
         }
     } else
-        showsidebar();
+        showSidebar();
 });
 $("#mainframe").on("click", ".dir", function (e) {
-    tabshow(e.target.title, 1);
+    filelist(e.target.title);
 });
 $("#mainframe").on("click", ".move", function (e) {
     if (confirm("Move " + e.target.title + " to old?"))
-        tabshow("?action=move&src=" + e.target.title, 1);
+        filelist("?action=move&src=" + e.target.title);
 });
 $("#mainframe").on("click", ".del", function (e) {
     if (confirm("Clear " + e.target.title + "?"))
         history("del&src=" + e.target.title);
 });
-$("#clear").on("click", function () {
+$("#clear").click(function () {
     if (confirm("Clear all history?"))
         history("clear");
 });
-
+$("#history").click(function () {
+    if ($('#navtab li:eq(0)').attr('class') == 'active')
+        history("list");
+    $('#dialog').show();
+});
 function tabshow(str, n) {
     $("#list").load(encodeURI(str), function (responseTxt, status, xhr) {
         if (xhr.statusText == "OK") {
-            $("#navtab li:eq(" + n + ") a").tab("show");
-            if(n==0) {
-                //$("#clear").show();
-                history("list");
-            }
-            else
-                $("#clear").hide();
-            }
-        else
+            $("#navtab li:eq(1) a").tab("show");
+            $("#clear").hide();
+        } else
+            out(xhr.statusText);
+    });
+}
+function filelist(str) {
+    $("#list").load(encodeURI(str), function (responseTxt, status, xhr) {
+        if (xhr.statusText == "OK") {
+            $("#navtab li:eq(1) a").tab("show");
+            $("#clear").hide();
+        } else
             out(xhr.statusText);
     });
 }
@@ -359,8 +362,8 @@ function history(str) {
                 "<i class='glyphicon glyphicon-film' title='" + n["path"]
                  + "'></i></td><td class='filelist'>" + "<a href='?src="
                  + n["filename"] + "'>" + n["filename"] + "</a><br><small>"
-                 + n["latest_date"] + " | " + format_time(n["time"]) + "/"
-                 + format_time(n["duration"])
+                 + n["latest_date"] + " | " + formatTime(n["time"]) + "/"
+                 + formatTime(n["duration"])
                  + "</small></td><td class='del' title='" + n["filename"]
                  + "'><i class='glyphicon glyphicon-remove-circle' title='"
                  + n["filename"] + "'></i>" + "</td></tr>";
