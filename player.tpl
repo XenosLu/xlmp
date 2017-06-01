@@ -8,7 +8,7 @@
 <style>
 /*** modified bootstrap style ***/
 .glyphicon-film, .glyphicon-folder-close, .glyphicon-remove-circle, .glyphicon-file, .glyphicon-list-alt, .caret {
-  font-size: 1.75em;
+  font-size: 1.8em;
 }
 .glyphicon-remove-circle {
     color: grey;
@@ -43,6 +43,12 @@ a {
 }
 div {
   text-align: center;
+}
+td {
+  vertical-align: middle;
+}
+td:hover {
+  background: white;
 }
 video {
   /*clear: both;*/
@@ -123,7 +129,6 @@ video {
 <body>
 <!-- <div id="sidebar" class="outside"> -->
 <div id="sidebar">
-  <!-- <button onClick="if($('#navtab li:eq(0)').attr('class')=='active')tabshow('?action=list', 0);$('#dialog').show();" type="button" class="btn btn-default"> -->
   <button id="history" type="button" class="btn btn-default">
     <i class="glyphicon glyphicon-list-alt"></i>
   </button>
@@ -195,10 +200,10 @@ var lastplaytime = 0;//in seconds
 //window.addEventListener("resize", adapt, false);
 //window.addEventListener("mousemove", showsidebar, false);
 
-$("#history").on("click", function () {
-    if($('#navtab li:eq(0)').attr('class')=='active')
-		tabshow('?action=list', 0);
-	$('#dialog').show();
+$("#history").click(function () {
+    if ($('#navtab li:eq(0)').attr('class') == 'active')
+        tabshow('?action=list', 0);
+    $('#dialog').show();
 });
 
 window.onload = adapt;
