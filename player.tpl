@@ -98,7 +98,6 @@ video {
 </style>
 </head>
 <body>
-<!-- <div id="sidebar" class="outside"> -->
 <div id="sidebar">
   <button id="history" type="button" class="btn btn-default">
     <i class="glyphicon glyphicon-list-alt"></i>
@@ -109,7 +108,6 @@ video {
   <button onClick="$('#dialog').hide();" type="button" class="close">&times;</button>
     <ul id="navtab" class="nav nav-tabs">
       <li class="active">
-        <!-- <a href="#mainframe" data-toggle="tab" onclick="tabshow('?action=list', 0)"> -->
         <a href="#mainframe" data-toggle="tab" onclick="history('list')">
           <i class="glyphicon glyphicon-list"></i>History
         </a>
@@ -172,7 +170,6 @@ var lastplaytime = 0;//in seconds
 
 $("#history").click(function () {
     if ($('#navtab li:eq(0)').attr('class') == 'active')
-        //tabshow('?action=list', 0);
         history("list");
     $('#dialog').show();
 });
@@ -185,7 +182,6 @@ $(document).mousemove(function () {
     showsidebar();
 });
 if (("{{src}}"=="")) {
-    //tabshow("?action=list", 0);
     history("list");
     $("#dialog").show();
     $("#videosize").hide();
@@ -234,17 +230,7 @@ if (("{{src}}"=="")) {
 function showsidebar() {
     //$("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
     $("#sidebar").show().fadeTo(500, 0.35).delay(9999).fadeOut(800);
-    ////////////////////////////////////////////////////////////////
-    //var sidebar = document.getElementById("sidebar");
-    //sidebar.className = "sliding";
-    //sidebar.addEventListener("animationend", resetsidebar);
-    //sidebar.addEventListener("webkitAnimationEnd", resetsidebar);
 }
-/*
-function resetsidebar() {
-    $("#sidebar").attr("class", "outside");
-}
-*/
 function rate(x) {
     out(x + "X");
     $("video").get(0).playbackRate = x;
@@ -277,7 +263,6 @@ function videosizetoggle() {
 }
 function adapt() {
     $("#videosize").text("orign");
-    //out($(window).height() +"|"+ $(document).height() +"|"+ $(document.body).height()  +"|"+  $(document.body).outerHeight(true));
     $("#mainframe").css("max-height", ($(window).height() - 200) + "px");
     if ($(window).height() <= 480)
         $("#dialog").width("100%");
@@ -350,12 +335,10 @@ $("#mainframe").on("click", ".move", function (e) {
 });
 $("#mainframe").on("click", ".del", function (e) {
     if (confirm("Clear " + e.target.title + "?"))
-        //tabshow("?action=del&src=" + e.target.title, 0);
         history("del&src=" + e.target.title);
 });
 $("#clear").on("click", function () {
     if (confirm("Clear all history?"))
-        //tabshow("?action=clear", 0);
         history("clear");
 });
 
