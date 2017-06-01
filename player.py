@@ -79,14 +79,16 @@ def list_history_from_db():
           <td class="dir" title="/%s">
 		    <i class="glyphicon glyphicon-film" title="/%s"></i>
 		  </td>
-          <td class="filelist"><a href="?src=%s">%s</a>
-          <br><small>%s | %s/%s</small></td>
+          <td class="filelist">
+		    <a href="?src=%s">%s</a>
+            <br><small>%s | %s/%s</small>
+		  </td>
           <td class="del" title="%s">
             <i class="glyphicon glyphicon-remove-circle" title="%s"></i>
           </td>
         </tr>
-		''' % (os.path.dirname(s[0]), os.path.dirname(s[0]), s[0], s[0], s[3],
-		time_format(s[1]), time_format(s[2]), s[0], s[0])
+		''' % (os.path.dirname(s[0]), os.path.dirname(s[0]), s[0], s[0], 
+        s[3], time_format(s[1]), time_format(s[2]), s[0], s[0])
         for s in historys]
 
     if html:
