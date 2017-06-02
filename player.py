@@ -105,7 +105,6 @@ def history_list_json_from_db():
     'path':'/' + os.path.dirname(s[0])} for s in historys]
     return json.dumps(dict)
 
-	
 @route('/player.php')#index
 def videoplayer():
     action = request.query.action

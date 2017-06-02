@@ -178,7 +178,7 @@ $(window).resize(function () {
 $(document).mousemove(function () {
     showSidebar();
 });
-if (("{{src}}"=="")) {
+if (("{{src}}" == "")) {
     history("list");
     $("#dialog").show(250);
     $("#videosize").hide();
@@ -194,7 +194,8 @@ if (("{{src}}"=="")) {
         text = "<small>Play from</small><br>";
     });
     $("video").on("seeking", function () { //show progress when changed
-        out(text + formatTime($("video").get(0).currentTime) + '/' + formatTime($("video").get(0).duration));
+        out(text + formatTime($("video").get(0).currentTime) + '/' + 
+        formatTime($("video").get(0).duration));
         text = "";
     });
     $("video").on("timeupdate", function () { //auto save play progress
@@ -231,20 +232,9 @@ function rate(x) {
     $("video").get(0).playbackRate = x;
 }
 function formatTime(time) {
-    return Math.floor(time / 3600) + ":" + ("0"+Math.floor(time / 60)).slice(-2) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
+    return Math.floor(time / 3600) + ":" + ("0" + Math.floor(time / 60)).slice(-2) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
 }
-function playward(time) {
-    if (!isNaN($("video").get(0).duration)) {
-        if (time > 0) {
-            time = Math.min(60, time);
-            text = time + "S>><br>";
-        } else if (time < 0) {
-            time = Math.max(-60, time);
-            text = "<<" + -time + "S<br>";
-        }
-        $("video").get(0).currentTime += time;
-    }
-}
+
 function adapt() {
     $("#videosize").text("orign");
     $("#mainframe").css("max-height", ($(window).height() - 200) + "px");
@@ -288,6 +278,20 @@ $(document).on('touchmove',function(e) {//test function
     }
 });
 */
+/*
+function playward(time) {
+    if (!isNaN($("video").get(0).duration)) {
+        if (time > 0) {
+            time = Math.min(60, time);
+            text = time + "S>><br>";
+        } else if (time < 0) {
+            time = Math.max(-60, time);
+            text = "<<" + -time + "S<br>";
+        }
+        $("video").get(0).currentTime += time;
+    }
+}
+*/
 $(document).on('touchend', function (e) {
     x = e.changedTouches[0].screenX - x0;
     y = e.changedTouches[0].screenY - y0;
@@ -296,7 +300,18 @@ $(document).on('touchend', function (e) {
     //window.clearInterval(int);
     if (Math.abs(y / x) < 0.25) {
         if (Math.abs(x) > RANGE) {
-            playward(Math.floor(x / 11));
+            //playward(Math.floor(x / 11));
+            time = Math.floor(x / 11)
+                if (!isNaN($("video").get(0).duration)) {
+                    if (time > 0) {
+                        time = Math.min(60, time);
+                        text = time + "S>><br>";
+                    } else if (time < 0) {
+                        time = Math.max(-60, time);
+                        text = "<<" + -time + "S<br>";
+                    }
+                    $("video").get(0).currentTime += time;
+                }
         }
     } else
         showSidebar();
