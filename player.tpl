@@ -131,7 +131,6 @@ video {
     
   </div>
   <div class="panel-footer">
-    <!-- <button id="videosize" onClick="videosizetoggle()" type="button" class="btn btn-default">orign</button> -->
     <button id="videosize" type="button" class="btn btn-default">orign</button>
     <div id="rate" class="btn-group dropup">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -371,8 +370,8 @@ function history(str) {
                 "<i class='glyphicon glyphicon-film' title='" + n["path"] +
                 "'></i></td><td class='filelist link' title='?src=" + 
                 n["filename"] + "'>" + n["filename"] + "<br><small>" +
-                n["latest_date"] + " | " + formatTime(n["time"]) + "/" +
-                formatTime(n["duration"]) +
+                n["latest_date"] + " | " + formatTime(n["time"]) + 
+                "/" + formatTime(n["duration"]) +
                 "</small></td><td class='del' title='" + n["filename"] +
                 "'><i class='glyphicon glyphicon-remove-circle' title='" +
                 n["filename"] + "'></i>" + "</td></tr>";
