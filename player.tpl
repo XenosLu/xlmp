@@ -128,7 +128,6 @@ video {
       <tbody id="list">
       </tbody>
     </table>
-    
   </div>
   <div class="panel-footer">
     <button id="videosize" type="button" class="btn btn-default">orign</button>
@@ -336,20 +335,6 @@ $("#mainframe").on("click", ".del", function (e) {
 $("#mainframe").on("click", ".link", function (e) {
     window.location.href = e.target.title;
 });
-
-/*
-function videosizetoggle() {
-    if ($("#videosize").text() == "auto")
-        adapt();
-    else {
-        $("#videosize").text("auto");
-        if ($("video").get(0).width < $(window).width() && $("video").get(0).height < $(window).height()) {
-            $("video").get(0).style.width = $("video").get(0).videoWidth + "px";
-            $("video").get(0).style.height = $("video").get(0).videoHeight + "px";
-        }
-    }
-}
-*/
 function filelist(str) {
     $("#list").load(encodeURI(str), function (responseTxt, status, xhr) {
         if (xhr.statusText == "OK") {
