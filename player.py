@@ -43,7 +43,7 @@ def update_history_from_db(filename, time, duration):
     conn = db()
     conn.execute('''replace into history 
         (FILENAME, TIME, DURATION, LATEST_DATE)
-        VALUES(? , ?, ?, DateTime('now'));''',(filename, time, duration))
+        VALUES(? , ?, ?, DateTime('now'));''', (filename, time, duration))
     conn.commit()
     conn.close()
     return
@@ -66,9 +66,9 @@ def load_history_from_db(name):
 def remove_history_from_db(name = None):
     conn = db()
     if name:
-        conn.execute("delete from history where FILENAME=?",(name,))
+        conn.execute("delete from history where FILENAME=?", (name,))
     else:
-        conn.execute("delete from history")#clearall
+        conn.execute("delete from history")  # clear all
     conn.commit()
     conn.close()
     return
@@ -105,8 +105,8 @@ def history_list_json_from_db():
     historys=conn.execute('''
         select * from history order by LATEST_DATE desc''').fetchall()
     conn.close()
-    history = [{'filename': s[0], 'time': s[1], 'duration': s[2], 'latest_date': s[3],
-    'path': '/' + os.path.dirname(s[0])} for s in historys]
+    history = [{'filename': s[0], 'time': s[1], 'duration': s[2], 'latest_date': s[3], 'path': '/' +
+               os.path.dirname(s[0])} for s in historys]
     return json.dumps(history)
 
 
@@ -144,8 +144,7 @@ def videoplayer():
         title = os.path.basename(src)
     else:
         title = 'Light mp4 Player'
-    return template(
-    'player', src=src, progress=load_history_from_db(src), title=title)
+    return template('player', src=src, progress=load_history_from_db(src), title=title)
 
 
 @route('/suspend.php')
@@ -153,7 +152,7 @@ def suspend():
     if sys.platform == 'win32':
         import ctypes
         dll = ctypes.WinDLL('powrprof.dll')
-        if dll.SetSuspendState(0,1,0):
+        if dll.SetSuspendState(0, 1, 0):
             return 'Suspending...'
         else:
             return 'Suspend Failure!'
@@ -199,8 +198,8 @@ def folder(dir):
     try:
         html_dir, html_mp4, html_files = '', '', ''
         if dir != '':
-            dirs=dir.split('/')
-            html_dir='''
+            dirs = dir.split('/')
+            html_dir = '''
             <tr><td colspan=3>
             <ol class="breadcrumb">
               <li>
@@ -225,7 +224,7 @@ def folder(dir):
               <td class="filelist dir" colspan=2 title="/%s..">..</td>
             </tr>''' % dir
         for file in os.listdir('./static/mp4/%s' % dir):
-            if os.path.isdir('./static/mp4/%s%s' % (dir,file)):
+            if os.path.isdir('./static/mp4/%s%s' % (dir, file)):
                 html_dir += '''
                 <tr>
                   <td><i class="glyphicon glyphicon-folder-close"></i></td>
@@ -234,7 +233,7 @@ def folder(dir):
                     <i class="glyphicon glyphicon-remove-circle" title="%s%s"></i>
                   </td>
                 </tr>''' % (dir, file, file, dir, file, dir, file)
-            elif re.match('.*\.((?i)mp)4$',file):
+            elif re.match('.*\.((?i)mp)4$', file):
                 html_mp4 += '''
                 <tr>
                   <td><i class="glyphicon glyphicon-film"></i></td>
@@ -255,13 +254,12 @@ def folder(dir):
                     <br><small>%s</small>
                   </td>
                   <td class="move" title="%s%s">
-                    <i class="glyphicon glyphicon-remove-circle" title="%s%s">
-                    </i>
+                    <i class="glyphicon glyphicon-remove-circle" title="%s%s"></i>
                   </td>
-	            </tr>''' % (file, get_size(dir+file), dir, file, dir, file)
-        return "".join([html_dir,html_mp4,html_files])
+                </tr>''' % (file, get_size(dir+file), dir, file, dir, file)
+        return "".join([html_dir, html_mp4, html_files])
     except Exception as e:
-        abort(404,str(e))
+        abort(404, str(e))
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 initdb()
