@@ -209,16 +209,16 @@ def folder(dir):
                 </span>
               </li>
               '''
-            for n,i in enumerate(dirs[:-1:],1):
-                print("/%s %s" % ('/'.join(dirs[0:n]),i))
+            for n, i in enumerate(dirs[:-1:], 1):
+                print("/%s %s" % ('/'.join(dirs[0:n]), i))
                 html_dir += '''
                 <li><span class="filelist dir" title="/%s">%s</span>
-                </li>''' % ('/'.join(dirs[0:n]),i)
+                </li>''' % ('/'.join(dirs[0:n]), i)
             html_dir += '''
               <li class="active">%s</li>
             </ol>
             </td></tr>''' % dirs[-1]
-            dir='%s/' % dir.strip('/')
+            dir = '%s/' % dir.strip('/')
             html_dir += '''
             <tr>
               <td><i class="glyphicon glyphicon-folder-close"></i></td>
@@ -231,36 +231,34 @@ def folder(dir):
                   <td><i class="glyphicon glyphicon-folder-close"></i></td>
                   <td class="filelist dir" title="/%s%s">%s</td>
                   <td class="move" title="%s%s">
-                    <i class="glyphicon glyphicon-remove-circle" title="%s%s">
-					</i>
-				  </td>
-				</tr>''' % (dir, file, file, dir, file, dir, file)
+                    <i class="glyphicon glyphicon-remove-circle" title="%s%s"></i>
+                  </td>
+                </tr>''' % (dir, file, file, dir, file, dir, file)
             elif re.match('.*\.((?i)mp)4$',file):
                 html_mp4 += '''
-				<tr>
-				  <td><i class="glyphicon glyphicon-film"></i></td>
-				  <td class="filelist link" title="/player.php?src=%s%s">
+                <tr>
+                  <td><i class="glyphicon glyphicon-film"></i></td>
+                  <td class="filelist link" title="/player.php?src=%s%s">
                     %s<br><small>%s</small>
-				  </td>
-				  <td class="move" title="%s%s">
-					<i class="glyphicon glyphicon-remove-circle" title="%s%s">
-					</i>
-				  </td>
-				 </tr>
-			 ''' % (dir, file, file, get_size(dir+file), dir, file, dir, file)
+                  </td>
+                  <td class="move" title="%s%s">
+                    <i class="glyphicon glyphicon-remove-circle" title="%s%s"></i>
+                  </td>
+                </tr>
+                ''' % (dir, file, file, get_size(dir+file), dir, file, dir, file)
             else:
                 html_files += '''
-				<tr>
-				  <td><i class="glyphicon glyphicon-file"></i></td>
-				  <td>
-					<span class="filelist other">%s</span>
-					<br><small>%s</small>
-				  </td>
-				  <td class="move" title="%s%s">
-					<i class="glyphicon glyphicon-remove-circle" title="%s%s">
-					</i>
-				  </td>
-				</tr>''' % (file, get_size(dir+file), dir, file, dir, file)
+                <tr>
+                  <td><i class="glyphicon glyphicon-file"></i></td>
+                  <td>
+                    <span class="filelist other">%s</span>
+                    <br><small>%s</small>
+                  </td>
+                  <td class="move" title="%s%s">
+                    <i class="glyphicon glyphicon-remove-circle" title="%s%s">
+                    </i>
+                  </td>
+	            </tr>''' % (file, get_size(dir+file), dir, file, dir, file)
         return "".join([html_dir,html_mp4,html_files])
     except Exception as e:
         abort(404,str(e))
