@@ -184,12 +184,13 @@ if (("{{src}}" == "")) {
     $("#videosize").hide();
     $('#rate').hide();
 } else {
-    $(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");
+    //$(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");
+    $(document.body).append("<video webkit-playsinline poster controls preload='meta'>No video support!</video>");
     $("video").attr("src", "{{src}}");
     $("video").on("error", function () {
         out("error");
     });
-    $("video").on("loadeddata", function () { //auto load progress
+    $("video").on("loadedmetadata", function () { //auto load progress //loadeddata
         $("video").get(0).currentTime = Math.max({{progress}} - 0.5, 0);
         text = "<small>Play from</small><br>";
     });
@@ -219,7 +220,7 @@ if (("{{src}}" == "")) {
                 if ($("video").get(0).currentTime >= $("video").get(0).buffered.start(i) && $("video").get(0).currentTime <= $("video").get(0).buffered.end(i))
                     str = formatTime($("video").get(0).buffered.start(i)) + "-" + formatTime($("video").get(0).buffered.end(i)) + "<br>";
             };
-            out(str + "<small>buffering...</small>");
+            out(str + "<small>buffering...</small>" + $("video").get(0).networkState);
         };
     });
 };
