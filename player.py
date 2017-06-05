@@ -1,15 +1,20 @@
 ﻿#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-import os
+# import os
 import shutil
 import sqlite3
-import sys
+# import sys
 import math
 import json
 
 from bottle import *  # pip install bottle
 
-db = lambda: sqlite3.connect('player.db')  # define DB connection
+# db = lambda: sqlite3.connect('player.db')  # define DB connection
+
+
+def db():
+    return sqlite3.connect('player.db')
+
 # def time_format(time):#turn seconds into hh:mm:ss time format
     # m, s = divmod(time, 60)
     # h, m = divmod(time/60, 60)
@@ -63,7 +68,7 @@ def load_history_from_db(name):
     return progress
 
 
-def remove_history_from_db(name = None):
+def remove_history_from_db(name=None):
     conn = db()
     if name:
         conn.execute('delete from history where FILENAME=?', (name,))
@@ -110,7 +115,7 @@ def history_list_json_from_db():
 
 
 @route('/player.php')  # index
-def videoplayer():
+def video_player():
     action = request.query.action
     src = request.query.src
     if action == 'save':
@@ -135,7 +140,7 @@ def videoplayer():
         try:
             shutil.move(file, dir_old)  # gonna do something when file is occupied
         except Exception as e:
-            abort(404,str(e))
+            abort(404, str(e))
         return folder(os.path.dirname(src))
     elif not os.path.exists('./static/mp4/%s' % src):
         redirect('/player.php')
@@ -192,12 +197,12 @@ def fs_mp4(file):
     return static_file(file, root='./static/mp4')
 
 
-@route('/<dir:re:.*>')  # static folder access
-def folder(dir):
+@route('/<path:re:.*>')  # static folder access
+def folder(path):
     try:
         html_dir, html_mp4, html_files = '', '', ''
-        if dir != '':
-            dirs = dir.split('/')
+        if path != '':
+            dirs = path.split('/')
             html_dir = '''
             <tr><td colspan=3>
             <ol class="breadcrumb">
@@ -216,14 +221,14 @@ def folder(dir):
               <li class="active">%s</li>
             </ol>
             </td></tr>''' % dirs[-1]
-            dir = '%s/' % dir.strip('/')
+            path = '%s/' % path.strip('/')
             html_dir += '''
             <tr>
               <td><i class="glyphicon glyphicon-folder-close"></i></td>
               <td class="filelist dir" colspan=2 title="/%s..">..</td>
-            </tr>''' % dir
-        for file in os.listdir('./static/mp4/%s' % dir):
-            if os.path.isdir('./static/mp4/%s%s' % (dir, file)):
+            </tr>''' % path
+        for file in os.listdir('./static/mp4/%s' % path):
+            if os.path.isdir('./static/mp4/%s%s' % (path, file)):
                 html_dir += '''
                 <tr>
                   <td><i class="glyphicon glyphicon-folder-close"></i></td>
@@ -231,7 +236,7 @@ def folder(dir):
                   <td class="move" title="%s%s">
                     <i class="glyphicon glyphicon-remove-circle" title="%s%s"></i>
                   </td>
-                </tr>''' % (dir, file, file, dir, file, dir, file)
+                </tr>''' % (path, file, file, path, file, path, file)
             elif re.match('.*\.((?i)mp)4$', file):
                 html_mp4 += '''
                 <tr>
@@ -243,7 +248,7 @@ def folder(dir):
                     <i class="glyphicon glyphicon-remove-circle" title="%s%s"></i>
                   </td>
                 </tr>
-                ''' % (dir, file, file, get_size(dir+file), dir, file, dir, file)
+                ''' % (path, file, file, get_size(path + file), path, file, path, file)
             else:
                 html_files += '''
                 <tr>
@@ -255,14 +260,14 @@ def folder(dir):
                   <td class="move" title="%s%s">
                     <i class="glyphicon glyphicon-remove-circle" title="%s%s"></i>
                   </td>
-                </tr>''' % (file, get_size(dir+file), dir, file, dir, file)
-        return "".join([html_dir, html_mp4, html_files])
+                </tr>''' % (file, get_size(path + file), path, file, path, file)
+        return ''.join([html_dir, html_mp4, html_files])
     except Exception as e:
         abort(404, str(e))
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 init_db()
 
-if __name__=="__main__":
+if __name__ == '__main__':
     os.system('start http://127.0.0.1:8081/player.php')  # open the page automatic
     run(host='0.0.0.0', port=8081, debug=True)  # you can change port here
