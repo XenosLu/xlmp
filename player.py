@@ -162,6 +162,13 @@ def shutdown():
     else:
         os.system("sudo /sbin/shutdown -h now")
 
+@route('/restart.php')
+def restart():
+    if sys.platform == 'win32':
+        os.system("shutdown.exe -f -r -t 0")
+    else:
+        os.system("sudo /sbin/shutdown -r now")
+
 @route('/static/<file:re:.*>')#static files access
 def static(file):
     return static_file(file, root='./static')
@@ -169,6 +176,11 @@ def static(file):
 @route('/<file:re:.*\.((?i)mp)4$>')#mp4 static files access.
 #to support larger files(>2GB), you should use apache "AliasMatch"
 def mp4(file):
+    return static_file(file, root='./static/mp4')
+
+@route('/fs/<file:re:.*\.((?i)mp)4$>')#mp4 static files access.
+#to support larger files(>2GB), you should use apache "AliasMatch"
+def fs_mp4(file):
     return static_file(file, root='./static/mp4')
 
 @route('/<dir:re:.*>')#static folder access
