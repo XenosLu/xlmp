@@ -28,7 +28,7 @@ def get_size(file):
         return '%.1f%s' % (size/1024.0**l, unit[l])
 
 
-def initdb():  # initialize database by create history table
+def init_db():  # initialize database by create history table
     conn = db()
     conn.execute('''create table if not exists history
         (FILENAME TEXT PRIMARY KEY    NOT NULL,
@@ -53,7 +53,7 @@ def load_history_from_db(name):
     if not name:
         return
     conn = db()
-    cursor = conn.execute("select TIME from history where FILENAME=?", (name,))
+    cursor = conn.execute('select TIME from history where FILENAME=?', (name,))
     try:
         progress = cursor.fetchone()[0]
     except Exception as e:
@@ -66,9 +66,9 @@ def load_history_from_db(name):
 def remove_history_from_db(name = None):
     conn = db()
     if name:
-        conn.execute("delete from history where FILENAME=?", (name,))
+        conn.execute('delete from history where FILENAME=?', (name,))
     else:
-        conn.execute("delete from history")  # clear all
+        conn.execute('delete from history')  # clear all
     conn.commit()
     conn.close()
     return
@@ -102,8 +102,7 @@ def remove_history_from_db(name = None):
 
 def history_list_json_from_db():
     conn = db()
-    historys=conn.execute('''
-        select * from history order by LATEST_DATE desc''').fetchall()
+    historys=conn.execute('select * from history order by LATEST_DATE desc').fetchall()
     conn.close()
     history = [{'filename': s[0], 'time': s[1], 'duration': s[2], 'latest_date': s[3], 'path': '/' +
                os.path.dirname(s[0])} for s in historys]
@@ -262,7 +261,7 @@ def folder(dir):
         abort(404, str(e))
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
-initdb()
+init_db()
 
 if __name__=="__main__":
     os.system('start http://127.0.0.1:8081/player.php')  # open the page automatic
