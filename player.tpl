@@ -252,7 +252,6 @@ function adapt() {
         $("video").get(0).style.height = $(window).height() + "px";
     }
 }
-
 function out(str) {
     if (str != "") {
         $("#output").remove();
@@ -353,7 +352,8 @@ $("#mainframe").on("click", ".link", function (e) {
 function filelist(str) {
     $("#list").load(encodeURI(str), function (responseTxt, status, xhr) {
         if (xhr.statusText == "OK") {
-            $("#navtab li:eq(1) a").tab("show");
+            if ($('#navtab li:eq(1)').attr('class') != 'active')
+                $("#navtab li:eq(1) a").tab("show");
             $("#clear").hide();
         } else
             out(xhr.statusText);
@@ -362,7 +362,8 @@ function filelist(str) {
 function history(str) {
     $.getJSON("?action=" + str, function (data, status, xhr) {
         if (xhr.statusText == "OK") {
-            $("#navtab li:eq(0) a").tab("show");
+            if ($('#navtab li:eq(0)').attr('class') != 'active')
+                $("#navtab li:eq(0) a").tab("show");
             $("#clear").show();
             var html = "";
             $.each(data, function (i, n) {
