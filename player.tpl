@@ -117,8 +117,7 @@ video {
         </a>
       </li>
       <li>
-        <!-- <a href="#mainframe" data-toggle="tab" onclick="filelist('/');filelist_json('/fs/')"> -->
-        <a href="#mainframe" data-toggle="tab" onclick="filelist_json('/fs/')">
+        <a href="#mainframe" data-toggle="tab" onclick="filelist('/fs/')">
           <i class="glyphicon glyphicon-home"></i>Home dir
         </a>
       </li>
@@ -328,17 +327,14 @@ $("#videosize").click(function () {
 });
 $("#clear").click(function () {
     if (confirm("Clear all history?"))
-        //history("/player.php?action=clear");
         history("/clear");
 });
 $("#mainframe").on("click", ".folder", function (e) {
-    //filelist(e.target.title);
-    filelist_json("/fs" + e.target.title + "/");
+    filelist("/fs" + e.target.title + "/");
 });
 $("#mainframe").on("click", ".move", function (e) {
     if (confirm("Move " + e.target.title + " to old?")) {
-        //filelist("/player.php?action=move&src=" + e.target.title);
-        filelist_json("/move/" + e.target.title);
+        filelist("/move/" + e.target.title);
     }
 });
 $("#mainframe").on("click", ".remove", function (e) {
@@ -349,6 +345,7 @@ $("#mainframe").on("click", ".remove", function (e) {
 $("#mainframe").on("click", ".mp4", function (e) {
     window.location.href = "/play/" + e.target.title;
 });
+/*
 function filelist(str) {
     $("#list").load(encodeURI(str), function (responseTxt, status, xhr) {
         if (xhr.statusText == "OK") {
@@ -359,7 +356,8 @@ function filelist(str) {
             out(xhr.statusText);
     });
 }
-function filelist_json(str) {
+*/
+function filelist(str) {
     $.getJSON(encodeURI(str), function (data, status, xhr) {
         if (xhr.statusText == "OK") {
             if ($('#navtab li:eq(1)').attr('class') != 'active')

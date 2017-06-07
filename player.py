@@ -136,11 +136,6 @@ def video_player():
     elif action == 'remove':
         remove_to_history_db(src)
         return list_from_history_db()
-    # elif action == 'clear':
-        # remove_to_history_db()
-        # return list_from_history_db()
-    # elif action == 'list':
-        # return list_from_history_db()
     # elif action == 'move':
         # file = './static/mp4/%s' % src
         # dir_old = './static/mp4/%s/old' % os.path.dirname(src)
@@ -198,12 +193,6 @@ def static(filename):
 # to support larger files(>2GB), you should use apache "AliasMatch"
 def static_mp4(filename):
     return static_file(filename, root='./static/mp4')
-
-
-# @route('/<filename:re:.*\.((?i)mp)4$>')  # mp4 static files access.
-# # to support larger files(>2GB), you should use apache "AliasMatch"
-# def mp4(filename):
-    # return static_file(filename, root='./static/mp4')
 
 
 @route('/fs/<path:re:.*>')  # get static folder json list
@@ -300,5 +289,4 @@ init_db()
 if __name__ == '__main__':
     os.system('start http://127.0.0.1:8081/')  # open the page automatic
     # os.system('start http://127.0.0.1:8081/player.php')  # open the page automatic
-    # os.system('start http://127.0.0.1:8081/fs/')  # open the page automatic
     run(host='0.0.0.0', port=8081, debug=True)  # you can change port here
