@@ -87,6 +87,18 @@ def list_from_history_db():
     return json.dumps(history)
 
 
+@route('/')  # index page
+def index():
+    return template('player', src='', progress=0, title='Light mp4 Player')
+
+
+@route('/play/<src:re:.*\.((?i)mp)4$>')  # player page
+def play(src):
+    if not os.path.exists('./static/mp4/%s' % src):
+        redirect('/')
+    return template('player', src=src, progress=load_from_history_db(src), title=src)
+
+
 @route('/clear')  # clear play history
 def clear():
     remove_to_history_db()
@@ -97,18 +109,6 @@ def clear():
 def remove(src):
     remove_to_history_db(src)
     return list_from_history_db()
-
-
-@route('/play/<src:re:.*\.((?i)mp)4$>')  # player page
-def play(src):
-    if not os.path.exists('./static/mp4/%s' % src):
-        redirect('/')
-    return template('player', src=src, progress=load_from_history_db(src), title=src)
-
-
-@route('/')  # index page
-def index():
-    return template('player', src='', progress=0, title='Light mp4 Player')
 
 
 @route('/move/<src:re:.*>')  # move file to old folder

@@ -171,9 +171,9 @@ video {
 <script src="/static/js/jquery-3.2.1.min.js"></script>
 <script src="/static/js/bootstrap.min.js"></script>
 <script language="javascript">
-var RANGE = 12; //minimum touch move range in px
+var RANGE = 12;  //minimum touch move range in px
 var text="";
-var lastplaytime = 0;//in seconds
+var lastplaytime = 0;  //in seconds
 
 window.onload = adapt;
 $(window).resize(function () {
@@ -193,21 +193,21 @@ if (("{{src}}" == "")) {
     $("video").on("error", function () {
         out("error");
     });
-    $("video").on("durationchange", function () { //auto load progress
+    $("video").on("durationchange", function () {  //auto load progress
         loadProgress();
     });
-    $("video").on("loadeddata", function () { //auto load progress
+    $("video").on("loadeddata", function () {  //auto load progress
         loadProgress();
     });
-    $("video").on("seeking", function () { //show progress when changed
+    $("video").on("seeking", function () {  //show progress when changed
         out(text + formatTime($("video").get(0).currentTime) + '/' + 
         formatTime($("video").get(0).duration));
         text = "";
     });
-    $("video").on("timeupdate", function () { //auto save play progress
-        lastplaytime = new Date().getTime(); //to dectect if video is playing
+    $("video").on("timeupdate", function () {  //auto save play progress
+        lastplaytime = new Date().getTime();  //to dectect if video is playing
         if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
-            if (Math.floor(Math.random() * 99) > 81) { //randomly save play progress
+            if (Math.floor(Math.random() * 99) > 81) {  //randomly save play progress
                 $.get("/player.php?action=save&src={{src}}&time=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
                     if (xhr.statusText != "OK")
                         out(xhr.statusText);
@@ -216,7 +216,7 @@ if (("{{src}}" == "")) {
             }
         }
     });
-    $("video").on("progress", function () { //show buffered
+    $("video").on("progress", function () {  //show buffered
         var str = "";
         if (new Date().getTime() - lastplaytime > 1000) {
         //if ($("video").get(0).networkState != 1) {
@@ -273,7 +273,7 @@ $(document).on('touchstart', function (e) {
     y0 = e.originalEvent.touches[0].screenY;
 });
 /*
-$(document).on('touchmove',function(e) {//test function
+$(document).on('touchmove',function(e) {  //test function
     x = e.changedTouches[0].screenX - x0;
     y = e.changedTouches[0].screenY - y0;
     if (Math.abs(y / x) < 0.25) {
@@ -285,20 +285,6 @@ $(document).on('touchmove',function(e) {//test function
        }
     }
 });
-*/
-/*
-function playward(time) {
-    if (!isNaN($("video").get(0).duration)) {
-        if (time > 0) {
-            time = Math.min(60, time);
-            text = time + "S>><br>";
-        } else if (time < 0) {
-            time = Math.max(-60, time);
-            text = "<<" + -time + "S<br>";
-        }
-        $("video").get(0).currentTime += time;
-    }
-}
 */
 $(document).on('touchend', function (e) {
     x = e.changedTouches[0].screenX - x0;
