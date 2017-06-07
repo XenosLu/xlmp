@@ -44,17 +44,16 @@ def init_db():  # initialize database by create history table
     return
 
 
-def update_history_from_db(filename, time, duration):
+def update_to_history_db(filename, time, duration):
     conn = db()
-    conn.execute('''replace into history 
-                    (FILENAME, TIME, DURATION, LATEST_DATE)
+    conn.execute('''replace into history (FILENAME, TIME, DURATION, LATEST_DATE)
                      VALUES(? , ?, ?, DateTime('now'));''', (filename, time, duration))
     conn.commit()
     conn.close()
     return
 
 
-def load_history_from_db(name):
+def load_from_history_db(name):
     if not name:
         return
     conn = db()
@@ -68,7 +67,7 @@ def load_history_from_db(name):
     return progress
 
 
-def remove_history_from_db(name=None):
+def remove_to_history_db(name=None):
     conn = db()
     if name:
         conn.execute('delete from history where FILENAME= ?', (name,))
@@ -79,7 +78,8 @@ def remove_history_from_db(name=None):
     return
 
 
-def history_list_json_from_db():
+@route('/list')  # list play history
+def list_from_history_db():
     conn = db()
     historys = conn.execute('select * from history order by LATEST_DATE desc').fetchall()
     conn.close()
@@ -89,9 +89,23 @@ def history_list_json_from_db():
     return json.dumps(history)
 
 
+@route('/clear')  # clear play history
+def clear():
+    remove_to_history_db()
+    return list_from_history_db()
+
+
+@route('/remove/<src>')  # clear from play history
+def remove(src):
+    remove_to_history_db(src)
+    return list_from_history_db()
+
+
 @route('/play/<src:re:.*\.((?i)mp)4$>')  # player page
 def play(src):
-    return template('player', src=src, progress=load_history_from_db(src), title=src)
+    if not os.path.exists('./static/mp4/%s' % src):
+        redirect('/')
+    return template('player', src=src, progress=load_from_history_db(src), title=src)
 
 
 @route('/')  # index page
@@ -99,7 +113,7 @@ def index():
     return template('player', src='', progress=0, title='Light mp4 Player')
 
 
-@route('/move/<src>')
+@route('/move/<src>')  # move file to old folder
 def move(src):
     file = './static/mp4/%s' % src
     dir_old = './static/mp4/%s/old' % os.path.dirname(src)
@@ -109,51 +123,46 @@ def move(src):
         shutil.move(file, dir_old)  # gonna do something when file is occupied
     except Exception as e:
         abort(404, str(e))
-    return fs_folder(os.path.dirname(src)+'/')
+    return fs_dir(os.path.dirname(src)+'/')
 
 
-@route('/list')  # list play history
-def list():
-    return history_list_json_from_db()
-
-    
-@route('/player.php')  # index
+@route('/player.php')  # index old
 def video_player():
     action = request.query.action
     src = request.query.src
     if action == 'save':
         time = request.GET.get('time')
         duration = request.GET.get('duration')
-        update_history_from_db(src, time, duration)
+        update_to_history_db(src, time, duration)
         return
-    elif action == 'del':
-        remove_history_from_db(src)
-        return history_list_json_from_db()
-    elif action == 'clear':
-        remove_history_from_db()
-        return history_list_json_from_db()
-    elif action == 'list':
-        return history_list_json_from_db()
-    elif action == 'move':
-        file = './static/mp4/%s' % src
-        dir_old = './static/mp4/%s/old' % os.path.dirname(src)
-        if not os.path.exists(dir_old):
-            os.mkdir(dir_old)
-        try:
-            shutil.move(file, dir_old)  # gonna do something when file is occupied
-        except Exception as e:
-            abort(404, str(e))
-        return folder(os.path.dirname(src))
+    # elif action == 'del':
+        # remove_to_history_db(src)
+        # return list_from_history_db()
+    # elif action == 'clear':
+        # remove_to_history_db()
+        # return list_from_history_db()
+    # elif action == 'list':
+        # return list_from_history_db()
+    # elif action == 'move':
+        # file = './static/mp4/%s' % src
+        # dir_old = './static/mp4/%s/old' % os.path.dirname(src)
+        # if not os.path.exists(dir_old):
+            # os.mkdir(dir_old)
+        # try:
+            # shutil.move(file, dir_old)  # gonna do something when file is occupied
+        # except Exception as e:
+            # abort(404, str(e))
+        # return folder(os.path.dirname(src))
     elif not os.path.exists('./static/mp4/%s' % src):
         redirect('/player.php')
     if src:
         title = os.path.basename(src)
     else:
         title = 'Light mp4 Player'
-    return template('player', src=src, progress=load_history_from_db(src), title=title)
+    return template('player', src=src, progress=load_from_history_db(src), title=title)
 
 
-@route('/suspend.php')
+@route('/suspend.php')  # suspend the server
 def suspend():
     if sys.platform == 'win32':
         import ctypes
@@ -166,7 +175,7 @@ def suspend():
         return 'OS not supported!'
 
 
-@route('/shutdown.php')
+@route('/shutdown.php')  # shutdown the server
 def shutdown():
     if sys.platform == 'win32':
         os.system("shutdown.exe -f -s -t 0")
@@ -174,7 +183,7 @@ def shutdown():
         os.system("sudo /sbin/shutdown -h now")
 
 
-@route('/restart.php')
+@route('/restart.php')  # restart the server
 def restart():
     if sys.platform == 'win32':
         os.system("shutdown.exe -f -r -t 0")
@@ -187,9 +196,9 @@ def static(filename):
     return static_file(filename, root='./static')
 
 
-@route('/fs/<filename:re:.*\.((?i)mp)4$>')  # mp4 static files access.
+@route('/mp4/<filename:re:.*\.((?i)mp)4$>')  # mp4 static files access.
 # to support larger files(>2GB), you should use apache "AliasMatch"
-def fs_mp4(filename):
+def static_mp4(filename):
     return static_file(filename, root='./static/mp4')
 
 
@@ -199,8 +208,8 @@ def mp4(filename):
     return static_file(filename, root='./static/mp4')
 
 
-@route('/fs/<path:re:.*>')  # static folder access
-def fs_folder(path):
+@route('/fs/<path:re:.*>')  # get static folder json list
+def fs_dir(path):
     try:
         fs_list, fs_list_folder, fs_list_mp4, fs_list_other = [], [], [], []
         if path != '':
@@ -214,9 +223,6 @@ def fs_folder(path):
             else:
                 fs_list_other.append({'filename': file, 'type': 'other',
                                       'path': '%s%s' % (path, file), 'size': get_size(path + file)})
-
-            # fs_list = fs_list + fs_list_folder+fs_list_mp4+fs_list_other
-        # return json.dumps(fs_list)
         return json.dumps(fs_list + fs_list_folder+fs_list_mp4+fs_list_other)
     except Exception as e:
         abort(404, str(e))

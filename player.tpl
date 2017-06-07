@@ -190,7 +190,7 @@ if (("{{src}}" == "")) {
     $('#rate').hide();
 } else {
     $(document.body).append("<video poster controls preload='meta'>No video support!</video>");
-    $("video").attr("src", "/fs/{{src}}");
+    $("video").attr("src", "/mp4/{{src}}");
     $("video").on("error", function () {
         out("error");
     });
@@ -345,7 +345,8 @@ $("#videosize").click(function () {
 });
 $("#clear").click(function () {
     if (confirm("Clear all history?"))
-        history("/player.php?action=clear");
+        //history("/player.php?action=clear");
+        history("/clear");
 });
 $("#mainframe").on("click", ".folder", function (e) {
     //filelist(e.target.title);
@@ -357,9 +358,10 @@ $("#mainframe").on("click", ".move", function (e) {
         filelist_json("/move/" + e.target.title);
     }
 });
-$("#mainframe").on("click", ".del", function (e) {
+$("#mainframe").on("click", ".remove", function (e) {
     if (confirm("Clear " + e.target.title + "?"))
-        history("/player.php?action=del&src=" + e.target.title);
+        //history("/player.php?action=del&src=" + e.target.title);
+        history("/remove/" + e.target.title);
 });
 $("#mainframe").on("click", ".mp4", function (e) {
     window.location.href = "/play/" + e.target.title;
@@ -375,7 +377,7 @@ function filelist(str) {
     });
 }
 function filelist_json(str) {
-    $.getJSON(str, function (data, status, xhr) {
+    $.getJSON(encodeURI(str), function (data, status, xhr) {
         if (xhr.statusText == "OK") {
             if ($('#navtab li:eq(1)').attr('class') != 'active')
                 $("#navtab li:eq(1) a").tab("show");
@@ -416,7 +418,7 @@ function history(str) {
                             "<br><small title='" + n["filename"] + "'>" + n["latest_date"] + " | " + 
                             formatTime(n["time"]) + "/" + formatTime(n["duration"]) + "</small>" + 
                           "</td>" + 
-                          "<td class='del' title='" + n["filename"] + "'>" +
+                          "<td class='remove' title='" + n["filename"] + "'>" +
                             "<i class='glyphicon glyphicon-remove-circle' title='" + n["filename"] + "'></i>" + 
                           "</td>" +
                         "</tr>";
