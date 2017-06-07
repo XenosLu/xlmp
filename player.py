@@ -9,11 +9,9 @@ import json
 
 from bottle import *  # pip install bottle
 
-# db = lambda: sqlite3.connect('player.db')  # define DB connection
-
 
 def db():
-    return sqlite3.connect('player.db')
+    return sqlite3.connect('player.db')  # define DB connection
 
 # def time_format(time):#turn seconds into hh:mm:ss time format
     # m, s = divmod(time, 60)
@@ -84,8 +82,8 @@ def list_from_history_db():
     historys = conn.execute('select * from history order by LATEST_DATE desc').fetchall()
     conn.close()
     history = [{'filename': s[0], 'time': s[1], 'duration': s[2], 'latest_date': s[3],
-                'path': os.path.dirname(s[0])} for s in historys]
-                # 'path': '/' + os.path.dirname(s[0])} for s in historys]
+                # 'path': os.path.dirname(s[0])} for s in historys]
+                'path': '/' + os.path.dirname(s[0])} for s in historys]
     return json.dumps(history)
 
 
@@ -95,7 +93,7 @@ def clear():
     return list_from_history_db()
 
 
-@route('/remove/<src>')  # clear from play history
+@route('/remove/<src:re:.*>')  # clear from play history
 def remove(src):
     remove_to_history_db(src)
     return list_from_history_db()
@@ -113,7 +111,7 @@ def index():
     return template('player', src='', progress=0, title='Light mp4 Player')
 
 
-@route('/move/<src>')  # move file to old folder
+@route('/move/<src:re:.*>')  # move file to old folder
 def move(src):
     file = './static/mp4/%s' % src
     dir_old = './static/mp4/%s/old' % os.path.dirname(src)
@@ -135,9 +133,9 @@ def video_player():
         duration = request.GET.get('duration')
         update_to_history_db(src, time, duration)
         return
-    # elif action == 'del':
-        # remove_to_history_db(src)
-        # return list_from_history_db()
+    elif action == 'remove':
+        remove_to_history_db(src)
+        return list_from_history_db()
     # elif action == 'clear':
         # remove_to_history_db()
         # return list_from_history_db()
@@ -202,10 +200,10 @@ def static_mp4(filename):
     return static_file(filename, root='./static/mp4')
 
 
-@route('/<filename:re:.*\.((?i)mp)4$>')  # mp4 static files access.
-# to support larger files(>2GB), you should use apache "AliasMatch"
-def mp4(filename):
-    return static_file(filename, root='./static/mp4')
+# @route('/<filename:re:.*\.((?i)mp)4$>')  # mp4 static files access.
+# # to support larger files(>2GB), you should use apache "AliasMatch"
+# def mp4(filename):
+    # return static_file(filename, root='./static/mp4')
 
 
 @route('/fs/<path:re:.*>')  # get static folder json list

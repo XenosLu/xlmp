@@ -173,7 +173,6 @@ video {
 <script language="javascript">
 var RANGE = 12; //minimum touch move range in px
 var text="";
-//var lastsavetime = 0;//in seconds
 var lastplaytime = 0;//in seconds
 
 window.onload = adapt;
@@ -208,10 +207,8 @@ if (("{{src}}" == "")) {
     $("video").on("timeupdate", function () { //auto save play progress
         lastplaytime = new Date().getTime(); //to dectect if video is playing
         if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
-            //if (Math.abs($("video").get(0).currentTime - lastsavetime) > 3) {//save play progress in every 3 seconds
             if (Math.floor(Math.random() * 99) > 81) { //randomly save play progress
-                //lastsavetime = $("video").get(0).currentTime;
-                $.get("?action=save&src={{src}}&time=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
+                $.get("/player.php?action=save&src={{src}}&time=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
                     if (xhr.statusText != "OK")
                         out(xhr.statusText);
                     xhr = null;
@@ -221,8 +218,8 @@ if (("{{src}}" == "")) {
     });
     $("video").on("progress", function () { //show buffered
         var str = "";
-        //if (new Date().getTime() - lastplaytime > 1000) {
-        if ($("video").get(0).networkState != 1) {
+        if (new Date().getTime() - lastplaytime > 1000) {
+        //if ($("video").get(0).networkState != 1) {
             for (i = 0, t = $("video").get(0).buffered.length; i < t; i++) {
                 if ($("video").get(0).currentTime >= $("video").get(0).buffered.start(i) && $("video").get(0).currentTime <= $("video").get(0).buffered.end(i))
                     str = formatTime($("video").get(0).buffered.start(i)) + "-" + formatTime($("video").get(0).buffered.end(i)) + "<br>";
@@ -354,13 +351,13 @@ $("#mainframe").on("click", ".folder", function (e) {
 });
 $("#mainframe").on("click", ".move", function (e) {
     if (confirm("Move " + e.target.title + " to old?")) {
-        //filelist("?action=move&src=" + e.target.title);
+        //filelist("/player.php?action=move&src=" + e.target.title);
         filelist_json("/move/" + e.target.title);
     }
 });
 $("#mainframe").on("click", ".remove", function (e) {
     if (confirm("Clear " + e.target.title + "?"))
-        //history("/player.php?action=del&src=" + e.target.title);
+        //history("/player.php?action=remove&src=" + e.target.title);
         history("/remove/" + e.target.title);
 });
 $("#mainframe").on("click", ".mp4", function (e) {
