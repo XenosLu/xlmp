@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=1.0, user-scalable=1">
 <title>{{title}}</title>
-<link href="static/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/css/bootstrap.min.css" rel="stylesheet">
 <style>
 /*** modified bootstrap style ***/
 .glyphicon-film, .glyphicon-folder-close, .glyphicon-remove-circle, .glyphicon-file, .glyphicon-list-alt, .caret {
@@ -58,7 +58,7 @@ video {
 .filelist {
   min-width: 14em;
 }
-.filelist.link {
+.filelist.mp4 {
   color: #337AB7;
 }
 .filelist.other, .filelist small {
@@ -112,12 +112,13 @@ video {
   <button onClick="$('#dialog').hide(250);" type="button" class="close">&times;</button>
     <ul id="navtab" class="nav nav-tabs">
       <li class="active">
-        <a href="#mainframe" data-toggle="tab" onclick="history('list')">
+        <a href="#mainframe" data-toggle="tab" onclick="history('/list')">
           <i class="glyphicon glyphicon-list"></i>History
         </a>
       </li>
       <li>
-        <a href="#mainframe" data-toggle="tab" onclick="filelist('/')">
+        <!-- <a href="#mainframe" data-toggle="tab" onclick="filelist('/');filelist_json('/fs/')"> -->
+        <a href="#mainframe" data-toggle="tab" onclick="filelist_json('/fs/')">
           <i class="glyphicon glyphicon-home"></i>Home dir
         </a>
       </li>
@@ -167,8 +168,8 @@ video {
   </div>
 </div>
 </body>
-<script src="static/js/jquery-3.2.1.min.js"></script>
-<script src="static/js/bootstrap.min.js"></script>
+<script src="/static/js/jquery-3.2.1.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
 <script language="javascript">
 var RANGE = 12; //minimum touch move range in px
 var text="";
@@ -183,20 +184,21 @@ $(document).mousemove(function () {
     showSidebar();
 });
 if (("{{src}}" == "")) {
-    history("list");
+    history("/list");
     $("#dialog").show(250);
     $("#videosize").hide();
     $('#rate').hide();
 } else {
-    //$(document.body).append("<div><video poster controls preload='meta'>No video support!</video></div>");
-    $(document.body).append("<video webkit-playsinline poster controls preload='meta'>No video support!</video>");
-    $("video").attr("src", "{{src}}");
+    $(document.body).append("<video poster controls preload='meta'>No video support!</video>");
+    $("video").attr("src", "/fs/{{src}}");
     $("video").on("error", function () {
         out("error");
     });
-    $("video").on("loadedmetadata", function () { //auto load progress //loadeddata
-        $("video").get(0).currentTime = Math.max({{progress}} - 0.5, 0);
-        text = "<small>Play from</small><br>";
+    $("video").on("durationchange", function () { //auto load progress
+        loadProgress();
+    });
+    $("video").on("loadeddata", function () { //auto load progress
+        loadProgress();
     });
     $("video").on("seeking", function () { //show progress when changed
         out(text + formatTime($("video").get(0).currentTime) + '/' + 
@@ -219,15 +221,20 @@ if (("{{src}}" == "")) {
     });
     $("video").on("progress", function () { //show buffered
         var str = "";
-        if (new Date().getTime() - lastplaytime > 1000) {
+        //if (new Date().getTime() - lastplaytime > 1000) {
+        if ($("video").get(0).networkState != 1) {
             for (i = 0, t = $("video").get(0).buffered.length; i < t; i++) {
                 if ($("video").get(0).currentTime >= $("video").get(0).buffered.start(i) && $("video").get(0).currentTime <= $("video").get(0).buffered.end(i))
                     str = formatTime($("video").get(0).buffered.start(i)) + "-" + formatTime($("video").get(0).buffered.end(i)) + "<br>";
             };
-            out(str + "<small>buffering...</small>" + $("video").get(0).networkState);
+            out(str + "<small>buffering...</small>");
         };
     });
 };
+function loadProgress() {
+    $("video").get(0).currentTime = Math.max({{progress}} - 0.5, 0);
+    text = "<small>Play from</small><br>";
+}
 function showSidebar() {
     //$("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
     $("#sidebar").show(600).delay(9999).fadeOut(800);
@@ -322,7 +329,7 @@ $(document).on('touchend', function (e) {
 });
 $("#history").click(function () {
     if ($('#navtab li:eq(0)').attr('class') == 'active')
-        history("list");
+        history("/list");
     $('#dialog').show(250);
 });
 $("#videosize").click(function () {
@@ -338,21 +345,24 @@ $("#videosize").click(function () {
 });
 $("#clear").click(function () {
     if (confirm("Clear all history?"))
-        history("clear");
+        history("/player.php?action=clear");
 });
-$("#mainframe").on("click", ".dir", function (e) {
-    filelist(e.target.title);
+$("#mainframe").on("click", ".folder", function (e) {
+    //filelist(e.target.title);
+    filelist_json("/fs" + e.target.title + "/");
 });
 $("#mainframe").on("click", ".move", function (e) {
-    if (confirm("Move " + e.target.title + " to old?"))
-        filelist("?action=move&src=" + e.target.title);
+    if (confirm("Move " + e.target.title + " to old?")) {
+        //filelist("?action=move&src=" + e.target.title);
+        filelist_json("/move/" + e.target.title);
+    }
 });
 $("#mainframe").on("click", ".del", function (e) {
     if (confirm("Clear " + e.target.title + "?"))
-        history("del&src=" + e.target.title);
+        history("/player.php?action=del&src=" + e.target.title);
 });
-$("#mainframe").on("click", ".link", function (e) {
-    window.location.href = e.target.title;
+$("#mainframe").on("click", ".mp4", function (e) {
+    window.location.href = "/play/" + e.target.title;
 });
 function filelist(str) {
     $("#list").load(encodeURI(str), function (responseTxt, status, xhr) {
@@ -364,23 +374,52 @@ function filelist(str) {
             out(xhr.statusText);
     });
 }
+function filelist_json(str) {
+    $.getJSON(str, function (data, status, xhr) {
+        if (xhr.statusText == "OK") {
+            if ($('#navtab li:eq(1)').attr('class') != 'active')
+                $("#navtab li:eq(1) a").tab("show");
+            $("#clear").hide();
+            var html = "";
+            var icon = {"folder":"folder-close", "mp4":"film", "other":"file"}
+            $.each(data, function (i, n) {
+                size = ""
+                if(n["size"])
+                    size = "<br><small title='" + n["path"] + "'>" + n["size"] +"</small>" || ''
+                html += "<tr>" +
+                          "<td><i class='glyphicon glyphicon-" + icon[n["type"]] + "'></i></td>" +
+                          "<td class='filelist " + n["type"] + "' title='" + n["path"] + "'>" + n["filename"] + size + "</td>" +
+                          "<td class='move' title='" + n["path"] + "'>" +
+                          "<i class='glyphicon glyphicon-remove-circle' title='" + n["path"] + "'></i>" +
+                          "</td>" +
+                        "</tr>"
+            });
+            $('#list').empty();
+            $('#list').append(html);
+        } else
+            out(xhr.statusText);
+    });
+}
 function history(str) {
-    $.getJSON("?action=" + str, function (data, status, xhr) {
+    $.getJSON(str, function (data, status, xhr) {
         if (xhr.statusText == "OK") {
             if ($('#navtab li:eq(0)').attr('class') != 'active')
                 $("#navtab li:eq(0) a").tab("show");
             $("#clear").show();
             var html = "";
             $.each(data, function (i, n) {
-                html += "<tr>" + "<td class='dir' title='" + n["path"] + "'>" +
-                "<i class='glyphicon glyphicon-film' title='" + n["path"] +
-                "'></i></td><td class='filelist link' title='?src=" + 
-                n["filename"] + "'>" + n["filename"] + "<br><small>" +
-                n["latest_date"] + " | " + formatTime(n["time"]) + 
-                "/" + formatTime(n["duration"]) +
-                "</small></td><td class='del' title='" + n["filename"] +
-                "'><i class='glyphicon glyphicon-remove-circle' title='" +
-                n["filename"] + "'></i>" + "</td></tr>";
+                html += "<tr>"+
+                          "<td class='folder' title='" + n["path"] + "'>" +
+                            "<i class='glyphicon glyphicon-film' title='" + n["path"] + "'></i>" +
+                          "</td>" +
+                          "<td class='filelist mp4' title='" + n["filename"] + "'>" + n["filename"] + 
+                            "<br><small title='" + n["filename"] + "'>" + n["latest_date"] + " | " + 
+                            formatTime(n["time"]) + "/" + formatTime(n["duration"]) + "</small>" + 
+                          "</td>" + 
+                          "<td class='del' title='" + n["filename"] + "'>" +
+                            "<i class='glyphicon glyphicon-remove-circle' title='" + n["filename"] + "'></i>" + 
+                          "</td>" +
+                        "</tr>";
             });
             $('#list').empty();
             $('#list').append(html);
