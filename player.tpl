@@ -147,7 +147,7 @@ video {
     </div>
     <button id="clear" type="button" class="btn btn-default">Clear History</button>
     <div class="btn-group dropup">
-      <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.get('/suspend.php');">
+      <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.get('/suspend');">
         <i class="glyphicon glyphicon-off"></i>
       </button>
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">

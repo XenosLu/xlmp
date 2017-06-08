@@ -145,7 +145,7 @@ def video_player():
     return template('player', src=src, progress=load_from_history_db(src), title=title)
 
 
-@route('/suspend.php')  # suspend the server
+@route('/suspend')  # suspend the server
 def suspend():
     if sys.platform == 'win32':
         import ctypes
