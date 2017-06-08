@@ -192,9 +192,6 @@ if (("{{src}}" == "")) {
     $("video").on("error", function () {
         out("error");
     });
-    $("video").on("durationchange", function () {  //auto load progress
-        loadProgress();
-    });
     $("video").on("loadeddata", function () {  //auto load progress
         loadProgress();
     });
@@ -207,7 +204,8 @@ if (("{{src}}" == "")) {
         lastplaytime = new Date().getTime();  //to dectect if video is playing
         if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
             if (Math.floor(Math.random() * 99) > 81) {  //randomly save play progress
-                $.get("/player?action=save&src={{src}}&progress=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
+                //$.get("/player?action=save&src={{src}}&progress=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
+                $.get("/save?src={{src}}&progress=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
                     if (xhr.statusText != "OK")
                         out(xhr.statusText);
                     xhr = null;
@@ -339,7 +337,6 @@ $("#mainframe").on("click", ".move", function (e) {
 });
 $("#mainframe").on("click", ".remove", function (e) {
     if (confirm("Clear " + e.target.title + "?"))
-        //history("/player?action=remove&src=" + e.target.title);
         history("/remove/" + e.target.title);
 });
 $("#mainframe").on("click", ".mp4", function (e) {

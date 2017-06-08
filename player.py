@@ -1,9 +1,9 @@
 ﻿#!/usr/bin/python3
 # -*- coding:utf-8 -*-
+# import sys
 # import os
 import shutil
 import sqlite3
-# import sys
 import math
 import json
 
@@ -109,13 +109,13 @@ def clear():
     return list_from_history_db()
 
 
-@route('/remove/<src:re:.*>')  # clear from play history
+@route('/remove/<src:path>')  # clear from play history
 def remove(src):
     remove_to_history_db(src)
     return list_from_history_db()
 
 
-@route('/move/<src:re:.*>')  # move file to old folder
+@route('/move/<src:path>')  # move file to old folder
 def move(src):
     file = './static/mp4/%s' % src
     dir_old = './static/mp4/%s/old' % os.path.dirname(src)
@@ -129,25 +129,31 @@ def move(src):
     return fs_dir(os.path.dirname(src)+'/')
 
 
-@route('/player')  # index old
-def video_player():
-    action = request.query.action
+# @route('/player')  # index old
+# def video_player():
+    # action = request.query.action
+    # src = request.query.src
+    # if action == 'save':
+        # progress = request.GET.get('progress')
+        # duration = request.GET.get('duration')
+        # update_to_history_db(src, progress, duration)
+        # return
+    # elif not os.path.exists('./static/mp4/%s' % src):
+        # redirect('/')
+    # if src:
+        # title = os.path.basename(src)
+    # else:
+        # title = 'Light mp4 Player'
+    # return template('player', src=src, progress=load_from_history_db(src), title=title)
+
+
+@route('/save')  # save play progress
+def save():
     src = request.query.src
-    if action == 'save':
-        progress = request.GET.get('progress')
-        duration = request.GET.get('duration')
-        update_to_history_db(src, progress, duration)
-        return
-    # elif action == 'remove':
-        # remove_to_history_db(src)
-        # return list_from_history_db()
-    elif not os.path.exists('./static/mp4/%s' % src):
-        redirect('/')
-    if src:
-        title = os.path.basename(src)
-    else:
-        title = 'Light mp4 Player'
-    return template('player', src=src, progress=load_from_history_db(src), title=title)
+    progress = request.GET.get('progress')
+    duration = request.GET.get('duration')
+    update_to_history_db(src, progress, duration)
+    return
 
 
 @route('/suspend')  # suspend the server
@@ -179,7 +185,7 @@ def restart():
         os.system("sudo /sbin/shutdown -r now")
 
 
-@route('/static/<filename:re:.*>')  # static files access
+@route('/static/<filename:path>')  # static files access
 def static(filename):
     return static_file(filename, root='./static')
 
@@ -190,7 +196,7 @@ def static_mp4(filename):
     return static_file(filename, root='./static/mp4')
 
 
-@route('/fs/<path:re:.*>')  # get static folder json list
+@route('/fs/<path:path>')  # get static folder json list
 def fs_dir(path):
     try:
         fs_list, fs_list_folder, fs_list_mp4, fs_list_other = [], [], [], []
