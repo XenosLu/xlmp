@@ -158,7 +158,7 @@ def suspend():
         return 'OS not supported!'
 
 
-@route('/shutdown.php')  # shutdown the server
+@route('/shutdown')  # shutdown the server
 def shutdown():
     if sys.platform == 'win32':
         os.system("shutdown.exe -f -s -t 0")

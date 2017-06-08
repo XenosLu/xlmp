@@ -155,7 +155,7 @@ video {
       </button>
       <ul class="dropdown-menu" role="menu">
         <li>
-          <a onClick="if(confirm('Shutdown ?'))$.get('/shutdown.php');">
+          <a onClick="if(confirm('Shutdown ?'))$.get('/shutdown');">
           <i class="glyphicon glyphicon-off"></i>shutdown</a>
         </li>
         <li>
