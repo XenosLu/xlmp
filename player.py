@@ -45,7 +45,7 @@ def init_db():  # initialize database by create history table
 def update_to_history_db(filename, time, duration):
     conn = db()
     conn.execute('''replace into history (FILENAME, TIME, DURATION, LATEST_DATE)
-                     VALUES(? , ?, ?, DateTime('now'));''', (filename, time, duration))
+                     VALUES(? , ?, ?, DateTime('now', 'localtime'));''', (filename, time, duration))
     conn.commit()
     conn.close()
     return
