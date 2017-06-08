@@ -136,16 +136,6 @@ def video_player():
     # elif action == 'remove':
         # remove_to_history_db(src)
         # return list_from_history_db()
-    # elif action == 'move':
-        # file = './static/mp4/%s' % src
-        # dir_old = './static/mp4/%s/old' % os.path.dirname(src)
-        # if not os.path.exists(dir_old):
-            # os.mkdir(dir_old)
-        # try:
-            # shutil.move(file, dir_old)  # gonna do something when file is occupied
-        # except Exception as e:
-            # abort(404, str(e))
-        # return folder(os.path.dirname(src))
     elif not os.path.exists('./static/mp4/%s' % src):
         redirect('/player.php')
     if src:
