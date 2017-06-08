@@ -196,7 +196,7 @@ def static_mp4(filename):
     return static_file(filename, root='./static/mp4')
 
 
-@route('/fs/<path:path>')  # get static folder json list
+@route('/fs/<path:re:.*>')  # get static folder json list
 def fs_dir(path):
     try:
         fs_list, fs_list_folder, fs_list_mp4, fs_list_other = [], [], [], []
