@@ -222,11 +222,11 @@ if (("{{src}}" == "")) {
             for (i = 0, t = $("video").get(0).buffered.length; i < t; i++) {
                 if ($("video").get(0).currentTime >= $("video").get(0).buffered.start(i) && $("video").get(0).currentTime <= $("video").get(0).buffered.end(i))
                     str = formatTime($("video").get(0).buffered.start(i)) + "-" + formatTime($("video").get(0).buffered.end(i)) + "<br>";
-            };
+            }
             out(str + "<small>buffering...</small>");
-        };
+        }
     });
-};
+}
 function loadProgress() {
     $("video").get(0).currentTime = Math.max({{progress}} - 0.5, 0);
     text = "<small>Play from</small><br>";
@@ -294,7 +294,7 @@ $(document).on('touchend', function (e) {
     if (Math.abs(y / x) < 0.25) {
         if (Math.abs(x) > RANGE) {
             //playward(Math.floor(x / 11));
-            time = Math.floor(x / 11)
+            time = Math.floor(x / 11);
                 if (!isNaN($("video").get(0).duration)) {
                     if (time > 0) {
                         time = Math.min(60, time);
