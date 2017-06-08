@@ -56,13 +56,17 @@ def load_from_history_db(name):
         return
     conn = db()
     cursor = conn.execute('select TIME from history where FILENAME=?', (name,))
-    try:
-        progress = cursor.fetchone()[0]
-    except Exception as e:
-        print(str(e))
-        progress = ''
+    progress = cursor.fetchone()
+    cursor.close()
     conn.close()
-    return progress
+    if progress is None:
+        progress = [0]
+    # try:
+        # progress = cursor.fetchone()[0]
+    # except Exception as e:
+        # print(str(e))
+        # progress = ''
+    return progress[0]
 
 
 def remove_to_history_db(name=None):
@@ -83,7 +87,7 @@ def list_from_history_db():
     conn.close()
     history = [{'filename': s[0], 'time': s[1], 'duration': s[2], 'latest_date': s[3],
                 # 'path': os.path.dirname(s[0])} for s in historys]
-                'path': '/' + os.path.dirname(s[0])} for s in historys]
+                'path': '/%s' % os.path.dirname(s[0])} for s in historys]
     return json.dumps(history)
 
 
@@ -120,6 +124,7 @@ def move(src):
     try:
         shutil.move(file, dir_old)  # gonna do something when file is occupied
     except Exception as e:
+        print(str(e))
         abort(404, str(e))
     return fs_dir(os.path.dirname(src)+'/')
 
