@@ -129,9 +129,9 @@ def video_player():
     action = request.query.action
     src = request.query.src
     if action == 'save':
-        time = request.GET.get('time')
+        progress = request.GET.get('progress')
         duration = request.GET.get('duration')
-        update_to_history_db(src, time, duration)
+        update_to_history_db(src, progress, duration)
         return
     # elif action == 'remove':
         # remove_to_history_db(src)
