@@ -133,9 +133,9 @@ def video_player():
         duration = request.GET.get('duration')
         update_to_history_db(src, time, duration)
         return
-    elif action == 'remove':
-        remove_to_history_db(src)
-        return list_from_history_db()
+    # elif action == 'remove':
+        # remove_to_history_db(src)
+        # return list_from_history_db()
     # elif action == 'move':
         # file = './static/mp4/%s' % src
         # dir_old = './static/mp4/%s/old' % os.path.dirname(src)
