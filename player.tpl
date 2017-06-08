@@ -207,7 +207,7 @@ if (("{{src}}" == "")) {
         lastplaytime = new Date().getTime();  //to dectect if video is playing
         if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
             if (Math.floor(Math.random() * 99) > 81) {  //randomly save play progress
-                $.get("/player.php?action=save&src={{src}}&progress=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
+                $.get("/player?action=save&src={{src}}&progress=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
                     if (xhr.statusText != "OK")
                         out(xhr.statusText);
                     xhr = null;
@@ -339,24 +339,12 @@ $("#mainframe").on("click", ".move", function (e) {
 });
 $("#mainframe").on("click", ".remove", function (e) {
     if (confirm("Clear " + e.target.title + "?"))
-        //history("/player.php?action=remove&src=" + e.target.title);
+        //history("/player?action=remove&src=" + e.target.title);
         history("/remove/" + e.target.title);
 });
 $("#mainframe").on("click", ".mp4", function (e) {
     window.location.href = "/play/" + e.target.title;
 });
-/*
-function filelist(str) {
-    $("#list").load(encodeURI(str), function (responseTxt, status, xhr) {
-        if (xhr.statusText == "OK") {
-            if ($('#navtab li:eq(1)').attr('class') != 'active')
-                $("#navtab li:eq(1) a").tab("show");
-            $("#clear").hide();
-        } else
-            out(xhr.statusText);
-    });
-}
-*/
 function filelist(str) {
     $.getJSON(encodeURI(str), function (data, status, xhr) {
         if (xhr.statusText == "OK") {

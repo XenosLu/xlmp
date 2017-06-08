@@ -124,7 +124,7 @@ def move(src):
     return fs_dir(os.path.dirname(src)+'/')
 
 
-@route('/player.php')  # index old
+@route('/player')  # index old
 def video_player():
     action = request.query.action
     src = request.query.src
@@ -137,7 +137,7 @@ def video_player():
         # remove_to_history_db(src)
         # return list_from_history_db()
     elif not os.path.exists('./static/mp4/%s' % src):
-        redirect('/player.php')
+        redirect('/')
     if src:
         title = os.path.basename(src)
     else:
@@ -180,7 +180,7 @@ def static(filename):
 
 
 @route('/mp4/<filename:re:.*\.((?i)mp)4$>')  # mp4 static files access.
-# to support larger files(>2GB), you should use apache "AliasMatch"
+# to support larger files(>2GB), you should use web server to deal with static files like apache "AliasMatch"
 def static_mp4(filename):
     return static_file(filename, root='./static/mp4')
 
@@ -273,10 +273,9 @@ def fs_dir(path):
     # except Exception as e:
         # abort(404, str(e))
 
-os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 init_db()
 
 if __name__ == '__main__':
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
     os.system('start http://127.0.0.1:8081/')  # open the page automatic
-    # os.system('start http://127.0.0.1:8081/player.php')  # open the page automatic
     run(host='0.0.0.0', port=8081, debug=True)  # you can change port here
