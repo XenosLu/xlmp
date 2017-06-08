@@ -166,7 +166,7 @@ def shutdown():
         os.system("sudo /sbin/shutdown -h now")
 
 
-@route('/restart.php')  # restart the server
+@route('/restart')  # restart the server
 def restart():
     if sys.platform == 'win32':
         os.system("shutdown.exe -f -r -t 0")

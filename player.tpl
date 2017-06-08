@@ -159,7 +159,7 @@ video {
           <i class="glyphicon glyphicon-off"></i>shutdown</a>
         </li>
         <li>
-          <a onClick="if(confirm('Restart ?'))$.get('/restart.php');">
+          <a onClick="if(confirm('Restart ?'))$.get('/restart');">
           <i class="glyphicon glyphicon-off"></i>restart</a>
         </li>
       </ul>
