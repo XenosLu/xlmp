@@ -34,10 +34,8 @@ def get_size(filename):
 def init_db():  # initialize database by create history table
     conn = db()
     conn.execute('''create table if not exists history
-                    (FILENAME TEXT PRIMARY KEY    NOT NULL,
-                    TIME FLOAT NOT NULL,
-                    DURATION FLOAT,
-                    LATEST_DATE DATETIME NOT NULL);''')
+                    (FILENAME text PRIMARY KEY NOT NULL, TIME float NOT NULL,
+                    DURATION float, LATEST_DATE datetime NOT NULL);''')
     conn.close()
     return
 
@@ -59,14 +57,14 @@ def load_from_history_db(name):
     progress = cursor.fetchone()
     cursor.close()
     conn.close()
-    if progress is None:
-        progress = [0]
+    if progress:
+        return progress[0]
+    return 0
     # try:
         # progress = cursor.fetchone()[0]
     # except Exception as e:
         # print(str(e))
         # progress = ''
-    return progress[0]
 
 
 def remove_to_history_db(name=None):
