@@ -18,7 +18,7 @@ def db():
     return sqlite3.connect('player.db')  # define DB connection
 
 
-def run_sql(sql, *args):
+def run_sql(sql, *args):  # run SQL
     conn = db()
     cursor = conn.execute(sql, args)
     result = cursor.fetchall()
@@ -43,7 +43,7 @@ def run_sql(sql, *args):
 
 
 def get_size(filename):
-    size = os.path.getsize('./static/mp4/%s' % filename)
+    size = os.path.getsize('%s/%s' % (MP4_PATH, filename))
     if size < 0:
         return 'Out of Range'
     if size < 1024:
@@ -132,7 +132,7 @@ def index():
 
 @route('/play/<src:re:.*\.((?i)mp)4$>')  # player page
 def play(src):
-    if not os.path.exists('./static/mp4/%s' % src):
+    if not os.path.exists('%s/%s' % (MP4_PATH, src)):
         redirect('/')
     return template('player', src=src, progress=load_from_history_db(src), title=src)
 
@@ -151,8 +151,8 @@ def remove(src):
 
 @route('/move/<src:path>')  # move file to old folder
 def move(src):
-    file = './static/mp4/%s' % src
-    dir_old = './static/mp4/%s/old' % os.path.dirname(src)
+    file = '%s/%s' % (MP4_PATH, src)
+    dir_old = '%s/%s/old' % (MP4_PATH, os.path.dirname(src))
     if not os.path.exists(dir_old):
         os.mkdir(dir_old)
     try:
@@ -160,7 +160,7 @@ def move(src):
     except Exception as e:
         print(str(e))
         abort(404, str(e))
-    return fs_dir(os.path.dirname(src)+'/')
+    return fs_dir('%s/' % os.path.dirname(src))
 
 
 # @route('/player')  # index old
@@ -185,7 +185,6 @@ def move(src):
 @route('/save/<src:path>')  # save play progress
 def save(src):
     # src = request.query.src
-    # print(src)
     progress = request.GET.get('progress')
     duration = request.GET.get('duration')
     update_from_history_db(src, progress, duration)
@@ -211,6 +210,7 @@ def shutdown():
         os.system("shutdown.exe -f -s -t 0")
     else:
         os.system("sudo /sbin/shutdown -h now")
+    return 'shutting down...'
 
 
 @route('/restart')  # restart the server
@@ -219,6 +219,7 @@ def restart():
         os.system("shutdown.exe -f -r -t 0")
     else:
         os.system("sudo /sbin/shutdown -r now")
+    return 'restarting...'
 
 
 @route('/static/<filename:path>')  # static files access
@@ -229,7 +230,7 @@ def static(filename):
 @route('/mp4/<filename:re:.*\.((?i)mp)4$>')  # mp4 static files access.
 # to support larger files(>2GB), you should use web server to deal with static files like apache "AliasMatch"
 def static_mp4(filename):
-    return static_file(filename, root='./static/mp4')
+    return static_file(filename, root=MP4_PATH)
 
 
 @route('/fs/<path:re:.*>')  # get static folder json list
@@ -238,8 +239,8 @@ def fs_dir(path):
         fs_list, fs_list_folder, fs_list_mp4, fs_list_other = [], [], [], []
         if path != '':
             fs_list.append({'type': 'folder', 'path': '/%s..' % path, 'filename': '..'})
-        for file in os.listdir('./static/mp4/%s' % path):
-            if os.path.isdir('./static/mp4/%s%s' % (path, file)):
+        for file in os.listdir('%s/%s' % (MP4_PATH, path)):
+            if os.path.isdir('%s/%s%s' % (MP4_PATH, path, file)):
                 fs_list_folder.append({'filename': file, 'type': 'folder', 'path': '/%s%s' % (path, file)})
             elif re.match('.*\.((?i)mp)4$', file):
                 fs_list_mp4.append({'filename': file, 'type': 'mp4',
