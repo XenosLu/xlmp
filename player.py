@@ -1,13 +1,15 @@
 ﻿#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-# import sys
-# import os
+import os
+import sys
 import shutil
 import sqlite3
 import math
 import json
+import re
 
-from bottle import *  # pip install bottle  # 1.2
+# from bottle import *  # pip install bottle  # 1.2
+from bottle import route, run, template, static_file, abort  # pip install bottle  # 1.2
 
 MP4_PATH = './static/mp4'  # mp4 file path
 
@@ -21,7 +23,14 @@ def run_sql(sql, *args):
     cursor = conn.execute(sql, args)
     result = cursor.fetchall()
     cursor.close()
-    if not result:
+    # print('%s %d' % (sql,cursor.rowcount))
+    # for i in ['delete', 'replace']:
+        # if sql.lower().startswith(i):
+            # conn.commit()
+            # break
+    # if not result:
+        # conn.commit()
+    if cursor.rowcount > 0:
         conn.commit()
     conn.close()
     return result
@@ -48,11 +57,11 @@ def get_size(filename):
 def init_db():  # initialize database by create history table
     # conn = db()
     # conn.execute('''create table if not exists history
-                    # (FILENAME text PRIMARY KEY NOT NULL, TIME float NOT NULL,
+                    # (FILENAME text primary key not null, TIME float not null,
                     # DURATION float, LATEST_DATE datetime NOT NULL);''')
     run_sql('''create table if not exists history
-                    (FILENAME text PRIMARY KEY NOT NULL, TIME float NOT NULL,
-                    DURATION float, LATEST_DATE datetime NOT NULL);''')
+                    (FILENAME text primary key not null, TIME float not null,
+                    DURATION float, LATEST_DATE datetime not null);''')
     # conn.close()
     return
 
@@ -60,7 +69,7 @@ def init_db():  # initialize database by create history table
 def update_from_history_db(filename, time, duration):
     # conn = db()
     run_sql('''replace into history (FILENAME, TIME, DURATION, LATEST_DATE)
-                     VALUES(? , ?, ?, DateTime('now', 'localtime'));''', filename, time, duration)
+                     values(? , ?, ?, DateTime('now', 'localtime'));''', filename, time, duration)
     # conn.execute('''replace into history (FILENAME, TIME, DURATION, LATEST_DATE)
                      # VALUES(? , ?, ?, DateTime('now', 'localtime'));''', (filename, time, duration))
     # conn.commit()
