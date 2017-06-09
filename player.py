@@ -13,6 +13,18 @@ from bottle import *  # pip install bottle
 def db():
     return sqlite3.connect('player.db')  # define DB connection
 
+
+def run_sql(sql, *args):
+    conn = db()
+    cursor = conn.execute(sql, args)
+    result = cursor.fetchall()
+    cursor.close()
+    if not result:
+        conn.commit()
+    conn.close()
+    return result
+
+
 # def time_format(time):#turn seconds into hh:mm:ss time format
     # m, s = divmod(time, 60)
     # h, m = divmod(time/60, 60)
@@ -32,34 +44,45 @@ def get_size(filename):
 
 
 def init_db():  # initialize database by create history table
-    conn = db()
-    conn.execute('''create table if not exists history
+    # conn = db()
+    # conn.execute('''create table if not exists history
+                    # (FILENAME text PRIMARY KEY NOT NULL, TIME float NOT NULL,
+                    # DURATION float, LATEST_DATE datetime NOT NULL);''')
+    run_sql('''create table if not exists history
                     (FILENAME text PRIMARY KEY NOT NULL, TIME float NOT NULL,
                     DURATION float, LATEST_DATE datetime NOT NULL);''')
-    conn.close()
+    # conn.close()
     return
 
 
-def update_to_history_db(filename, time, duration):
-    conn = db()
-    conn.execute('''replace into history (FILENAME, TIME, DURATION, LATEST_DATE)
-                     VALUES(? , ?, ?, DateTime('now', 'localtime'));''', (filename, time, duration))
-    conn.commit()
-    conn.close()
+def update_from_history_db(filename, time, duration):
+    # conn = db()
+    run_sql('''replace into history (FILENAME, TIME, DURATION, LATEST_DATE)
+                     VALUES(? , ?, ?, DateTime('now', 'localtime'));''', filename, time, duration)
+    # conn.execute('''replace into history (FILENAME, TIME, DURATION, LATEST_DATE)
+                     # VALUES(? , ?, ?, DateTime('now', 'localtime'));''', (filename, time, duration))
+    # conn.commit()
+    # conn.close()
     return
-
+    
 
 def load_from_history_db(name):
     if not name:
-        return
-    conn = db()
-    cursor = conn.execute('select TIME from history where FILENAME=?', (name,))
-    progress = cursor.fetchone()
-    cursor.close()
-    conn.close()
-    if progress:
-        return progress[0]
-    return 0
+        return 0
+    # conn = db()
+    # cursor = conn.execute('select TIME from history where FILENAME=?', (name,))
+    progress = run_sql('select TIME from history where FILENAME=?', name)
+    # progress = cursor.fetchone()
+    # cursor.close()
+    # conn.close()
+    # return str(len(progress))
+    if len(progress) == 0:
+        return 0
+    # else
+    return str(progress[0][0])
+    # if progress:
+        # return progress[0][0]
+    # return 0
     # try:
         # progress = cursor.fetchone()[0]
     # except Exception as e:
@@ -67,22 +90,25 @@ def load_from_history_db(name):
         # progress = ''
 
 
-def remove_to_history_db(name=None):
-    conn = db()
+def remove_from_history_db(name=None):
+    # conn = db()
     if name:
-        conn.execute('delete from history where FILENAME= ?', (name,))
+        run_sql('delete from history where FILENAME= ?', name)
+        # conn.execute('delete from history where FILENAME= ?', (name,))
     else:
-        conn.execute('delete from history')  # clear all
-    conn.commit()
-    conn.close()
+        # conn.execute('delete from history')  # clear all
+        run_sql('delete from history')  # clear all
+    # conn.commit()
+    # conn.close()
     return
 
 
 @route('/list')  # list play history
 def list_from_history_db():
-    conn = db()
-    historys = conn.execute('select * from history order by LATEST_DATE desc').fetchall()
-    conn.close()
+    # conn = db()
+    # historys = conn.execute('select * from history order by LATEST_DATE desc').fetchall()
+    historys = run_sql('select * from history order by LATEST_DATE desc')
+    # conn.close()
     history = [{'filename': s[0], 'time': s[1], 'duration': s[2], 'latest_date': s[3],
                 # 'path': os.path.dirname(s[0])} for s in historys]
                 'path': '/%s' % os.path.dirname(s[0])} for s in historys]
@@ -103,13 +129,13 @@ def play(src):
 
 @route('/clear')  # clear play history
 def clear():
-    remove_to_history_db()
+    remove_from_history_db()
     return list_from_history_db()
 
 
 @route('/remove/<src:path>')  # clear from play history
 def remove(src):
-    remove_to_history_db(src)
+    remove_from_history_db(src)
     return list_from_history_db()
 
 
@@ -134,7 +160,7 @@ def move(src):
     # if action == 'save':
         # progress = request.GET.get('progress')
         # duration = request.GET.get('duration')
-        # update_to_history_db(src, progress, duration)
+        # update_from_history_db(src, progress, duration)
         # return
     # elif not os.path.exists('./static/mp4/%s' % src):
         # redirect('/')
@@ -150,7 +176,7 @@ def save():
     src = request.query.src
     progress = request.GET.get('progress')
     duration = request.GET.get('duration')
-    update_to_history_db(src, progress, duration)
+    update_from_history_db(src, progress, duration)
     return
 
 
