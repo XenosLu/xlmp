@@ -9,7 +9,7 @@ import json
 import re
 
 # from bottle import *  # pip install bottle  # 1.2
-from bottle import route, run, template, static_file, abort  # pip install bottle  # 1.2
+from bottle import route, run, template, static_file, abort, request  # pip install bottle  # 1.2
 
 MP4_PATH = './static/mp4'  # mp4 file path
 
@@ -181,9 +181,11 @@ def move(src):
     # return template('player', src=src, progress=load_from_history_db(src), title=title)
 
 
-@route('/save')  # save play progress
-def save():
-    src = request.query.src
+# @route('/save')  # save play progress
+@route('/save/<src:path>')  # save play progress
+def save(src):
+    # src = request.query.src
+    # print(src)
     progress = request.GET.get('progress')
     duration = request.GET.get('duration')
     update_from_history_db(src, progress, duration)

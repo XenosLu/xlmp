@@ -203,11 +203,11 @@ if (("{{src}}" == "")) {
         text = "";
     });
     $("video").on("timeupdate", function () {  //auto save play progress
-        lastplaytime = new Date().getTime();  //to dectect if video is playing
+        lastplaytime = new Date().getTime();  //to detect if video is playing
         if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
             if (Math.floor(Math.random() * 99) > 81) {  //randomly save play progress
-                //$.get("/player?action=save&src={{src}}&progress=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
-                $.get("/save?src={{src}}&progress=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
+                //$.get("/save?src={{src}}&progress=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
+                $.get("/save/{{src}}?progress=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
                     if (xhr.statusText != "OK")
                         out(xhr.statusText);
                     xhr = null;
