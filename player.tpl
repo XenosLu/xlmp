@@ -22,11 +22,13 @@
   opacity: 0.75;
   min-width: 6em;
 }
+/*
 .breadcrumb {
   background: 0 0;
   margin: 0;
   font-size: 1.2em;
 }
+*/
 .table > tbody > tr > td {
   vertical-align: middle;
 }
@@ -349,7 +351,7 @@ function filelist(str) {
                 $("#navtab li:eq(1) a").tab("show");
             $("#clear").hide();
             var html = "";
-            var icon = {"folder":"folder-close", "mp4":"film", "other":"file"}
+            var icon = {"folder": "folder-close", "mp4": "film", "other": "file"}
             $.each(data, function (i, n) {
                 size = ""
                 if(n["size"])
@@ -358,7 +360,7 @@ function filelist(str) {
                           "<td><i class='glyphicon glyphicon-" + icon[n["type"]] + "'></i></td>" +
                           "<td class='filelist " + n["type"] + "' title='" + n["path"] + "'>" + n["filename"] + size + "</td>" +
                           "<td class='move' title='" + n["path"] + "'>" +
-                          "<i class='glyphicon glyphicon-remove-circle' title='" + n["path"] + "'></i>" +
+                            "<i class='glyphicon glyphicon-remove-circle' title='" + n["path"] + "'></i>" +
                           "</td>" +
                         "</tr>"
             });
@@ -377,8 +379,8 @@ function history(str) {
             var html = "";
             $.each(data, function (i, n) {
                 html += "<tr>"+
-                          "<td class='folder' title='" + n["path"] + "'>" +
-                            "<i class='glyphicon glyphicon-film' title='" + n["path"] + "'></i>" +
+                          "<td class='folder' title='/" + n["path"] + "'>" +
+                            "<i class='glyphicon glyphicon-film' title='/" + n["path"] + "'></i>" +
                           "</td>" +
                           "<td class='filelist mp4' title='" + n["filename"] + "'>" + n["filename"] + 
                             "<br><small title='" + n["filename"] + "'>" + n["latest_date"] + " | " + 

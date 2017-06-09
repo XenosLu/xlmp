@@ -7,7 +7,9 @@ import sqlite3
 import math
 import json
 
-from bottle import *  # pip install bottle
+from bottle import *  # pip install bottle  # 1.2
+
+MP4_PATH = './static/mp4'  # mp4 file path
 
 
 def db():
@@ -64,7 +66,7 @@ def update_from_history_db(filename, time, duration):
     # conn.commit()
     # conn.close()
     return
-    
+
 
 def load_from_history_db(name):
     if not name:
@@ -110,8 +112,7 @@ def list_from_history_db():
     historys = run_sql('select * from history order by LATEST_DATE desc')
     # conn.close()
     history = [{'filename': s[0], 'time': s[1], 'duration': s[2], 'latest_date': s[3],
-                # 'path': os.path.dirname(s[0])} for s in historys]
-                'path': '/%s' % os.path.dirname(s[0])} for s in historys]
+                'path': os.path.dirname(s[0])} for s in historys]
     return json.dumps(history)
 
 
@@ -239,7 +240,7 @@ def fs_dir(path):
     except Exception as e:
         abort(404, str(e))
 
-    
+
 # @route('/<path:re:.*>')  # static folder access
 # def folder(path):
     # try:
@@ -310,7 +311,7 @@ def fs_dir(path):
 
 init_db()
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # for debug
     os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
     os.system('start http://127.0.0.1:8081/')  # open the page automatic
-    run(host='0.0.0.0', port=8081, debug=True)  # you can change port here
+    run(host='0.0.0.0', port=8081, debug=True)  # run demo server
