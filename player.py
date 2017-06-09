@@ -20,9 +20,15 @@ def db():
 
 def run_sql(sql, *args):  # run SQL
     conn = db()
-    cursor = conn.execute(sql, args)
-    result = cursor.fetchall()
-    cursor.close()
+    try:
+        cursor = conn.execute(sql, args)
+        result = cursor.fetchall()
+        cursor.close()
+        if cursor.rowcount > 0:
+            conn.commit()
+    except Exception as e:
+        print(str(e))
+        result = []
     # print('%s %d' % (sql,cursor.rowcount))
     # for i in ['delete', 'replace']:
         # if sql.lower().startswith(i):
@@ -30,16 +36,9 @@ def run_sql(sql, *args):  # run SQL
             # break
     # if not result:
         # conn.commit()
-    if cursor.rowcount > 0:
-        conn.commit()
-    conn.close()
+    finally:
+        conn.close()
     return result
-
-
-# def time_format(time):#turn seconds into hh:mm:ss time format
-    # m, s = divmod(time, 60)
-    # h, m = divmod(time/60, 60)
-    # return "%02d:%02d:%02d" % (h, m, s)
 
 
 def get_size(filename):
@@ -55,25 +54,16 @@ def get_size(filename):
 
 
 def init_db():  # initialize database by create history table
-    # conn = db()
-    # conn.execute('''create table if not exists history
-                    # (FILENAME text primary key not null, TIME float not null,
-                    # DURATION float, LATEST_DATE datetime NOT NULL);''')
     run_sql('''create table if not exists history
-                    (FILENAME text primary key not null, TIME float not null,
+                    (FILENAME text PRIMARY KEY not null,
+                    TIME float not null,
                     DURATION float, LATEST_DATE datetime not null);''')
-    # conn.close()
     return
 
 
 def update_from_history_db(filename, time, duration):
-    # conn = db()
     run_sql('''replace into history (FILENAME, TIME, DURATION, LATEST_DATE)
                      values(? , ?, ?, DateTime('now', 'localtime'));''', filename, time, duration)
-    # conn.execute('''replace into history (FILENAME, TIME, DURATION, LATEST_DATE)
-                     # VALUES(? , ?, ?, DateTime('now', 'localtime'));''', (filename, time, duration))
-    # conn.commit()
-    # conn.close()
     return
 
 
@@ -163,25 +153,6 @@ def move(src):
     return fs_dir('%s/' % os.path.dirname(src))
 
 
-# @route('/player')  # index old
-# def video_player():
-    # action = request.query.action
-    # src = request.query.src
-    # if action == 'save':
-        # progress = request.GET.get('progress')
-        # duration = request.GET.get('duration')
-        # update_from_history_db(src, progress, duration)
-        # return
-    # elif not os.path.exists('./static/mp4/%s' % src):
-        # redirect('/')
-    # if src:
-        # title = os.path.basename(src)
-    # else:
-        # title = 'Light mp4 Player'
-    # return template('player', src=src, progress=load_from_history_db(src), title=title)
-
-
-# @route('/save')  # save play progress
 @route('/save/<src:path>')  # save play progress
 def save(src):
     # src = request.query.src
@@ -321,9 +292,10 @@ def fs_dir(path):
     # except Exception as e:
         # abort(404, str(e))
 
+os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 init_db()
 
 if __name__ == '__main__':  # for debug
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
+
     os.system('start http://127.0.0.1:8081/')  # open the page automatic
     run(host='0.0.0.0', port=8081, debug=True)  # run demo server
