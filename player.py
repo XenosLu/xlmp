@@ -8,7 +8,6 @@ import math
 import json
 import re
 
-# from bottle import *  # pip install bottle  # 1.2
 from bottle import route, run, template, static_file, abort, request, redirect  # pip install bottle  # 1.2
 
 MP4_PATH = './static/mp4'  # mp4 file path
@@ -42,15 +41,7 @@ def get_size(filename):
         return '%.1f%s' % (size/1024.0**l, unit[l])
 
 
-# def init_db():  # initialize database by create history table
-    # run_sql('''create table if not exists history
-                    # (FILENAME text PRIMARY KEY not null,
-                    # TIME float not null,
-                    # DURATION float, LATEST_DATE datetime not null);''')
-    # return
-
-
-def load_from_history_db(name):
+def load_history(name):
     progress = run_sql('select TIME from history where FILENAME=?', name)
     if len(progress) == 0:
         return 0
@@ -58,11 +49,13 @@ def load_from_history_db(name):
 
 
 @route('/list')  # list play history
-def list_from_history_db():
-    historys = run_sql('select * from history order by LATEST_DATE desc')
-    history = [{'filename': s[0], 'time': s[1], 'duration': s[2], 'latest_date': s[3],
-                'path': os.path.dirname(s[0])} for s in historys]
-    return json.dumps(history)
+def list_history():
+    # history = [{'filename': s[0], 'time': s[1], 'duration': s[2], 'latest_date': s[3], 'path': os.path.dirname(s[0])}
+               # for s in run_sql('select * from history order by LATEST_DATE desc')]
+    # return json.dumps(history)
+    return json.dumps([{'filename': s[0], 'time': s[1], 'duration': s[2], 'latest_date': s[3], 
+                        'path': os.path.dirname(s[0])}
+                       for s in run_sql('select * from history order by LATEST_DATE desc')])
 
 
 @route('/')  # index page
@@ -74,20 +67,20 @@ def index():
 def play(src):
     if not os.path.exists('%s/%s' % (MP4_PATH, src)):
         redirect('/')
-    return template('player', src=src, progress=load_from_history_db(src), title=src)
+    return template('player', src=src, progress=load_history(src), title=src)
 
 
 @route('/clear')
 def clear():
     'Clear play history'
     run_sql('delete from history')
-    return list_from_history_db()
+    return list_history()
 
 
 @route('/remove/<src:path>')  # clear from play history
 def remove(src):
     run_sql('delete from history where FILENAME= ?', src)
-    return list_from_history_db()
+    return list_history()
 
 
 @route('/move/<src:path>')  # move file to old folder
