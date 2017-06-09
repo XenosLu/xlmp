@@ -13,7 +13,7 @@ from bottle import route, run, template, static_file, abort, request, redirect  
 MP4_PATH = './static/mp4'  # mp4 file path
 
 
-def run_sql(sql, *args):  # run SQL
+def run_sql(sql, *args):
     conn = sqlite3.connect('player.db')  # define DB connection
     try:
         cursor = conn.execute(sql, args)
@@ -48,42 +48,40 @@ def load_history(name):
     return progress[0][0]
 
 
-@route('/list')  # list play history
+@route('/list')
 def list_history():
-    # history = [{'filename': s[0], 'time': s[1], 'duration': s[2], 'latest_date': s[3], 'path': os.path.dirname(s[0])}
-               # for s in run_sql('select * from history order by LATEST_DATE desc')]
-    # return json.dumps(history)
+    'Return play history list'
     return json.dumps([{'filename': s[0], 'time': s[1], 'duration': s[2], 'latest_date': s[3], 
                         'path': os.path.dirname(s[0])}
                        for s in run_sql('select * from history order by LATEST_DATE desc')])
 
 
-@route('/')  # index page
+@route('/')
 def index():
     return template('player', src='', progress=0, title='Light mp4 Player')
 
 
-@route('/play/<src:re:.*\.((?i)mp)4$>')  # player page
+@route('/play/<src:re:.*\.((?i)mp)4$>')
 def play(src):
+    'Player page'
     if not os.path.exists('%s/%s' % (MP4_PATH, src)):
         redirect('/')
     return template('player', src=src, progress=load_history(src), title=src)
 
 
-@route('/clear')
+@route('/clear')  # clear play history list
 def clear():
-    'Clear play history'
     run_sql('delete from history')
     return list_history()
 
 
-@route('/remove/<src:path>')  # clear from play history
+@route('/remove/<src:path>')  # remove from play history list
 def remove(src):
     run_sql('delete from history where FILENAME= ?', src)
     return list_history()
 
 
-@route('/move/<src:path>')  # move file to old folder
+@route('/move/<src:path>')  # move file to 'old' folder
 def move(src):
     file = '%s/%s' % (MP4_PATH, src)
     dir_old = '%s/%s/old' % (MP4_PATH, os.path.dirname(src))
