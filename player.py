@@ -9,7 +9,7 @@ import json
 import re
 
 # from bottle import *  # pip install bottle  # 1.2
-from bottle import route, run, template, static_file, abort, request  # pip install bottle  # 1.2
+from bottle import route, run, template, static_file, abort, request, redirect  # pip install bottle  # 1.2
 
 MP4_PATH = './static/mp4'  # mp4 file path
 
