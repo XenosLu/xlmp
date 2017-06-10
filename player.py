@@ -201,6 +201,5 @@ run_sql('''create table if not exists history
                 DURATION float, LATEST_DATE datetime not null);''')
 
 if __name__ == '__main__':  # for debug
-
     os.system('start http://127.0.0.1:8081/')  # open the page automatic
     run(host='0.0.0.0', port=8081, debug=True)  # run demo server

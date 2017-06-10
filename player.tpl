@@ -33,9 +33,6 @@
   vertical-align: middle;
 }
 /*** modified bootstrap style ***/
-html, body {
-  /*height: 100%;*/
-}
 body {
   background-color: #F1F2F6; /* #DDD9DD #101010; */
   -webkit-user-select: none;
@@ -195,7 +192,8 @@ if (("{{src}}" == "")) {
         out("error");
     });
     $("video").on("loadeddata", function () {  //auto load progress
-        loadProgress();
+        $("video").get(0).currentTime = Math.max({{progress}} - 0.5, 0);
+        text = "<small>Play from</small><br>";
     });
     $("video").on("seeking", function () {  //show progress when changed
         out(text + formatTime($("video").get(0).currentTime) + '/' + 
@@ -207,7 +205,6 @@ if (("{{src}}" == "")) {
         if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
             if (Math.floor(Math.random() * 99) > 81) {  //randomly save play progress
                 $.ajax({
-                        //url: "/save/{{src}}?progress=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration,
                         url: "/save/{{src}}",
                         data: {
                                 progress: $("video").get(0).currentTime,
@@ -240,10 +237,6 @@ if (("{{src}}" == "")) {
             out(str + "<small>buffering...</small>");
         }
     });
-}
-function loadProgress() {
-    $("video").get(0).currentTime = Math.max({{progress}} - 0.5, 0);
-    text = "<small>Play from</small><br>";
 }
 function showSidebar() {
     //$("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
@@ -358,34 +351,6 @@ $("#mainframe").on("click", ".remove", function (e) {
 $("#mainframe").on("click", ".mp4", function (e) {
     window.location.href = "/play/" + e.target.title;
 });
-/*
-function filelist_test(str) {
-    $.getJSON(encodeURI(str), function (data, status, xhr) {
-        if (xhr.statusText == "OK") {
-            if ($('#navtab li:eq(1)').attr('class') != 'active')
-                $("#navtab li:eq(1) a").tab("show");
-            $("#clear").hide();
-            var html = "";
-            var icon = {"folder": "folder-close", "mp4": "film", "other": "file"};
-            $.each(data, function (i, n) {
-                size = "";
-                if(n["size"])
-                    size = "<br><small title='" + n["path"] + "'>" + n["size"] +"</small>";
-                html += "<tr>" +
-                          "<td><i class='glyphicon glyphicon-" + icon[n["type"]] + "'></i></td>" +
-                          "<td class='filelist " + n["type"] + "' title='" + n["path"] + "'>" + n["filename"] + size + "</td>" +
-                          "<td class='move' title='" + n["path"] + "'>" +
-                            "<i class='glyphicon glyphicon-remove-circle' title='" + n["path"] + "'></i>" +
-                          "</td>" +
-                        "</tr>"
-            });
-            $('#list').empty();
-            $('#list').append(html);
-        } else
-            out(xhr.statusText);
-    });
-}
-*/
 function filelist(str) {
     $.ajax({
             url: encodeURI(str),
@@ -424,7 +389,7 @@ function history(str) {
             dataType: "json",
             timeout : 1000,
             type: "get",
-            success: function (data) {  //成功后回调
+            success: function (data) {
                 if ($('#navtab li:eq(0)').attr('class') != 'active')
                     $("#navtab li:eq(0) a").tab("show");
                 $("#clear").show();
@@ -446,7 +411,7 @@ function history(str) {
                 $('#list').empty();
                 $('#list').append(html);
             },
-            error: function(xhr){  //失败后回调
+            error: function(xhr){
                 out(xhr.statusText);
             }
     });
