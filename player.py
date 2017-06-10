@@ -109,7 +109,7 @@ def save(src):
     return
 
 
-@route('/suspend')  # suspend the server
+@post('/suspend')  # suspend the server
 def suspend():
     if sys.platform == 'win32':
         import ctypes
@@ -122,7 +122,7 @@ def suspend():
         return 'OS not supported!'
 
 
-@route('/shutdown')  # shutdown the server
+@post('/shutdown')  # shutdown the server
 def shutdown():
     if sys.platform == 'win32':
         os.system("shutdown.exe -f -s -t 0")
@@ -131,7 +131,7 @@ def shutdown():
     return 'shutting down...'
 
 
-@route('/restart')  # restart the server
+@post('/restart')  # restart the server
 def restart():
     if sys.platform == 'win32':
         os.system("shutdown.exe -f -r -t 0")

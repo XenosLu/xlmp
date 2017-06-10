@@ -149,7 +149,7 @@ video {
     </div>
     <button id="clear" type="button" class="btn btn-default">Clear History</button>
     <div class="btn-group dropup">
-      <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.get('/suspend');">
+      <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.post('/suspend');">
         <i class="glyphicon glyphicon-off"></i>
       </button>
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -157,11 +157,11 @@ video {
       </button>
       <ul class="dropdown-menu" role="menu">
         <li>
-          <a onClick="if(confirm('Shutdown ?'))$.get('/shutdown');">
+          <a onClick="if(confirm('Shutdown ?'))$.post('/shutdown');">
           <i class="glyphicon glyphicon-off"></i>shutdown</a>
         </li>
         <li>
-          <a onClick="if(confirm('Restart ?'))$.get('/restart');">
+          <a onClick="if(confirm('Restart ?'))$.post('/restart');">
           <i class="glyphicon glyphicon-off"></i>restart</a>
         </li>
       </ul>
