@@ -206,12 +206,21 @@ if (("{{src}}" == "")) {
         lastplaytime = new Date().getTime();  //to detect if video is playing
         if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
             if (Math.floor(Math.random() * 99) > 81) {  //randomly save play progress
-                //$.get("/save?src={{src}}&progress=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
+                $.ajax({
+                        url: "/save/{{src}}?progress=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration,
+                        timeout: 800,
+                        request: "get",
+                        error: function(xhr) {
+                            out("save: " + xhr.statusText);
+                        }
+                })
+                /*
                 $.get("/save/{{src}}?progress=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
                     if (xhr.statusText != "OK")
                         out(xhr.statusText);
                     xhr = null;
                 });
+                */
             }
         }
     });
@@ -344,18 +353,19 @@ $("#mainframe").on("click", ".remove", function (e) {
 $("#mainframe").on("click", ".mp4", function (e) {
     window.location.href = "/play/" + e.target.title;
 });
-function filelist(str) {
+/*
+function filelist_test(str) {
     $.getJSON(encodeURI(str), function (data, status, xhr) {
         if (xhr.statusText == "OK") {
             if ($('#navtab li:eq(1)').attr('class') != 'active')
                 $("#navtab li:eq(1) a").tab("show");
             $("#clear").hide();
             var html = "";
-            var icon = {"folder": "folder-close", "mp4": "film", "other": "file"}
+            var icon = {"folder": "folder-close", "mp4": "film", "other": "file"};
             $.each(data, function (i, n) {
-                size = ""
+                size = "";
                 if(n["size"])
-                    size = "<br><small title='" + n["path"] + "'>" + n["size"] +"</small>" || ''
+                    size = "<br><small title='" + n["path"] + "'>" + n["size"] +"</small>";
                 html += "<tr>" +
                           "<td><i class='glyphicon glyphicon-" + icon[n["type"]] + "'></i></td>" +
                           "<td class='filelist " + n["type"] + "' title='" + n["path"] + "'>" + n["filename"] + size + "</td>" +
@@ -370,31 +380,70 @@ function filelist(str) {
             out(xhr.statusText);
     });
 }
+*/
+function filelist(str) {
+    $.ajax({
+            url: encodeURI(str),
+            dataType: "json",
+            timeout : 1000,
+            type: "get",
+            success: function (data) {
+                if ($('#navtab li:eq(1)').attr('class') != 'active')
+                    $("#navtab li:eq(1) a").tab("show");
+                $("#clear").hide();
+                var html = "";
+                var icon = {"folder": "folder-close", "mp4": "film", "other": "file"};
+                $.each(data, function (i, n) {
+                    size = "";
+                    if(n["size"])
+                        size = "<br><small title='" + n["path"] + "'>" + n["size"] +"</small>";
+                    html += "<tr>" +
+                              "<td><i class='glyphicon glyphicon-" + icon[n["type"]] + "'></i></td>" +
+                              "<td class='filelist " + n["type"] + "' title='" + n["path"] + "'>" + n["filename"] + size + "</td>" +
+                              "<td class='move' title='" + n["path"] + "'>" +
+                                "<i class='glyphicon glyphicon-remove-circle' title='" + n["path"] + "'></i>" +
+                              "</td>" +
+                            "</tr>"
+                });
+                $('#list').empty();
+                $('#list').append(html);
+            },
+            error: function(xhr){
+                out(xhr.statusText);
+            }
+    });
+}
 function history(str) {
-    $.getJSON(str, function (data, status, xhr) {
-        if (xhr.statusText == "OK") {
-            if ($('#navtab li:eq(0)').attr('class') != 'active')
-                $("#navtab li:eq(0) a").tab("show");
-            $("#clear").show();
-            var html = "";
-            $.each(data, function (i, n) {
-                html += "<tr>"+
-                          "<td class='folder' title='/" + n["path"] + "'>" +
-                            "<i class='glyphicon glyphicon-film' title='/" + n["path"] + "'></i>" +
-                          "</td>" +
-                          "<td class='filelist mp4' title='" + n["filename"] + "'>" + n["filename"] + 
-                            "<br><small title='" + n["filename"] + "'>" + n["latest_date"] + " | " + 
-                            formatTime(n["time"]) + "/" + formatTime(n["duration"]) + "</small>" + 
-                          "</td>" + 
-                          "<td class='remove' title='" + n["filename"] + "'>" +
-                            "<i class='glyphicon glyphicon-remove-circle' title='" + n["filename"] + "'></i>" + 
-                          "</td>" +
-                        "</tr>";
-            });
-            $('#list').empty();
-            $('#list').append(html);
-        } else
-            out(xhr.statusText);
+    $.ajax({
+            url: encodeURI(str),
+            dataType: "json",
+            timeout : 1000,
+            type: "get",
+            success: function (data) {  //成功后回调
+                if ($('#navtab li:eq(0)').attr('class') != 'active')
+                    $("#navtab li:eq(0) a").tab("show");
+                $("#clear").show();
+                var html = "";
+                $.each(data, function (i, n) {
+                    html += "<tr>"+
+                              "<td class='folder' title='/" + n["path"] + "'>" +
+                                "<i class='glyphicon glyphicon-film' title='/" + n["path"] + "'></i>" +
+                              "</td>" +
+                              "<td class='filelist mp4' title='" + n["filename"] + "'>" + n["filename"] + 
+                                "<br><small title='" + n["filename"] + "'>" + n["latest_date"] + " | " + 
+                                formatTime(n["progress"]) + "/" + formatTime(n["duration"]) + "</small>" + 
+                              "</td>" + 
+                              "<td class='remove' title='" + n["filename"] + "'>" +
+                                "<i class='glyphicon glyphicon-remove-circle' title='" + n["filename"] + "'></i>" + 
+                              "</td>" +
+                            "</tr>";
+                });
+                $('#list').empty();
+                $('#list').append(html);
+            },
+            error: function(xhr){  //失败后回调
+                out(xhr.statusText);
+            }
     });
 }
 </script>
