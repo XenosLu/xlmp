@@ -42,7 +42,7 @@ def get_size(filename):
 
 
 def load_history(name):
-    progress = run_sql('select TIME from history where FILENAME=?', name)
+    progress = run_sql('select PROGRESS from history where FILENAME=?', name)
     if len(progress) == 0:
         return 0
     return progress[0][0]
@@ -51,7 +51,7 @@ def load_history(name):
 @route('/list')
 def list_history():
     'Return play history list'
-    return json.dumps([{'filename': s[0], 'time': s[1], 'duration': s[2], 'latest_date': s[3], 
+    return json.dumps([{'filename': s[0], 'progress': s[1], 'duration': s[2], 'latest_date': s[3], 
                         'path': os.path.dirname(s[0])}
                        for s in run_sql('select * from history order by LATEST_DATE desc')])
 
@@ -100,7 +100,7 @@ def save(src):
     # src = request.query.src
     progress = request.GET.get('progress')
     duration = request.GET.get('duration')
-    run_sql('''replace into history (FILENAME, TIME, DURATION, LATEST_DATE)
+    run_sql('''replace into history (FILENAME, PROGRESS, DURATION, LATEST_DATE)
                values(? , ?, ?, DateTime('now', 'localtime'));''', src, progress, duration)
     return
 
@@ -166,7 +166,7 @@ def fs_dir(path):
     except Exception as e:
         abort(404, str(e))
 
-# def folder(path):
+
     # if path != '':
         # dirs = path.split('/')
         # html_dir = '''
@@ -193,7 +193,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 # Initialize DataBase
 run_sql('''create table if not exists history
                 (FILENAME text PRIMARY KEY not null,
-                TIME float not null,
+                PROGRESS float not null,
                 DURATION float, LATEST_DATE datetime not null);''')
 
 if __name__ == '__main__':  # for debug
