@@ -207,9 +207,14 @@ if (("{{src}}" == "")) {
         if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
             if (Math.floor(Math.random() * 99) > 81) {  //randomly save play progress
                 $.ajax({
-                        url: "/save/{{src}}?progress=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration,
+                        //url: "/save/{{src}}?progress=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration,
+                        url: "/save/{{src}}",
+                        data: {
+                                progress: $("video").get(0).currentTime,
+                               duration: $("video").get(0).duration
+                               },
                         timeout: 800,
-                        request: "get",
+                        type: "POST",
                         error: function(xhr) {
                             out("save: " + xhr.statusText);
                         }
@@ -249,7 +254,7 @@ function rate(x) {
     $("video").get(0).playbackRate = x;
 }
 function formatTime(time) {
-    return Math.floor(time / 3600) + ":" + ("0" + Math.floor(time / 60)).slice(-2) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
+    return Math.floor(time / 3600) + ":" + ("0" + Math.floor(time %3600 / 60)).slice(-2) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
 }
 
 function adapt() {

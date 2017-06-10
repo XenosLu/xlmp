@@ -8,7 +8,7 @@ import math
 import json
 import re
 
-from bottle import route, run, template, static_file, abort, request, redirect  # pip install bottle  # 1.2
+from bottle import route, post, template, static_file, abort, request, redirect, run  # pip install bottle  # 1.2
 
 MP4_PATH = './static/mp4'  # mp4 file path
 
@@ -63,20 +63,22 @@ def index():
 
 @route('/play/<src:re:.*\.((?i)mp)4$>')
 def play(src):
-    'Player page'
+    'Video play page'
     if not os.path.exists('%s/%s' % (MP4_PATH, src)):
         redirect('/')
     return template('player', src=src, progress=load_history(src), title=src)
 
 
-@route('/clear')  # clear play history list
+@route('/clear')
 def clear():
+    'Clear play history list'
     run_sql('delete from history')
     return list_history()
 
 
-@route('/remove/<src:path>')  # remove from play history list
+@route('/remove/<src:path>')
 def remove(src):
+    'Remove from play history list'
     run_sql('delete from history where FILENAME= ?', src)
     return list_history()
 
@@ -95,11 +97,13 @@ def move(src):
     return fs_dir('%s/' % os.path.dirname(src))
 
 
-@route('/save/<src:path>')  # save play progress
+@post('/save/<src:path>')  # save play progress
 def save(src):
     # src = request.query.src
-    progress = request.GET.get('progress')
-    duration = request.GET.get('duration')
+    # progress = request.GET.get('progress')
+    # duration = request.GET.get('duration')
+    progress = request.forms.get('progress')
+    duration = request.forms.get('duration')
     run_sql('''replace into history (FILENAME, PROGRESS, DURATION, LATEST_DATE)
                values(? , ?, ?, DateTime('now', 'localtime'));''', src, progress, duration)
     return
