@@ -36,9 +36,9 @@ def get_size(filename):
     if size < 1024:
         return '%dB' % size
     else:
-        unit = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB', 'BB']
+        unit = ['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y', 'B']
         l = min(int(math.floor(math.log(size, 1024))), 9)
-        return '%.1f%s' % (size/1024.0**l, unit[l])
+        return '%.1f%sB' % (size/1024.0**l, unit[l])
 
 
 def load_history(name):
