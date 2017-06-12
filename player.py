@@ -180,29 +180,6 @@ def fs_dir(path):
     except Exception as e:
         abort(404, str(e))
 
-
-    # if path != '':
-        # dirs = path.split('/')
-        # html_dir = '''
-        # <tr><td colspan=3>
-        # <ol class="breadcrumb">
-          # <li>
-            # <span class="filelist folder">
-              # <i class="glyphicon glyphicon-home" title="/"></i>
-            # </span>
-          # </li>
-          # '''
-        # for n, i in enumerate(dirs[:-1:], 1):
-            # print("/%s %s" % ('/'.join(dirs[0:n]), i))
-            # html_dir += '''
-            # <li><span class="filelist folder" title="/%s">%s</span>
-            # </li>''' % ('/'.join(dirs[0:n]), i)
-        # html_dir += '''
-          # <li class="active">%s</li>
-        # </ol>
-        # </td></tr>''' % dirs[-1]
-        # path = '%s/' % path.strip('/')
-
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 # Initialize DataBase
 run_sql('''create table if not exists history
