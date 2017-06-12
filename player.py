@@ -50,7 +50,7 @@ def load_history(name):
 
 @route('/list')
 def list_history():
-    'Return play history list'
+    """Return play history list"""
     return json.dumps([{'filename': s[0], 'progress': s[1], 'duration': s[2], 'latest_date': s[3], 
                         'path': os.path.dirname(s[0])}
                        for s in run_sql('select * from history order by LATEST_DATE desc')])
@@ -63,7 +63,7 @@ def index():
 
 @route('/play/<src:re:.*\.((?i)mp)4$>')
 def play(src):
-    'Video play page'
+    """Video play page"""
     if not os.path.exists('%s/%s' % (MP4_PATH, src)):
         redirect('/')
     return template('player', src=src, progress=load_history(src), title=src)
@@ -71,20 +71,21 @@ def play(src):
 
 @route('/clear')
 def clear():
-    'Clear play history list'
+    """Clear play history list"""
     run_sql('delete from history')
     return list_history()
 
 
 @route('/remove/<src:path>')
 def remove(src):
-    'Remove from play history list'
+    """Remove from play history list"""
     run_sql('delete from history where FILENAME= ?', src)
     return list_history()
 
 
-@route('/move/<src:path>')  # move file to 'old' folder
+@route('/move/<src:path>')
 def move(src):
+    """Move file to 'old' folder"""
     file = '%s/%s' % (MP4_PATH, src)
     dir_old = '%s/%s/old' % (MP4_PATH, os.path.dirname(src))
     if not os.path.exists(dir_old):
@@ -97,8 +98,9 @@ def move(src):
     return fs_dir('%s/' % os.path.dirname(src))
 
 
-@post('/save/<src:path>')  # save play progress
+@post('/save/<src:path>')
 def save(src):
+    """Save play progress"""
     # src = request.query.src
     # progress = request.GET.get('progress')
     # duration = request.GET.get('duration')
@@ -109,8 +111,9 @@ def save(src):
     return
 
 
-@post('/suspend')  # suspend the server
+@post('/suspend')
 def suspend():
+    """Suepend server"""
     if sys.platform == 'win32':
         import ctypes
         dll = ctypes.WinDLL('powrprof.dll')
@@ -122,8 +125,9 @@ def suspend():
         return 'OS not supported!'
 
 
-@post('/shutdown')  # shutdown the server
+@post('/shutdown')
 def shutdown():
+    """Shutdown server"""
     if sys.platform == 'win32':
         os.system("shutdown.exe -f -s -t 0")
     else:
@@ -131,8 +135,9 @@ def shutdown():
     return 'shutting down...'
 
 
-@post('/restart')  # restart the server
+@post('/restart')
 def restart():
+    """Restart server"""
     if sys.platform == 'win32':
         os.system("shutdown.exe -f -r -t 0")
     else:
@@ -140,19 +145,24 @@ def restart():
     return 'restarting...'
 
 
-@route('/static/<filename:path>')  # static files access
+@route('/static/<filename:path>')
 def static(filename):
+    """Static file access"""
     return static_file(filename, root='./static')
 
 
-@route('/mp4/<filename:re:.*\.((?i)mp)4$>')  # mp4 static files access.
-# to support larger files(>2GB), you should use web server to deal with static files like apache "AliasMatch"
+@route('/mp4/<filename:re:.*\.((?i)mp)4$>')
 def static_mp4(filename):
+    """mp4 file access
+       To support large file(>2GB), you should use web server to deal with static files.
+       Such as Apache, use "AliasMatch"
+    """
     return static_file(filename, root=MP4_PATH)
 
 
-@route('/fs/<path:re:.*>')  # get static folder json list
+@route('/fs/<path:re:.*>')
 def fs_dir(path):
+    """Get static folder list in json"""
     try:
         fs_list, fs_list_folder, fs_list_mp4, fs_list_other = [], [], [], []
         if path != '':
