@@ -51,8 +51,8 @@ def load_history(name):
 @route('/list')
 def list_history():
     """Return play history list"""
-    return json.dumps([{'filename': s[0], 'progress': s[1], 'duration': s[2], 'latest_date': s[3], 
-                        'path': os.path.dirname(s[0])}
+    return json.dumps([{'filename': s[0], 'progress': s[1], 'duration': s[2],
+                        'latest_date': s[3], 'path': os.path.dirname(s[0])}
                        for s in run_sql('select * from history order by LATEST_DATE desc')])
 
 
@@ -176,7 +176,7 @@ def fs_dir(path):
             else:
                 fs_list_other.append({'filename': file, 'type': 'other',
                                       'path': '%s%s' % (path, file), 'size': get_size(path + file)})
-        return json.dumps(fs_list + fs_list_folder+fs_list_mp4+fs_list_other)
+        return json.dumps(fs_list + fs_list_folder + fs_list_mp4 + fs_list_other)
     except Exception as e:
         abort(404, str(e))
 
