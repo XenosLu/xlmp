@@ -23,7 +23,7 @@ def run_sql(sql, *args):
             conn.commit()
     except Exception as e:
         print(str(e))
-        result = []
+        result = ()
     finally:
         conn.close()
     return result
@@ -36,7 +36,7 @@ def get_size(filename):
     if size < 1024:
         return '%dB' % size
     else:
-        unit = ['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y', 'B']
+        unit = ('', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y', 'B')
         l = min(int(math.floor(math.log(size, 1024))), 9)
         return '%.1f%sB' % (size/1024.0**l, unit[l])
 
@@ -155,7 +155,7 @@ def static(filename):
 def static_mp4(filename):
     """mp4 file access
        To support large file(>2GB), you should use web server to deal with static files.
-       Such as Apache, use "AliasMatch"
+       For example, you can use "AliasMatch"/"Alias" in Apache
     """
     return static_file(filename, root=MP4_PATH)
 
@@ -166,7 +166,7 @@ def fs_dir(path):
     try:
         fs_list, fs_list_folder, fs_list_mp4, fs_list_other = [], [], [], []
         if path != '':
-            fs_list.append({'type': 'folder', 'path': '/%s..' % path, 'filename': '..'})
+            fs_list.append({'filename': '..', 'type': 'folder', 'path': '/%s..' % path})
         for file in os.listdir('%s/%s' % (MP4_PATH, path)):
             if os.path.isdir('%s/%s%s' % (MP4_PATH, path, file)):
                 fs_list_folder.append({'filename': file, 'type': 'folder', 'path': '/%s%s' % (path, file)})
