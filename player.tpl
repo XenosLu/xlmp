@@ -108,7 +108,7 @@ video {
 </div>
 <div id="dialog" style="display:none">
   <div class="bg-info">
-  <button onClick="$('#dialog').hide(250);" type="button" class="close">&times;</button>
+    <button onClick="$('#dialog').hide(250);" type="button" class="close">&times;</button>
     <ul id="navtab" class="nav nav-tabs">
       <li class="active">
         <a href="#mainframe" data-toggle="tab" onclick="history('/list')">
@@ -200,29 +200,22 @@ if (("{{src}}" == "")) {
         formatTime($("video").get(0).duration));
         text = "";
     });
-    $("video").on("timeupdate", function () {  //auto save play progress
-        lastplaytime = new Date().getTime();  //to detect if video is playing
+    $("video").on("timeupdate", function () { //auto save play progress
+        lastplaytime = new Date().getTime(); //to detect if video is playing
         if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
-            if (Math.floor(Math.random() * 99) > 81) {  //randomly save play progress
+            if (Math.floor(Math.random() * 99) > 81) { //randomly save play progress
                 $.ajax({
-                        url: "/save/{{src}}",
-                        data: {
-                                progress: $("video").get(0).currentTime,
-                               duration: $("video").get(0).duration
-                               },
-                        timeout: 800,
-                        type: "POST",
-                        error: function(xhr) {
-                            out("save: " + xhr.statusText);
-                        }
-                })
-                /*
-                $.get("/save/{{src}}?progress=" + $("video").get(0).currentTime + "&duration=" + $("video").get(0).duration, function (data, status, xhr) {
-                    if (xhr.statusText != "OK")
-                        out(xhr.statusText);
-                    xhr = null;
+                    url: "/save/{{src}}",
+                    data: {
+                        progress: $("video").get(0).currentTime,
+                        duration: $("video").get(0).duration
+                    },
+                    timeout: 900,
+                    type: "POST",
+                    error: function (xhr) {
+                        out("save: " + xhr.statusText);
+                    }
                 });
-                */
             }
         }
     });
@@ -355,7 +348,7 @@ function filelist(str) {
     $.ajax({
             url: encodeURI(str),
             dataType: "json",
-            timeout : 1000,
+            timeout : 999,
             type: "get",
             success: function (data) {
                 if ($('#navtab li:eq(1)').attr('class') != 'active')
@@ -387,7 +380,7 @@ function history(str) {
     $.ajax({
             url: encodeURI(str),
             dataType: "json",
-            timeout : 1000,
+            timeout : 999,
             type: "get",
             success: function (data) {
                 if ($('#navtab li:eq(0)').attr('class') != 'active')
