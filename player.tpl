@@ -137,9 +137,9 @@ video {
       <ul class="dropdown-menu" role="menu">
         <li><a href="#" onclick="rate(0.5)">0.5X</a></li>
         <li><a href="#" onclick="rate(0.75)">0.75X</a></li>
-        <li class="divider"/>
+        <li class="divider"></li>
         <li><a href="#" onclick="rate(1)">1X</a></li>
-        <li class="divider"/>
+        <li class="divider"></li>
         <li><a href="#" onclick="rate(1.5)">1.5X</a></li>
         <li><a href="#" onclick="rate(2)">2X</a></li>
       </ul>
@@ -187,20 +187,16 @@ if (("{{src}}" == "")) {
     $('#rate').hide();
 } else {
     $(document.body).append("<video poster controls preload='meta'>No video support!</video>");
-    $("video").attr("src", "/mp4/{{src}}");
-    $("video").on("error", function () {
+    $("video").attr("src", "/mp4/{{src}}").on("error", function () {
         out("error");
-    });
-    $("video").on("loadeddata", function () {  //auto load progress
+    }).on("loadeddata", function () {  //auto load progress
         $("video").get(0).currentTime = Math.max({{progress}} - 0.5, 0);
         text = "<small>Play from</small><br>";
-    });
-    $("video").on("seeking", function () {  //show progress when changed
+    }).on("seeking", function () {  //show progress when changed
         out(text + formatTime($("video").get(0).currentTime) + '/' + 
         formatTime($("video").get(0).duration));
         text = "";
-    });
-    $("video").on("timeupdate", function () { //auto save play progress
+    }).on("timeupdate", function () { //auto save play progress
         lastplaytime = new Date().getTime(); //to detect if video is playing
         if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
             if (Math.floor(Math.random() * 99) > 81) { //randomly save play progress
@@ -218,8 +214,7 @@ if (("{{src}}" == "")) {
                 });
             }
         }
-    });
-    $("video").on("progress", function () {  //show buffered
+    }).on("progress", function () {  //show buffered
         var str = "";
         if (new Date().getTime() - lastplaytime > 1000) {
         //if ($("video").get(0).networkState != 1) {
@@ -315,10 +310,12 @@ $("#history").click(function () {
     $('#dialog').show(250);
 });
 $("#videosize").click(function () {
-    if ($("#videosize").text() == "auto")
+    //if ($("#videosize").text() == "auto")
+    if ($(this).text() == "auto")
         adapt();
     else {
-        $("#videosize").text("auto");
+        //$("#videosize").text("auto");
+        $(this).text("auto");
         if ($("video").get(0).width < $(window).width() && $("video").get(0).height < $(window).height()) {
             $("video").get(0).style.width = $("video").get(0).videoWidth + "px";
             $("video").get(0).style.height = $("video").get(0).videoHeight + "px";
@@ -329,20 +326,20 @@ $("#clear").click(function () {
     if (confirm("Clear all history?"))
         history("/clear");
 });
-$("#mainframe").on("click", ".folder", function (e) {
-    filelist("/fs" + e.target.title + "/");
-});
-$("#mainframe").on("click", ".move", function (e) {
-    if (confirm("Move " + e.target.title + " to old?")) {
-        filelist("/move/" + e.target.title);
+$("#mainframe").on("click", ".folder", function () {
+    filelist("/fs" + this.title + "/");
+}).on("click", ".move", function () {
+    if (confirm("Move " + this.title + " to old?")) {
+        filelist("/move/" + this.title);
     }
-});
-$("#mainframe").on("click", ".remove", function (e) {
-    if (confirm("Clear " + e.target.title + "?"))
-        history("/remove/" + e.target.title);
-});
-$("#mainframe").on("click", ".mp4", function (e) {
-    window.location.href = "/play/" + e.target.title;
+}).on("click", ".remove", function () {
+    //if (confirm("Clear " + e.target.title + "?"))
+    if (confirm("Clear " + this.title + "?"))
+        history("/remove/" + this.title);
+        //history("/remove/" + e.target.title);
+}).on("click", ".mp4", function () {
+    //window.location.href = "/play/" + e.target.title;
+    window.location.href = "/play/" + this.title;
 });
 function filelist(str) {
     $.ajax({
@@ -368,8 +365,9 @@ function filelist(str) {
                               "</td>" +
                             "</tr>"
                 });
-                $('#list').empty();
-                $('#list').append(html);
+                //$('#list').empty();
+                //$('#list').append(html);
+                $('#list').empty().append(html);
             },
             error: function(xhr){
                 out(xhr.statusText);
@@ -393,11 +391,13 @@ function history(str) {
                                 "<i class='glyphicon glyphicon-film' title='/" + n["path"] + "'></i>" +
                               "</td>" +
                               "<td class='filelist mp4' title='" + n["filename"] + "'>" + n["filename"] + 
-                                "<br><small title='" + n["filename"] + "'>" + n["latest_date"] + " | " + 
+                                //"<br><small title='" + n["filename"] + "'>" + n["latest_date"] + " | " + 
+                                "<br><small>" + n["latest_date"] + " | " + 
                                 formatTime(n["progress"]) + "/" + formatTime(n["duration"]) + "</small>" + 
                               "</td>" + 
                               "<td class='remove' title='" + n["filename"] + "'>" +
-                                "<i class='glyphicon glyphicon-remove-circle' title='" + n["filename"] + "'></i>" + 
+                                //"<i class='glyphicon glyphicon-remove-circle' title='" + n["filename"] + "'></i>" + 
+                                "<i class='glyphicon glyphicon-remove-circle'></i>" + 
                               "</td>" +
                             "</tr>";
                 });
