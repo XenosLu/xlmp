@@ -33,7 +33,7 @@ div {
   text-align: center;
 }
 td:hover {
-  background: #F9F5E2; /*#EDE6D8*/ /*#E0DDE2*/ /*#EEEEF3;*/
+  background: #F9F0E2; /*#EDE6D8*/ /*#E0DDE2*/ /*#EEEEF3;*/
 }
 video {
   display: block;
