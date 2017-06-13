@@ -30,7 +30,7 @@
         </ul>
       </div>
       <div id="mainframe" class="tab-pane fade in bg-warning">
-        <table class="table">
+        <table class="table table-striped table-responsive table-condensed">
           <tbody id="list">
           </tbody>
         </table>
@@ -147,11 +147,12 @@ function formatTime(time) {
 
 function adapt() {
     $("#videosize").text("orign");
-    $("#mainframe").css("max-height", ($(window).height() - 202) + "px");
+    $("#mainframe").css("max-height", ($(window).height() - 240) + "px");
     //if ($(window).height() <= 480)
         //$("#dialog").width("100%");
     //else
         //$("#dialog").width("auto");
+    //out($("table").width()+'|'+$("#dialog").width()+'|'+$(window).width());
     video_ratio = $("video").get(0).videoWidth / $("video").get(0).videoHeight;
     page_ratio = $(window).width() / $(window).height();
     if (page_ratio < video_ratio) {

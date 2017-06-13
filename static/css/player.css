@@ -16,6 +16,7 @@
 }
 .table > tbody > tr > td {
   vertical-align: middle;
+  border-top: 0;
 }
 /*** modified bootstrap style ***/
 body {
@@ -80,5 +81,6 @@ video {
   overflow: auto;
   min-height: 9em;
   min-width: 18em;
+  max-width: 60em;
   width: 100%;
 }
