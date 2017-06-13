@@ -5,100 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=1.0, user-scalable=1">
 <title>{{title}}</title>
 <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-<style>
-/*** modified bootstrap style ***/
-.glyphicon-film, .glyphicon-folder-close, .glyphicon-remove-circle, .glyphicon-file, .glyphicon-list-alt, .caret {
-  font-size: 1.8em;
-}
-.glyphicon-remove-circle {
-    color: grey;
-}
-.close {
-  font-size: 2.5em;
-  margin-right: 0.25em;
-  margin-top: 0.05em;
-}
-.dropdown-menu {
-  opacity: 0.75;
-  min-width: 6em;
-}
-/*
-.breadcrumb {
-  background: 0 0;
-  margin: 0;
-  font-size: 1.2em;
-}
-*/
-.table > tbody > tr > td {
-  vertical-align: middle;
-}
-/*** modified bootstrap style ***/
-body {
-  background-color: #F1F2F6; /* #DDD9DD #101010; */
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-  font-family: AppleSDGothicNeo-Regular;
-}
-a {
-  cursor: default;
-}
-div {
-  text-align: center;
-}
-td:hover {
-  background: #EEEEF3;
-}
-video {
-  /*clear: both;*/
-  display: block;
-  margin: auto;
-}
-.filelist {
-  min-width: 14em;
-}
-.filelist.mp4 {
-  color: #337AB7;
-}
-.filelist.other, .filelist small {
-  color: grey;
-}
-#sidebar{
-  opacity: 0.4;
-  display: none;
-  position: fixed;
-  top: 40%;
-}
-#output {
-  z-index: 99;
-  font-size: 1.8em;
-  pointer-events: none;
-  border-radius: 0.2em;
-  padding: 0.2em;
-  opacity: 0.7;
-  border: 1px solid #777777;
-  box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
-  text-shadow: 0.1em 0.1em 0.4em #666;
-}
-#dialog {
-  opacity: 0.8;
-  box-shadow: 2px 2px 5px #333333;
-  max-width: 100%;
-}
-#output, #dialog {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-}
-#mainframe {
-  overflow: auto;
-  min-height: 9em;
-  min-width: 18em;
-  width: 100%;
-}
-</style>
+<link href="/static/css/player.css" rel="stylesheet">
 </head>
 <body>
 <div id="sidebar">
@@ -223,8 +130,10 @@ if (("{{src}}" == "")) {
         //if ($("video").get(0).networkState != 1) {
             //for (i = 0, t = $("video").get(0).buffered.length; i < t; i++) {
             for (i = 0, t = this.buffered.length; i < t; i++) {
-                if ($("video").get(0).currentTime >= $("video").get(0).buffered.start(i) && $("video").get(0).currentTime <= $("video").get(0).buffered.end(i))
-                    str = formatTime($("video").get(0).buffered.start(i)) + "-" + formatTime($("video").get(0).buffered.end(i)) + "<br>";
+                //if ($("video").get(0).currentTime >= $("video").get(0).buffered.start(i) && $("video").get(0).currentTime <= $("video").get(0).buffered.end(i))
+                if (this.currentTime >= this.buffered.start(i) && this.currentTime <= this.buffered.end(i))
+                    str = formatTime(this.buffered.start(i)) + "-" + formatTime(this.buffered.end(i)) + "<br>";
+                    //str = formatTime($("video").get(0).buffered.start(i)) + "-" + formatTime($("video").get(0).buffered.end(i)) + "<br>";
             }
             out(str + "<small>buffering...</small>");
         }
