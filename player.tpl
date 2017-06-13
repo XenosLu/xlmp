@@ -1,81 +1,81 @@
 ﻿<!doctype html>
 <html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=1.0, user-scalable=1">
-<title>{{title}}</title>
-<link href="/static/css/bootstrap.min.css" rel="stylesheet">
-<link href="/static/css/player.css" rel="stylesheet">
-</head>
-<body>
-<div id="sidebar">
-  <button id="history" type="button" class="btn btn-default">
-    <i class="glyphicon glyphicon-list-alt"></i>
-  </button>
-</div>
-<div id="dialog" style="display:none">
-  <div class="bg-info">
-    <button onClick="$('#dialog').hide(250);" type="button" class="close">&times;</button>
-    <ul id="navtab" class="nav nav-tabs">
-      <li class="active">
-        <a href="#mainframe" data-toggle="tab" onclick="history('/list')">
-          <i class="glyphicon glyphicon-list"></i>History
-        </a>
-      </li>
-      <li>
-        <a href="#mainframe" data-toggle="tab" onclick="filelist('/fs/')">
-          <i class="glyphicon glyphicon-home"></i>Home dir
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="mainframe" class="tab-pane fade in bg-warning">
-    <table class="table">
-      <tbody id="list">
-      </tbody>
-    </table>
-  </div>
-  <div class="panel-footer">
-    <button id="videosize" type="button" class="btn btn-default">orign</button>
-    <div id="rate" class="btn-group dropup">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        Rate<span class="caret"></span>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=1.0, user-scalable=1">
+    <title>{{title}}</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/player.css" rel="stylesheet">
+  </head>
+  <body>
+    <div id="sidebar">
+      <button id="history" type="button" class="btn btn-default">
+        <i class="glyphicon glyphicon-list-alt"></i>
       </button>
-      <ul class="dropdown-menu" role="menu">
-        <li><a href="#" onclick="rate(0.5)">0.5X</a></li>
-        <li><a href="#" onclick="rate(0.75)">0.75X</a></li>
-        <li class="divider"></li>
-        <li><a href="#" onclick="rate(1)">1X</a></li>
-        <li class="divider"></li>
-        <li><a href="#" onclick="rate(1.5)">1.5X</a></li>
-        <li><a href="#" onclick="rate(2)">2X</a></li>
-      </ul>
     </div>
-    <button id="clear" type="button" class="btn btn-default">Clear History</button>
-    <div class="btn-group dropup">
-      <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.post('/suspend');">
-        <i class="glyphicon glyphicon-off"></i>
-      </button>
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu">
-        <li>
-          <a onClick="if(confirm('Shutdown ?'))$.post('/shutdown');">
-          <i class="glyphicon glyphicon-off"></i>shutdown</a>
-        </li>
-        <li>
-          <a onClick="if(confirm('Restart ?'))$.post('/restart');">
-          <i class="glyphicon glyphicon-off"></i>restart</a>
-        </li>
-      </ul>
+    <div id="dialog" style="display:none">
+      <div class="bg-info">
+        <button onClick="$('#dialog').hide(250);" type="button" class="close">&times;</button>
+        <ul id="navtab" class="nav nav-tabs">
+          <li class="active">
+            <a href="#mainframe" data-toggle="tab" onclick="history('/list')">
+              <i class="glyphicon glyphicon-list"></i>History
+            </a>
+          </li>
+          <li>
+            <a href="#mainframe" data-toggle="tab" onclick="filelist('/fs/')">
+              <i class="glyphicon glyphicon-home"></i>Home dir
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div id="mainframe" class="tab-pane fade in bg-warning">
+        <table class="table">
+          <tbody id="list">
+          </tbody>
+        </table>
+      </div>
+      <div class="panel-footer">
+        <button id="videosize" type="button" class="btn btn-default">orign</button>
+        <div id="rate" class="btn-group dropup">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            Rate<span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#" onclick="rate(0.5)">0.5X</a></li>
+            <li><a href="#" onclick="rate(0.75)">0.75X</a></li>
+            <li class="divider"></li>
+            <li><a href="#" onclick="rate(1)">1X</a></li>
+            <li class="divider"></li>
+            <li><a href="#" onclick="rate(1.5)">1.5X</a></li>
+            <li><a href="#" onclick="rate(2)">2X</a></li>
+          </ul>
+        </div>
+        <button id="clear" type="button" class="btn btn-default">Clear History</button>
+        <div class="btn-group dropup">
+          <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.post('/suspend');">
+            <i class="glyphicon glyphicon-off"></i>
+          </button>
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <a onClick="if(confirm('Shutdown ?'))$.post('/shutdown');">
+              <i class="glyphicon glyphicon-off"></i>shutdown</a>
+            </li>
+            <li>
+              <a onClick="if(confirm('Restart ?'))$.post('/restart');">
+              <i class="glyphicon glyphicon-off"></i>restart</a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-</body>
-<script src="/static/js/jquery-3.2.1.min.js"></script>
-<script src="/static/js/bootstrap.min.js"></script>
-<script language="javascript">
+  </body>
+  <script src="/static/js/jquery-3.2.1.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script language="javascript">
 var RANGE = 12;  //minimum touch move range in px
 var text="";
 var lastplaytime = 0;  //in seconds
@@ -319,5 +319,5 @@ function history(str) {
             }
     });
 }
-</script>
+  </script>
 </html>
