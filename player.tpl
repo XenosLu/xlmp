@@ -105,32 +105,29 @@ if (("{{src}}" == "")) {
     }).on("timeupdate", function () { //auto save play progress
         lastplaytime = new Date().getTime(); //to detect if video is playing
         //if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
-        if (this.readyState == 4 && this.currentTime < this.duration) {
-            if (Math.floor(Math.random() * 99) > 81) { //randomly save play progress
-                $.ajax({
-                    url: "/save/{{src}}",
-                    data: {
-                        progress: this.currentTime,
-                        duration: this.duration
-                    },
-                    timeout: 999,
-                    type: "POST",
-                    error: function (xhr) {
-                        out("save: " + xhr.statusText);
-                    }
-                });
-            }
+        //if (this.readyState == 4 && this.currentTime < this.duration && Math.floor(Math.random() * 99) > 80) {
+        if (this.readyState == 4 && Math.floor(Math.random() * 99) > 80) {  //randomly save play progress
+            //if (Math.floor(Math.random() * 99) > 80) {
+            $.ajax({
+                url: "/save/{{src}}",
+                data: {
+                    progress: this.currentTime,
+                    duration: this.duration
+                },
+                timeout: 999,
+                type: "POST",
+                error: function (xhr) {
+                    out("save: " + xhr.statusText);
+                }
+            });//}
         }
     }).on("progress", function () {  //show buffered
         var str = "";
         if (new Date().getTime() - lastplaytime > 1000) {
         //if ($("video").get(0).networkState != 1) {
-            //for (i = 0, t = $("video").get(0).buffered.length; i < t; i++) {
             for (i = 0, t = this.buffered.length; i < t; i++) {
-                //if ($("video").get(0).currentTime >= $("video").get(0).buffered.start(i) && $("video").get(0).currentTime <= $("video").get(0).buffered.end(i))
                 if (this.currentTime >= this.buffered.start(i) && this.currentTime <= this.buffered.end(i))
                     str = formatTime(this.buffered.start(i)) + "-" + formatTime(this.buffered.end(i)) + "<br>";
-                    //str = formatTime($("video").get(0).buffered.start(i)) + "-" + formatTime($("video").get(0).buffered.end(i)) + "<br>";
             }
             out(str + "<small>buffering...</small>");
         }
@@ -150,11 +147,11 @@ function formatTime(time) {
 
 function adapt() {
     $("#videosize").text("orign");
-    $("#mainframe").css("max-height", ($(window).height() - 200) + "px");
-    if ($(window).height() <= 480)
-        $("#dialog").width("100%");
-    else
-        $("#dialog").width("auto");
+    $("#mainframe").css("max-height", ($(window).height() - 202) + "px");
+    //if ($(window).height() <= 480)
+        //$("#dialog").width("100%");
+    //else
+        //$("#dialog").width("auto");
     video_ratio = $("video").get(0).videoWidth / $("video").get(0).videoHeight;
     page_ratio = $(window).width() / $(window).height();
     if (page_ratio < video_ratio) {
@@ -220,11 +217,9 @@ $("#history").click(function () {
     $('#dialog').show(250);
 });
 $("#videosize").click(function () {
-    //if ($("#videosize").text() == "auto")
     if ($(this).text() == "auto")
         adapt();
     else {
-        //$("#videosize").text("auto");
         $(this).text("auto");
         if ($("video").get(0).width < $(window).width() && $("video").get(0).height < $(window).height()) {
             $("video").get(0).style.width = $("video").get(0).videoWidth + "px";
