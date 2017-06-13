@@ -97,11 +97,9 @@ if (("{{src}}" == "")) {
     $("video").attr("src", "/mp4/{{src}}").on("error", function () {
         out("error");
     }).on("loadeddata", function () {  //auto load progress
-        //$("video").get(0).currentTime = Math.max({{progress}} - 0.5, 0);
         this.currentTime = Math.max({{progress}} - 0.5, 0);
         text = "<small>Play from</small><br>";
     }).on("seeking", function () {  //show progress when changed
-        //out(text + formatTime($("video").get(0).currentTime) + '/' + formatTime($("video").get(0).duration));
         out(text + formatTime(this.currentTime) + '/' + formatTime(this.duration));
         text = "";
     }).on("timeupdate", function () { //auto save play progress
@@ -112,7 +110,6 @@ if (("{{src}}" == "")) {
                 $.ajax({
                     url: "/save/{{src}}",
                     data: {
-                        //progress: $("video").get(0).currentTime,
                         progress: this.currentTime,
                         duration: this.duration
                     },
