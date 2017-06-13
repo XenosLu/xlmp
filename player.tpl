@@ -190,23 +190,26 @@ if (("{{src}}" == "")) {
     $("video").attr("src", "/mp4/{{src}}").on("error", function () {
         out("error");
     }).on("loadeddata", function () {  //auto load progress
-        $("video").get(0).currentTime = Math.max({{progress}} - 0.5, 0);
+        //$("video").get(0).currentTime = Math.max({{progress}} - 0.5, 0);
+        this.currentTime = Math.max({{progress}} - 0.5, 0);
         text = "<small>Play from</small><br>";
     }).on("seeking", function () {  //show progress when changed
-        out(text + formatTime($("video").get(0).currentTime) + '/' + 
-        formatTime($("video").get(0).duration));
+        //out(text + formatTime($("video").get(0).currentTime) + '/' + formatTime($("video").get(0).duration));
+        out(text + formatTime(this.currentTime) + '/' + formatTime(this.duration));
         text = "";
     }).on("timeupdate", function () { //auto save play progress
         lastplaytime = new Date().getTime(); //to detect if video is playing
-        if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
+        //if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
+        if (this.readyState == 4 && this.currentTime < this.duration) {
             if (Math.floor(Math.random() * 99) > 81) { //randomly save play progress
                 $.ajax({
                     url: "/save/{{src}}",
                     data: {
-                        progress: $("video").get(0).currentTime,
-                        duration: $("video").get(0).duration
+                        //progress: $("video").get(0).currentTime,
+                        progress: this.currentTime,
+                        duration: this.duration
                     },
-                    timeout: 900,
+                    timeout: 999,
                     type: "POST",
                     error: function (xhr) {
                         out("save: " + xhr.statusText);
@@ -218,7 +221,8 @@ if (("{{src}}" == "")) {
         var str = "";
         if (new Date().getTime() - lastplaytime > 1000) {
         //if ($("video").get(0).networkState != 1) {
-            for (i = 0, t = $("video").get(0).buffered.length; i < t; i++) {
+            //for (i = 0, t = $("video").get(0).buffered.length; i < t; i++) {
+            for (i = 0, t = this.buffered.length; i < t; i++) {
                 if ($("video").get(0).currentTime >= $("video").get(0).buffered.start(i) && $("video").get(0).currentTime <= $("video").get(0).buffered.end(i))
                     str = formatTime($("video").get(0).buffered.start(i)) + "-" + formatTime($("video").get(0).buffered.end(i)) + "<br>";
             }
@@ -356,12 +360,14 @@ function filelist(str) {
                 $.each(data, function (i, n) {
                     size = "";
                     if(n["size"])
-                        size = "<br><small title='" + n["path"] + "'>" + n["size"] +"</small>";
+                        size = "<br><small>" + n["size"] +"</small>";
+                        //size = "<br><small title='" + n["path"] + "'>" + n["size"] +"</small>";
                     html += "<tr>" +
                               "<td><i class='glyphicon glyphicon-" + icon[n["type"]] + "'></i></td>" +
                               "<td class='filelist " + n["type"] + "' title='" + n["path"] + "'>" + n["filename"] + size + "</td>" +
                               "<td class='move' title='" + n["path"] + "'>" +
-                                "<i class='glyphicon glyphicon-remove-circle' title='" + n["path"] + "'></i>" +
+                                //"<i class='glyphicon glyphicon-remove-circle' title='" + n["path"] + "'></i>" +
+                                "<i class='glyphicon glyphicon-remove-circle'></i>" +
                               "</td>" +
                             "</tr>"
                 });
