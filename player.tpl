@@ -401,8 +401,9 @@ function history(str) {
                               "</td>" +
                             "</tr>";
                 });
-                $('#list').empty();
-                $('#list').append(html);
+                //$('#list').empty();
+                //$('#list').append(html);
+                $('#list').empty().append(html);
             },
             error: function(xhr){
                 out(xhr.statusText);
