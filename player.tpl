@@ -337,10 +337,8 @@ $("#mainframe").on("click", ".folder", function () {
         filelist("/move/" + this.title);
     }
 }).on("click", ".remove", function () {
-    //if (confirm("Clear " + e.target.title + "?"))
     if (confirm("Clear " + this.title + "?"))
         history("/remove/" + this.title);
-        //history("/remove/" + e.target.title);
 }).on("click", ".mp4", function () {
     //window.location.href = "/play/" + e.target.title;
     window.location.href = "/play/" + this.title;
@@ -371,8 +369,6 @@ function filelist(str) {
                               "</td>" +
                             "</tr>"
                 });
-                //$('#list').empty();
-                //$('#list').append(html);
                 $('#list').empty().append(html);
             },
             error: function(xhr){
@@ -407,8 +403,6 @@ function history(str) {
                               "</td>" +
                             "</tr>";
                 });
-                //$('#list').empty();
-                //$('#list').append(html);
                 $('#list').empty().append(html);
             },
             error: function(xhr){
