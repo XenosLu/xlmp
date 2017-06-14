@@ -105,10 +105,7 @@ if (("{{src}}" == "")) {
         text = "";
     }).on("timeupdate", function () { //auto save play progress
         lastplaytime = new Date().getTime(); //to detect if video is playing
-        //if ($("video").get(0).readyState == 4 && $("video").get(0).currentTime < $("video").get(0).duration + 1) {
-        //if (this.readyState == 4 && this.currentTime < this.duration && Math.floor(Math.random() * 99) > 80) {
         if (this.readyState == 4 && Math.floor(Math.random() * 99) > 80) {  //randomly save play progress
-            //if (Math.floor(Math.random() * 99) > 80) {
             $.ajax({
                 url: "/save/{{src}}",
                 data: {
@@ -262,12 +259,10 @@ function filelist(str) {
                     size = "";
                     if(n["size"])
                         size = "<br><small>" + n["size"] +"</small>";
-                        //size = "<br><small title='" + n["path"] + "'>" + n["size"] +"</small>";
                     html += "<tr>" +
                               "<td><i class='glyphicon glyphicon-" + icon[n["type"]] + "'></i></td>" +
                               "<td class='filelist " + n["type"] + "' title='" + n["path"] + "'>" + n["filename"] + size + "</td>" +
                               "<td class='move' title='" + n["path"] + "'>" +
-                                //"<i class='glyphicon glyphicon-remove-circle' title='" + n["path"] + "'></i>" +
                                 "<i class='glyphicon glyphicon-remove-circle'></i>" +
                               "</td>" +
                             "</tr>"
@@ -291,20 +286,16 @@ function history(str) {
                 $("#clear").show();
                 var html = "";
                 $.each(data, function (i, n) {
-                    html += "<tr>"+
-                              "<td class='folder' title='/" + n["path"] + "'>" +
+                    html += "<tr><td class='folder' title='/" + n["path"] + "'>" +
                                 "<i class='glyphicon glyphicon-film' title='/" + n["path"] + "'></i>" +
                               "</td>" +
                               "<td class='filelist mp4' title='" + n["filename"] + "'>" + n["filename"] + 
-                                //"<br><small title='" + n["filename"] + "'>" + n["latest_date"] + " | " + 
                                 "<br><small>" + n["latest_date"] + " | " + 
                                 formatTime(n["progress"]) + "/" + formatTime(n["duration"]) + "</small>" + 
                               "</td>" + 
                               "<td class='remove' title='" + n["filename"] + "'>" +
-                                //"<i class='glyphicon glyphicon-remove-circle' title='" + n["filename"] + "'></i>" + 
                                 "<i class='glyphicon glyphicon-remove-circle'></i>" + 
-                              "</td>" +
-                            "</tr>";
+                              "</td></tr>";
                 });
                 $('#list').empty().append(html);
             },
