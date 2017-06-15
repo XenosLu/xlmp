@@ -29,8 +29,9 @@ def run_sql(sql, *args):
     return result
 
 
-def get_size(filename):
-    size = os.path.getsize('%s/%s' % (MP4_PATH, filename))
+def get_size(*filename):
+    size = os.path.getsize('%s/%s' % (MP4_PATH, ''.join(filename)))
+    # size = os.path.getsize('%s/%s' % (MP4_PATH, filename))
     if size < 0:
         return 'Out of Range'
     if size < 1024:
@@ -164,7 +165,7 @@ def static_mp4(filename):
 def fs_dir(path):
     """Get static folder list in json"""
     try:
-        fs_list_folder, fs_list_mp4, fs_list_other = [], [], []
+        list_folder, list_mp4, list_other = [], [], []
         if path == '':
             up = []
         else:
@@ -172,14 +173,14 @@ def fs_dir(path):
             up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]
         for file in os.listdir('%s/%s' % (MP4_PATH, path)):
             if os.path.isdir('%s/%s%s' % (MP4_PATH, path, file)):
-                fs_list_folder.append({'filename': file, 'type': 'folder', 'path': '/%s%s' % (path, file)})
+                list_folder.append({'filename': file, 'type': 'folder', 'path': '/%s%s' % (path, file)})
             elif re.match('.*\.((?i)mp)4$', file):
-                fs_list_mp4.append({'filename': file, 'type': 'mp4',
-                                    'path': '%s%s' % (path, file), 'size': get_size(path + file)})
+                list_mp4.append({'filename': file, 'type': 'mp4',
+                                'path': '%s%s' % (path, file), 'size': get_size(path, file)})
             else:
-                fs_list_other.append({'filename': file, 'type': 'other',
-                                      'path': '%s%s' % (path, file), 'size': get_size(path + file)})
-        return json.dumps(up + fs_list_folder + fs_list_mp4 + fs_list_other)
+                list_other.append({'filename': file, 'type': 'other',
+                                  'path': '%s%s' % (path, file), 'size': get_size(path, file)})
+        return json.dumps(up + list_folder + list_mp4 + list_other)
     except Exception as e:
         abort(404, str(e))
 
