@@ -164,10 +164,12 @@ def static_mp4(filename):
 def fs_dir(path):
     """Get static folder list in json"""
     try:
-        up, fs_list_folder, fs_list_mp4, fs_list_other = [], [], [], []
-        if path != '':
-            up.append({'filename': '..', 'type': 'folder', 'path': '/%s..' % path})
-            up.append({'filename': '..', 'type': 'folder', 'path': '/%s..' % path})
+        fs_list_folder, fs_list_mp4, fs_list_other = [], [], []
+        if path == '':
+            up = []
+        else:
+            # up.append({'filename': '..', 'type': 'folder', 'path': '/%s..' % path})
+            up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]
         for file in os.listdir('%s/%s' % (MP4_PATH, path)):
             if os.path.isdir('%s/%s%s' % (MP4_PATH, path, file)):
                 fs_list_folder.append({'filename': file, 'type': 'folder', 'path': '/%s%s' % (path, file)})
