@@ -31,7 +31,6 @@ def run_sql(sql, *args):
 
 def get_size(*filename):
     size = os.path.getsize('%s/%s' % (MP4_PATH, ''.join(filename)))
-    # size = os.path.getsize('%s/%s' % (MP4_PATH, filename))
     if size < 0:
         return 'Out of Range'
     if size < 1024:
@@ -169,7 +168,6 @@ def fs_dir(path):
         if path == '':
             up = []
         else:
-            # up.append({'filename': '..', 'type': 'folder', 'path': '/%s..' % path})
             up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]
         for file in os.listdir('%s/%s' % (MP4_PATH, path)):
             if os.path.isdir('%s/%s%s' % (MP4_PATH, path, file)):
