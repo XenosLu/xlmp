@@ -86,7 +86,8 @@ $(window).resize(function () {
     adapt();
 });
 $(document).mousemove(function () {
-    showSidebar();
+    //showSidebar();
+    $("#sidebar").show(600).delay(9999).fadeOut(800);
 });
 if (("{{src}}" == "")) {
     history("/list");
@@ -131,10 +132,11 @@ if (("{{src}}" == "")) {
         }
     });
 }
+/*
 function showSidebar() {
-    //$("#sidebar").stop(true).show().fadeTo(300,0.65).delay(3000).fadeOut(800);
     $("#sidebar").show(600).delay(9999).fadeOut(800);
 }
+*/
 function rate(x) {
     out(x + "X");
     $("video").get(0).playbackRate = x;
@@ -208,7 +210,8 @@ $(document).on('touchend', function (e) {
                 }
         }
     } else
-        showSidebar();
+        //showSidebar();
+        $("#sidebar").show(600).delay(9999).fadeOut(800);
 });
 $("#history").click(function () {
     if ($('#navtab li:eq(0)').attr('class') == 'active')
@@ -240,7 +243,6 @@ $("#mainframe").on("click", ".folder", function () {
     if (confirm("Clear " + this.title + "?"))
         history("/remove/" + this.title);
 }).on("click", ".mp4", function () {
-    //window.location.href = "/play/" + e.target.title;
     window.location.href = "/play/" + this.title;
 });
 function filelist(str) {
