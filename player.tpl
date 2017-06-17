@@ -31,7 +31,8 @@
       </div>
       <!-- <div id="mainframe" class="tab-pane fade in bg-warning"> -->
       <div id="mainframe" class="tab-pane fade in">
-        <table class="table table-striped table-responsive table-condensed">
+        <!-- <table class="table table-striped table-responsive table-condensed"> -->
+        <table class="table-striped table-responsive table-condensed">
           <tbody id="list">
           </tbody>
         </table>

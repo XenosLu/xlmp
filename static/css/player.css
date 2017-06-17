@@ -14,10 +14,6 @@
   opacity: 0.75;
   min-width: 6em;
 }
-.table > tbody > tr > td {
-  vertical-align: middle;
-  border-top: 0;
-}
 /*** modified bootstrap style ***/
 body {
   background-color: #F1F2F6;
@@ -34,7 +30,8 @@ div {
   background-color: #F1F2F6;
 }
 td:hover {
-  background-color: #F9F0E2; /*#EDE6D8*/ /*#E0DDE2*/ /*#EEEEF3;*/
+  /*background-color: #F9F0E2; /*#EDE6D8*/ /*#E0DDE2*/ /*#EEEEF3;*/
+  background-color: #FBF3E9;
 }
 video {
   display: block;
