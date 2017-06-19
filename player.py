@@ -14,18 +14,19 @@ MP4_PATH = './static/mp4'  # mp4 file path
 
 
 def run_sql(sql, *args):
-    conn = sqlite3.connect('player.db')  # define DB connection
-    try:
-        cursor = conn.execute(sql, args)
-        result = cursor.fetchall()
-        cursor.close()
-        if cursor.rowcount > 0:
-            conn.commit()
-    except Exception as e:
-        print(str(e))
-        result = ()
-    finally:
-        conn.close()
+    # conn = sqlite3.connect('player.db')  # define DB connection
+    with sqlite3.connect('player.db') as conn:
+        try:
+            cursor = conn.execute(sql, args)
+            result = cursor.fetchall()
+            cursor.close()
+            if cursor.rowcount > 0:
+                conn.commit()
+        except Exception as e:
+            print(str(e))
+            result = ()
+    # finally:
+        # conn.close()
     return result
 
 
