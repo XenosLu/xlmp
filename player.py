@@ -102,9 +102,6 @@ def move(src):
 @post('/save/<src:path>')
 def save(src):
     """Save play progress"""
-    # src = request.query.src
-    # progress = request.GET.get('progress')
-    # duration = request.GET.get('duration')
     progress = request.forms.get('progress')
     duration = request.forms.get('duration')
     run_sql('''replace into history (FILENAME, PROGRESS, DURATION, LATEST_DATE)
