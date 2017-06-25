@@ -33,6 +33,9 @@ div {
   text-align: center;
   background-color: #F1F2F6;
 }
+table {
+  width: 100%;
+}
 td:hover {
   /*background-color: #F9F0E2; /*#EDE6D8*/ /*#E0DDE2*/ /*#EEEEF3;*/
   background-color: #FBF3E9;
@@ -59,11 +62,14 @@ video {
 .filelist.other, .filelist small {
   color: grey;
 }
+#dlna{
+  height:100%;
+}
 #sidebar{
   opacity: 0.4;
   display: none;
   position: fixed;
-  top: 40%;
+  top: 30%;
 }
 #output {
   z-index: 99;

@@ -8,6 +8,16 @@
     <link href="/static/css/player.css" rel="stylesheet">
   </head>
   <body>
+    <div id="dlna" style="display:none">
+      {{src}}
+      <br>
+      <button onclick="$.get('/dlnaplay/{{src}}')">play</button>
+      <button onclick="$.get('/dlnapause')">pause</button>
+      <button onclick="$.get('/dlnavolume/0')">mute</button>
+      <button onclick="$.get('/dlnavolume/10')">volume-10</button>
+      <button onclick="$.get('/dlnaseek/00:01:30')">seek-1:30</button>
+      <button onclick="$.get('/dlnaseek/00:00:30')">seek-30</button>
+    </div>
     <div id="sidebar">
       <button id="history" type="button" class="btn btn-default">
         <i class="glyphicon glyphicon-list-alt"></i>
@@ -88,14 +98,16 @@ $(document).mousemove(function () {
     //showSidebar();
     $("#sidebar").show(600).delay(9999).fadeOut(800);
 });
-if (("{{src}}" == "")) {
+if ("{{mode}}" == "index") {
     history("/list");
     $("#dialog").show(250);
     $("#videosize").hide();
     $('#rate').hide();
-} else {
+} else if ("{{mode}}" == "dlna") {
+    $("#dlna").show(250);
+} else if ("{{mode}}" == "player") {
     $(document.body).append("<video poster controls preload='meta'>No video support!</video>");
-    $("video").attr("src", "/mp4/{{src}}").on("error", function () {
+    $("video").attr("src", "/video/{{src}}").on("error", function () {
         out("error");
     }).on("loadeddata", function () {  //auto load progress
         this.currentTime = Math.max({{progress}} - 0.5, 0);
@@ -117,7 +129,7 @@ if (("{{src}}" == "")) {
                 error: function (xhr) {
                     out("save: " + xhr.statusText);
                 }
-            });//}
+            });
         }
     }).on("progress", function () {  //show buffered
         var str = "";
@@ -243,6 +255,8 @@ $("#mainframe").on("click", ".folder", function () {
         history("/remove/" + this.title);
 }).on("click", ".mp4", function () {
     window.location.href = "/play/" + this.title;
+}).on("click", ".dlna", function () {
+    window.location.href = "/dlna/" + this.title;
 });
 function filelist(str) {
     $.ajax({
@@ -255,13 +269,17 @@ function filelist(str) {
                     $("#navtab li:eq(1) a").tab("show");
                 $("#clear").hide();
                 var html = "";
-                var icon = {"folder": "folder-close", "mp4": "film", "other": "file"};
+                var icon = {"folder": "folder-close", "mp4": "film", "mkv": "film", "other": "file"};
                 $.each(data, function (i, n) {
                     size = "";
                     if(n["size"])
                         size = "<br><small>" + n["size"] +"</small>";
+                    dlna = "";
+                    if(icon[n["type"]]=="film")
+                        dlna = " class='dlna' title='" + n["path"] + "'";
                     html += "<tr>" +
-                              "<td><i class='glyphicon glyphicon-" + icon[n["type"]] + "'></i></td>" +
+                              //"<td><i class='dlna glyphicon glyphicon-" + icon[n["type"]] + "' title='"+ n["path"] +"''></i></td>" +
+                              "<td" + dlna + "><i class='glyphicon glyphicon-" + icon[n["type"]] + "'></i></td>" +
                               "<td class='filelist " + n["type"] + "' title='" + n["path"] + "'>" + n["filename"] + size + "</td>" +
                               "<td class='move' title='" + n["path"] + "'>" +
                                 "<i class='glyphicon glyphicon-remove-circle'></i>" +
@@ -288,7 +306,10 @@ function history(str) {
                 var html = "";
                 $.each(data, function (i, n) {
                     html += "<tr><td class='folder' title='/" + n["path"] + "'>" +
-                                "<i class='glyphicon glyphicon-film' title='/" + n["path"] + "'></i>" +
+                                "<i class='glyphicon glyphicon-folder-close'></i>" +
+                              "</td>" +
+                              "<td class='dlna' title='" + n["filename"] + "'>" +
+                                "<i class='glyphicon glyphicon-film'></i>" +
                               "</td>" +
                               "<td class='filelist mp4' title='" + n["filename"] + "'>" + n["filename"] + 
                                 "<br><small>" + n["latest_date"] + " | " + 

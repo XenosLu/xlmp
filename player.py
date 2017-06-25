@@ -7,14 +7,17 @@ import sqlite3
 import math
 import json
 import re
+from urllib.parse import quote
 
 from bottle import route, post, template, static_file, abort, request, redirect, run  # pip install bottle  # 1.2
 
-MP4_PATH = './static/mp4'  # mp4 file path
+import dlnap  # https://github.com/cherezov/dlnap
+
+VIDEO_PATH = './static/mp4'  # mp4 file path
+URN_AVTransport_Fmt = "urn:schemas-upnp-org:service:AVTransport:{}"
 
 
 def run_sql(sql, *args):
-    # conn = sqlite3.connect('player.db')  # define DB connection
     with sqlite3.connect('player.db') as conn:
         try:
             cursor = conn.execute(sql, args)
@@ -25,13 +28,17 @@ def run_sql(sql, *args):
         except Exception as e:
             print(str(e))
             result = ()
-    # finally:
-        # conn.close()
     return result
 
 
+def time_format(time):#turn seconds into hh:mm:ss time format
+	m, s = divmod(time, 60)
+	h, m = divmod(time/60, 60)
+	return "%02d:%02d:%02d" % (h, m, s)
+
+
 def get_size(*filename):
-    size = os.path.getsize('%s/%s' % (MP4_PATH, ''.join(filename)))
+    size = os.path.getsize('%s/%s' % (VIDEO_PATH, ''.join(filename)))
     if size < 0:
         return 'Out of Range'
     if size < 1024:
@@ -59,15 +66,76 @@ def list_history():
 
 @route('/')
 def index():
-    return template('player', src='', progress=0, title='Light mp4 Player')
+    return template('player', mode='index', src='', progress=0, title='Light mp4 Player')
 
 
 @route('/play/<src:re:.*\.((?i)mp)4$>')
 def play(src):
     """Video play page"""
-    if not os.path.exists('%s/%s' % (MP4_PATH, src)):
+    if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         redirect('/')
-    return template('player', src=src, progress=load_history(src), title=src)
+    return template('player', mode='player', src=src, progress=load_history(src), title=src)
+
+@route('/dlna/<src:re:.*\.((?i)(mp4|mkv))$>')
+def dlna(src):
+    """Video DLNA play page"""
+    return template('player', mode='dlna', src=src, progress=0, title="DLNA - %s" % src)
+
+
+@route('/dlnaplay/<src:re:.*\.((?i)(mp4|mkv))$>')
+def dlna_play(src):
+    """Play video through DLNA"""
+    url = 'http://192.168.2.100/mp4/%s' % quote(src)
+    allDevices = dlnap.discover(name='', ip='', timeout=2, st=URN_AVTransport_Fmt, ssdp_version=1)
+    d = allDevices[0]
+    try:
+        d.set_current_media(url=url)
+        d.play()
+    except Exception as e:
+        print('Device is unable to play media.')
+        print('Play exception:\n{}'.format(traceback.format_exc()))
+    run_sql('''replace into history (FILENAME, PROGRESS, DURATION, LATEST_DATE)
+               values(? , ?, ?, DateTime('now', 'localtime'));''', src, 0, 0)
+    return ''
+
+
+@route('/dlnapause')
+def dlna_pause():
+    """Play video through DLNA"""
+    allDevices = dlnap.discover(name='', ip='', timeout=2, st=URN_AVTransport_Fmt, ssdp_version=1)
+    d = allDevices[0]
+    try:
+        d.pause()
+    except Exception as e:
+        print('Device is unable to pause.')
+        print('Play exception:\n{}'.format(traceback.format_exc()))
+    return ''
+
+
+@route('/dlnavolume/<v>')
+def dlna_volume(v):
+    """Play video through DLNA"""
+    allDevices = dlnap.discover(name='', ip='', timeout=2, st=URN_AVTransport_Fmt, ssdp_version=1)
+    d = allDevices[0]
+    try:
+        d.volume(v)
+    except Exception as e:
+        print('Device is unable to set volume.')
+        print('Play exception:\n{}'.format(traceback.format_exc()))
+    return ''
+
+
+@route('/dlnaseek/<position>')
+def dlna_seek(position):
+    """Play video through DLNA"""
+    allDevices = dlnap.discover(name='', ip='', timeout=2, st=URN_AVTransport_Fmt, ssdp_version=1)
+    d = allDevices[0]
+    try:
+        d.seek(position)
+    except Exception as e:
+        print('Device is unable to seek.')
+        print('Play exception:\n{}'.format(traceback.format_exc()))
+    return ''
 
 
 @route('/clear')
@@ -87,8 +155,8 @@ def remove(src):
 @route('/move/<src:path>')
 def move(src):
     """Move file to 'old' folder"""
-    file = '%s/%s' % (MP4_PATH, src)
-    dir_old = '%s/%s/old' % (MP4_PATH, os.path.dirname(src))
+    file = '%s/%s' % (VIDEO_PATH, src)
+    dir_old = '%s/%s/old' % (VIDEO_PATH, os.path.dirname(src))
     if not os.path.exists(dir_old):
         os.mkdir(dir_old)
     try:
@@ -149,34 +217,47 @@ def static(filename):
     return static_file(filename, root='./static')
 
 
-@route('/mp4/<filename:re:.*\.((?i)mp)4$>')
-def static_mp4(filename):
+# @route('/mp4/<src:re:.*\.((?i)mp)4$>')
+@route('/mp4/<src:re:.*\.((?i)(mp4|mkv))$>')
+def static_mp4(src):
     """mp4 file access
        To support large file(>2GB), you should use web server to deal with static files.
        For example, you can use "AliasMatch"/"Alias" in Apache
     """
-    return static_file(filename, root=MP4_PATH)
+    return static_file(src, root=VIDEO_PATH)
+
+
+@route('/video/<src:re:.*\.((?i)(mp4|mkv))$>')
+def static_video(src):
+    """video file access
+       To support large file(>2GB), you should use web server to deal with static files.
+       For example, you can use "AliasMatch"/"Alias" in Apache
+    """
+    return static_file(src, root=VIDEO_PATH)
 
 
 @route('/fs/<path:re:.*>')
 def fs_dir(path):
     """Get static folder list in json"""
     try:
-        list_folder, list_mp4, list_other = [], [], []
+        list_folder, list_mp4, list_mkv, list_other = [], [], [], []
         if path == '':
             up = []
         else:
             up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]
-        for file in os.listdir('%s/%s' % (MP4_PATH, path)):
-            if os.path.isdir('%s/%s%s' % (MP4_PATH, path, file)):
+        for file in os.listdir('%s/%s' % (VIDEO_PATH, path)):
+            if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, file)):
                 list_folder.append({'filename': file, 'type': 'folder', 'path': '/%s%s' % (path, file)})
             elif re.match('.*\.((?i)mp)4$', file):
                 list_mp4.append({'filename': file, 'type': 'mp4',
                                 'path': '%s%s' % (path, file), 'size': get_size(path, file)})
+            elif re.match('.*\.((?i)mkv)$', file):
+                list_mkv.append({'filename': file, 'type': 'mkv',
+                                'path': '%s%s' % (path, file), 'size': get_size(path, file)})
             else:
                 list_other.append({'filename': file, 'type': 'other',
                                   'path': '%s%s' % (path, file), 'size': get_size(path, file)})
-        return json.dumps(up + list_folder + list_mp4 + list_other)
+        return json.dumps(up + list_folder + list_mp4 + list_mkv + list_other)
     except Exception as e:
         abort(404, str(e))
 
