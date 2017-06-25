@@ -53,6 +53,7 @@ video {
   right: 0;
 }
 }
+
 .filelist {
   min-width: 14em;
 }
@@ -65,11 +66,14 @@ video {
 #dlna{
   height:100%;
 }
+#src, #progress {
+  font-size: 1.8em;
+}
 #sidebar{
   opacity: 0.4;
   display: none;
   position: fixed;
-  top: 30%;
+  top: 15%;
 }
 #output {
   z-index: 99;
@@ -83,7 +87,7 @@ video {
   text-shadow: 0.1em 0.1em 0.4em #666;
 }
 #dialog {
-  opacity: 0.8;
+  opacity: 0.85;
   box-shadow: 2px 2px 5px #333333;
   max-width: 100%;
 }

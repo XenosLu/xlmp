@@ -6,17 +6,50 @@
     <title>{{title}}</title>
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/player.css" rel="stylesheet">
+    <style>
+#position-range {
+  -webkit-appearance: none;
+  background-color: #A0D468;
+  margin-left: 7%;
+  margin-right: 7%;
+  width: 86%;
+  
+  /*border-radius: 15px;*/
+  /* width: 400px; */
+  /*height:10px;*/
+}
+#position-range::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  height: 3em;
+  width: 1.8em;
+  border: 1px;
+  /*transform: translateY(-4px);*/
+  /*background: none repeat scroll 0 0 #777;*/
+  /* border-radius: 15px; */
+  /* -webkit-box-shadow: 0 -1px 1px black inset; */
+}
+#progress-panel {
+  position: absolute;
+  bottom: 33%;
+  width: 100%;
+}
+    </style>
   </head>
   <body>
     <div id="dlna" style="display:none">
-      {{src}}
+      <span id="src"></span>
       <br>
-      <button onclick="$.get('/dlnaplay/{{src}}')">play</button>
-      <button onclick="$.get('/dlnapause')">pause</button>
-      <button onclick="$.get('/dlnavolume/0')">mute</button>
-      <button onclick="$.get('/dlnavolume/10')">volume-10</button>
-      <button onclick="$.get('/dlnaseek/00:01:30')">seek-1:30</button>
-      <button onclick="$.get('/dlnaseek/00:00:30')">seek-30</button>
+      <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnaplay/{{src}}')">play</button>
+      <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnapause')">pause</button>
+      <br>
+      <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnavolume/0')">mute</button>
+      <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnavolume/10')">volume-10</button>
+      <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnaseek/00:01:30')">seek-1:30</button>
+      <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnaseek/00:00:30')">seek-30</button>
+      <div id="progress-panel">
+        <span id="progress"></span>
+        <input type="range" id="position-range" min="0">
+      </div>
     </div>
     <div id="sidebar">
       <button id="history" type="button" class="btn btn-default">
@@ -98,13 +131,28 @@ $(document).mousemove(function () {
     //showSidebar();
     $("#sidebar").show(600).delay(9999).fadeOut(800);
 });
+function get_dlna_position(){
+    $.get("/dlnapositioninfo",function(data){
+        $("#position-range").attr("max",timeToSecond(data["TrackDuration"]));
+        $("#position-range").val(timeToSecond(data["RelTime"]));
+        $('#progress').text(data["RelTime"] + "/" + data["TrackDuration"]);
+        $('#src').text(decodeURI(data["TrackURI"]));
+    });
+}
 if ("{{mode}}" == "index") {
     history("/list");
     $("#dialog").show(250);
     $("#videosize").hide();
-    $('#rate').hide();
+    $("#rate").hide();
 } else if ("{{mode}}" == "dlna") {
+    get_dlna_position();
     $("#dlna").show(250);
+    setInterval("get_dlna_position()",500);
+    $("#position-range").on("change",function() {
+        $.get("/dlnaseek/" + secondToTime($(this).val()));
+    }).on("input",function() {
+        out(secondToTime($(this).val()));
+    });
 } else if ("{{mode}}" == "player") {
     $(document.body).append("<video poster controls preload='meta'>No video support!</video>");
     $("video").attr("src", "/video/{{src}}").on("error", function () {
@@ -113,7 +161,7 @@ if ("{{mode}}" == "index") {
         this.currentTime = Math.max({{progress}} - 0.5, 0);
         text = "<small>Play from</small><br>";
     }).on("seeking", function () {  //show progress when changed
-        out(text + formatTime(this.currentTime) + '/' + formatTime(this.duration));
+        out(text + secondToTime(this.currentTime) + '/' + secondToTime(this.duration));
         text = "";
     }).on("timeupdate", function () { //auto save play progress
         lastplaytime = new Date().getTime(); //to detect if video is playing
@@ -137,7 +185,7 @@ if ("{{mode}}" == "index") {
         //if ($("video").get(0).networkState != 1) {
             for (i = 0, t = this.buffered.length; i < t; i++) {
                 if (this.currentTime >= this.buffered.start(i) && this.currentTime <= this.buffered.end(i))
-                    str = formatTime(this.buffered.start(i)) + "-" + formatTime(this.buffered.end(i)) + "<br>";
+                    str = secondToTime(this.buffered.start(i)) + "-" + secondToTime(this.buffered.end(i)) + "<br>";
             }
             out(str + "<small>buffering...</small>");
         }
@@ -152,10 +200,13 @@ function rate(x) {
     out(x + "X");
     $("video").get(0).playbackRate = x;
 }
-function formatTime(time) {
-    return Math.floor(time / 3600) + ":" + ("0" + Math.floor(time %3600 / 60)).slice(-2) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
+function secondToTime(time) {
+    return ("0" + Math.floor(time / 3600)).slice(-2) + ":" + ("0" + Math.floor(time %3600 / 60)).slice(-2) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
 }
-
+function timeToSecond(time) {
+    t = String(time).split(":");
+    return parseInt(t[0]) * 3600 + parseInt(t[1]) * 60 + parseInt(t[2]);
+}
 function adapt() {
     $("#videosize").text("orign");
     $("#mainframe").css("max-height", ($(window).height() - 240) + "px");
@@ -194,7 +245,7 @@ $(document).on('touchmove',function(e) {  //test function
             $("video").get(0).muted = true;
             $("video").get(0).playbackRate = 9 * x / Math.abs(x);
             window.clearInterval(int);
-            var int = setInterval("out(text+formatTime($('video').get(0).currentTime)+ '/' + formatTime($('video').get(0).duration))", 50);
+            var int = setInterval("out(text+secondToTime($('video').get(0).currentTime)+ '/' + secondToTime($('video').get(0).duration))", 50);
        }
     }
 });
@@ -313,7 +364,7 @@ function history(str) {
                               "</td>" +
                               "<td class='filelist mp4' title='" + n["filename"] + "'>" + n["filename"] + 
                                 "<br><small>" + n["latest_date"] + " | " + 
-                                formatTime(n["progress"]) + "/" + formatTime(n["duration"]) + "</small>" + 
+                                secondToTime(n["progress"]) + "/" + secondToTime(n["duration"]) + "</small>" + 
                               "</td>" + 
                               "<td class='remove' title='" + n["filename"] + "'>" +
                                 "<i class='glyphicon glyphicon-remove-circle'></i>" + 

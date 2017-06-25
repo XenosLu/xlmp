@@ -85,7 +85,7 @@ def dlna(src):
 @route('/dlnaplay/<src:re:.*\.((?i)(mp4|mkv))$>')
 def dlna_play(src):
     """Play video through DLNA"""
-    url = 'http://192.168.2.100/mp4/%s' % quote(src)
+    url = 'http://192.168.2.100/video/%s' % quote(src)
     allDevices = dlnap.discover(name='', ip='', timeout=2, st=URN_AVTransport_Fmt, ssdp_version=1)
     d = allDevices[0]
     try:
@@ -110,6 +110,18 @@ def dlna_pause():
         print('Device is unable to pause.')
         print('Play exception:\n{}'.format(traceback.format_exc()))
     return ''
+
+
+@route('/dlnapositioninfo')
+def dlna_position_info():
+    """Play video through DLNA"""
+    allDevices = dlnap.discover(name='', ip='', timeout=2, st=URN_AVTransport_Fmt, ssdp_version=1)
+    d = allDevices[0]
+    try:
+        return dlnap._xpath(d.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
+    except Exception as e:
+        print('Device is unable to pause.')
+        print('Play exception:\n{}'.format(traceback.format_exc()))
 
 
 @route('/dlnavolume/<v>')
@@ -217,14 +229,13 @@ def static(filename):
     return static_file(filename, root='./static')
 
 
-# @route('/mp4/<src:re:.*\.((?i)mp)4$>')
-@route('/mp4/<src:re:.*\.((?i)(mp4|mkv))$>')
-def static_mp4(src):
-    """mp4 file access
-       To support large file(>2GB), you should use web server to deal with static files.
-       For example, you can use "AliasMatch"/"Alias" in Apache
-    """
-    return static_file(src, root=VIDEO_PATH)
+# @route('/mp4/<src:re:.*\.((?i)(mp4|mkv))$>')
+# def static_mp4(src):
+    # """mp4 file access
+       # To support large file(>2GB), you should use web server to deal with static files.
+       # For example, you can use "AliasMatch"/"Alias" in Apache
+    # """
+    # return static_file(src, root=VIDEO_PATH)
 
 
 @route('/video/<src:re:.*\.((?i)(mp4|mkv))$>')
@@ -269,5 +280,6 @@ run_sql('''create table if not exists history
                 DURATION float, LATEST_DATE datetime not null);''')
 
 if __name__ == '__main__':  # for debug
-    os.system('start http://127.0.0.1:8081/')  # open the page automatic
+    # os.system('start http://127.0.0.1:8081/')  # open the page automatic
+    os.system('start http://127.0.0.1:8081/dlna/test.mp4')  # open the page automatic
     run(host='0.0.0.0', port=8081, debug=True)  # run demo server
