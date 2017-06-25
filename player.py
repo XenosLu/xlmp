@@ -89,8 +89,17 @@ def dlna_play(src):
     allDevices = dlnap.discover(name='', ip='', timeout=2, st=URN_AVTransport_Fmt, ssdp_version=1)
     d = allDevices[0]
     try:
-        d.set_current_media(url=url)
-        d.play()
+        state = dlnap._xpath(d.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')
+        if state == 'STOPPED':
+            print('stop')
+            d.stop()  # PAUSED_PLAYBACK, PLAYING
+        # if url!=url
+        if dlnap._xpath(d.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse/TrackURI') != url:
+            print('load')
+            d.set_current_media(url=url)
+        if state != 'PLAYING':
+            d.play()
+            print('play')
     except Exception as e:
         print('Device is unable to play media.')
         print('Play exception:\n{}'.format(traceback.format_exc()))

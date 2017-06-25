@@ -10,9 +10,9 @@
 #position-range {
   -webkit-appearance: none;
   background-color: #A0D468;
-  margin-left: 7%;
-  margin-right: 7%;
-  width: 86%;
+  margin-left: 8%;
+  margin-right: 8%;
+  width: 84%;
   
   /*border-radius: 15px;*/
   /* width: 400px; */
@@ -22,15 +22,25 @@
   -webkit-appearance: none;
   height: 3em;
   width: 1.8em;
-  border: 1px;
   /*transform: translateY(-4px);*/
   /*background: none repeat scroll 0 0 #777;*/
   /* border-radius: 15px; */
   /* -webkit-box-shadow: 0 -1px 1px black inset; */
 }
+#volume {
+  -webkit-appearance: none;
+  background-color: #F0AD4E;
+  width: 18em;
+  margin: auto;
+}
+#volume::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  height: 1.8em;
+  width: 3em;
+}
 #progress-panel {
   position: absolute;
-  bottom: 33%;
+  bottom: 25%;
   width: 100%;
 }
     </style>
@@ -42,13 +52,14 @@
       <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnaplay/{{src}}')">play</button>
       <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnapause')">pause</button>
       <br>
-      <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnavolume/0')">mute</button>
-      <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnavolume/10')">volume-10</button>
       <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnaseek/00:01:30')">seek-1:30</button>
       <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnaseek/00:00:30')">seek-30</button>
       <div id="progress-panel">
         <span id="progress"></span>
         <input type="range" id="position-range" min="0">
+        <br>
+        <br>
+        <input type="range" id="volume" min="0" value="12" max="100">
       </div>
     </div>
     <div id="sidebar">
@@ -147,11 +158,16 @@ if ("{{mode}}" == "index") {
 } else if ("{{mode}}" == "dlna") {
     get_dlna_position();
     $("#dlna").show(250);
-    setInterval("get_dlna_position()",500);
-    $("#position-range").on("change",function() {
+    setInterval("get_dlna_position()",800);
+    $("#position-range").on("change", function() {
         $.get("/dlnaseek/" + secondToTime($(this).val()));
-    }).on("input",function() {
+    }).on("input", function() {
         out(secondToTime($(this).val()));
+    });
+    $("#volume").on("change",function() {
+        $.get("/dlnavolume/" + $(this).val());
+    }).on("input", function() {
+        out($(this).val());
     });
 } else if ("{{mode}}" == "player") {
     $(document.body).append("<video poster controls preload='meta'>No video support!</video>");
