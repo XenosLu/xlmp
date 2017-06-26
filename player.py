@@ -253,15 +253,6 @@ def static(filename):
     return static_file(filename, root='./static')
 
 
-# @route('/mp4/<src:re:.*\.((?i)(mp4|mkv))$>')
-# def static_mp4(src):
-    # """mp4 file access
-       # To support large file(>2GB), you should use web server to deal with static files.
-       # For example, you can use "AliasMatch"/"Alias" in Apache
-    # """
-    # return static_file(src, root=VIDEO_PATH)
-
-
 @route('/video/<src:re:.*\.((?i)(mp4|mkv))$>')
 def static_video(src):
     """video file access
