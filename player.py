@@ -14,7 +14,14 @@ from bottle import route, post, template, static_file, abort, request, redirect,
 import dlnap  # https://github.com/cherezov/dlnap
 
 VIDEO_PATH = './static/mp4'  # mp4 file path
-URN_AVTransport_Fmt = "urn:schemas-upnp-org:service:AVTransport:{}"
+DLNAP = None
+
+
+def discover_dlnap():
+    global DLNAP
+    allDevices = dlnap.discover(name='', ip='', timeout=3, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
+    if len(allDevices) > 0:
+        DLNAP = allDevices[0]
 
 
 def run_sql(sql, *args):
@@ -56,6 +63,11 @@ def load_history(name):
     return progress[0][0]
 
 
+def save_history(src, progress, duration):
+    run_sql('''replace into history (FILENAME, PROGRESS, DURATION, LATEST_DATE)
+               values(? , ?, ?, DateTime('now', 'localtime'));''', src, progress, duration)
+
+
 @route('/list')
 def list_history():
     """Return play history list"""
@@ -68,6 +80,10 @@ def list_history():
 def index():
     return template('player', mode='index', src='', progress=0, title='Light mp4 Player')
 
+@route('/test')
+def test():
+    return 'http://%s/video/%s' % (request.urlparts.netloc, quote('xxx.mp4'))
+
 
 @route('/play/<src:re:.*\.((?i)mp)4$>')
 def play(src):
@@ -76,24 +92,27 @@ def play(src):
         redirect('/')
     return template('player', mode='player', src=src, progress=load_history(src), title=src)
 
+
 @route('/dlna/<src:re:.*\.((?i)(mp4|mkv))$>')
 def dlna(src):
     """Video DLNA play page"""
+    if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
+        redirect('/')
+    discover_dlnap()
     return template('player', mode='dlna', src=src, progress=0, title="DLNA - %s" % src)
 
 
 @route('/dlnaplay/<src:re:.*\.((?i)(mp4|mkv))$>')
 def dlna_play(src):
     """Play video through DLNA"""
-    url = 'http://192.168.2.100/video/%s' % quote(src)
-    allDevices = dlnap.discover(name='', ip='', timeout=2, st=URN_AVTransport_Fmt, ssdp_version=1)
+    url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
+    allDevices = dlnap.discover(name='', ip='', timeout=2, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
     d = allDevices[0]
     try:
         state = dlnap._xpath(d.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')
         if state == 'STOPPED':
             print('stop')
             d.stop()  # PAUSED_PLAYBACK, PLAYING
-        # if url!=url
         if dlnap._xpath(d.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse/TrackURI') != url:
             print('load')
             d.set_current_media(url=url)
@@ -102,61 +121,58 @@ def dlna_play(src):
             print('play')
     except Exception as e:
         print('Device is unable to play media.')
-        print('Play exception:\n{}'.format(traceback.format_exc()))
-    run_sql('''replace into history (FILENAME, PROGRESS, DURATION, LATEST_DATE)
-               values(? , ?, ?, DateTime('now', 'localtime'));''', src, 0, 0)
-    return ''
+        print('Play exception:\n%S' % e)
+    save_history(src, 0, 0)
+    return
 
 
 @route('/dlnapause')
 def dlna_pause():
     """Play video through DLNA"""
-    allDevices = dlnap.discover(name='', ip='', timeout=2, st=URN_AVTransport_Fmt, ssdp_version=1)
+    allDevices = dlnap.discover(name='', ip='', timeout=2, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
     d = allDevices[0]
     try:
         d.pause()
     except Exception as e:
         print('Device is unable to pause.')
-        print('Play exception:\n{}'.format(traceback.format_exc()))
-    return ''
+        print('Play exception:\n%S' % e)
+    return
 
 
 @route('/dlnapositioninfo')
 def dlna_position_info():
     """Play video through DLNA"""
-    allDevices = dlnap.discover(name='', ip='', timeout=2, st=URN_AVTransport_Fmt, ssdp_version=1)
-    d = allDevices[0]
+    # allDevices = dlnap.discover(name='', ip='', timeout=2, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
+    # d = allDevices[0]
     try:
-        return dlnap._xpath(d.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
+        return dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
     except Exception as e:
         print('Device is unable to pause.')
-        print('Play exception:\n{}'.format(traceback.format_exc()))
+        print('Play exception:\n%S' % e)
 
 
 @route('/dlnavolume/<v>')
 def dlna_volume(v):
     """Play video through DLNA"""
-    allDevices = dlnap.discover(name='', ip='', timeout=2, st=URN_AVTransport_Fmt, ssdp_version=1)
+    allDevices = dlnap.discover(name='', ip='', timeout=2, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
     d = allDevices[0]
     try:
         d.volume(v)
     except Exception as e:
         print('Device is unable to set volume.')
-        print('Play exception:\n{}'.format(traceback.format_exc()))
-    return ''
+        print('Play exception:\n%S' % e)
 
 
 @route('/dlnaseek/<position>')
 def dlna_seek(position):
     """Play video through DLNA"""
-    allDevices = dlnap.discover(name='', ip='', timeout=2, st=URN_AVTransport_Fmt, ssdp_version=1)
+    allDevices = dlnap.discover(name='', ip='', timeout=2, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
     d = allDevices[0]
     try:
         d.seek(position)
     except Exception as e:
         print('Device is unable to seek.')
-        print('Play exception:\n{}'.format(traceback.format_exc()))
-    return ''
+        print('Play exception:\n%S' % e)
 
 
 @route('/clear')
@@ -190,11 +206,10 @@ def move(src):
 
 @post('/save/<src:path>')
 def save(src):
-    """Save play progress"""
+    """Save play position"""
     progress = request.forms.get('progress')
     duration = request.forms.get('duration')
-    run_sql('''replace into history (FILENAME, PROGRESS, DURATION, LATEST_DATE)
-               values(? , ?, ?, DateTime('now', 'localtime'));''', src, progress, duration)
+    save_history(src, progress, duration)
     return
 
 
@@ -290,5 +305,5 @@ run_sql('''create table if not exists history
 
 if __name__ == '__main__':  # for debug
     # os.system('start http://127.0.0.1:8081/')  # open the page automatic
-    os.system('start http://127.0.0.1:8081/dlna/test.mp4')  # open the page automatic
-    run(host='0.0.0.0', port=8081, debug=True)  # run demo server
+    # os.system('start http://127.0.0.1:8081/dlna/test.mp4')  # open the page automatic
+    run(host='0.0.0.0', port=8081, debug=True, reloader=True)  # run demo server
