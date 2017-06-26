@@ -38,10 +38,10 @@ def run_sql(sql, *args):
     return result
 
 
-def time_format(time):#turn seconds into hh:mm:ss time format
-	m, s = divmod(time, 60)
-	h, m = divmod(time/60, 60)
-	return "%02d:%02d:%02d" % (h, m, s)
+def time_format(time):  # turn seconds into hh:mm:ss time format
+    m, s = divmod(time, 60)
+    h, m = divmod(time/60, 60)
+    return "%02d:%02d:%02d" % (h, m, s)
 
 
 def get_size(*filename):
@@ -79,6 +79,7 @@ def list_history():
 @route('/')
 def index():
     return template('player', mode='index', src='', progress=0, title='Light mp4 Player')
+
 
 @route('/test')
 def test():
@@ -121,7 +122,7 @@ def dlna_play(src):
             print('play')
     except Exception as e:
         print('Device is unable to play media.')
-        print('Play exception:\n%S' % e)
+        print('Play exception:\n%s' % e)
     save_history(src, 0, 0)
     return
 
@@ -135,7 +136,7 @@ def dlna_pause():
         d.pause()
     except Exception as e:
         print('Device is unable to pause.')
-        print('Play exception:\n%S' % e)
+        print('Play exception:\n%s' % e)
     return
 
 
@@ -148,7 +149,7 @@ def dlna_position_info():
         return dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
     except Exception as e:
         print('Device is unable to pause.')
-        print('Play exception:\n%S' % e)
+        print('Play exception:\n%s' % e)
 
 
 @route('/dlnavolume/<v>')
@@ -160,7 +161,7 @@ def dlna_volume(v):
         d.volume(v)
     except Exception as e:
         print('Device is unable to set volume.')
-        print('Play exception:\n%S' % e)
+        print('Play exception:\n%s' % e)
 
 
 @route('/dlnaseek/<position>')
@@ -172,7 +173,7 @@ def dlna_seek(position):
         d.seek(position)
     except Exception as e:
         print('Device is unable to seek.')
-        print('Play exception:\n%S' % e)
+        print('Play exception:\n%s' % e)
 
 
 @route('/clear')
