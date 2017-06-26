@@ -29,7 +29,6 @@ a {
   cursor: default;
 }
 div {
-  z-index: 10;
   text-align: center;
   background-color: #F1F2F6;
 }
@@ -87,6 +86,7 @@ video {
   text-shadow: 0.1em 0.1em 0.4em #666;
 }
 #dialog {
+  z-index: 10;
   opacity: 0.85;
   box-shadow: 2px 2px 5px #333333;
   max-width: 100%;
