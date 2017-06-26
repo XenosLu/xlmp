@@ -512,6 +512,13 @@ class DlnapDevice:
       packet = self._create_packet_rcs('SetVolume', {'InstanceID':instance_id, 'DesiredVolume':vol, 'Channel':'Master'})
       _send_tcp((self.ip, self.port), packet)
 
+   def get_volume(self, vol, instance_id = 0):
+      """
+      xenos
+      """#SETMUTE
+      packet = self._create_packet_rcs('GetVolume', {'InstanceID':instance_id, 'Channel':'Master'})
+      _send_tcp((self.ip, self.port), packet)
+
    def play(self, instance_id = 0):
       """ Play media that was already set as current.
 
