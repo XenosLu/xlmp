@@ -13,16 +13,12 @@
   margin-left: 8%;
   margin-right: 8%;
   width: 84%;
-  
-  /*border-radius: 15px;*/
-  /* width: 400px; */
-  /*height:10px;*/
 }
 #position-range::-webkit-slider-thumb{
   -webkit-appearance: none;
   height: 3em;
   width: 1.8em;
-  /*transform: translateY(-4px);*/
+  border-radius: 3px;
   /*background: none repeat scroll 0 0 #777;*/
   /* border-radius: 15px; */
   /* -webkit-box-shadow: 0 -1px 1px black inset; */
@@ -52,6 +48,18 @@
       <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnaplay/{{src}}')">play</button>
       <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnapause')">pause</button>
       <br>
+      <div class="btn-group dropdown">
+        <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown">
+          seek<span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="#" onclick="$.get('/dlnaseek/00:00:15')">00:15</a></li>
+          <li><a href="#" onclick="$.get('/dlnaseek/00:00:30')">00:30</a></li>
+          <li><a href="#" onclick="$.get('/dlnaseek/00:01:00')">01:00</a></li>
+          <li class="divider"></li>
+          <li><a href="#" onclick="$.get('/dlnaseek/00:01:30')">01:30</a></li>
+        </ul>
+      </div>
       <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnaseek/00:01:30')">seek-1:30</button>
       <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnaseek/00:00:30')">seek-30</button>
       <div id="progress-panel">
