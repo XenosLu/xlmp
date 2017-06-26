@@ -60,8 +60,6 @@
           <li><a href="#" onclick="$.get('/dlnaseek/00:01:30')">01:30</a></li>
         </ul>
       </div>
-      <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnaseek/00:01:30')">seek-1:30</button>
-      <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnaseek/00:00:30')">seek-30</button>
       <div id="progress-panel">
         <span id="progress"></span>
         <input type="range" id="position-range" min="0">
