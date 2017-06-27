@@ -7,7 +7,9 @@ import sqlite3
 import math
 import json
 import re
-from urllib.parse import quote
+from urllib.parse import quote, unquote
+from time import sleep
+from threading import Thread
 
 from bottle import route, post, template, static_file, abort, request, redirect, run  # pip install bottle  # 1.2
 
@@ -15,13 +17,14 @@ import dlnap  # https://github.com/cherezov/dlnap
 
 VIDEO_PATH = './static/mp4'  # mp4 file path
 DLNAP = None
-
+DLNA_STATE = None
 
 def discover_dlnap():
     global DLNAP
-    allDevices = dlnap.discover(name='', ip='', timeout=3, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
-    if len(allDevices) > 0:
-        DLNAP = allDevices[0]
+    if not DLNAP:
+        allDevices = dlnap.discover(name='', ip='', timeout=2, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
+        if len(allDevices) > 0:
+            DLNAP = allDevices[0]
 
 
 def run_sql(sql, *args):
@@ -38,10 +41,16 @@ def run_sql(sql, *args):
     return result
 
 
-def time_format(time):  # turn seconds into hh:mm:ss time format
+def second_to_time(time):  # turn seconds into hh:mm:ss time format
     m, s = divmod(time, 60)
     h, m = divmod(time/60, 60)
-    return "%02d:%02d:%02d" % (h, m, s)
+    return '%02d:%02d:%02d' % (h, m, s)
+
+
+def time_to_second(time):  # turn hh:mm:ss time format into seconds
+    # t = str(time).split(':')
+    # return int(t[0]) * 3600 + int(t[1]) * 60 + int(t[2])
+    return sum([int(i)*60**n for n,i in enumerate(str(time).split(':')[::-1])])
 
 
 def get_size(*filename):
@@ -57,33 +66,59 @@ def get_size(*filename):
 
 
 def load_history(name):
-    progress = run_sql('select PROGRESS from history where FILENAME=?', name)
-    if len(progress) == 0:
+    position = run_sql('select PROGRESS from history where FILENAME=?', name)
+    if len(position) == 0:
         return 0
-    return progress[0][0]
+    return position[0][0]
 
 
-def save_history(src, progress, duration):
+def save_history(src, position, duration):
+    if position < 10 or duration < 10:
+        return
     run_sql('''replace into history (FILENAME, PROGRESS, DURATION, LATEST_DATE)
-               values(? , ?, ?, DateTime('now', 'localtime'));''', src, progress, duration)
+               values(? , ?, ?, DateTime('now', 'localtime'));''', src, position, duration)
 
 
 @route('/list')
 def list_history():
     """Return play history list"""
-    return json.dumps([{'filename': s[0], 'progress': s[1], 'duration': s[2],
+    return json.dumps([{'filename': s[0], 'position': s[1], 'duration': s[2],
                         'latest_date': s[3], 'path': os.path.dirname(s[0])}
                        for s in run_sql('select * from history order by LATEST_DATE desc')])
 
 
 @route('/')
 def index():
-    return template('player', mode='index', src='', progress=0, title='Light mp4 Player')
+    return template('player', mode='index', src='', position=0, title='Light mp4 Player')
 
 
 @route('/test')
 def test():
-    return 'http://%s/video/%s' % (request.urlparts.netloc, quote('xxx.mp4'))
+    global DLNA_STATE
+    return str(DLNA_STATE)
+
+def dlna_tracker():
+    global DLNA_STATE
+    while True:
+        try:
+            DLNA_STATE = dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
+            DLNA_STATE['TrackURI'] = 
+            src = unquote(re.sub('http://.*/video/', '', dic['TrackURI'][0]))
+            save_history(src, time_to_second(dic['RelTime'][0]), time_to_second(dic['TrackDuration'][0]))
+            sleep(3)
+            # state = dlnap._xpath(DLNAP.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK, PLAYING
+        except Exception as e:
+            print(e)
+
+
+@route('/testth')
+def testth():
+    
+    t = Thread(target=dlna_tracker)
+    t.setDaemon(True)
+    t.start()
+    global TTT
+    return str(TTT)
 
 
 @route('/play/<src:re:.*\.((?i)mp)4$>')
@@ -91,7 +126,7 @@ def play(src):
     """Video play page"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         redirect('/')
-    return template('player', mode='player', src=src, progress=load_history(src), title=src)
+    return template('player', mode='player', src=src, position=load_history(src), title=src)
 
 
 @route('/dlna/<src:re:.*\.((?i)(mp4|mkv))$>')
@@ -100,80 +135,83 @@ def dlna(src):
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         redirect('/')
     discover_dlnap()
-    return template('player', mode='dlna', src=src, progress=0, title="DLNA - %s" % src)
-
-
-@route('/dlnaplay/<src:re:.*\.((?i)(mp4|mkv))$>')
-def dlna_play(src):
-    """Play video through DLNA"""
+    # if not DLNAP:
+        # redirect('/')
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
-    allDevices = dlnap.discover(name='', ip='', timeout=2, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
-    d = allDevices[0]
     try:
-        state = dlnap._xpath(d.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')
-        if state == 'STOPPED':
-            print('stop')
-            d.stop()  # PAUSED_PLAYBACK, PLAYING
-        if dlnap._xpath(d.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse/TrackURI') != url:
-            print('load')
-            d.set_current_media(url=url)
-        if state != 'PLAYING':
-            d.play()
-            print('play')
+        if dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse/TrackURI') != url:
+            DLNAP.stop()
+            DLNAP.set_current_media(url=url)
+            DLNAP.play()
+            position = load_history(src)
+            if position:
+                sleep(1.9)
+                DLNAP.seek(second_to_time(position))
     except Exception as e:
-        print('Device is unable to play media.')
-        print('Play exception:\n%s' % e)
-    save_history(src, 0, 0)
-    return
+        print(e)
+    return template('player', mode='dlna', src=src, position=0, title="DLNA - %s" % src)
+
+
+@route('/dlnaplay')
+def dlna_play():
+    """Play video through DLNA"""
+    discover_dlnap()
+    DLNAP.play()
+    # try:
+        # state = dlnap._xpath(DLNAP.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK, PLAYING
+        # print(1)
+        # # if state == 'STOPPED':
+            # # print('stop')
+            # # DLNAP.stop()  # PAUSED_PLAYBACK, PLAYING
+        # if dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse/TrackURI') != url:
+            # print('load')
+        # DLNAP.set_current_media(url=url)
+        # if state != 'PLAYING':
+            # DLNAP.play()
+            # # DLNAP.seek(second_to_time(load_history(src)))
+            # print('play')
 
 
 @route('/dlnapause')
 def dlna_pause():
     """Play video through DLNA"""
-    allDevices = dlnap.discover(name='', ip='', timeout=2, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
-    d = allDevices[0]
-    try:
-        d.pause()
-    except Exception as e:
-        print('Device is unable to pause.')
-        print('Play exception:\n%s' % e)
-    return
+    discover_dlnap()
+    DLNAP.pause()
 
 
-@route('/dlnapositioninfo')
-def dlna_position_info():
+@route('/dlnastop')
+def dlna_stop():
     """Play video through DLNA"""
-    # allDevices = dlnap.discover(name='', ip='', timeout=2, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
-    # d = allDevices[0]
+    discover_dlnap()
+    DLNAP.stop()
+
+
+@route('/dlnainfo')
+def dlna_info():
+    """Play video through DLNA"""
+    discover_dlnap()
+    # state = dlnap._xpath(DLNAP.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK, PLAYING
     try:
-        return dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
+        dic = dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
+        src = unquote(re.sub('http://.*/video/', '', dic['TrackURI'][0]))
+        save_history(src, time_to_second(dic['RelTime'][0]), time_to_second(dic['TrackDuration'][0]))
+        return dic
     except Exception as e:
-        print('Device is unable to pause.')
-        print('Play exception:\n%s' % e)
+        print(e)
 
 
 @route('/dlnavolume/<v>')
 def dlna_volume(v):
     """Play video through DLNA"""
-    allDevices = dlnap.discover(name='', ip='', timeout=2, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
-    d = allDevices[0]
-    try:
-        d.volume(v)
-    except Exception as e:
-        print('Device is unable to set volume.')
-        print('Play exception:\n%s' % e)
+    discover_dlnap()
+    DLNAP.volume(v)
 
 
 @route('/dlnaseek/<position>')
 def dlna_seek(position):
     """Play video through DLNA"""
-    allDevices = dlnap.discover(name='', ip='', timeout=2, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
-    d = allDevices[0]
-    try:
-        d.seek(position)
-    except Exception as e:
-        print('Device is unable to seek.')
-        print('Play exception:\n%s' % e)
+    discover_dlnap()
+    DLNAP.seek(position)
 
 
 @route('/clear')
@@ -208,10 +246,9 @@ def move(src):
 @post('/save/<src:path>')
 def save(src):
     """Save play position"""
-    progress = request.forms.get('progress')
+    position = request.forms.get('position')
     duration = request.forms.get('duration')
-    save_history(src, progress, duration)
-    return
+    save_history(src, position, duration)
 
 
 @post('/suspend')

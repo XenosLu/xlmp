@@ -7,47 +7,75 @@
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/player.css" rel="stylesheet">
     <style>
+input[type=range]::-moz-range-track {
+  height: 0;
+}
 #position-range {
   -webkit-appearance: none;
-  background-color: #A0D468;
+  background: #A0D468;
   margin-left: 8%;
   margin-right: 8%;
   width: 84%;
+  height: 1em;
+  margin-top: 2em;
+  margin-bottom: 5em;
 }
 #position-range::-webkit-slider-thumb{
   -webkit-appearance: none;
   height: 3em;
-  width: 1.8em;
-  border-radius: 3px;
-  /*background: none repeat scroll 0 0 #777;*/
-  /* border-radius: 15px; */
-  /* -webkit-box-shadow: 0 -1px 1px black inset; */
+  width: 1.6em;
+}
+#position-range::-moz-range-thumb {
+  -moz-appearance: none;
+  height: 1.8em;
+  width: 0.5em;
+  border-radius: 0;
 }
 #volume {
   -webkit-appearance: none;
   background-color: #F0AD4E;
   width: 18em;
+  height: 0.5em;
   margin: auto;
 }
 #volume::-webkit-slider-thumb{
   -webkit-appearance: none;
-  height: 1.8em;
+  height: 1.6em;
   width: 3em;
+  border-radius: 0.2em;
 }
-#progress-panel {
-  position: absolute;
-  bottom: 25%;
+#volume::-moz-range-thumb {
+  -moz-appearance: none;
+  height: 0.6em;
+  width: 1.5em;
+  border-radius: 0;
+}
+#src {
   width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#position {
+  margin-top: 10em;
+}
+#tabFrame {
+  overflow: auto;
+  background-color: #F1F2F6;
+  /*
+  min-height: 9em;
+  min-width: 18em;
+  max-width: 60em;
+  width: 100%;
+  */
 }
     </style>
   </head>
   <body>
-    <div id="dlna" style="display:none">
-      <span id="src"></span>
-      <br>
-      <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnaplay/{{src}}')">play</button>
+    <div class="col-xs-12 col-sm-6 col-md-5" id="dlna" style="display:none">
+      <h1 id="src"></h1>
+      <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnaplay')">play</button>
       <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnapause')">pause</button>
-      <br>
+      <button type="button" class="btn btn-default btn-lg" onclick="$.get('/dlnastop')">stop</button>
       <div class="btn-group dropdown">
         <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown">
           seek<span class="caret"></span>
@@ -60,36 +88,32 @@
           <li><a href="#" onclick="$.get('/dlnaseek/00:01:30')">01:30</a></li>
         </ul>
       </div>
-      <div id="progress-panel">
-        <span id="progress"></span>
-        <input type="range" id="position-range" min="0">
-        <br>
-        <br>
+        <h3 id="position"></h3>
+        <input type="range" id="position-range" min="0" max="600">
         <input type="range" id="volume" min="0" value="12" max="100">
-      </div>
     </div>
     <div id="sidebar">
       <button id="history" type="button" class="btn btn-default">
         <i class="glyphicon glyphicon-list-alt"></i>
       </button>
     </div>
-    <div id="dialog" style="display:none">
+    <div class="col-xs-12 col-sm-6 col-md-5" id="dialog" style="display:none">
       <div class="bg-info">
         <button onClick="$('#dialog').hide(250);" type="button" class="close">&times;</button>
         <ul id="navtab" class="nav nav-tabs">
           <li class="active">
-            <a href="#mainframe" data-toggle="tab" onclick="history('/list')">
+            <a href="#tabFrame" data-toggle="tab" onclick="history('/list')">
               <i class="glyphicon glyphicon-list"></i>History
             </a>
           </li>
           <li>
-            <a href="#mainframe" data-toggle="tab" onclick="filelist('/fs/')">
+            <a href="#tabFrame" data-toggle="tab" onclick="filelist('/fs/')">
               <i class="glyphicon glyphicon-home"></i>Home dir
             </a>
           </li>
         </ul>
       </div>
-      <div id="mainframe" class="tab-pane fade in">
+      <div id="tabFrame" class="tab-pane fade in">
         <table class="table-striped table-responsive table-condensed">
           <tbody id="list">
           </tbody>
@@ -141,18 +165,13 @@ var text="";
 var lastplaytime = 0;  //in seconds
 
 window.onload = adapt;
-$(window).resize(function () {
-    adapt();
-});
-$(document).mousemove(function () {
-    //showSidebar();
-    $("#sidebar").show(600).delay(9999).fadeOut(800);
-});
+$(window).resize(adapt);
+$(document).mousemove(showSidebar);
 function get_dlna_position(){
-    $.get("/dlnapositioninfo",function(data){
+    $.get("/dlnainfo",function(data){
         $("#position-range").attr("max",timeToSecond(data["TrackDuration"]));
         $("#position-range").val(timeToSecond(data["RelTime"]));
-        $('#progress').text(data["RelTime"] + "/" + data["TrackDuration"]);
+        $('#position').text(data["RelTime"] + "/" + data["TrackDuration"]);
         $('#src').text(decodeURI(data["TrackURI"]));
     });
 }
@@ -164,7 +183,7 @@ if ("{{mode}}" == "index") {
 } else if ("{{mode}}" == "dlna") {
     get_dlna_position();
     $("#dlna").show(250);
-    setInterval("get_dlna_position()",800);
+    //setInterval("get_dlna_position()",1500);
     $("#position-range").on("change", function() {
         $.get("/dlnaseek/" + secondToTime($(this).val()));
     }).on("input", function() {
@@ -179,19 +198,19 @@ if ("{{mode}}" == "index") {
     $(document.body).append("<video poster controls preload='meta'>No video support!</video>");
     $("video").attr("src", "/video/{{src}}").on("error", function () {
         out("error");
-    }).on("loadeddata", function () {  //auto load progress
-        this.currentTime = Math.max({{progress}} - 0.5, 0);
+    }).on("loadeddata", function () {  //auto load position
+        this.currentTime = Math.max({{position}} - 0.5, 0);
         text = "<small>Play from</small><br>";
-    }).on("seeking", function () {  //show progress when changed
+    }).on("seeking", function () {  //show position when changed
         out(text + secondToTime(this.currentTime) + '/' + secondToTime(this.duration));
         text = "";
-    }).on("timeupdate", function () { //auto save play progress
+    }).on("timeupdate", function () { //auto save play position
         lastplaytime = new Date().getTime(); //to detect if video is playing
-        if (this.readyState == 4 && Math.floor(Math.random() * 99) > 80) {  //randomly save play progress
+        if (this.readyState == 4 && Math.floor(Math.random() * 99) > 80) {  //randomly save play position
             $.ajax({
                 url: "/save/{{src}}",
                 data: {
-                    progress: this.currentTime,
+                    position: this.currentTime,
                     duration: this.duration
                 },
                 timeout: 999,
@@ -213,11 +232,9 @@ if ("{{mode}}" == "index") {
         }
     });
 }
-/*
 function showSidebar() {
     $("#sidebar").show(600).delay(9999).fadeOut(800);
 }
-*/
 function rate(x) {
     out(x + "X");
     $("video").get(0).playbackRate = x;
@@ -231,7 +248,7 @@ function timeToSecond(time) {
 }
 function adapt() {
     $("#videosize").text("orign");
-    $("#mainframe").css("max-height", ($(window).height() - 240) + "px");
+    $("#tabFrame").css("max-height", ($(window).height() - 240) + "px");
     //if ($(window).height() <= 480)
         //$("#dialog").width("100%");
     //else
@@ -294,8 +311,7 @@ $(document).on('touchend', function (e) {
                 }
         }
     } else
-        //showSidebar();
-        $("#sidebar").show(600).delay(9999).fadeOut(800);
+        showSidebar();
 });
 $("#history").click(function () {
     if ($('#navtab li:eq(0)').attr('class') == 'active')
@@ -317,7 +333,7 @@ $("#clear").click(function () {
     if (confirm("Clear all history?"))
         history("/clear");
 });
-$("#mainframe").on("click", ".folder", function () {
+$("#tabFrame").on("click", ".folder", function () {
     filelist("/fs" + this.title + "/");
 }).on("click", ".move", function () {
     if (confirm("Move " + this.title + " to old?")) {
@@ -386,7 +402,7 @@ function history(str) {
                               "</td>" +
                               "<td class='filelist mp4' title='" + n["filename"] + "'>" + n["filename"] + 
                                 "<br><small>" + n["latest_date"] + " | " + 
-                                secondToTime(n["progress"]) + "/" + secondToTime(n["duration"]) + "</small>" + 
+                                secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small>" + 
                               "</td>" + 
                               "<td class='remove' title='" + n["filename"] + "'>" +
                                 "<i class='glyphicon glyphicon-remove-circle'></i>" + 

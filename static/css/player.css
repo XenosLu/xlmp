@@ -30,7 +30,6 @@ a {
 }
 div {
   text-align: center;
-  background-color: #F1F2F6;
 }
 table {
   width: 100%;
@@ -51,8 +50,6 @@ video {
   left: 0;
   right: 0;
 }
-}
-
 .filelist {
   min-width: 14em;
 }
@@ -61,12 +58,6 @@ video {
 }
 .filelist.other, .filelist small {
   color: grey;
-}
-#dlna{
-  height:100%;
-}
-#src, #progress {
-  font-size: 1.8em;
 }
 #sidebar{
   opacity: 0.4;
@@ -87,9 +78,9 @@ video {
 }
 #dialog {
   z-index: 10;
-  opacity: 0.85;
+  opacity: 0.88;
   box-shadow: 2px 2px 5px #333333;
-  max-width: 100%;
+  /* max-width: 100%; */
 }
 #output, #dialog {
   position: fixed;
@@ -97,11 +88,4 @@ video {
   left: 50%;
   transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
-}
-#mainframe {
-  overflow: auto;
-  min-height: 9em;
-  min-width: 18em;
-  max-width: 60em;
-  width: 100%;
 }
