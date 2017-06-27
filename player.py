@@ -13,7 +13,7 @@ from threading import Thread
 
 from bottle import route, post, template, static_file, abort, request, redirect, run  # pip install bottle  # 1.2
 
-import dlnap  # https://github.com/cherezov/dlnap
+import dlnap  # https://github.com/ttopholm/dlnap
 
 VIDEO_PATH = './static/mp4'  # mp4 file path
 DLNAP = None
@@ -65,6 +65,29 @@ def get_size(*filename):
         return '%.1f%sB' % (size/1024.0**l, unit[l])
 
 
+def dlna_tracker():
+    global DLNA_STATE
+    while True:
+        try:
+            DLNA_STATE = dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
+            # DLNA_STATE['TrackURI'] = 
+            src = unquote(re.sub('http://.*/video/', '', dic['TrackURI'][0]))
+            save_history(src, time_to_second(dic['RelTime'][0]), time_to_second(dic['TrackDuration'][0]))
+            for i in range(3):
+                sleep(1)
+                # RelTime += 1
+            # state = dlnap._xpath(DLNAP.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK, PLAYING
+            # DLNAP.get_volume.CurrentVolume
+        except Exception as e:
+            print(e)
+
+
+def start_dlna_tracker():
+    t = Thread(target=dlna_tracker)
+    t.setDaemon(True)
+    t.start()
+
+
 def load_history(name):
     position = run_sql('select PROGRESS from history where FILENAME=?', name)
     if len(position) == 0:
@@ -90,35 +113,6 @@ def list_history():
 @route('/')
 def index():
     return template('player', mode='index', src='', position=0, title='Light mp4 Player')
-
-
-@route('/test')
-def test():
-    global DLNA_STATE
-    return str(DLNA_STATE)
-
-def dlna_tracker():
-    global DLNA_STATE
-    while True:
-        try:
-            DLNA_STATE = dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
-            DLNA_STATE['TrackURI'] = 
-            src = unquote(re.sub('http://.*/video/', '', dic['TrackURI'][0]))
-            save_history(src, time_to_second(dic['RelTime'][0]), time_to_second(dic['TrackDuration'][0]))
-            sleep(3)
-            # state = dlnap._xpath(DLNAP.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK, PLAYING
-        except Exception as e:
-            print(e)
-
-
-@route('/testth')
-def testth():
-    
-    t = Thread(target=dlna_tracker)
-    t.setDaemon(True)
-    t.start()
-    global TTT
-    return str(TTT)
 
 
 @route('/play/<src:re:.*\.((?i)mp)4$>')
@@ -149,7 +143,7 @@ def dlna(src):
                 DLNAP.seek(second_to_time(position))
     except Exception as e:
         print(e)
-    return template('player', mode='dlna', src=src, position=0, title="DLNA - %s" % src)
+    return template('player', mode='dlna', src=src, position=0, title='DLNA - %s' % src)
 
 
 @route('/dlnaplay')
@@ -174,21 +168,21 @@ def dlna_play():
 
 @route('/dlnapause')
 def dlna_pause():
-    """Play video through DLNA"""
+    """Pause video through DLNA"""
     discover_dlnap()
     DLNAP.pause()
 
 
 @route('/dlnastop')
 def dlna_stop():
-    """Play video through DLNA"""
+    """Stop video through DLNA"""
     discover_dlnap()
     DLNAP.stop()
 
 
 @route('/dlnainfo')
 def dlna_info():
-    """Play video through DLNA"""
+    """Get play info through DLNA"""
     discover_dlnap()
     # state = dlnap._xpath(DLNAP.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK, PLAYING
     try:
@@ -202,14 +196,14 @@ def dlna_info():
 
 @route('/dlnavolume/<v>')
 def dlna_volume(v):
-    """Play video through DLNA"""
+    """Set volume through DLNA"""
     discover_dlnap()
     DLNAP.volume(v)
 
 
 @route('/dlnaseek/<position>')
 def dlna_seek(position):
-    """Play video through DLNA"""
+    """Seek video through DLNA"""
     discover_dlnap()
     DLNAP.seek(position)
 
@@ -279,9 +273,9 @@ def shutdown():
 def restart():
     """Restart server"""
     if sys.platform == 'win32':
-        os.system("shutdown.exe -f -r -t 0")
+        os.system('shutdown.exe -f -r -t 0')
     else:
-        os.system("sudo /sbin/shutdown -r now")
+        os.system('sudo /sbin/shutdown -r now')
     return 'restarting...'
 
 
@@ -295,7 +289,7 @@ def static(filename):
 def static_video(src):
     """video file access
        To support large file(>2GB), you should use web server to deal with static files.
-       For example, you can use "AliasMatch"/"Alias" in Apache
+       For example, you can use 'AliasMatch' or 'Alias' in Apache
     """
     return static_file(src, root=VIDEO_PATH)
 
