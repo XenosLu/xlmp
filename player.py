@@ -48,8 +48,6 @@ def second_to_time(time):  # turn seconds into hh:mm:ss time format
 
 
 def time_to_second(time):  # turn hh:mm:ss time format into seconds
-    # t = str(time).split(':')
-    # return int(t[0]) * 3600 + int(t[1]) * 60 + int(t[2])
     return sum([int(i)*60**n for n,i in enumerate(str(time).split(':')[::-1])])
 
 
@@ -67,16 +65,20 @@ def get_size(*filename):
 
 def dlna_tracker():
     global DLNA_STATE
-    while True:
+    stop = False
+    while not stop:
         try:
             DLNA_STATE = dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
             # DLNA_STATE['TrackURI'] = 
-            src = unquote(re.sub('http://.*/video/', '', dic['TrackURI'][0]))
-            save_history(src, time_to_second(dic['RelTime'][0]), time_to_second(dic['TrackDuration'][0]))
+            src = unquote(re.sub('http://.*/video/', '', DLNA_STATE['TrackURI'][0]))
+            save_history(src, time_to_second(DLNA_STATE['RelTime'][0]), time_to_second(DLNA_STATE['TrackDuration'][0]))
             for i in range(3):
                 sleep(1)
+                print('tick')
                 # RelTime += 1
-            # state = dlnap._xpath(DLNAP.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK, PLAYING
+            state = dlnap._xpath(DLNAP.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK
+            if state != 'PLAYING':
+                stop = True
             # DLNAP.get_volume.CurrentVolume
         except Exception as e:
             print(e)
@@ -143,6 +145,7 @@ def dlna(src):
             sleep(2.5)
             print(second_to_time(position))
             DLNAP.seek(second_to_time(position))
+        start_dlna_tracker()
     except Exception as e:
         print(e)
     return template('player', mode='dlna', src=src, position=0, title='DLNA - %s' % src)
@@ -153,19 +156,7 @@ def dlna_play():
     """Play video through DLNA"""
     discover_dlnap()
     DLNAP.play()
-    # try:
-        # state = dlnap._xpath(DLNAP.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK, PLAYING
-        # print(1)
-        # # if state == 'STOPPED':
-            # # print('stop')
-            # # DLNAP.stop()  # PAUSED_PLAYBACK, PLAYING
-        # if dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse/TrackURI') != url:
-            # print('load')
-        # DLNAP.set_current_media(url=url)
-        # if state != 'PLAYING':
-            # DLNAP.play()
-            # # DLNAP.seek(second_to_time(load_history(src)))
-            # print('play')
+    start_dlna_tracker()
 
 
 @route('/dlnapause')
@@ -185,6 +176,7 @@ def dlna_stop():
 @route('/dlnainfo')
 def dlna_info():
     """Get play info through DLNA"""
+    return DLNA_STATE
     discover_dlnap()
     # state = dlnap._xpath(DLNAP.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK, PLAYING
     try:
