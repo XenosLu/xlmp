@@ -7,39 +7,39 @@
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/player.css" rel="stylesheet">
     <style>
-#position-range {
+#position-bar {
   -webkit-appearance: none;
   background: #A0D468;
-  margin-left: 8%;
-  margin-right: 8%;
+  margin: auto;
   margin-top: 1.5em;
-  margin-bottom: 3.5em;
+  /*margin-bottom: 3.5em;*/
   width: 84%;
   /* height: 0.8em; */
 }
-#position-range::-webkit-slider-thumb{
+#position-bar::-webkit-slider-thumb{
   -webkit-appearance: none;
   height: 3em;
   width: 1.8em;
 }
-#position-range::-moz-range-thumb {
+#position-bar::-moz-range-thumb {
   height: 2em;
   width: 1em;
 }
-#volume-range {
+#volume-bar {
   -webkit-appearance: none;
   background-color: #F0AD4E;
-  width: 18em;
+  width: 16em;
   /* height: 0.5em; */
   margin: auto;
+  margin-top: 3.5em;
 }
-#volume-range::-webkit-slider-thumb{
+#volume-bar::-webkit-slider-thumb{
   -webkit-appearance: none;
   height: 1.8em;
   width: 3em;
   border-radius: 0.2em;
 }
-#volume-range::-moz-range-thumb {
+#volume-bar::-moz-range-thumb {
   height: 1em;
   width: 1.8em;
 }
@@ -82,12 +82,10 @@
         </ul>
       </div>
         <h3 id="position"></h3>
-        <input type="range" id="position-range" min="0" max="600">
-        <div class = "row">
-          <span class="col-xs-6 col-sm-3 col-md-2" id="position-min"></span>
-          <span class="col-xs-6 col-sm-3 col-md-2" id="position-max"></span>
-        <div>
-        <input type="range" id="volume-range" min="0" value="12" max="100">
+        <input type="range" id="position-bar" min="0" max="600">
+          <span class="col-xs-3 col-sm-3 col-md-2" id="position-min">00:00:00</span>
+          <span class="col-xs-3 col-sm-3 col-md-2 col-xs-offset-6 col-sm-offset-6 col-md-offset-8" id="position-max">00:10:00</span>
+        <input type="range" id="volume-bar" min="0" value="12" max="100">
     </div>
     <div id="sidebar">
       <button id="history" type="button" class="btn btn-default">
@@ -170,11 +168,11 @@ function get_dlna_position(){
     $.get("/dlnainfo",function(data){
         //max(0,min(current-300,total-600))
         //min(mini+600,total)
-        $("#position-range").attr("min",timeToSecond(Math.max(Math.min(data["RelTime"], data["TrackDuration"]), 0)));
-        $("#position-range").attr("max",Math.min(timeToSecond(data["TrackDuration"]), $("#position-range").attr("min") + 600));
-        $("#position-min").text(secondToTime($("#position-range").attr("min")));
-        $("#position-max").text(secondToTime($("#position-range").attr("max")));
-        $("#position-range").val(timeToSecond(data["RelTime"]));
+        $("#position-bar").attr("min",timeToSecond(Math.max(Math.min(data["RelTime"], data["TrackDuration"]), 0)));
+        $("#position-bar").attr("max",Math.min(timeToSecond(data["TrackDuration"]), $("#position-bar").attr("min") + 600));
+        $("#position-min").text(secondToTime($("#position-bar").attr("min")));
+        $("#position-max").text(secondToTime($("#position-bar").attr("max")));
+        $("#position-bar").val(timeToSecond(data["RelTime"]));
         $('#position').text(data["RelTime"] + "/" + data["TrackDuration"]);
         $('#src').text(decodeURI(data["TrackURI"]));
     });
@@ -185,13 +183,13 @@ if ("{{mode}}" == "index") {
 } else if ("{{mode}}" == "dlna") {
     get_dlna_position();
     $("#dlna").show(250);
-    setInterval("get_dlna_position()",1500);
-    $("#position-range").on("change", function() {
+    //setInterval("get_dlna_position()",1500);
+    $("#position-bar").on("change", function() {
         $.get("/dlnaseek/" + secondToTime($(this).val()));
     }).on("input", function() {
         out(secondToTime($(this).val()));
     });
-    $("#volume-range").on("change",function() {
+    $("#volume-bar").on("change",function() {
         $.get("/dlnavolume/" + $(this).val());
     }).on("input", function() {
         out($(this).val());
