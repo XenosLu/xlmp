@@ -56,6 +56,14 @@ input[type=range]::-moz-range-thumb {
   -moz-appearance: none;
   border-radius: 0;
 }
+#position-bar::-moz-range-thumb {
+  height: 2em;
+  width: 1em;
+}
+#volume-bar::-moz-range-thumb {
+  height: 1em;
+  width: 1.8em;
+}
 .filelist {
   min-width: 14em;
 }
@@ -91,7 +99,14 @@ input[type=range]::-moz-range-thumb {
 #dialog, #videosize, #rate, #dlna {
   display: none;
 }
-#output, #dialog {
+#dialog {
+  position: fixed;
+  top: 50%;
+  transform: translate(0%, -50%);
+  -webkit-transform: translate(0%, -50%);
+}
+/* #output, #dialog { */
+#output {
   position: fixed;
   top: 50%;
   left: 50%;

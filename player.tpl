@@ -21,10 +21,6 @@
   height: 3em;
   width: 1.8em;
 }
-#position-bar::-moz-range-thumb {
-  height: 2em;
-  width: 1em;
-}
 #volume-bar {
   -webkit-appearance: none;
   background-color: #F0AD4E;
@@ -38,10 +34,6 @@
   height: 1.8em;
   width: 3em;
   border-radius: 0.2em;
-}
-#volume-bar::-moz-range-thumb {
-  height: 1em;
-  width: 1.8em;
 }
 #src {
   width: 100%;
@@ -92,7 +84,7 @@
         <i class="glyphicon glyphicon-list-alt"></i>
       </button>
     </div>
-    <div id="dialog" class="col-xs-12 col-sm-6 col-md-5">
+    <div id="dialog" class="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
       <div id="panel">
         <div class="bg-info panel-title">
           <button onClick="$('#dialog').hide(250);" type="button" class="close">&times;</button>
