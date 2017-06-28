@@ -60,14 +60,17 @@ input[type=range]::-moz-range-track {
 input[type=range]::-moz-range-thumb {
     -moz-appearance: none;
     border-radius: 0;
+    border: None;
 }
 #position-bar::-moz-range-thumb {
-    height: 2em;
+    height: 2.4em;
     width: 1em;
+    box-shadow: inset 0px 0px 5px 1px #A0D468;
 }
 #volume-bar::-moz-range-thumb {
-    height: 1.3em;
+    height: 1.5em;
     width: 1.8em;
+    box-shadow: inset 0px 0px 5px 1px #F0AD4E;
 }
 .filelist {
     min-width: 14em;
@@ -95,14 +98,14 @@ input[type=range]::-moz-range-thumb {
     box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
     text-shadow: 0.1em 0.1em 0.4em #666;
 }
+#videosize, #rate, #dlna {
+    display: none;
+}
 #panel {
     z-index: 10;
     opacity: 0.88;
     box-shadow: 2px 2px 5px #333333;
     /* max-width: 100%; */
-}
-#videosize, #rate, #dlna {
-    display: none;
 }
 #dialog {
     position: fixed;

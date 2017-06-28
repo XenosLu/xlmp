@@ -10,16 +10,18 @@
 #position-bar {
     background-color: #A0D468;
     margin-top: 1.5em;
-    /*margin-bottom: 3.5em;*/
+    margin-bottom: 1.5em;
     width: 84%;
-    height: 3em;
+    height: 2.4em;
 }
 #position-bar::-webkit-slider-thumb{
     -webkit-appearance: none;
-    height: 4em;
-    width: 1.8em;
-    border: None;
+    height: 5.2em;
+    width: 3.3em;
+    padding: 1.5em;
+    background-clip: content-box;
     background-color: #F1F2F6;
+    border: None;
     /* box-shadow: inset 0px 0px 5px 1px #A0D468; */
 }
 #volume-bar::-webkit-slider-thumb:active{
@@ -28,17 +30,18 @@
 #volume-bar {
     background-color: #F0AD4E;
     width: 16em;
-    height: 1.8em;
-    margin: auto;
+    height: 1.5em;
     margin-top: 3.5em;
 }
 #volume-bar::-webkit-slider-thumb{
     -webkit-appearance: none;
-    height: 3em;
-    width: 3em;
-    border: None;
+    height: 3.2em;
+    width: 3.8em;
+    padding: 1em;
+    background-clip: content-box;
     background-color: #F1F2F6;
-    /* border-radius: 0.2em; */
+    border: None;
+    /* box-shadow: inset 0px 0px 5px 1px #F0AD4E; */
 }
 #src {
     width: 100%;
@@ -231,7 +234,8 @@ if ("{{mode}}" == "index") {
     });
 }
 function showSidebar() {
-    $("#sidebar").show(600).delay(9999).fadeOut(800);
+    //$("#sidebar").show(600).delay(9999).hide(300);
+    $("#sidebar").show(600).delay(3).hide(300);
 }
 function rate(x) {
     out(x + "X");
