@@ -11,7 +11,7 @@
     margin-top: 0.05em;
 }
 .dropdown-menu {
-    opacity: 0.75;
+    opacity: 0.8;
     min-width: 6em;
 }
 /*** modified bootstrap style ***/
@@ -49,6 +49,11 @@ table {
 td:hover {
     background-color: #FBF3E9;
 }
+input[type=range]{
+    box-shadow: inset 0px 0px 9px 0px #F1F2F6;
+    -webkit-appearance: none;
+    margin: auto;
+}
 input[type=range]::-moz-range-track {
     height: 0;
 }
@@ -61,7 +66,7 @@ input[type=range]::-moz-range-thumb {
     width: 1em;
 }
 #volume-bar::-moz-range-thumb {
-    height: 1em;
+    height: 1.3em;
     width: 1.8em;
 }
 .filelist {

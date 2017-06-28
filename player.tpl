@@ -8,30 +8,37 @@
     <link href="/static/css/player.css" rel="stylesheet">
     <style>
 #position-bar {
-    -webkit-appearance: none;
-    background: #A0D468;
-    margin: auto;
+    background-color: #A0D468;
     margin-top: 1.5em;
     /*margin-bottom: 3.5em;*/
     width: 84%;
+    height: 3em;
 }
 #position-bar::-webkit-slider-thumb{
     -webkit-appearance: none;
-    height: 3em;
+    height: 4em;
     width: 1.8em;
+    border: None;
+    background-color: #F1F2F6;
+    /* box-shadow: inset 0px 0px 5px 1px #A0D468; */
+}
+#volume-bar::-webkit-slider-thumb:active{
+    /* background: grey; */
 }
 #volume-bar {
-    -webkit-appearance: none;
     background-color: #F0AD4E;
     width: 16em;
+    height: 1.8em;
     margin: auto;
     margin-top: 3.5em;
 }
 #volume-bar::-webkit-slider-thumb{
     -webkit-appearance: none;
-    height: 1.8em;
+    height: 3em;
     width: 3em;
-    border-radius: 0.2em;
+    border: None;
+    background-color: #F1F2F6;
+    /* border-radius: 0.2em; */
 }
 #src {
     width: 100%;
@@ -56,13 +63,13 @@
   <body>
     <div class="col-xs-12 col-sm-6 col-md-5" id="dlna">
       <h2 id="src"></h2>
-      <button type="button" class="btn btn-success btn-lg glyphicon glyphicon-play" onclick="$.get('/dlnaplay')">play</button>
-      <button type="button" class="btn btn-warning btn-lg glyphicon glyphicon-pause" onclick="$.get('/dlnapause')">pause</button>
-      <button type="button" class="btn btn-danger btn-lg glyphicon glyphicon-stop" onclick="$.get('/dlnastop')">stop</button>
+      <!-- <button type="button" class="btn btn-success btn-lg glyphicon glyphicon-play" onclick="$.get('/dlnaplay')">play</button> -->
+      <!-- <button type="button" class="btn btn-warning btn-lg glyphicon glyphicon-pause" onclick="$.get('/dlnapause')">pause</button> -->
+      <!-- <button type="button" class="btn btn-danger btn-lg glyphicon glyphicon-stop" onclick="$.get('/dlnastop')">stop</button> -->
       <div class="btn-group dropdown">
-        <button type="button" class="btn btn-info btn-lg dropdown-toggle glyphicon glyphicon-chevron-down" data-toggle="dropdown">seek
-          <!-- <span class="caret"></span> -->
-        </button>
+        <!-- <button type="button" class="btn btn-info btn-lg dropdown-toggle glyphicon glyphicon-chevron-down" data-toggle="dropdown">seek -->
+          <!-- <!-- <span class="caret"></span> --> -->
+        <!-- </button> -->
         <ul class="dropdown-menu" role="menu">
           <li><a href="#" onclick="$.get('/dlnaseek/00:00:15')">00:15</a></li>
           <li><a href="#" onclick="$.get('/dlnaseek/00:00:30')">00:30</a></li>
