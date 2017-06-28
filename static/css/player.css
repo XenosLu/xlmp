@@ -31,13 +31,6 @@ a {
 div {
   text-align: center;
 }
-table {
-  width: 100%;
-}
-td:hover {
-  /*background-color: #F9F0E2; /*#EDE6D8*/ /*#E0DDE2*/ /*#EEEEF3;*/
-  background-color: #FBF3E9;
-}
 video {
   /*
   clear: both;
@@ -49,6 +42,19 @@ video {
   bottom: 0;
   left: 0;
   right: 0;
+}
+table {
+  width: 100%;
+}
+td:hover {
+  background-color: #FBF3E9;
+}
+input[type=range]::-moz-range-track {
+  height: 0;
+}
+input[type=range]::-moz-range-thumb {
+  -moz-appearance: none;
+  border-radius: 0;
 }
 .filelist {
   min-width: 14em;
