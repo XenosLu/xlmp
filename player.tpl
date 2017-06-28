@@ -7,48 +7,41 @@
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/player.css" rel="stylesheet">
     <style>
-input[type=range]::-moz-range-track {
-  height: 0;
-}
 #position-range {
   -webkit-appearance: none;
   background: #A0D468;
   margin-left: 8%;
   margin-right: 8%;
+  margin-top: 1.5em;
+  margin-bottom: 3.5em;
   width: 84%;
-  height: 1em;
-  margin-top: 2em;
-  margin-bottom: 5em;
+  /* height: 0.8em; */
 }
 #position-range::-webkit-slider-thumb{
   -webkit-appearance: none;
   height: 3em;
-  width: 1.6em;
+  width: 1.8em;
 }
 #position-range::-moz-range-thumb {
-  -moz-appearance: none;
-  height: 1.8em;
-  width: 0.5em;
-  border-radius: 0;
+  height: 2em;
+  width: 1em;
 }
-#volume {
+#volume-range {
   -webkit-appearance: none;
   background-color: #F0AD4E;
   width: 18em;
-  height: 0.5em;
+  /* height: 0.5em; */
   margin: auto;
 }
-#volume::-webkit-slider-thumb{
+#volume-range::-webkit-slider-thumb{
   -webkit-appearance: none;
-  height: 1.6em;
+  height: 1.8em;
   width: 3em;
   border-radius: 0.2em;
 }
-#volume::-moz-range-thumb {
-  -moz-appearance: none;
-  height: 0.6em;
-  width: 1.5em;
-  border-radius: 0;
+#volume-range::-moz-range-thumb {
+  height: 1em;
+  width: 1.8em;
 }
 #src {
   width: 100%;
@@ -56,7 +49,7 @@ input[type=range]::-moz-range-track {
   text-overflow: ellipsis;
 }
 #position {
-  margin-top: 9em;
+  margin-top: 3em;
 }
 #tabFrame {
   overflow: auto;
@@ -72,12 +65,13 @@ input[type=range]::-moz-range-track {
   </head>
   <body>
     <div class="col-xs-12 col-sm-6 col-md-5" id="dlna">
-      <h1 id="src"></h1>
+      <h2 id="src"></h2>
       <button type="button" class="btn btn-success btn-lg glyphicon glyphicon-play" onclick="$.get('/dlnaplay')">play</button>
       <button type="button" class="btn btn-warning btn-lg glyphicon glyphicon-pause" onclick="$.get('/dlnapause')">pause</button>
       <button type="button" class="btn btn-danger btn-lg glyphicon glyphicon-stop" onclick="$.get('/dlnastop')">stop</button>
       <div class="btn-group dropdown">
-        <button type="button" class="btn btn-info btn-lg dropdown-toggle glyphicon glyphicon-forward" data-toggle="dropdown">seek<span class="caret"></span>
+        <button type="button" class="btn btn-info btn-lg dropdown-toggle glyphicon glyphicon-chevron-down" data-toggle="dropdown">seek
+          <!-- <span class="caret"></span> -->
         </button>
         <ul class="dropdown-menu" role="menu">
           <li><a href="#" onclick="$.get('/dlnaseek/00:00:15')">00:15</a></li>
@@ -89,7 +83,11 @@ input[type=range]::-moz-range-track {
       </div>
         <h3 id="position"></h3>
         <input type="range" id="position-range" min="0" max="600">
-        <input type="range" id="volume" min="0" value="12" max="100">
+        <div class = "row">
+          <span class="col-xs-6 col-sm-3 col-md-2" id="position-min"></span>
+          <span class="col-xs-6 col-sm-3 col-md-2" id="position-max"></span>
+        <div>
+        <input type="range" id="volume-range" min="0" value="12" max="100">
     </div>
     <div id="sidebar">
       <button id="history" type="button" class="btn btn-default">
@@ -170,7 +168,12 @@ $(window).resize(adapt);
 $(document).mousemove(showSidebar);
 function get_dlna_position(){
     $.get("/dlnainfo",function(data){
-        $("#position-range").attr("max",timeToSecond(data["TrackDuration"]));
+        //max(0,min(current-300,total-600))
+        //min(mini+600,total)
+        $("#position-range").attr("min",timeToSecond(Math.max(Math.min(data["RelTime"], data["TrackDuration"]), 0)));
+        $("#position-range").attr("max",Math.min(timeToSecond(data["TrackDuration"]), $("#position-range").attr("min") + 600));
+        $("#position-min").text(secondToTime($("#position-range").attr("min")));
+        $("#position-max").text(secondToTime($("#position-range").attr("max")));
         $("#position-range").val(timeToSecond(data["RelTime"]));
         $('#position').text(data["RelTime"] + "/" + data["TrackDuration"]);
         $('#src').text(decodeURI(data["TrackURI"]));
@@ -182,13 +185,13 @@ if ("{{mode}}" == "index") {
 } else if ("{{mode}}" == "dlna") {
     get_dlna_position();
     $("#dlna").show(250);
-    //setInterval("get_dlna_position()",1500);
+    setInterval("get_dlna_position()",1500);
     $("#position-range").on("change", function() {
         $.get("/dlnaseek/" + secondToTime($(this).val()));
     }).on("input", function() {
         out(secondToTime($(this).val()));
     });
-    $("#volume").on("change",function() {
+    $("#volume-range").on("change",function() {
         $.get("/dlnavolume/" + $(this).val());
     }).on("input", function() {
         out($(this).val());
@@ -205,8 +208,8 @@ if ("{{mode}}" == "index") {
     }).on("seeking", function () {  //show position when changed
         out(text + secondToTime(this.currentTime) + '/' + secondToTime(this.duration));
         text = "";
-    }).on("timeupdate", function () { //auto save play position
-        lastplaytime = new Date().getTime(); //to detect if video is playing
+    }).on("timeupdate", function () {  //auto save play position
+        lastplaytime = new Date().getTime();  //to detect if video is playing
         if (this.readyState == 4 && Math.floor(Math.random() * 99) > 80) {  //randomly save play position
             $.ajax({
                 url: "/save/{{src}}",
@@ -224,7 +227,6 @@ if ("{{mode}}" == "index") {
     }).on("progress", function () {  //show buffered
         var str = "";
         if (new Date().getTime() - lastplaytime > 1000) {
-        //if ($("video").get(0).networkState != 1) {
             for (i = 0, t = this.buffered.length; i < t; i++) {
                 if (this.currentTime >= this.buffered.start(i) && this.currentTime <= this.buffered.end(i))
                     str = secondToTime(this.buffered.start(i)) + "-" + secondToTime(this.buffered.end(i)) + "<br>";
@@ -250,11 +252,6 @@ function timeToSecond(time) {
 function adapt() {
     $("#videosize").text("orign");
     $("#tabFrame").css("max-height", ($(window).height() - 240) + "px");
-    //if ($(window).height() <= 480)
-        //$("#dialog").width("100%");
-    //else
-        //$("#dialog").width("auto");
-    //out($("table").width()+'|'+$("#dialog").width()+'|'+$(window).width());
     video_ratio = $("video").get(0).videoWidth / $("video").get(0).videoHeight;
     page_ratio = $(window).width() / $(window).height();
     if (page_ratio < video_ratio) {
@@ -276,29 +273,11 @@ $(document).on('touchstart', function (e) {
     x0 = e.originalEvent.touches[0].screenX;
     y0 = e.originalEvent.touches[0].screenY;
 });
-/*
-$(document).on('touchmove',function(e) {  //test function
-    x = e.changedTouches[0].screenX - x0;
-    y = e.changedTouches[0].screenY - y0;
-    if (Math.abs(y / x) < 0.25) {
-        if (Math.abs(x) > RANGE) {
-            $("video").get(0).muted = true;
-            $("video").get(0).playbackRate = 9 * x / Math.abs(x);
-            window.clearInterval(int);
-            var int = setInterval("out(text+secondToTime($('video').get(0).currentTime)+ '/' + secondToTime($('video').get(0).duration))", 50);
-       }
-    }
-});
-*/
 $(document).on('touchend', function (e) {
     x = e.changedTouches[0].screenX - x0;
     y = e.changedTouches[0].screenY - y0;
-    //$("video").get(0).playbackRate = 1;
-    //$("video").get(0).muted = false;
-    //window.clearInterval(int);
     if (Math.abs(y / x) < 0.25) {
         if (Math.abs(x) > RANGE) {
-            //playward(Math.floor(x / 11));
             time = Math.floor(x / 11);
                 if (!isNaN($("video").get(0).duration)) {
                     if (time > 0) {
@@ -368,7 +347,6 @@ function filelist(str) {
                     if(icon[n["type"]]=="film")
                         dlna = " class='dlna' title='" + n["path"] + "'";
                     html += "<tr>" +
-                              //"<td><i class='dlna glyphicon glyphicon-" + icon[n["type"]] + "' title='"+ n["path"] +"''></i></td>" +
                               "<td" + dlna + "><i class='glyphicon glyphicon-" + icon[n["type"]] + "'></i></td>" +
                               "<td class='filelist " + n["type"] + "' title='" + n["path"] + "'>" + n["filename"] + size + "</td>" +
                               "<td class='move' title='" + n["path"] + "'>" +
