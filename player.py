@@ -300,10 +300,8 @@ def static_video(src):
 def fs_dir(path):
     """Get static folder list in json"""
     try:
-        list_folder, list_mp4, list_mkv, list_other = [], [], [], []
-        if path == '':
-            up = []
-        else:
+        up, list_folder, list_mp4, list_mkv, list_other = [], [], [], [], []
+        if path:
             up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]
         for file in os.listdir('%s/%s' % (VIDEO_PATH, path)):
             if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, file)):
