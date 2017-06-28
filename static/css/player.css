@@ -15,9 +15,6 @@
     min-width: 6em;
 }
 /*** modified bootstrap style ***/
-html, body {
-    /*height: 100%;*/
-}
 body {
     background-color: #F1F2F6;
     -webkit-user-select: none;
@@ -45,6 +42,9 @@ video {
 }
 table {
     width: 100%;
+}
+td {
+    word-break:break-all; 
 }
 td:hover {
     background-color: #FBF3E9;
@@ -98,24 +98,19 @@ input[type=range]::-moz-range-thumb {
     box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
     text-shadow: 0.1em 0.1em 0.4em #666;
 }
-#videosize, #rate, #dlna {
+#dialog, #videosize, #rate, #dlna {
     display: none;
 }
 #panel {
     z-index: 10;
     opacity: 0.88;
     box-shadow: 2px 2px 5px #333333;
-    /* max-width: 100%; */
 }
-#dialog {
-    position: fixed;
-    top: 50%;
-    display: none;
-    transform: translate(0%, -50%);
-    -webkit-transform: translate(0%, -50%);
+#tabFrame {
+    overflow: auto;
+    background-color: #F1F2F6;
 }
-/* #output, #dialog { */
-#output {
+#output, #dialog {
     position: fixed;
     top: 50%;
     left: 50%;

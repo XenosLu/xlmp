@@ -51,28 +51,25 @@
 #position {
     margin-top: 3em;
 }
-#tabFrame {
-    overflow: auto;
-    background-color: #F1F2F6;
-    /*
-    min-height: 9em;
-    min-width: 18em;
-    max-width: 60em;
-    width: 100%;
-    */
-}
     </style>
   </head>
   <body>
     <div class="col-xs-12 col-sm-6 col-md-5" id="dlna">
       <h2 id="src"></h2>
-      <!-- <button type="button" class="btn btn-success btn-lg glyphicon glyphicon-play" onclick="$.get('/dlnaplay')">play</button> -->
-      <!-- <button type="button" class="btn btn-warning btn-lg glyphicon glyphicon-pause" onclick="$.get('/dlnapause')">pause</button> -->
-      <!-- <button type="button" class="btn btn-danger btn-lg glyphicon glyphicon-stop" onclick="$.get('/dlnastop')">stop</button> -->
+      <button type="button" class="btn btn-success btn-lg glyphicon glyphicon-play" onclick="$.get('/dlnaplay')">
+      <!-- play -->
+      </button>
+      <button type="button" class="btn btn-warning btn-lg glyphicon glyphicon-pause" onclick="$.get('/dlnapause')">
+      <!-- pause -->
+      </button>
+      <button type="button" class="btn btn-danger btn-lg glyphicon glyphicon-stop" onclick="$.get('/dlnastop')">
+      <!-- stop -->
+      </button>
       <div class="btn-group dropdown">
-        <!-- <button type="button" class="btn btn-info btn-lg dropdown-toggle glyphicon glyphicon-chevron-down" data-toggle="dropdown">seek -->
-          <!-- <!-- <span class="caret"></span> --> -->
-        <!-- </button> -->
+        <button type="button" class="btn btn-info btn-lg dropdown-toggle glyphicon glyphicon-chevron-down" data-toggle="dropdown">
+        <!-- seek -->
+          <!-- <span class="caret"></span> -->
+        </button>
         <ul class="dropdown-menu" role="menu">
           <li><a href="#" onclick="$.get('/dlnaseek/00:00:15')">00:15</a></li>
           <li><a href="#" onclick="$.get('/dlnaseek/00:00:30')">00:30</a></li>
@@ -92,7 +89,7 @@
         <i class="glyphicon glyphicon-list-alt"></i>
       </button>
     </div>
-    <div id="dialog" class="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+    <div id="dialog" class="col-xs-12 col-sm-6 col-md-4">
       <div id="panel">
         <div class="bg-info panel-title">
           <button onClick="$('#dialog').hide(250);" type="button" class="close">&times;</button>
@@ -168,11 +165,15 @@ function get_dlna_position(){
     $.get("/dlnainfo",function(data){
         //max(0,min(current-300,total-600))
         //min(mini+600,total)
-        $("#position-bar").attr("min",timeToSecond(Math.max(Math.min(data["RelTime"], data["TrackDuration"]), 0)));
-        $("#position-bar").attr("max",Math.min(timeToSecond(data["TrackDuration"]), $("#position-bar").attr("min") + 600));
-        $("#position-min").text(secondToTime($("#position-bar").attr("min")));
-        $("#position-max").text(secondToTime($("#position-bar").attr("max")));
-        $("#position-bar").val(timeToSecond(data["RelTime"]));
+        reltime = timeToSecond(data["RelTime"]);
+        duration = timeToSecond(data["TrackDuration"]);
+        min = Math.max(Math.min(reltime - 300, duration - 600), 0);
+        max = Math.min(min + 600, duration);
+        $("#position-bar").attr("min", min);
+        $("#position-bar").attr("max", max);
+        $("#position-bar").val(reltime);
+        $("#position-min").text(secondToTime(min));
+        $("#position-max").text(secondToTime(max));
         $('#position').text(data["RelTime"] + "/" + data["TrackDuration"]);
         $('#src').text(decodeURI(data["TrackURI"]));
     });
@@ -183,7 +184,7 @@ if ("{{mode}}" == "index") {
 } else if ("{{mode}}" == "dlna") {
     get_dlna_position();
     $("#dlna").show(250);
-    //setInterval("get_dlna_position()",1500);
+    setInterval("get_dlna_position()",1500);
     $("#position-bar").on("change", function() {
         $.get("/dlnaseek/" + secondToTime($(this).val()));
     }).on("input", function() {
@@ -234,8 +235,7 @@ if ("{{mode}}" == "index") {
     });
 }
 function showSidebar() {
-    //$("#sidebar").show(600).delay(9999).hide(300);
-    $("#sidebar").show(600).delay(3).hide(300);
+    $("#sidebar").show(600).delay(9999).hide(300);
 }
 function rate(x) {
     out(x + "X");
