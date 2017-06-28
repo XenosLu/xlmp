@@ -133,14 +133,16 @@ def dlna(src):
         # redirect('/')
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try:
-        if dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse/TrackURI') != url:
-            DLNAP.stop()
-            DLNAP.set_current_media(url=url)
-            DLNAP.play()
-            position = load_history(src)
-            if position:
-                sleep(1.9)
-                DLNAP.seek(second_to_time(position))
+        # if dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse/TrackURI') != url:
+            # print('url not the same')
+        DLNAP.stop()
+        DLNAP.set_current_media(url=url)
+        DLNAP.play()
+        position = load_history(src)
+        if position:
+            sleep(2.5)
+            print(second_to_time(position))
+            DLNAP.seek(second_to_time(position))
     except Exception as e:
         print(e)
     return template('player', mode='dlna', src=src, position=0, title='DLNA - %s' % src)
