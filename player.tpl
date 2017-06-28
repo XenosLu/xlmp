@@ -8,50 +8,48 @@
     <link href="/static/css/player.css" rel="stylesheet">
     <style>
 #position-bar {
-  -webkit-appearance: none;
-  background: #A0D468;
-  margin: auto;
-  margin-top: 1.5em;
-  /*margin-bottom: 3.5em;*/
-  width: 84%;
-  /* height: 0.8em; */
+    -webkit-appearance: none;
+    background: #A0D468;
+    margin: auto;
+    margin-top: 1.5em;
+    /*margin-bottom: 3.5em;*/
+    width: 84%;
 }
 #position-bar::-webkit-slider-thumb{
-  -webkit-appearance: none;
-  height: 3em;
-  width: 1.8em;
+    -webkit-appearance: none;
+    height: 3em;
+    width: 1.8em;
 }
 #volume-bar {
-  -webkit-appearance: none;
-  background-color: #F0AD4E;
-  width: 16em;
-  /* height: 0.5em; */
-  margin: auto;
-  margin-top: 3.5em;
+    -webkit-appearance: none;
+    background-color: #F0AD4E;
+    width: 16em;
+    margin: auto;
+    margin-top: 3.5em;
 }
 #volume-bar::-webkit-slider-thumb{
-  -webkit-appearance: none;
-  height: 1.8em;
-  width: 3em;
-  border-radius: 0.2em;
+    -webkit-appearance: none;
+    height: 1.8em;
+    width: 3em;
+    border-radius: 0.2em;
 }
 #src {
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 #position {
-  margin-top: 3em;
+    margin-top: 3em;
 }
 #tabFrame {
-  overflow: auto;
-  background-color: #F1F2F6;
-  /*
-  min-height: 9em;
-  min-width: 18em;
-  max-width: 60em;
-  width: 100%;
-  */
+    overflow: auto;
+    background-color: #F1F2F6;
+    /*
+    min-height: 9em;
+    min-width: 18em;
+    max-width: 60em;
+    width: 100%;
+    */
 }
     </style>
   </head>
