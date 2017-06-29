@@ -337,7 +337,7 @@ function filelist(str) {
                     $("#navtab li:eq(1) a").tab("show");
                 $("#clear").hide();
                 var html = "";
-                var icon = {"folder": "folder-close", "mp4": "film", "mkv": "film", "other": "file"};
+                var icon = {"folder": "folder-close", "mp4": "film", "video": "film", "other": "file"};
                 $.each(data, function (i, n) {
                     size = "";
                     if(n["size"])

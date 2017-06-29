@@ -98,11 +98,14 @@ input[type=range]::-moz-range-thumb {
     box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
     text-shadow: 0.1em 0.1em 0.4em #666;
 }
-#dialog, #videosize, #rate, #dlna {
+#videosize, #rate, #dlna {
     display: none;
 }
-#panel {
+#dialog {
+    display: none;
     z-index: 10;
+}
+#panel {
     opacity: 0.88;
     box-shadow: 2px 2px 5px #333333;
 }

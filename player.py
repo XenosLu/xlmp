@@ -8,7 +8,7 @@ import math
 import json
 import re
 from urllib.parse import quote, unquote
-from time import sleep
+from time import sleep, time
 from threading import Thread
 
 from bottle import route, post, template, static_file, abort, request, redirect, run  # pip install bottle  # 1.2
@@ -18,6 +18,60 @@ import dlnap  # https://github.com/ttopholm/dlnap
 VIDEO_PATH = './static/mp4'  # mp4 file path
 DLNAP = None
 DLNA_STATE = None
+
+
+class DLNA_Tracker(Thread):
+
+    def __init__(self, *args, **kwargs):
+        super(Job, self).__init__(*args, **kwargs)
+        self.__flag = threading.Event()
+        self.__flag.set()
+        self.__running = threading.Event()
+        self.__running.set()
+
+    def run(self):
+        while self.__running.isSet():
+            self.__flag.wait()
+            print(time.time())
+            time.sleep(1)
+
+    def pause(self):
+        self.__flag.clear()
+
+    def resume(self):
+        self.__flag.set()
+
+    def stop(self):
+        self.__flag.set()
+        self.__running.clear()  
+        
+
+def dlna_tracker():
+    global DLNA_STATE
+    stop = False
+    while not stop:
+        try:
+            DLNA_STATE = dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
+            print(DLNA_STATE['TrackURI'])
+            # DLNA_STATE['TrackURI'] = 
+            src = unquote(re.sub('http://.*/video/', '', DLNA_STATE['TrackURI'][0]))
+            save_history(src, time_to_second(DLNA_STATE['RelTime'][0]), time_to_second(DLNA_STATE['TrackDuration'][0]))
+            for i in range(3):
+                sleep(1)
+                print('tick: %s' % time())
+                # RelTime += 1
+            state = dlnap._xpath(DLNAP.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK
+            if state != 'PLAYING':
+                stop = True
+            # DLNAP.get_volume.CurrentVolume
+        except Exception as e:
+            print(e)
+
+
+def start_dlna_tracker():
+    t = Thread(target=dlna_tracker)
+    t.setDaemon(True)
+    t.start()
 
 def discover_dlnap():
     global DLNAP
@@ -41,14 +95,14 @@ def run_sql(sql, *args):
     return result
 
 
-def second_to_time(time):  # turn seconds into hh:mm:ss time format
-    m, s = divmod(time, 60)
-    h, m = divmod(time/60, 60)
+def second_to_time(second):  # turn seconds into hh:mm:ss time format
+    m, s = divmod(second, 60)
+    h, m = divmod(second/60, 60)
     return '%02d:%02d:%02d' % (h, m, s)
 
 
-def time_to_second(time):  # turn hh:mm:ss time format into seconds
-    return sum([int(i)*60**n for n,i in enumerate(str(time).split(':')[::-1])])
+def time_to_second(time_str):  # turn hh:mm:ss time format into seconds
+    return sum([int(i)*60**n for n,i in enumerate(str(time_str).split(':')[::-1])])
 
 
 def get_size(*filename):
@@ -61,33 +115,6 @@ def get_size(*filename):
         unit = ('', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y', 'B')
         l = min(int(math.floor(math.log(size, 1024))), 9)
         return '%.1f%sB' % (size/1024.0**l, unit[l])
-
-
-def dlna_tracker():
-    global DLNA_STATE
-    stop = False
-    while not stop:
-        try:
-            DLNA_STATE = dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
-            # DLNA_STATE['TrackURI'] = 
-            src = unquote(re.sub('http://.*/video/', '', DLNA_STATE['TrackURI'][0]))
-            save_history(src, time_to_second(DLNA_STATE['RelTime'][0]), time_to_second(DLNA_STATE['TrackDuration'][0]))
-            for i in range(3):
-                sleep(1)
-                print('tick')
-                # RelTime += 1
-            state = dlnap._xpath(DLNAP.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK
-            if state != 'PLAYING':
-                stop = True
-            # DLNAP.get_volume.CurrentVolume
-        except Exception as e:
-            print(e)
-
-
-def start_dlna_tracker():
-    t = Thread(target=dlna_tracker)
-    t.setDaemon(True)
-    t.start()
 
 
 def load_history(name):
@@ -125,7 +152,7 @@ def play(src):
     return template('player', mode='player', src=src, position=load_history(src), title=src)
 
 
-@route('/dlna/<src:re:.*\.((?i)(mp4|mkv))$>')
+@route('/dlna/<src:re:.*\.((?i)(mp4|mkv|avi))$>')
 def dlna(src):
     """Video DLNA play page"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
@@ -138,11 +165,12 @@ def dlna(src):
         # if dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse/TrackURI') != url:
             # print('url not the same')
         DLNAP.stop()
+        sleep(0.75)
         DLNAP.set_current_media(url=url)
         DLNAP.play()
         position = load_history(src)
         if position:
-            sleep(2.5)
+            sleep(1.8)
             print(second_to_time(position))
             DLNAP.seek(second_to_time(position))
         start_dlna_tracker()
@@ -279,7 +307,7 @@ def static(filename):
     return static_file(filename, root='./static')
 
 
-@route('/video/<src:re:.*\.((?i)(mp4|mkv))$>')
+@route('/video/<src:re:.*\.((?i)(mp4|mkv|avi))$>')
 def static_video(src):
     """video file access
        To support large file(>2GB), you should use web server to deal with static files.
@@ -292,7 +320,7 @@ def static_video(src):
 def fs_dir(path):
     """Get static folder list in json"""
     try:
-        up, list_folder, list_mp4, list_mkv, list_other = [], [], [], [], []
+        up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
         if path:
             up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]
         for file in os.listdir('%s/%s' % (VIDEO_PATH, path)):
@@ -301,13 +329,13 @@ def fs_dir(path):
             elif re.match('.*\.((?i)mp)4$', file):
                 list_mp4.append({'filename': file, 'type': 'mp4',
                                 'path': '%s%s' % (path, file), 'size': get_size(path, file)})
-            elif re.match('.*\.((?i)mkv)$', file):
-                list_mkv.append({'filename': file, 'type': 'mkv',
+            elif re.match('.*\.((?i)(mkv|avi))$', file):
+                list_video.append({'filename': file, 'type': 'video',
                                 'path': '%s%s' % (path, file), 'size': get_size(path, file)})
             else:
                 list_other.append({'filename': file, 'type': 'other',
                                   'path': '%s%s' % (path, file), 'size': get_size(path, file)})
-        return json.dumps(up + list_folder + list_mp4 + list_mkv + list_other)
+        return json.dumps(up + list_folder + list_mp4 + list_video + list_other)
     except Exception as e:
         abort(404, str(e))
 
