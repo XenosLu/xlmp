@@ -3,7 +3,7 @@
 ### You can play mp4 video from other device through any html5 web browser in your LAN.
 
 ### I'm working on to add dlna playback support, and already works in an ungracefully way.
-
+### It can achieve the DMC + DMS Roles in DLNA
 ## install steps:
 ### 1. install Python3.4.4(suggested)
 ### 2. run 'python player.py' as a debug demo server
