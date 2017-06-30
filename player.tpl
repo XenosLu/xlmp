@@ -164,7 +164,32 @@ window.onload = adapt;
 $(window).resize(adapt);
 $(document).mousemove(showSidebar);
 function get_dlna_position(){
-    $.get("/dlnainfo",function(data){
+    $.ajax({
+        url: "/dlnainfo",
+        dataType: "json",
+        timeout: 999,
+        type: "GET",
+        success: function (data) {
+            reltime = timeToSecond(data["RelTime"]);
+            duration = timeToSecond(data["TrackDuration"]);
+            min = Math.max(Math.min(reltime - 300, duration - 600), 0);
+            max = Math.min(min + 600, duration);
+            $("#position-bar").attr("min", min).attr("max", max).val(reltime);
+            //$("#position-bar").attr("min", min);
+            //$("#position-bar").attr("max", max);
+            //$("#position-bar").val(reltime);
+            $("#position-min").text(secondToTime(min));
+            $("#position-max").text(secondToTime(max));
+            $('#position').text(data["RelTime"] + "/" + data["TrackDuration"]);
+            $('#src').text(decodeURI(data["TrackURI"]));
+        },
+        error: function(xhr, err) {
+            if(err != "parsererror")
+                out("DLNAINFO: " + xhr.statusText);
+        }
+    });
+    /*
+    $.get("/dlnainfo", function(data){
         //max(0,min(current-300,total-600))
         //min(mini+600,total)
         reltime = timeToSecond(data["RelTime"]);
@@ -179,6 +204,7 @@ function get_dlna_position(){
         $('#position').text(data["RelTime"] + "/" + data["TrackDuration"]);
         $('#src').text(decodeURI(data["TrackURI"]));
     });
+    */
 }
 if ("{{mode}}" == "index") {
     history("/list");
@@ -186,7 +212,7 @@ if ("{{mode}}" == "index") {
 } else if ("{{mode}}" == "dlna") {
     get_dlna_position();
     $("#dlna").show(250);
-    setInterval("get_dlna_position()",1500);
+    setInterval("get_dlna_position()",1000);
     $("#position-bar").on("change", function() {
         $.get("/dlnaseek/" + secondToTime($(this).val()));
     }).on("input", function() {
@@ -326,7 +352,11 @@ $("#tabFrame").on("click", ".folder", function () {
 }).on("click", ".mp4", function () {
     window.location.href = "/play/" + this.title;
 }).on("click", ".dlna", function () {
-    window.location.href = "/dlna/" + this.title;
+    $.get("/dlna/" + this.title, function(){
+        if("{{mode}}" != "dlna")
+            window.location.href = "/dlna";
+    });
+    //window.location.href = "/dlna/" + this.title;
 });
 function filelist(str) {
     $.ajax({
