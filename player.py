@@ -44,14 +44,13 @@ class DMR_Tracker(Thread):
             if self.dmr:
                 try:
                     self.state = dlnap._xpath(self.dmr.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
-                    print(self.state['TrackURI'])
-                    # state['TrackURI'] = 
+                    # print(self.state['TrackURI']) 
                     src = unquote(re.sub('http://.*/video/', '', self.state['TrackURI'][0]))
                     save_history(src, time_to_second(self.state['RelTime'][0]), time_to_second(self.state['TrackDuration'][0]))
 
-                    self.state = dlnap._xpath(self.dmr.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK
-                    if self.state != 'PLAYING':
-                        stop = True
+                    statex = dlnap._xpath(self.dmr.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK
+                    # if state != 'PLAYING':
+                        # stop = True
                     # .get_volume.CurrentVolume
                 except Exception as e:
                     # self.dmr = None
@@ -74,32 +73,32 @@ class DMR_Tracker(Thread):
         self.__running.clear()  
         
 
-def dlna_tracker():
-    global DLNA_STATE
-    stop = False
-    while not stop:
-        try:
-            DLNA_STATE = dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
-            print(DLNA_STATE['TrackURI'])
-            # DLNA_STATE['TrackURI'] = 
-            src = unquote(re.sub('http://.*/video/', '', DLNA_STATE['TrackURI'][0]))
-            save_history(src, time_to_second(DLNA_STATE['RelTime'][0]), time_to_second(DLNA_STATE['TrackDuration'][0]))
-            for i in range(3):
-                sleep(1)
-                print('tick: %s' % time())
-                # RelTime += 1
-            state = dlnap._xpath(DLNAP.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK
-            if state != 'PLAYING':
-                stop = True
-            # DLNAP.get_volume.CurrentVolume
-        except Exception as e:
-            print(e)
+# def dlna_tracker():
+    # global DLNA_STATE
+    # stop = False
+    # while not stop:
+        # try:
+            # DLNA_STATE = dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
+            # print(DLNA_STATE['TrackURI'])
+            # # DLNA_STATE['TrackURI'] = 
+            # src = unquote(re.sub('http://.*/video/', '', DLNA_STATE['TrackURI'][0]))
+            # save_history(src, time_to_second(DLNA_STATE['RelTime'][0]), time_to_second(DLNA_STATE['TrackDuration'][0]))
+            # for i in range(3):
+                # sleep(1)
+                # print('tick: %s' % time())
+                # # RelTime += 1
+            # state = dlnap._xpath(DLNAP.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK
+            # if state != 'PLAYING':
+                # stop = True
+            # # DLNAP.get_volume.CurrentVolume
+        # except Exception as e:
+            # print(e)
 
 
-def start_dlna_tracker():
-    t = Thread(target=dlna_tracker)
-    t.setDaemon(True)
-    t.start()
+# def start_dlna_tracker():
+    # t = Thread(target=dlna_tracker)
+    # t.setDaemon(True)
+    # t.start()
 
 def discover_dlnap():
     global DLNAP
@@ -194,21 +193,25 @@ def dlna_load(src):
     """Video DLNA play page"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         redirect('/')
-    discover_dlnap()
+    
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try:
-        # if dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse/TrackURI') != url:
-            # print('url not the same')
-        DLNAP.stop()
+        # DLNAP.stop()
+        tracker.dmr.stop()
         sleep(0.75)
-        DLNAP.set_current_media(url)
-        DLNAP.play()
+        # DLNAP.set_current_media(url)
+        tracker.dmr.set_current_media(url)
+        # DLNAP.play()
+        tracker.dmr.play()
         position = load_history(src)
         if position:
-            sleep(1.8)
+            # sleep(1.8)
+            while tracker.state['TrackDuration'][0] == '00:00:00':
+                print(tracker.state['TrackDuration'][0])
+                sleep(0.1)
             print(second_to_time(position))
-            DLNAP.seek(second_to_time(position))
-        start_dlna_tracker()
+            tracker.dmr.seek(second_to_time(position))
+            # DLNAP.seek(second_to_time(position))
     except Exception as e:
         print(e)
     return template('player', mode='dlna', src=src, position=0, title='DMC - %s' % src)
@@ -219,7 +222,7 @@ def dlna_play():
     """Play video through DLNA"""
     discover_dlnap()
     DLNAP.play()
-    start_dlna_tracker()
+    # start_dlna_tracker()
 
 
 @route('/dlnapause')
@@ -240,16 +243,6 @@ def dlna_stop():
 def dlna_info():
     """Get play info through DLNA"""
     return tracker.state
-    return DLNA_STATE
-    discover_dlnap()
-    # state = dlnap._xpath(DLNAP.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK, PLAYING
-    try:
-        dic = dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
-        src = unquote(re.sub('http://.*/video/', '', dic['TrackURI'][0]))
-        save_history(src, time_to_second(dic['RelTime'][0]), time_to_second(dic['TrackDuration'][0]))
-        return dic
-    except Exception as e:
-        print(e)
 
 
 @route('/dlnavolume/<v>')
