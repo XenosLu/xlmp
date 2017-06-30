@@ -28,7 +28,7 @@
     /* background: grey; */
 }
 #volume-bar {
-    background-color: #F0AD4E;
+    background-color: #F98787; /* #F0AD4E; */
     width: 16em;
     height: 1.5em;
     margin-top: 3.5em;
