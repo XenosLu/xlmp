@@ -118,7 +118,7 @@ def get_size(*filename):
 
 
 def load_history(name):
-    position = run_sql('select PROGRESS from history where FILENAME=?', name)
+    position = run_sql('select POSITION from history where FILENAME=?', name)
     if len(position) == 0:
         return 0
     return position[0][0]
@@ -127,7 +127,7 @@ def load_history(name):
 def save_history(src, position, duration):
     if position < 10 or duration < 10:
         return
-    run_sql('''replace into history (FILENAME, PROGRESS, DURATION, LATEST_DATE)
+    run_sql('''replace into history (FILENAME, POSITION, DURATION, LATEST_DATE)
                values(? , ?, ?, DateTime('now', 'localtime'));''', src, position, duration)
 
 
@@ -153,20 +153,18 @@ def play(src):
 
 
 @route('/dlna/<src:re:.*\.((?i)(mp4|mkv|avi))$>')
-def dlna(src):
+def dlna_load(src):
     """Video DLNA play page"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         redirect('/')
     discover_dlnap()
-    # if not DLNAP:
-        # redirect('/')
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try:
         # if dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse/TrackURI') != url:
             # print('url not the same')
         DLNAP.stop()
         sleep(0.75)
-        DLNAP.set_current_media(url=url)
+        DLNAP.set_current_media(url)
         DLNAP.play()
         position = load_history(src)
         if position:
@@ -343,10 +341,11 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 # Initialize DataBase
 run_sql('''create table if not exists history
                 (FILENAME text PRIMARY KEY not null,
-                PROGRESS float not null,
+                POSITION float not null,
                 DURATION float, LATEST_DATE datetime not null);''')
 
 if __name__ == '__main__':  # for debug
     # os.system('start http://127.0.0.1:8081/')  # open the page automatic
     # os.system('start http://127.0.0.1:8081/dlna/test.mp4')  # open the page automatic
-    run(host='0.0.0.0', port=8081, debug=True, reloader=True)  # run demo server
+    # run(host='0.0.0.0', port=8081, debug=True, reloader=True)  # run demo server
+    run(host='0.0.0.0', port=8081, debug=True)  # run demo server
