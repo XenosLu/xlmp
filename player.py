@@ -9,31 +9,59 @@ import json
 import re
 from urllib.parse import quote, unquote
 from time import sleep, time
-from threading import Thread
+from threading import Thread, Event
 
 from bottle import route, post, template, static_file, abort, request, redirect, run  # pip install bottle  # 1.2
 
 import dlnap  # https://github.com/ttopholm/dlnap
 
 VIDEO_PATH = './static/mp4'  # mp4 file path
-DLNAP = None
-DLNA_STATE = None
+DLNAP = None  # dlna player
+DLNA_STATE = None  # dlna player state
 
 
-class DLNA_Tracker(Thread):
+class DMR_Tracker(Thread):
+    """Digital Media Renderer"""
+    state = None  # dmr device state
+    dmr = None  # dmr device object
 
     def __init__(self, *args, **kwargs):
-        super(Job, self).__init__(*args, **kwargs)
-        self.__flag = threading.Event()
+        super(DMR_Tracker, self).__init__(*args, **kwargs)
+        self.__flag = Event()
         self.__flag.set()
-        self.__running = threading.Event()
+        self.__running = Event()
         self.__running.set()
+        self.discover_dmr()
+        
+    def discover_dmr(self):
+        allDevices = dlnap.discover(name='', ip='', timeout=2, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
+        if len(allDevices) > 0:
+            self.dmr = allDevices[0]  # self.dmr.name
 
     def run(self):
         while self.__running.isSet():
             self.__flag.wait()
-            print(time.time())
-            time.sleep(1)
+            if self.dmr:
+                try:
+                    self.state = dlnap._xpath(self.dmr.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
+                    print(self.state['TrackURI'])
+                    # state['TrackURI'] = 
+                    src = unquote(re.sub('http://.*/video/', '', self.state['TrackURI'][0]))
+                    save_history(src, time_to_second(self.state['RelTime'][0]), time_to_second(self.state['TrackDuration'][0]))
+
+                    self.state = dlnap._xpath(self.dmr.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK
+                    if self.state != 'PLAYING':
+                        stop = True
+                    # .get_volume.CurrentVolume
+                except Exception as e:
+                    # self.dmr = None
+                    print(e)
+                for i in range(1):
+                    sleep(1)
+                    print('tick: %s' % time())
+                    # RelTime += 1
+            else:
+                self.discover_dmr()
 
     def pause(self):
         self.__flag.clear()
@@ -141,7 +169,16 @@ def list_history():
 
 @route('/')
 def index():
-    return template('player', mode='index', src='', position=0, title='Light mp4 Player')
+    discover_dlnap()
+    mode = 'index'
+    if DLNAP:
+        mode = 'dlna'
+    return template('player', mode=mode, src='', position=0, title='Light mp4 Player')
+
+
+@route('/dlna')
+def dlna():
+    return template('player', mode='dlna', src='', position=0, title='DMC - Light mp4 Player')
 
 
 @route('/play/<src:re:.*\.((?i)mp)4$>')
@@ -174,7 +211,7 @@ def dlna_load(src):
         start_dlna_tracker()
     except Exception as e:
         print(e)
-    return template('player', mode='dlna', src=src, position=0, title='DLNA - %s' % src)
+    return template('player', mode='dlna', src=src, position=0, title='DMC - %s' % src)
 
 
 @route('/dlnaplay')
@@ -202,6 +239,7 @@ def dlna_stop():
 @route('/dlnainfo')
 def dlna_info():
     """Get play info through DLNA"""
+    return tracker.state
     return DLNA_STATE
     discover_dlnap()
     # state = dlnap._xpath(DLNAP.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK, PLAYING
@@ -343,6 +381,8 @@ run_sql('''create table if not exists history
                 (FILENAME text PRIMARY KEY not null,
                 POSITION float not null,
                 DURATION float, LATEST_DATE datetime not null);''')
+tracker = DMR_Tracker()
+tracker.start()
 
 if __name__ == '__main__':  # for debug
     # os.system('start http://127.0.0.1:8081/')  # open the page automatic
