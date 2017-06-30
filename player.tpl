@@ -51,6 +51,10 @@
 #position {
     margin-top: 3em;
 }
+#dlna button {
+    opacity: 0.8;
+    box-shadow: inset 0px 0px 9px 0px #F1F2F6;
+}
     </style>
   </head>
   <body>
@@ -62,9 +66,7 @@
       <button type="button" class="btn btn-warning btn-lg glyphicon glyphicon-pause" onclick="$.get('/dlnapause')">
       <!-- pause -->
       </button>
-      <button type="button" class="btn btn-danger btn-lg glyphicon glyphicon-stop" onclick="$.get('/dlnastop')">
-      <!-- stop -->
-      </button>
+      <!-- <button type="button" class="btn btn-danger btn-lg glyphicon glyphicon-stop" onclick="$.get('/dlnastop')"></button> -->
       <div class="btn-group dropdown">
         <button type="button" class="btn btn-info btn-lg dropdown-toggle glyphicon glyphicon-chevron-down" data-toggle="dropdown">
         <!-- seek -->
@@ -79,9 +81,9 @@
         </ul>
       </div>
         <h3 id="position"></h3>
-        <input type="range" id="position-bar" min="0" max="600">
-          <span class="col-xs-3 col-sm-3 col-md-2" id="position-min">00:00:00</span>
-          <span class="col-xs-3 col-sm-3 col-md-2 col-xs-offset-6 col-sm-offset-6 col-md-offset-8" id="position-max">00:10:00</span>
+        <input type="range" id="position-bar" min="0" max="0">
+          <span class="col-xs-3 col-sm-3 col-md-2" id="position-min"></span>
+          <span class="col-xs-3 col-sm-3 col-md-2 col-xs-offset-6 col-sm-offset-6 col-md-offset-8" id="position-max"></span>
         <input type="range" id="volume-bar" min="0" value="12" max="100">
     </div>
     <div id="sidebar">
