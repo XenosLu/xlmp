@@ -192,20 +192,15 @@ def play(src):
 def dlna_load(src):
     """Video DLNA play page"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
-        redirect('/')
-    
+        return
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try:
-        # DLNAP.stop()
         tracker.dmr.stop()
-        sleep(0.75)
-        # DLNAP.set_current_media(url)
+        sleep(0.8)
         tracker.dmr.set_current_media(url)
-        # DLNAP.play()
         tracker.dmr.play()
         position = load_history(src)
         if position:
-            # sleep(1.8)
             while tracker.state['TrackDuration'][0] == '00:00:00':
                 print(tracker.state['TrackDuration'][0])
                 sleep(0.1)
