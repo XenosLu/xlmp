@@ -16,8 +16,7 @@ from bottle import route, post, template, static_file, abort, request, redirect,
 import dlnap  # https://github.com/ttopholm/dlnap
 
 VIDEO_PATH = './static/mp4'  # mp4 file path
-DLNAP = None  # dlna player
-DLNA_STATE = None  # dlna player state
+# DLNAP = None  # dlna player
 
 
 class DMR_Tracker(Thread):
@@ -71,41 +70,14 @@ class DMR_Tracker(Thread):
     def stop(self):
         self.__flag.set()
         self.__running.clear()  
-        
-
-# def dlna_tracker():
-    # global DLNA_STATE
-    # stop = False
-    # while not stop:
-        # try:
-            # DLNA_STATE = dlnap._xpath(DLNAP.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
-            # print(DLNA_STATE['TrackURI'])
-            # # DLNA_STATE['TrackURI'] = 
-            # src = unquote(re.sub('http://.*/video/', '', DLNA_STATE['TrackURI'][0]))
-            # save_history(src, time_to_second(DLNA_STATE['RelTime'][0]), time_to_second(DLNA_STATE['TrackDuration'][0]))
-            # for i in range(3):
-                # sleep(1)
-                # print('tick: %s' % time())
-                # # RelTime += 1
-            # state = dlnap._xpath(DLNAP.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK
-            # if state != 'PLAYING':
-                # stop = True
-            # # DLNAP.get_volume.CurrentVolume
-        # except Exception as e:
-            # print(e)
 
 
-# def start_dlna_tracker():
-    # t = Thread(target=dlna_tracker)
-    # t.setDaemon(True)
-    # t.start()
-
-def discover_dlnap():
-    global DLNAP
-    if not DLNAP:
-        allDevices = dlnap.discover(name='', ip='', timeout=2, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
-        if len(allDevices) > 0:
-            DLNAP = allDevices[0]
+# def discover_dlnap():
+    # global DLNAP
+    # if not DLNAP:
+        # allDevices = dlnap.discover(name='', ip='', timeout=2, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
+        # if len(allDevices) > 0:
+            # DLNAP = allDevices[0]
 
 
 def run_sql(sql, *args):
@@ -170,7 +142,7 @@ def list_history():
 def index():
     discover_dlnap()
     mode = 'index'
-    if DLNAP:
+    if tracker.dmr:
         mode = 'dlna'
     return template('player', mode=mode, src='', position=0, title='Light mp4 Player')
 
@@ -206,7 +178,6 @@ def dlna_load(src):
                 sleep(0.1)
             print(second_to_time(position))
             tracker.dmr.seek(second_to_time(position))
-            # DLNAP.seek(second_to_time(position))
     except Exception as e:
         print(e)
     return template('player', mode='dlna', src=src, position=0, title='DMC - %s' % src)
@@ -215,23 +186,20 @@ def dlna_load(src):
 @route('/dlnaplay')
 def dlna_play():
     """Play video through DLNA"""
-    discover_dlnap()
-    DLNAP.play()
-    # start_dlna_tracker()
+    tracker.dmr.play()
 
 
 @route('/dlnapause')
 def dlna_pause():
     """Pause video through DLNA"""
     discover_dlnap()
-    DLNAP.pause()
+    tracker.dmr.pause()
 
 
 @route('/dlnastop')
 def dlna_stop():
     """Stop video through DLNA"""
-    discover_dlnap()
-    DLNAP.stop()
+    tracker.dmr.stop()
 
 
 @route('/dlnainfo')
@@ -243,15 +211,13 @@ def dlna_info():
 @route('/dlnavolume/<v>')
 def dlna_volume(v):
     """Set volume through DLNA"""
-    discover_dlnap()
-    DLNAP.volume(v)
+    tracker.dmr.volume(v)
 
 
 @route('/dlnaseek/<position>')
 def dlna_seek(position):
     """Seek video through DLNA"""
-    discover_dlnap()
-    DLNAP.seek(position)
+    tracker.dmr.seek(position)
 
 
 @route('/clear')
