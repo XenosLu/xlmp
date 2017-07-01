@@ -60,11 +60,11 @@
   <body>
     <div class="col-xs-12 col-sm-6 col-md-5" id="dlna">
       <h2 id="src"></h2>
+      <span id="state"></span>
+      <br>
       <button type="button" class="btn btn-success btn-lg glyphicon glyphicon-play" onclick="$.get('/dlnaplay')">
-      <!-- play -->
       </button>
       <button type="button" class="btn btn-warning btn-lg glyphicon glyphicon-pause" onclick="$.get('/dlnapause')">
-      <!-- pause -->
       </button>
       <!-- <button type="button" class="btn btn-danger btn-lg glyphicon glyphicon-stop" onclick="$.get('/dlnastop')"></button> -->
       <div class="btn-group dropdown">
@@ -163,7 +163,7 @@ var lastplaytime = 0;  //in seconds
 window.onload = adapt;
 $(window).resize(adapt);
 $(document).mousemove(showSidebar);
-function get_dlna_position(){
+function get_dmr_state(){
     $.ajax({
         url: "/dlnainfo",
         dataType: "json",
@@ -175,13 +175,12 @@ function get_dlna_position(){
             min = Math.max(Math.min(reltime - 300, duration - 600), 0);
             max = Math.min(min + 600, duration);
             $("#position-bar").attr("min", min).attr("max", max).val(reltime);
-            //$("#position-bar").attr("min", min);
-            //$("#position-bar").attr("max", max);
-            //$("#position-bar").val(reltime);
+            $("#volume-bar").val(data["CurrentVolume"]);
             $("#position-min").text(secondToTime(min));
             $("#position-max").text(secondToTime(max));
             $('#position').text(data["RelTime"] + "/" + data["TrackDuration"]);
             $('#src').text(decodeURI(data["TrackURI"]));
+            $('#state').text(data["CurrentTransportState"]);
         },
         error: function(xhr, err) {
             if(err != "parsererror")
@@ -210,9 +209,9 @@ if ("{{mode}}" == "index") {
     history("/list");
     $("#dialog").show(250);
 } else if ("{{mode}}" == "dlna") {
-    get_dlna_position();
+    get_dmr_state();
     $("#dlna").show(250);
-    setInterval("get_dlna_position()",1000);
+    setInterval("get_dmr_state()",1000);
     $("#position-bar").on("change", function() {
         $.get("/dlnaseek/" + secondToTime($(this).val()));
     }).on("input", function() {

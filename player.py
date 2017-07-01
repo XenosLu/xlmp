@@ -21,7 +21,7 @@ VIDEO_PATH = './static/mp4'  # mp4 file path
 
 class DMR_Tracker(Thread):
     """Digital Media Renderer"""
-    state = None  # dmr device state
+    state = {}  # dmr device state
     dmr = None  # dmr device object
 
     def __init__(self, *args, **kwargs):
@@ -33,6 +33,7 @@ class DMR_Tracker(Thread):
         self.discover_dmr()
         
     def discover_dmr(self):
+        print('Searching DMR device...')
         allDevices = dlnap.discover(name='', ip='', timeout=2, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
         if len(allDevices) > 0:
             self.dmr = allDevices[0]  # self.dmr.name
@@ -42,21 +43,20 @@ class DMR_Tracker(Thread):
             self.__flag.wait()
             if self.dmr:
                 try:
-                    self.state = dlnap._xpath(self.dmr.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
-                    # print(self.state['TrackURI']) 
-                    src = unquote(re.sub('http://.*/video/', '', self.state['TrackURI'][0]))
-                    save_history(src, time_to_second(self.state['RelTime'][0]), time_to_second(self.state['TrackDuration'][0]))
-
-                    statex = dlnap._xpath(self.dmr.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')  # PAUSED_PLAYBACK
-                    # if state != 'PLAYING':
-                        # stop = True
-                    # .get_volume.CurrentVolume
+                    self.state['CurrentTransportState'] = dlnap._xpath(self.dmr.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')
+                    self.state['CurrentVolume'] = dlnap._xpath(self.dmr.get_volume(), 's:Envelope/s:Body/u:GetVolumeResponse/CurrentVolume')
+                    position_info = dlnap._xpath(self.dmr.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
+                    for i in ('RelTime', 'TrackDuration'):
+                        self.state[i] = position_info[i][0]
+                    if len(position_info['TrackURI']) > 0:
+                        self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI'][0]))
+                        save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']), time_to_second(self.state['TrackDuration']))
                 except Exception as e:
                     # self.dmr = None
-                    print(e)
+                    print('DMR Tracker Exception: %s' % e)
                 for i in range(1):
                     sleep(1)
-                    print('tick: %s' % time())
+                    # print('tick: %s' % time())
                     # RelTime += 1
             else:
                 self.discover_dmr()
@@ -124,7 +124,7 @@ def load_history(name):
 
 
 def save_history(src, position, duration):
-    if position < 10 or duration < 10:
+    if float(position) < 10 or float(duration) < 10:
         return
     run_sql('''replace into history (FILENAME, POSITION, DURATION, LATEST_DATE)
                values(? , ?, ?, DateTime('now', 'localtime'));''', src, position, duration)
@@ -140,7 +140,6 @@ def list_history():
 
 @route('/')
 def index():
-    discover_dlnap()
     mode = 'index'
     if tracker.dmr:
         mode = 'dlna'
@@ -166,17 +165,22 @@ def dlna_load(src):
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         return
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
-    try:
+    try:  # set trackuri,if failed stop and retry
         tracker.dmr.stop()
         sleep(0.8)
         tracker.dmr.set_current_media(url)
-        tracker.dmr.play()
+        while tracker.state['CurrentTransportState'] == 'NO_MEDIA_PRESENT':
+            # tracker.dmr.stop()
+            tracker.dmr.set_current_media(url)
+            sleep(0.3)
+            print('load url')
+        tracker.dmr.play()  # TRANSITIONING
         position = load_history(src)
         if position:
-            while tracker.state['TrackDuration'][0] == '00:00:00':
-                print(tracker.state['TrackDuration'][0])
+            while tracker.state['TrackDuration'] == '00:00:00':
+                print(tracker.state['TrackDuration'])
                 sleep(0.1)
-            print(second_to_time(position))
+            print('load position: %s' % second_to_time(position))
             tracker.dmr.seek(second_to_time(position))
     except Exception as e:
         print(e)
@@ -192,7 +196,6 @@ def dlna_play():
 @route('/dlnapause')
 def dlna_pause():
     """Pause video through DLNA"""
-    discover_dlnap()
     tracker.dmr.pause()
 
 
