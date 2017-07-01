@@ -28,7 +28,7 @@
     /* background: grey; */
 }
 #volume-bar {
-    background-color: #F98787; /* #F0AD4E; */
+    background-color: #F0AD4E; /* #F98787;  */
     width: 16em;
     height: 1.5em;
     margin-top: 3.5em;
@@ -64,7 +64,7 @@
       <br>
       <button type="button" class="btn btn-success btn-lg glyphicon glyphicon-play" onclick="$.get('/dlnaplay')">
       </button>
-      <button type="button" class="btn btn-warning btn-lg glyphicon glyphicon-pause" onclick="$.get('/dlnapause')">
+      <button type="button" class="btn btn-danger btn-lg glyphicon glyphicon-pause" onclick="$.get('/dlnapause')">
       </button>
       <!-- <button type="button" class="btn btn-danger btn-lg glyphicon glyphicon-stop" onclick="$.get('/dlnastop')"></button> -->
       <div class="btn-group dropdown">
@@ -84,7 +84,7 @@
         <input type="range" id="position-bar" min="0" max="0">
           <span class="col-xs-3 col-sm-3 col-md-2" id="position-min"></span>
           <span class="col-xs-3 col-sm-3 col-md-2 col-xs-offset-6 col-sm-offset-6 col-md-offset-8" id="position-max"></span>
-        <input type="range" id="volume-bar" min="0" value="12" max="100">
+        <input type="range" id="volume-bar" min="0" max="100">
     </div>
     <div id="sidebar">
       <button id="history" type="button" class="btn btn-default">
@@ -181,29 +181,23 @@ function get_dmr_state(){
             $('#position').text(data["RelTime"] + "/" + data["TrackDuration"]);
             $('#src').text(decodeURI(data["TrackURI"]));
             $('#state').text(data["CurrentTransportState"]);
+            if ($('#state').text()=="PLAYING") {
+                $(".glyphicon-play").hide();
+                $(".glyphicon-pause").show();
+            } else {
+                $(".glyphicon-play").show();
+                $(".glyphicon-pause").hide();
+            }
+            if(reltime >= 90)
+                $(".glyphicon-chevron-down").hide();
+            else
+                $(".glyphicon-chevron-down").show();
         },
         error: function(xhr, err) {
             if(err != "parsererror")
                 out("DLNAINFO: " + xhr.statusText);
         }
     });
-    /*
-    $.get("/dlnainfo", function(data){
-        //max(0,min(current-300,total-600))
-        //min(mini+600,total)
-        reltime = timeToSecond(data["RelTime"]);
-        duration = timeToSecond(data["TrackDuration"]);
-        min = Math.max(Math.min(reltime - 300, duration - 600), 0);
-        max = Math.min(min + 600, duration);
-        $("#position-bar").attr("min", min);
-        $("#position-bar").attr("max", max);
-        $("#position-bar").val(reltime);
-        $("#position-min").text(secondToTime(min));
-        $("#position-max").text(secondToTime(max));
-        $('#position').text(data["RelTime"] + "/" + data["TrackDuration"]);
-        $('#src').text(decodeURI(data["TrackURI"]));
-    });
-    */
 }
 if ("{{mode}}" == "index") {
     history("/list");
@@ -351,9 +345,12 @@ $("#tabFrame").on("click", ".folder", function () {
 }).on("click", ".mp4", function () {
     window.location.href = "/play/" + this.title;
 }).on("click", ".dlna", function () {
-    $.get("/dlna/" + this.title, function(){
+    $.get("/dlnaload/" + this.title, function(){
         if("{{mode}}" != "dlna")
-            window.location.href = "/dlna";
+            window.location.href = "/";
+            //window.location.href = "/dlna";
+        else
+            $("#dialog").hide(250);
     });
     //window.location.href = "/dlna/" + this.title;
 });
