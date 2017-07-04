@@ -24,9 +24,6 @@
     border: None;
     /* box-shadow: inset 0px 0px 5px 1px #A0D468; */
 }
-#volume-bar::-webkit-slider-thumb:active{
-    /* background: grey; */
-}
 #volume-bar {
     background-color: #F0AD4E; /* #F98787;  */
     width: 16em;
@@ -50,10 +47,6 @@
 }
 #position {
     margin-top: 3em;
-}
-#dlna button {
-    opacity: 0.8;
-    box-shadow: inset 0px 0px 9px 0px #F1F2F6;
 }
     </style>
   </head>
