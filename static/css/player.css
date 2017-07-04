@@ -105,6 +105,10 @@ input[type=range]::-moz-range-thumb {
     display: none;
     z-index: 10;
 }
+#dlna button {
+    opacity: 0.8;
+    box-shadow: inset 0px 0px 9px 0px #F1F2F6;
+}
 #panel {
     opacity: 0.88;
     box-shadow: 2px 2px 5px #333333;
