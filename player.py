@@ -7,6 +7,7 @@ import sqlite3
 import math
 import json
 import re
+import traceback
 from urllib.parse import quote, unquote
 from time import sleep, time
 from threading import Thread, Event
@@ -16,16 +17,16 @@ from bottle import route, post, template, static_file, abort, request, redirect,
 import dlnap  # https://github.com/ttopholm/dlnap
 
 VIDEO_PATH = './static/mp4'  # mp4 file path
-# DLNAP = None  # dlna player
 
 
-class DMR_Tracker(Thread):
+class DMRTracker(Thread):
     """Digital Media Renderer"""
     state = {}  # dmr device state
     dmr = None  # dmr device object
+    retry = 0
 
     def __init__(self, *args, **kwargs):
-        super(DMR_Tracker, self).__init__(*args, **kwargs)
+        super(DMRTracker, self).__init__(*args, **kwargs)
         self.__flag = Event()
         self.__flag.set()
         self.__running = Event()
@@ -34,9 +35,10 @@ class DMR_Tracker(Thread):
         
     def discover_dmr(self):
         print('Searching DMR device...')
-        allDevices = dlnap.discover(name='', ip='', timeout=2, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
-        if len(allDevices) > 0:
-            self.dmr = allDevices[0]  # self.dmr.name
+        all_devices = dlnap.discover(name='', ip='', timeout=2, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
+        if len(all_devices) > 0:
+            self.dmr = all_devices[0]  # self.dmr.name
+            self.retry = 0
 
     def run(self):
         while self.__running.isSet():
@@ -51,11 +53,12 @@ class DMR_Tracker(Thread):
                     if self.state['CurrentTransportState'] == 'PLAYING':
                         self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI'][0]))
                         save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']), time_to_second(self.state['TrackDuration']))
+                    print(self.state)
                 except TypeError as e:
-                    print('type:error')
-                    self.dmr = None
+                    print('TypeError: %s' % e)
+                    # self.dmr = None
                 except Exception as e:
-                    print('DMR Tracker Exception: %s' % e)
+                    print('DMR Tracker Exception: %s\n%s' % (e, traceback.format_exc()))
                     
                 for i in range(1):
                     sleep(1)
@@ -63,6 +66,12 @@ class DMR_Tracker(Thread):
                     # RelTime += 1
             else:
                 self.discover_dmr()
+                self.retry += 1
+                if self.retry > 5:
+                    for i in range(self.retry):
+                        if self.retry == 0:
+                            break
+                        sleep(1)
 
     def pause(self):
         self.__flag.clear()
@@ -96,7 +105,7 @@ def second_to_time(second):  # turn seconds into hh:mm:ss time format
 
 
 def time_to_second(time_str):  # turn hh:mm:ss time format into seconds
-    return sum([int(i)*60**n for n,i in enumerate(str(time_str).split(':')[::-1])])
+    return sum([int(i)*60**n for n, i in enumerate(str(time_str).split(':')[::-1])])
 
 
 def get_size(*filename):
@@ -162,21 +171,19 @@ def dlna_load(src):
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try:  # set trackuri,if failed stop and retry
         tracker.dmr.stop()
-        time0 = time()
-        sleep(0.75)
-        while tracker.state['CurrentTransportState'] not in ['STOPPED', 'NO_MEDIA_PRESENT']:
-            sleep(0.1)
-            print(tracker.state['CurrentTransportState'])
-        print('stopped in %fs' % (time() - time0))
+        sleep(0.8)
+        # while tracker.state['CurrentTransportState'] not in ['STOPPED', 'NO_MEDIA_PRESENT']:
+            # sleep(0.1)
+            # print(tracker.state['CurrentTransportState'])
         tracker.dmr.set_current_media(url)
         print('loaded')
-        # print(tracker.state['CurrentTransportState'])
         tracker.dmr.play()  # TRANSITIONING
         position = load_history(src)
         if position:
             time0 = time()
             while tracker.state['TrackDuration'] == '00:00:00':
                 sleep(0.1)
+                print('Waiting for duration correctly recognized')
             print('load position: %s in %fs' % (second_to_time(position), time() - time0))
             tracker.dmr.seek(second_to_time(position))
     except Exception as e:
@@ -320,7 +327,7 @@ def fs_dir(path):
                                 'path': '%s%s' % (path, file), 'size': get_size(path, file)})
             elif re.match('.*\.((?i)(mkv|avi))$', file):
                 list_video.append({'filename': file, 'type': 'video',
-                                'path': '%s%s' % (path, file), 'size': get_size(path, file)})
+                                   'path': '%s%s' % (path, file), 'size': get_size(path, file)})
             else:
                 list_other.append({'filename': file, 'type': 'other',
                                   'path': '%s%s' % (path, file), 'size': get_size(path, file)})
@@ -334,7 +341,7 @@ run_sql('''create table if not exists history
                 (FILENAME text PRIMARY KEY not null,
                 POSITION float not null,
                 DURATION float, LATEST_DATE datetime not null);''')
-tracker = DMR_Tracker()
+tracker = DMRTracker()
 tracker.start()
 
 if __name__ == '__main__':  # for debug
