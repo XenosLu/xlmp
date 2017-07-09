@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=1">
     <title>{{title}}</title>
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/css/player.css" rel="stylesheet">
+    <link href="/static/css/player.css?v=1" rel="stylesheet">
     <style>
 #position-bar {
     background-color: #A0D468;
@@ -84,7 +84,7 @@
         <i class="glyphicon glyphicon-list-alt"></i>
       </button>
     </div>
-    <div id="dialog" class="col-xs-12 col-sm-6 col-md-4">
+    <div id="dialog" class="col-xs-12 col-sm-8 col-md-8 col-lg-7">
       <div id="panel">
         <div class="bg-info panel-title">
           <button onClick="$('#dialog').hide(250);" type="button" class="close">&times;</button>
@@ -198,16 +198,20 @@ if ("{{mode}}" == "index") {
 } else if ("{{mode}}" == "dlna") {
     get_dmr_state();
     $("#dlna").show(250);
-    setInterval("get_dmr_state()",1000);
+    inter = setInterval("get_dmr_state()",1000);
     $("#position-bar").on("change", function() {
+        //window.clearInterval(inter);
         $.get("/dlnaseek/" + secondToTime($(this).val()));
     }).on("input", function() {
         out(secondToTime($(this).val()));
+        //inter = setInterval("get_dmr_state()",1000);
     });
     $("#volume-bar").on("change",function() {
+        //window.clearInterval(inter);
         $.get("/dlnavolume/" + $(this).val());
     }).on("input", function() {
         out($(this).val());
+        //inter = setInterval("get_dmr_state()",1000);
     });
 } else if ("{{mode}}" == "player") {
     $("#videosize").show();

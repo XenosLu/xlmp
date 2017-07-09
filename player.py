@@ -23,7 +23,7 @@ class DMRTracker(Thread):
     """Digital Media Renderer"""
     state = {}  # dmr device state
     dmr = None  # dmr device object
-    retry = 0
+    # retry = 0
 
     def __init__(self, *args, **kwargs):
         super(DMRTracker, self).__init__(*args, **kwargs)
@@ -38,7 +38,7 @@ class DMRTracker(Thread):
         all_devices = dlnap.discover(name='', ip='', timeout=2, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
         if len(all_devices) > 0:
             self.dmr = all_devices[0]  # self.dmr.name
-            self.retry = 0
+            # self.retry = 0
 
     def run(self):
         while self.__running.isSet():
@@ -66,12 +66,12 @@ class DMRTracker(Thread):
                     # RelTime += 1
             else:
                 self.discover_dmr()
-                self.retry += 1
-                if self.retry > 5:
-                    for i in range(self.retry):
-                        if self.retry == 0:
-                            break
-                        sleep(1)
+                # self.retry += 1
+                # if self.retry > 5:
+                    # for i in range(self.retry):
+                        # if self.retry == 0:
+                            # break
+                sleep(3)
 
     def pause(self):
         self.__flag.clear()
