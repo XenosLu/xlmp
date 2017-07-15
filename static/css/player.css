@@ -83,7 +83,7 @@ input[type=range]::-moz-range-thumb {
     opacity: 0.4;
     /* display: none; */
     position: fixed;
-    top: 5%;
+    top: 3%;
     z-index: 9;
 }
 #output {

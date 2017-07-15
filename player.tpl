@@ -168,8 +168,8 @@ function get_dmr_state(){
         success: function (data) {
             reltime = timeToSecond(data["RelTime"]);
             duration = timeToSecond(data["TrackDuration"]);
-            min = Math.max(Math.min(reltime - 300, duration - 600), 0);
-            max = Math.min(min + 600, duration);
+            //min = Math.max(Math.min(reltime - 300, duration - 600), 0);
+            //max = Math.min(min + 600, duration);
             //$("#position-bar").attr("min", min).attr("max", max).val(reltime);
             if(update) {
                 $("#position-bar").attr("max", duration).val(reltime);
@@ -204,7 +204,7 @@ function sin_val(current, value, max) {
     else
         relduration = max - current;
     s = Math.sin((value - current) / relduration * 1.57079637);
-    return current + s * s * s * (value - current);
+    return current + Math.pow(s, 4) * (value - current);
 }
 if ("{{mode}}" == "index") {
     history("/list");
