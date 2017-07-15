@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=1">
     <title>{{title}}</title>
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/css/player.css?v=1" rel="stylesheet">
+    <link href="/static/css/player.css?v=3" rel="stylesheet">
     <style>
 #position-bar {
     background-color: #A0D468;
@@ -75,8 +75,9 @@
       </div>
         <h3 id="position"></h3>
         <input type="range" id="position-bar" min="0" max="0">
-          <span class="col-xs-3 col-sm-3 col-md-2" id="position-min"></span>
-          <span class="col-xs-3 col-sm-3 col-md-2 col-xs-offset-6 col-sm-offset-6 col-md-offset-8" id="position-max"></span>
+        <!-- <input type="range" id="position-test" min="-100" value="0" max="100"> -->
+        <!-- <span class="col-xs-3 col-sm-3 col-md-2" id="position-min"></span> -->
+        <!-- <span class="col-xs-3 col-sm-3 col-md-2 col-xs-offset-6 col-sm-offset-6 col-md-offset-8" id="position-max"></span> -->
         <input type="range" id="volume-bar" min="0" max="100">
     </div>
     <div id="sidebar">
@@ -152,6 +153,8 @@
 var RANGE = 12;  //minimum touch move range in px
 var text="";
 var lastplaytime = 0;  //in seconds
+var reltime = 0;
+var update = true;
 
 window.onload = adapt;
 $(window).resize(adapt);
@@ -167,10 +170,13 @@ function get_dmr_state(){
             duration = timeToSecond(data["TrackDuration"]);
             min = Math.max(Math.min(reltime - 300, duration - 600), 0);
             max = Math.min(min + 600, duration);
-            $("#position-bar").attr("min", min).attr("max", max).val(reltime);
-            $("#volume-bar").val(data["CurrentVolume"]);
-            $("#position-min").text(secondToTime(min));
-            $("#position-max").text(secondToTime(max));
+            //$("#position-bar").attr("min", min).attr("max", max).val(reltime);
+            if(update) {
+                $("#position-bar").attr("max", duration).val(reltime);
+                $("#volume-bar").val(data["CurrentVolume"]);
+            }
+            //$("#position-min").text(secondToTime(min));
+            //$("#position-max").text(secondToTime(max));
             $('#position').text(data["RelTime"] + "/" + data["TrackDuration"]);
             $('#src').text(decodeURI(data["TrackURI"]));
             $('#state').text(data["CurrentTransportState"]);
@@ -192,6 +198,14 @@ function get_dmr_state(){
         }
     });
 }
+function sin_val(current, value, max) {
+    if (value < current)
+        relduration = current;
+    else
+        relduration = max - current;
+    s = Math.sin((value - current) / relduration * 1.57079637);
+    return current + s * s * s * (value - current);
+}
 if ("{{mode}}" == "index") {
     history("/list");
     $("#dialog").show(250);
@@ -200,18 +214,21 @@ if ("{{mode}}" == "index") {
     $("#dlna").show(250);
     inter = setInterval("get_dmr_state()",1000);
     $("#position-bar").on("change", function() {
-        //window.clearInterval(inter);
-        $.get("/dlnaseek/" + secondToTime($(this).val()));
+        //$.get("/dlnaseek/" + secondToTime($(this).val()));
+        $.get("/dlnaseek/" + secondToTime(sin_val(reltime, $(this).val(), $(this).attr("max"))));
+        update = true;
     }).on("input", function() {
-        out(secondToTime($(this).val()));
-        //inter = setInterval("get_dmr_state()",1000);
+        //out(secondToTime($(this).val()));
+        out(secondToTime(sin_val(reltime, $(this).val(), $(this).attr("max"))));
+        //out(sin_val(reltime, $(this).val(), $(this).attr("max")));
+        update = false;
     });
     $("#volume-bar").on("change",function() {
-        //window.clearInterval(inter);
         $.get("/dlnavolume/" + $(this).val());
+        update = true;
     }).on("input", function() {
         out($(this).val());
-        //inter = setInterval("get_dmr_state()",1000);
+        update = false;
     });
 } else if ("{{mode}}" == "player") {
     $("#videosize").show();
@@ -253,7 +270,11 @@ if ("{{mode}}" == "index") {
     });
 }
 function showSidebar() {
-    $("#sidebar").show(600).delay(9999).hide(300);
+    //$("#sidebar").show(600).delay(9999).hide(300);
+    //out('show sidebar');
+    $("#sidebar").show(600);
+    sleep(9);
+    $("#sidebar").hide(300);
 }
 function rate(x) {
     out(x + "X");
@@ -290,6 +311,24 @@ $(document).on('touchstart', function (e) {
     x0 = e.originalEvent.touches[0].screenX;
     y0 = e.originalEvent.touches[0].screenY;
 });
+$(document).on('touchmove', function (e) {
+    x = e.changedTouches[0].screenX - x0;
+    y = e.changedTouches[0].screenY - y0;
+    if (Math.abs(y / x) < 0.25) {
+        if (Math.abs(x) > RANGE) {
+            time = Math.floor(x / 11);
+            //out(time);
+            if (!isNaN($("video").get(0).duration)) {
+                if (time > 0) {
+                    time = Math.min(60, time);
+                } else if (time < 0) {
+                    time = Math.max(-60, time);
+                }
+                
+            }
+        }
+    }
+});
 $(document).on('touchend', function (e) {
     x = e.changedTouches[0].screenX - x0;
     y = e.changedTouches[0].screenY - y0;
@@ -307,7 +346,8 @@ $(document).on('touchend', function (e) {
                     $("video").get(0).currentTime += time;
                 }
         }
-    } else
+    } 
+    else
         showSidebar();
 });
 $("#history").click(function () {

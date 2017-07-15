@@ -29,10 +29,8 @@ div {
     text-align: center;
 }
 video {
-    /*
     clear: both;
     display: block;
-    */
     margin: auto;
     position: absolute;
     top: 0;
@@ -83,9 +81,10 @@ input[type=range]::-moz-range-thumb {
 }
 #sidebar{
     opacity: 0.4;
-    display: none;
+    /* display: none; */
     position: fixed;
-    top: 15%;
+    top: 5%;
+    z-index: 9;
 }
 #output {
     z-index: 99;
@@ -93,7 +92,7 @@ input[type=range]::-moz-range-thumb {
     pointer-events: none;
     border-radius: 0.2em;
     padding: 0.2em;
-    opacity: 0.7;
+    opacity: 0.8;
     border: 1px solid #777777;
     box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
     text-shadow: 0.1em 0.1em 0.4em #666;

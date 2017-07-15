@@ -35,7 +35,7 @@ class DMRTracker(Thread):
         
     def discover_dmr(self):
         print('Searching DMR device...')
-        all_devices = dlnap.discover(name='', ip='', timeout=2, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
+        all_devices = dlnap.discover(name='', ip='', timeout=3, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
         if len(all_devices) > 0:
             self.dmr = all_devices[0]  # self.dmr.name
             # self.retry = 0
@@ -163,7 +163,7 @@ def play(src):
     return template('player', mode='player', src=src, position=load_history(src), title=src)
 
 
-@route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi))$>')
+@route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|rmvb))$>')
 def dlna_load(src):
     """Video DLNA play page"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
@@ -303,7 +303,7 @@ def static(filename):
     return static_file(filename, root='./static')
 
 
-@route('/video/<src:re:.*\.((?i)(mp4|mkv|avi))$>')
+@route('/video/<src:re:.*\.((?i)(mp4|mkv|avi|rmvb))$>')
 def static_video(src):
     """video file access
        To support large file(>2GB), you should use web server to deal with static files.
@@ -325,7 +325,7 @@ def fs_dir(path):
             elif re.match('.*\.((?i)mp)4$', file):
                 list_mp4.append({'filename': file, 'type': 'mp4',
                                 'path': '%s%s' % (path, file), 'size': get_size(path, file)})
-            elif re.match('.*\.((?i)(mkv|avi))$', file):
+            elif re.match('.*\.((?i)(mkv|avi|rmvb))$', file):
                 list_video.append({'filename': file, 'type': 'video',
                                    'path': '%s%s' % (path, file), 'size': get_size(path, file)})
             else:
@@ -345,7 +345,7 @@ tracker = DMRTracker()
 tracker.start()
 
 if __name__ == '__main__':  # for debug
-    # os.system('start http://127.0.0.1:8081/')  # open the page automatic
+    os.system('start http://127.0.0.1:8081/')  # open the page automatic
     # os.system('start http://127.0.0.1:8081/dlna/test.mp4')  # open the page automatic
     # run(host='0.0.0.0', port=8081, debug=True, reloader=True)  # run demo server
     run(host='0.0.0.0', port=8081, debug=True)  # run demo server
