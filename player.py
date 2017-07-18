@@ -171,7 +171,7 @@ def dlna_load(src):
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try:  # set trackuri,if failed stop and retry
         tracker.dmr.stop()
-        sleep(0.8)
+        sleep(0.85)
         # while tracker.state['CurrentTransportState'] not in ['STOPPED', 'NO_MEDIA_PRESENT']:
             # sleep(0.1)
             # print(tracker.state['CurrentTransportState'])

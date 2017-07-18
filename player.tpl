@@ -62,8 +62,6 @@
       <!-- <button type="button" class="btn btn-danger btn-lg glyphicon glyphicon-stop" onclick="$.get('/dlnastop')"></button> -->
       <div class="btn-group dropdown">
         <button type="button" class="btn btn-info btn-lg dropdown-toggle glyphicon glyphicon-chevron-down" data-toggle="dropdown">
-        <!-- seek -->
-          <!-- <span class="caret"></span> -->
         </button>
         <ul class="dropdown-menu" role="menu">
           <li><a href="#" onclick="$.get('/dlnaseek/00:00:15')">00:15</a></li>
@@ -75,9 +73,6 @@
       </div>
         <h3 id="position"></h3>
         <input type="range" id="position-bar" min="0" max="0">
-        <!-- <input type="range" id="position-test" min="-100" value="0" max="100"> -->
-        <!-- <span class="col-xs-3 col-sm-3 col-md-2" id="position-min"></span> -->
-        <!-- <span class="col-xs-3 col-sm-3 col-md-2 col-xs-offset-6 col-sm-offset-6 col-md-offset-8" id="position-max"></span> -->
         <input type="range" id="volume-bar" min="0" max="100">
     </div>
     <div id="sidebar">
@@ -167,16 +162,11 @@ function get_dmr_state(){
         type: "GET",
         success: function (data) {
             reltime = timeToSecond(data["RelTime"]);
-            duration = timeToSecond(data["TrackDuration"]);
-            //min = Math.max(Math.min(reltime - 300, duration - 600), 0);
-            //max = Math.min(min + 600, duration);
-            //$("#position-bar").attr("min", min).attr("max", max).val(reltime);
+            //duration = timeToSecond(data["TrackDuration"]);
             if(update) {
-                $("#position-bar").attr("max", duration).val(reltime);
+                $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
                 $("#volume-bar").val(data["CurrentVolume"]);
             }
-            //$("#position-min").text(secondToTime(min));
-            //$("#position-max").text(secondToTime(max));
             $('#position').text(data["RelTime"] + "/" + data["TrackDuration"]);
             $('#src').text(decodeURI(data["TrackURI"]));
             $('#state').text(data["CurrentTransportState"]);
@@ -204,7 +194,7 @@ function sin_val(current, value, max) {
     else
         relduration = max - current;
     s = Math.sin((value - current) / relduration * 1.57079637);
-    return current + Math.pow(s, 4) * (value - current);
+    return current + Math.abs(Math.pow(s, 3)) * (value - current);
 }
 if ("{{mode}}" == "index") {
     history("/list");
@@ -214,13 +204,10 @@ if ("{{mode}}" == "index") {
     $("#dlna").show(250);
     inter = setInterval("get_dmr_state()",1000);
     $("#position-bar").on("change", function() {
-        //$.get("/dlnaseek/" + secondToTime($(this).val()));
         $.get("/dlnaseek/" + secondToTime(sin_val(reltime, $(this).val(), $(this).attr("max"))));
         update = true;
     }).on("input", function() {
-        //out(secondToTime($(this).val()));
         out(secondToTime(sin_val(reltime, $(this).val(), $(this).attr("max"))));
-        //out(sin_val(reltime, $(this).val(), $(this).attr("max")));
         update = false;
     });
     $("#volume-bar").on("change",function() {
@@ -272,9 +259,6 @@ if ("{{mode}}" == "index") {
 function showSidebar() {
     //$("#sidebar").show(600).delay(9999).hide(300);
     //out('show sidebar');
-    $("#sidebar").show(600);
-    sleep(9);
-    $("#sidebar").hide(300);
 }
 function rate(x) {
     out(x + "X");
