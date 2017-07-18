@@ -130,7 +130,7 @@ function get_dmr_state(){
         type: "GET",
         success: function (data) {
             reltime = timeToSecond(data["RelTime"]);
-            vol = data["CurrentVolume"];
+            vol = Number(data["CurrentVolume"]);
             //duration = timeToSecond(data["TrackDuration"]);
             if(update) {
                 $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
@@ -163,8 +163,8 @@ function offset_value(current, value, max) {
         relduration = current;
     else
         relduration = max - current;
-    s = Math.sin((value - current) / relduration * 1.57079637);
-    return current + Math.abs(Math.pow(s, 3)) * (value - current);
+    s = Math.sin((value - current) / relduration * 1.5707963267948966192313216916);
+    return Math.round(current + Math.abs(Math.pow(s, 3)) * (value - current));
 }
 if ("{{mode}}" == "index") {
     history("/list");
