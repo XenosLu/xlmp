@@ -123,3 +123,34 @@ input[type=range]::-moz-range-thumb {
     transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
 }
+#position-bar {
+    background-color: #A0D468;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    width: 84%;
+    height: 2.4em;
+}
+#position-bar::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    height: 5.2em;
+    width: 3.3em;
+    padding: 1.5em;
+    background-clip: content-box;
+    background-color: #F1F2F6;
+    border: None;
+}
+#volume-bar {
+    background-color: #F0AD4E;
+    width: 16em;
+    height: 1.5em;
+    margin-top: 3.5em;
+}
+#volume-bar::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    height: 3.2em;
+    width: 3.8em;
+    padding: 1em;
+    background-clip: content-box;
+    background-color: #F1F2F6;
+    border: None;
+}

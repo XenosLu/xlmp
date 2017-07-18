@@ -5,41 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=1">
     <title>{{title}}</title>
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/css/player.css?v=3" rel="stylesheet">
+    <link href="/static/css/player.css?v=4" rel="stylesheet">
     <style>
-#position-bar {
-    background-color: #A0D468;
-    margin-top: 1.5em;
-    margin-bottom: 1.5em;
-    width: 84%;
-    height: 2.4em;
-}
-#position-bar::-webkit-slider-thumb{
-    -webkit-appearance: none;
-    height: 5.2em;
-    width: 3.3em;
-    padding: 1.5em;
-    background-clip: content-box;
-    background-color: #F1F2F6;
-    border: None;
-    /* box-shadow: inset 0px 0px 5px 1px #A0D468; */
-}
-#volume-bar {
-    background-color: #F0AD4E; /* #F98787;  */
-    width: 16em;
-    height: 1.5em;
-    margin-top: 3.5em;
-}
-#volume-bar::-webkit-slider-thumb{
-    -webkit-appearance: none;
-    height: 3.2em;
-    width: 3.8em;
-    padding: 1em;
-    background-clip: content-box;
-    background-color: #F1F2F6;
-    border: None;
-    /* box-shadow: inset 0px 0px 5px 1px #F0AD4E; */
-}
 #src {
     width: 100%;
     overflow: hidden;
@@ -149,6 +116,7 @@ var RANGE = 12;  //minimum touch move range in px
 var text="";
 var lastplaytime = 0;  //in seconds
 var reltime = 0;
+var vol = 0;
 var update = true;
 
 window.onload = adapt;
@@ -162,15 +130,17 @@ function get_dmr_state(){
         type: "GET",
         success: function (data) {
             reltime = timeToSecond(data["RelTime"]);
+            vol = data["CurrentVolume"];
             //duration = timeToSecond(data["TrackDuration"]);
             if(update) {
                 $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
-                $("#volume-bar").val(data["CurrentVolume"]);
+                //$("#volume-bar").val(data["CurrentVolume"]);
+                $("#volume-bar").val(vol);
             }
             $('#position').text(data["RelTime"] + "/" + data["TrackDuration"]);
             $('#src').text(decodeURI(data["TrackURI"]));
             $('#state').text(data["CurrentTransportState"]);
-            if ($('#state').text()=="PLAYING") {
+            if ($('#state').text() == "PLAYING") {
                 $(".glyphicon-play").hide();
                 $(".glyphicon-pause").show();
             } else {
@@ -188,7 +158,7 @@ function get_dmr_state(){
         }
     });
 }
-function sin_val(current, value, max) {
+function offset_value(current, value, max) {
     if (value < current)
         relduration = current;
     else
@@ -204,17 +174,19 @@ if ("{{mode}}" == "index") {
     $("#dlna").show(250);
     inter = setInterval("get_dmr_state()",1000);
     $("#position-bar").on("change", function() {
-        $.get("/dlnaseek/" + secondToTime(sin_val(reltime, $(this).val(), $(this).attr("max"))));
+        $.get("/dlnaseek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
         update = true;
     }).on("input", function() {
-        out(secondToTime(sin_val(reltime, $(this).val(), $(this).attr("max"))));
+        out(secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
         update = false;
     });
     $("#volume-bar").on("change",function() {
-        $.get("/dlnavolume/" + $(this).val());
+        //$.get("/dlnavolume/" + $(this).val());
+        $.get("/dlnavolume/" + offset_value(vol, $(this).val(), $(this).attr("max")));
         update = true;
     }).on("input", function() {
-        out($(this).val());
+        //out($(this).val());
+        out(offset_value(vol, $(this).val(), $(this).attr("max")));
         update = false;
     });
 } else if ("{{mode}}" == "player") {
@@ -373,7 +345,6 @@ $("#tabFrame").on("click", ".folder", function () {
         else
             $("#dialog").hide(250);
     });
-    //window.location.href = "/dlna/" + this.title;
 });
 function filelist(str) {
     $.ajax({
