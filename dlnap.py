@@ -38,13 +38,13 @@ from contextlib import contextmanager
 import os
 py3 = sys.version_info[0] == 3
 if py3:
-   from urllib.request import urlopen
-   from http.server import HTTPServer
-   from http.server import BaseHTTPRequestHandler
+    from urllib.request import urlopen
+    from http.server import HTTPServer
+    from http.server import BaseHTTPRequestHandler
 else:
-   from urllib2 import urlopen
-   from BaseHTTPServer import BaseHTTPRequestHandler
-   from BaseHTTPServer import HTTPServer
+    from urllib2 import urlopen
+    from BaseHTTPServer import BaseHTTPRequestHandler
+    from BaseHTTPServer import HTTPServer
 
 import shutil
 import threading
@@ -364,17 +364,16 @@ def _send_tcp(to, payload):
    return data
 
 
-
 def _get_location_url(raw):
-   """ Extract device description url from discovery response
+    """ Extract device description url from discovery response
 
-   raw -- raw discovery response
-   return -- location url string
-   """
-   for d in raw.split('\r\n'):
-      if d.lower().startswith('location:'):
-         return re.findall('location:\s*(.*)\s*', d, re.I)[0]
-   return ''
+    raw -- raw discovery response
+    return -- location url string
+    """
+    t = re.findall('\n(?i)location:\s*(.*)\r\s*', raw, re.M)
+    if len(t) > 0:
+        return t[0]
+    return ''
 
 def _get_friendly_name(xml):
    """ Extract device name from description xml
@@ -489,7 +488,7 @@ class DlnapDevice:
       instance_id -- device instance id
       """
       packet = self._create_packet('SetAVTransportURI', {'InstanceID':instance_id, 'CurrentURI':url, 'CurrentURIMetaData':'' })
-      return _send_tcp((self.ip, self.port), packet)
+      _send_tcp((self.ip, self.port), packet)
 
    def play(self, instance_id = 0):
       """ Play media that was already set as current.
@@ -497,7 +496,7 @@ class DlnapDevice:
       instance_id -- device instance id
       """
       packet = self._create_packet('Play', {'InstanceID': instance_id, 'Speed': 1})
-      return _send_tcp((self.ip, self.port), packet)
+      _send_tcp((self.ip, self.port), packet)
 
    def pause(self, instance_id = 0):
       """ Pause media that is currently playing back.
@@ -505,7 +504,7 @@ class DlnapDevice:
       instance_id -- device instance id
       """
       packet = self._create_packet('Pause', {'InstanceID': instance_id, 'Speed':1})
-      return _send_tcp((self.ip, self.port), packet)
+      _send_tcp((self.ip, self.port), packet)
 
    def stop(self, instance_id = 0):
       """ Stop media that is currently playing back.
@@ -513,7 +512,7 @@ class DlnapDevice:
       instance_id -- device instance id
       """
       packet = self._create_packet('Stop', {'InstanceID': instance_id, 'Speed': 1})
-      return _send_tcp((self.ip, self.port), packet)
+      _send_tcp((self.ip, self.port), packet)
 
 
    def seek(self, position, instance_id = 0):
@@ -521,7 +520,7 @@ class DlnapDevice:
       Seek position
       """
       packet = self._create_packet('Seek', {'InstanceID':instance_id, 'Unit':'REL_TIME', 'Target': position })
-      return _send_tcp((self.ip, self.port), packet)
+      _send_tcp((self.ip, self.port), packet)
 
 
    def volume(self, volume=10, instance_id = 0):
@@ -531,7 +530,7 @@ class DlnapDevice:
       """
       packet = self._create_packet('SetVolume', {'InstanceID': instance_id, 'DesiredVolume': volume, 'Channel': 'Master'})
 
-      return _send_tcp((self.ip, self.port), packet)
+      _send_tcp((self.ip, self.port), packet)
       
       
    def get_volume(self, instance_id = 0):
@@ -539,7 +538,7 @@ class DlnapDevice:
       get volume
       """
       packet = self._create_packet('GetVolume', {'InstanceID':instance_id, 'Channel': 'Master'})
-      return _send_tcp((self.ip, self.port), packet)
+      _send_tcp((self.ip, self.port), packet)
 
 
    def mute(self, instance_id = 0):
@@ -548,7 +547,7 @@ class DlnapDevice:
       instance_id -- device instance id
       """
       packet = self._create_packet('SetMute', {'InstanceID': instance_id, 'DesiredMute': '1', 'Channel': 'Master'})
-      return _send_tcp((self.ip, self.port), packet)
+      _send_tcp((self.ip, self.port), packet)
 
    def unmute(self, instance_id = 0):
       """ Stop media that is currently playing back.
@@ -556,7 +555,7 @@ class DlnapDevice:
       instance_id -- device instance id
       """
       packet = self._create_packet('SetMute', {'InstanceID': instance_id, 'DesiredMute': '0', 'Channel': 'Master'})
-      return _send_tcp((self.ip, self.port), packet)
+      _send_tcp((self.ip, self.port), packet)
 
    def info(self, instance_id=0):
       """ Transport info.
