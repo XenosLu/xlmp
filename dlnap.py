@@ -538,7 +538,7 @@ class DlnapDevice:
       get volume
       """
       packet = self._create_packet('GetVolume', {'InstanceID':instance_id, 'Channel': 'Master'})
-      _send_tcp((self.ip, self.port), packet)
+      return _send_tcp((self.ip, self.port), packet)
 
 
    def mute(self, instance_id = 0):
