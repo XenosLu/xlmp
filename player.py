@@ -23,6 +23,7 @@ class DMRTracker(Thread):
     """Digital Media Renderer"""
     state = {}  # dmr device state
     dmr = None  # dmr device object
+    all_devices = None  # dmr device object
     # retry = 0
 
     def __init__(self, *args, **kwargs):
@@ -35,16 +36,24 @@ class DMRTracker(Thread):
         
     def discover_dmr(self):
         print('Searching DMR device...')
-        all_devices = dlnap.discover(name='', ip='', timeout=3, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
-        if len(all_devices) > 0:
-            self.dmr = all_devices[0]  # self.dmr.name
-            # self.retry = 0
+        self.all_devices = dlnap.discover(name='', ip='', timeout=3, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
+        if len(self.all_devices) > 0:
+            self.dmr = self.all_devices[0]
+
+    def set_dmr(self, str_dmr):
+        for i in self.all_devices:
+            if str(i) == str_dmr:
+                self.dmr = i
+                return True
+        return False
 
     def run(self):
         while self.__running.isSet():
             self.__flag.wait()
             if self.dmr:
                 try:
+                    self.state['CurrentDMR'] = str(self.dmr)
+                    self.state['DMRs'] = [str(i) for i in self.all_devices]
                     self.state['CurrentVolume'] = dlnap._xpath(self.dmr.get_volume(), 's:Envelope/s:Body/u:GetVolumeResponse/CurrentVolume')
                     self.state['CurrentTransportState'] = dlnap._xpath(self.dmr.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')
                     position_info = dlnap._xpath(self.dmr.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
@@ -56,6 +65,7 @@ class DMRTracker(Thread):
                     print(self.state)
                 except TypeError as e:
                     print('TypeError: %s' % e)
+                    print(self.all_devices)
                     # self.dmr = None
                 except Exception as e:
                     print('DMR Tracker Exception: %s\n%s' % (e, traceback.format_exc()))
@@ -66,11 +76,6 @@ class DMRTracker(Thread):
                     # RelTime += 1
             else:
                 self.discover_dmr()
-                # self.retry += 1
-                # if self.retry > 5:
-                    # for i in range(self.retry):
-                        # if self.retry == 0:
-                            # break
                 sleep(3)
 
     def pause(self):
@@ -112,7 +117,7 @@ def get_size(*filename):
     size = os.path.getsize('%s/%s' % (VIDEO_PATH, ''.join(filename)))
     if size < 0:
         return 'Out of Range'
-    if size < 1024:
+    elif size < 1024:
         return '%dB' % size
     else:
         unit = ('', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y', 'B')
@@ -161,6 +166,14 @@ def play(src):
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         redirect('/')
     return template('player', mode='player', src=src, position=load_history(src), title=src)
+
+
+@route('/setdmr/<dmr>')
+def set_dlna_dmr(dmr):
+    if tracker.set_dmr(dmr):
+        return 'Success'
+    else:
+        return 'Failed'
 
 
 @route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|rmvb))$>')

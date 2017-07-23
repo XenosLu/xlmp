@@ -19,6 +19,14 @@
   </head>
   <body>
     <div class="col-xs-12 col-sm-6 col-md-5" id="dlna">
+      <div id="dmr" class="btn-group dropdown">
+        <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li class="divider"></li>
+          <li><a href="#" onclick="">test</a></li>
+        </ul>
+      </div>
       <h2 id="src"></h2>
       <span id="state"></span>
       <br>
@@ -131,16 +139,22 @@ function get_dmr_state(){
         success: function (data) {
             reltime = timeToSecond(data["RelTime"]);
             vol = Number(data["CurrentVolume"]);
-            //duration = timeToSecond(data["TrackDuration"]);
             if(update) {
                 $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
                 //$("#volume-bar").val(data["CurrentVolume"]);
                 $("#volume-bar").val(vol);
             }
-            $('#position').text(data["RelTime"] + "/" + data["TrackDuration"]);
+            $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
             $('#src').text(decodeURI(data["TrackURI"]));
-            $('#state').text(data["CurrentTransportState"]);
-            if ($('#state').text() == "PLAYING") {
+            
+            $("#dmr button").text(data["CurrentDMR"]);
+            $("#dmr ul").empty();
+            for (x in data["DMRs"]) {
+                $("#dmr ul").append('<li><a href="#" onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
+            }
+            
+            $("#state").text(data["CurrentTransportState"]);
+            if ($("#state").text() == "PLAYING") {
                 $(".glyphicon-play").hide();
                 $(".glyphicon-pause").show();
             } else {
@@ -157,6 +171,10 @@ function get_dmr_state(){
                 out("DLNAINFO: " + xhr.statusText);
         }
     });
+}
+function set_dmr(dmr) {
+    //window.location.href = "setdmr/" + dmr;
+    $.get("setdmr/" + dmr);
 }
 function offset_value(current, value, max) {
     if (value < current)
