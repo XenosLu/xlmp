@@ -15,6 +15,9 @@
 #position {
     margin-top: 3em;
 }
+#volume_up, #volume_down {
+    margin: 2.5em;
+}
     </style>
   </head>
   <body>
@@ -24,7 +27,7 @@
         </button>
         <ul class="dropdown-menu" role="menu">
           <li class="divider"></li>
-          <li><a href="#" onclick="">test</a></li>
+          <!-- <li><a href="#" onclick="">test</a></li> -->
         </ul>
       </div>
       <h2 id="src"></h2>
@@ -49,6 +52,9 @@
         <h3 id="position"></h3>
         <input type="range" id="position-bar" min="0" max="0">
         <input type="range" id="volume-bar" min="0" max="100">
+        <button id="volume_down" type="button" class="btn btn-warning btn-lg glyphicon glyphicon-minus">
+        <button id="volume_up" type="button" class="btn btn-warning btn-lg glyphicon glyphicon-plus">
+      </button>
     </div>
     <div id="sidebar">
       <button id="history" type="button" class="btn btn-default">
@@ -154,6 +160,7 @@ function get_dmr_state(){
             }
             
             $("#state").text(data["CurrentTransportState"]);
+            /*
             if ($("#state").text() == "PLAYING") {
                 $(".glyphicon-play").hide();
                 $(".glyphicon-pause").show();
@@ -161,6 +168,7 @@ function get_dmr_state(){
                 $(".glyphicon-play").show();
                 $(".glyphicon-pause").hide();
             }
+            */
             if(reltime >= 90)
                 $(".glyphicon-chevron-down").hide();
             else
@@ -181,7 +189,7 @@ function offset_value(current, value, max) {
         relduration = current;
     else
         relduration = max - current;
-    s = Math.sin((value - current) / relduration * 1.5707963267948966192313216916);
+    var s = Math.sin((value - current) / relduration * 1.5707963267948966192313216916);
     return Math.round(current + Math.abs(Math.pow(s, 3)) * (value - current));
 }
 if ("{{mode}}" == "index") {
@@ -190,13 +198,21 @@ if ("{{mode}}" == "index") {
 } else if ("{{mode}}" == "dlna") {
     get_dmr_state();
     $("#dlna").show(250);
-    inter = setInterval("get_dmr_state()",1000);
+    var inter = setInterval("get_dmr_state()",1000);
     $("#position-bar").on("change", function() {
         $.get("/dlnaseek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
         update = true;
     }).on("input", function() {
         out(secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
         update = false;
+    });
+    $("#volume_up").click(function() {
+        if (vol < 100)
+            $.get("/dlnavolume/" + (vol + 1));
+    });
+    $("#volume_up").click(function() {
+        if (vol > 0)
+            $.get("/dlnavolume/" + (vol - 1));
     });
     $("#volume-bar").on("change",function() {
         //$.get("/dlnavolume/" + $(this).val());
@@ -258,14 +274,14 @@ function secondToTime(time) {
     return ("0" + Math.floor(time / 3600)).slice(-2) + ":" + ("0" + Math.floor(time %3600 / 60)).slice(-2) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
 }
 function timeToSecond(time) {
-    t = String(time).split(":");
+    var t = String(time).split(":");
     return parseInt(t[0]) * 3600 + parseInt(t[1]) * 60 + parseInt(t[2]);
 }
 function adapt() {
     $("#videosize").text("orign");
     $("#tabFrame").css("max-height", ($(window).height() - 240) + "px");
-    video_ratio = $("video").get(0).videoWidth / $("video").get(0).videoHeight;
-    page_ratio = $(window).width() / $(window).height();
+    var video_ratio = $("video").get(0).videoWidth / $("video").get(0).videoHeight;
+    var page_ratio = $(window).width() / $(window).height();
     if (page_ratio < video_ratio) {
         $("video").get(0).style.width = $(window).width() + "px";
         $("video").get(0).style.height = Math.floor($(window).width() / video_ratio) + "px";
@@ -282,12 +298,12 @@ function out(str) {
     };
 }
 $(document).on('touchstart', function (e) {
-    x0 = e.originalEvent.touches[0].screenX;
-    y0 = e.originalEvent.touches[0].screenY;
+    var x0 = e.originalEvent.touches[0].screenX;
+    var y0 = e.originalEvent.touches[0].screenY;
 });
 $(document).on('touchmove', function (e) {
-    x = e.changedTouches[0].screenX - x0;
-    y = e.changedTouches[0].screenY - y0;
+    var x = e.changedTouches[0].screenX - x0;
+    var y = e.changedTouches[0].screenY - y0;
     if (Math.abs(y / x) < 0.25) {
         if (Math.abs(x) > RANGE) {
             time = Math.floor(x / 11);
@@ -304,8 +320,8 @@ $(document).on('touchmove', function (e) {
     }
 });
 $(document).on('touchend', function (e) {
-    x = e.changedTouches[0].screenX - x0;
-    y = e.changedTouches[0].screenY - y0;
+    var x = e.changedTouches[0].screenX - x0;
+    var y = e.changedTouches[0].screenY - y0;
     if (Math.abs(y / x) < 0.25) {
         if (Math.abs(x) > RANGE) {
             time = Math.floor(x / 11);
