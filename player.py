@@ -65,11 +65,9 @@ class DMRTracker(Thread):
                     print(self.state)
                 except TypeError as e:
                     print('TypeError: %s' % e)
-                    print(self.all_devices)
                     # self.dmr = None
                 except Exception as e:
                     print('DMR Tracker Exception: %s\n%s' % (e, traceback.format_exc()))
-                    
                 for i in range(1):
                     sleep(1)
                     # print('tick: %s' % time())
@@ -197,6 +195,9 @@ def dlna_load(src):
             while tracker.state['TrackDuration'] == '00:00:00':
                 sleep(0.1)
                 print('Waiting for duration correctly recognized')
+                if (time() - time0) > 10:
+                    dlna_load(src)
+                    print('reload position: %s in %fs' % (second_to_time(position), time() - time0))
             print('load position: %s in %fs' % (second_to_time(position), time() - time0))
             tracker.dmr.seek(second_to_time(position))
     except Exception as e:
