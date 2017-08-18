@@ -58,11 +58,7 @@ $(document).on('touchend', function (e) {
     else
         showSidebar();
 });
-$("#history").click(function () {
-    if ($('#navtab li:eq(0)').attr('class') == 'active')
-        history("/list");
-    $('#dialog').show(250);
-});
+
 $("#videosize").click(function () {
     if ($(this).text() == "auto")
         adapt();

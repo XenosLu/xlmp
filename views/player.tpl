@@ -1,19 +1,15 @@
-﻿<!doctype html>
-<html>
-  <head>
-    % include('commonhead.tpl')
-    <title>{{title}}</title>
-  </head>
-  <body>
-    % include('common.tpl')
-    % include('dlna.tpl')
-  </body>
-  % include('commonscript.tpl')
-  <script>
+﻿
+% rebase('base.tpl')
+<body>
+  % include('common.tpl')
+  % include('dlna.tpl')
+</body>
+% include('commonscript.tpl')
+<script>
 var reltime = 0;
 var vol = 0;
 var update = true;  
-  
+
 if ("{{mode}}" == "dlna") {
     get_dmr_state();
     $("#dlna").show(250);
@@ -137,6 +133,4 @@ function offset_value(current, value, max) {
     var s = Math.sin((value - current) / relduration * 1.5707963267948966192313216916);
     return Math.round(current + Math.abs(Math.pow(s, 3)) * (value - current));
 }
-
-  </script>
-</html>
+</script>

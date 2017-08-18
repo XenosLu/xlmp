@@ -2,6 +2,8 @@ window.onload = adapt;
 $(window).resize(adapt);
 $(document).mousemove(showSidebar);
 
+$("#history").click(showDialog);
+
 $("#tabFrame").on("click", ".folder", function () {
     filelist("/fs" + this.title + "/");
 }).on("click", ".move", function () {
@@ -25,6 +27,11 @@ function showSidebar() {
     //out('show sidebar');
 }
 
+function showDialog() {
+    if ($('#navtab li:eq(0)').attr('class') == 'active')
+        history("/list");
+    $("#dialog").show(250);
+}
 
 function out(str) {
     if (str != "") {
