@@ -147,10 +147,9 @@ def list_history():
 
 @route('/')
 def index():
-    mode = 'index'
     if tracker.dmr:
-        mode = 'dlna'
-    return template('player', mode=mode, src='', position=0, title='Light mp4 Player')
+        return template('player', mode='dlna', src='', position=0, title='DMC - Light mp4 Player')
+    return template('index.tpl', mode='index', title='Light mp4 Player')
 
 
 @route('/dlna')
