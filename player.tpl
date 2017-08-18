@@ -125,6 +125,7 @@
   </body>
   <script src="/static/js/jquery-3.2.1.min.js"></script>
   <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/player.js"></script>
   <script language="javascript">
 var RANGE = 12;  //minimum touch move range in px
 var text="";
@@ -289,13 +290,6 @@ function adapt() {
         $("video").get(0).style.width = Math.floor($(window).height() * video_ratio) + "px";
         $("video").get(0).style.height = $(window).height() + "px";
     }
-}
-function out(str) {
-    if (str != "") {
-        $("#output").remove();
-        $(document.body).append("<div id='output'>" + str + "</div>");
-        $("#output").fadeTo(250, 0.7).delay(1800).fadeOut(625);
-    };
 }
 $(document).on('touchstart', function (e) {
     var x0 = e.originalEvent.touches[0].screenX;
