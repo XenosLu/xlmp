@@ -148,13 +148,13 @@ def list_history():
 @route('/')
 def index():
     if tracker.dmr:
-        return template('player', mode='dlna', src='', position=0, title='DMC - Light mp4 Player')
-    return template('index.tpl', mode='index', title='Light mp4 Player')
+        redirect('/dlna')
+    return template('index', mode='index', title='Light mp4 Player')
 
 
 @route('/dlna')
 def dlna():
-    return template('player', mode='dlna', src='', position=0, title='DMC - Light mp4 Player')
+    return template('player.tpl', mode='dlna', src='', position=0, title='DMC - Light mp4 Player')
 
 
 @route('/play/<src:re:.*\.((?i)mp)4$>')
@@ -162,7 +162,7 @@ def play(src):
     """Video play page"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         redirect('/')
-    return template('player', mode='player', src=src, position=load_history(src), title=src)
+    return template('player.tpl', mode='player', src=src, position=load_history(src), title=src)
 
 
 @route('/setdmr/<dmr>')
