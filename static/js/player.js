@@ -2,14 +2,7 @@ var RANGE = 12;  //minimum touch move range in px
 var text="";
 var lastplaytime = 0;  //in seconds
 
-window.onload = adapt;
-$(window).resize(adapt);
-$(document).mousemove(showSidebar);
 
-function showSidebar() {
-    //$("#sidebar").show(600).delay(9999).hide(300);
-    //out('show sidebar');
-}
 function rate(x) {
     out(x + "X");
     $("video").get(0).playbackRate = x;
@@ -21,19 +14,7 @@ function timeToSecond(time) {
     var t = String(time).split(":");
     return parseInt(t[0]) * 3600 + parseInt(t[1]) * 60 + parseInt(t[2]);
 }
-function adapt() {
-    $("#videosize").text("orign");
-    $("#tabFrame").css("max-height", ($(window).height() - 240) + "px");
-    var video_ratio = $("video").get(0).videoWidth / $("video").get(0).videoHeight;
-    var page_ratio = $(window).width() / $(window).height();
-    if (page_ratio < video_ratio) {
-        $("video").get(0).style.width = $(window).width() + "px";
-        $("video").get(0).style.height = Math.floor($(window).width() / video_ratio) + "px";
-    } else {
-        $("video").get(0).style.width = Math.floor($(window).height() * video_ratio) + "px";
-        $("video").get(0).style.height = $(window).height() + "px";
-    }
-}
+
 $(document).on('touchstart', function (e) {
     var x0 = e.originalEvent.touches[0].screenX;
     var y0 = e.originalEvent.touches[0].screenY;

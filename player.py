@@ -149,7 +149,7 @@ def list_history():
 def index():
     if tracker.dmr:
         redirect('/dlna')
-    return template('index', mode='index', title='Light mp4 Player')
+    return template('index', title='Light mp4 Player')
 
 
 @route('/dlna')
