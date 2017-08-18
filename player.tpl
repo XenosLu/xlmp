@@ -5,20 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=1">
     <title>{{title}}</title>
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/css/player.css?v=4" rel="stylesheet">
-    <style>
-#src {
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-#position {
-    margin-top: 3em;
-}
-#volume_up, #volume_down {
-    margin: 2.5em;
-}
-    </style>
+    <link href="/static/css/player.css?v=5" rel="stylesheet">
   </head>
   <body>
     <div class="col-xs-12 col-sm-6 col-md-5" id="dlna">
@@ -127,6 +114,3 @@
   <script src="/static/js/bootstrap.min.js"></script>
   <script src="/static/js/player.js"></script>
 </html>
-
-
-
