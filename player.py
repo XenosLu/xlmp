@@ -177,7 +177,7 @@ def set_dlna_dmr(dmr):
 def dlna_load(src):
     """Video DLNA play page"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
-        return
+        abort(404, 'File not found.')
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try:  # set trackuri,if failed stop and retry
         tracker.dmr.stop()
