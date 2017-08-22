@@ -41,7 +41,7 @@
           <li><a href="#" onclick="rate(1.5)">1.5X</a></li>
           <li><a href="#" onclick="rate(2)">2X</a></li>
         </ul>
-      </div>
+      </div><!-- #rate .btn-group .dropup -->
       <button id="clear" type="button" class="btn btn-default">Clear History</button>
       <div class="btn-group dropup">
         <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.post('/suspend');">
@@ -60,7 +60,7 @@
             <i class="glyphicon glyphicon-off"></i>restart</a>
           </li>
         </ul>
-      </div>
+      </div><!-- .btn-group .dropup -->
     </div>
-  </div>
-</div>
+  </div><!-- #panel -->
+</div><!-- #dialog -->
