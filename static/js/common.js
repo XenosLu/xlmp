@@ -13,6 +13,10 @@ $("#clear").click(function () {
         history("/clear");
 });
 
+$(".close").click(function () {
+    $('#dialog').hide(250);
+});
+
 $("#tabFrame").on("click", ".folder", function () {
     filelist("/fs" + this.title + "/");
 }).on("click", ".move", function () {

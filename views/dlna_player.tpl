@@ -25,7 +25,7 @@ $("#volume_up").click(function() {
     if (vol < 100)
         $.get("/dlnavolume/" + (vol + 1));
 });
-$("#volume_up").click(function() {
+$("#volume_down").click(function() {
     if (vol > 0)
         $.get("/dlnavolume/" + (vol - 1));
 });

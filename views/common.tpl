@@ -6,7 +6,8 @@
 <div id="dialog" class="col-xs-12 col-sm-8 col-md-8 col-lg-7">
   <div id="panel">
     <div class="bg-info panel-title">
-      <button onClick="$('#dialog').hide(250);" type="button" class="close">&times;</button>
+      <!-- <button onClick="$('#dialog').hide(250);" type="button" class="close">&times;</button> -->
+      <button type="button" class="close">&times;</button>
       <ul id="navtab" class="nav nav-tabs">
         <li class="active">
           <a href="#tabFrame" data-toggle="tab" onclick="history('/list')">
