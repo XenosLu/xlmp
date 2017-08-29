@@ -3,7 +3,6 @@
     <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>
     </button>
     <ul class="dropdown-menu" role="menu">
-      <li class="divider"></li>
     </ul>
   </div>
   <h2 id="src"></h2>
