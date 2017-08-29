@@ -13,6 +13,7 @@ from time import sleep, time
 from threading import Thread, Event
 
 from bottle import route, post, template, static_file, abort, request, redirect, run  # pip install bottle  # 1.2
+from bottle import get
 
 import dlnap  # https://github.com/ttopholm/dlnap
 
@@ -35,10 +36,11 @@ class DMRTracker(Thread):
         self.discover_dmr()
         
     def discover_dmr(self):
-        print('Searching DMR device...')
+        # print('Searching DMR device...')
         self.all_devices = dlnap.discover(name='', ip='', timeout=3, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
         if len(self.all_devices) > 0:
             self.dmr = self.all_devices[0]
+            print('Found DMR device: %s' % self.dmr)
 
     def set_dmr(self, str_dmr):
         for i in self.all_devices:
@@ -64,7 +66,7 @@ class DMRTracker(Thread):
                         save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']), time_to_second(self.state['TrackDuration']))
                     print(self.state)
                 except TypeError as e:
-                    print('TypeError: %s' % e)
+                    print('TypeError: %s\n%s' % (e, traceback.format_exc()))
                     # self.dmr = None
                 except Exception as e:
                     print('DMR Tracker Exception: %s\n%s' % (e, traceback.format_exc()))
@@ -73,8 +75,8 @@ class DMRTracker(Thread):
                     # print('tick: %s' % time())
                     # RelTime += 1
             else:
+                sleep(5)
                 self.discover_dmr()
-                sleep(3)
 
     def pause(self):
         self.__flag.clear()
@@ -171,6 +173,11 @@ def set_dlna_dmr(dmr):
         return 'Success'
     else:
         return 'Failed'
+
+        
+@route('/searchdmr')
+def search_dmr():
+    tracker.discover_dmr()
 
 
 @route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|rmvb))$>')
@@ -361,4 +368,4 @@ if __name__ == '__main__':  # for debug
     os.system('start http://127.0.0.1:8081/')  # open the page automatic
     # os.system('start http://127.0.0.1:8081/dlna/test.mp4')  # open the page automatic
     # run(host='0.0.0.0', port=8081, debug=True, reloader=True)  # run demo server
-    run(host='0.0.0.0', port=8081, debug=True)  # run demo server
+    # run(host='0.0.0.0', port=8081, debug=True)  # run demo server
