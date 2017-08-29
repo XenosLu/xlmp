@@ -8,8 +8,7 @@
 <script>
 var reltime = 0;
 var vol = 0;
-var update = true;  
-
+var update = true;
 
 get_dmr_state();
 $("#dlna").show(250);
@@ -58,7 +57,7 @@ function get_dmr_state(){
             $('#src').text(decodeURI(data["TrackURI"]));
             
             $("#dmr button").text(data["CurrentDMR"]);
-            $("#dmr ul").empty();
+            $("#dmr ul").empty().append('<li><a href="#" onclick="$.get(\'/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
             for (x in data["DMRs"]) {
                 $("#dmr ul").append('<li><a href="#" onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
             }
