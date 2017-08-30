@@ -161,6 +161,12 @@ function filelist(str) {
     });
 }
 
+/**
+ * Render history list box from ajax
+ *
+ * @method history
+ * @param {String} str
+ */
 function history(str) {
     $.ajax({
             url: encodeURI(str),
@@ -195,19 +201,35 @@ function history(str) {
     });
 }
 
+/**
+ * @method secondToTime
+ * @param {Integer} time
+ * @return {String}
+ */
 function secondToTime(time) {
     return ("0" + Math.floor(time / 3600)).slice(-2) + ":" + ("0" + Math.floor(time %3600 / 60)).slice(-2) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
 }
 
+/**
+ * @method timeToSecond
+ * @param {String} time
+ * @return {Integer}
+ */
 function timeToSecond(time) {
     var t = String(time).split(":");
-    return parseInt(t[0]) * 3600 + parseInt(t[1]) * 60 + parseInt(t[2]);
+    return (parseInt(t[0]) * 3600 + parseInt(t[1]) * 60 + parseInt(t[2]));
 }
 
-function out(str) {
-    if (str != "") {
+/**
+ * Made an output box to show some text notification
+ *
+ * @method out
+ * @param {String} text
+ */
+function out(text) {
+    if (text != "") {
         $("#output").remove();
-        $(document.body).append("<div id='output'>" + str + "</div>");
+        $(document.body).append("<div id='output'>" + text + "</div>");
         $("#output").fadeTo(250, 0.7).delay(1800).fadeOut(625);
     };
 }
