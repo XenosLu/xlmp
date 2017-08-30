@@ -1,6 +1,8 @@
 var RANGE = 12;  //minimum touch move range in px
 var text = "";  //temp output text
 
+
+
 window.onload = adapt;
 window.onresize = adapt;
 //$(window).resize(adapt);
@@ -29,12 +31,22 @@ $("#tabFrame").on("click", ".folder", function () {
     if (confirm("Clear " + this.title + "?"))
         history("/remove/" + this.title);
 }).on("click", ".mp4", function () {
-    window.location.href = "/play/" + this.title;
+    if(window.document.location.pathname=="/dlna")
+        dlnaLoad(this.title);
+    else
+        window.location.href = "/play/" + this.title;
 }).on("click", ".dlna", function () {
-    $.get("/dlnaload/" + this.title, function(){
+    dlnaLoad(this.title);
+    // $.get("/dlnaload/" + this.title, function(){
+        // out('Loaded.');
+    // });
+});
+
+function dlnaLoad(media) {
+    $.get("/dlnaload/" + media, function () {
         out('Loaded.');
     });
-});
+}
 
 function showSidebar() {
     //$("#sidebar").show(600).delay(9999).hide(300);
@@ -50,7 +62,9 @@ function showDialog() {
 function adapt() {
     $("#videosize").text("orign");
     $("#tabFrame").css("max-height", ($(window).height() - 240) + "px");
-    if (!isNaN($("video").get(0).duration)) {
+    // if (!isNaN($("video").get(0).duration)) {
+    // if (!isNaN($("video").get(0))) {
+    if (!isNaN($("video"))) {
         var video_ratio = $("video").get(0).videoWidth / $("video").get(0).videoHeight;
         var page_ratio = $(window).width() / $(window).height();
         if (page_ratio < video_ratio) {
