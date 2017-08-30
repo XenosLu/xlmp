@@ -13,7 +13,6 @@ from time import sleep, time
 from threading import Thread, Event
 
 from bottle import route, post, template, static_file, abort, request, redirect, run  # pip install bottle  # 1.2
-from bottle import get
 
 import dlnap  # https://github.com/ttopholm/dlnap
 
@@ -25,7 +24,6 @@ class DMRTracker(Thread):
     state = {}  # dmr device state
     dmr = None  # dmr device object
     all_devices = None  # dmr device object
-    # retry = 0
 
     def __init__(self, *args, **kwargs):
         super(DMRTracker, self).__init__(*args, **kwargs)
@@ -59,6 +57,10 @@ class DMRTracker(Thread):
                     self.state['CurrentVolume'] = dlnap._xpath(self.dmr.get_volume(), 's:Envelope/s:Body/u:GetVolumeResponse/CurrentVolume')
                     self.state['CurrentTransportState'] = dlnap._xpath(self.dmr.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')
                     position_info = dlnap._xpath(self.dmr.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
+                    if self.state['CurrentTransportState'] is None:
+                        print('No DMR currently.')
+                        self.dmr = None
+                        break
                     for i in ('RelTime', 'TrackDuration'):
                         self.state[i] = position_info[i][0]
                     if self.state['CurrentTransportState'] == 'PLAYING':
@@ -67,7 +69,6 @@ class DMRTracker(Thread):
                     print(self.state)
                 except TypeError as e:
                     print('TypeError: %s\n%s' % (e, traceback.format_exc()))
-                    # self.dmr = None
                 except Exception as e:
                     print('DMR Tracker Exception: %s\n%s' % (e, traceback.format_exc()))
                 for i in range(1):
@@ -368,4 +369,4 @@ if __name__ == '__main__':  # for debug
     os.system('start http://127.0.0.1:8081/')  # open the page automatic
     # os.system('start http://127.0.0.1:8081/dlna/test.mp4')  # open the page automatic
     # run(host='0.0.0.0', port=8081, debug=True, reloader=True)  # run demo server
-    # run(host='0.0.0.0', port=8081, debug=True)  # run demo server
+    run(host='0.0.0.0', port=8081, debug=True)  # run demo server
