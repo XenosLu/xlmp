@@ -1,1 +1,1 @@
-bottle bottle-websocket
+bottle==1.2
