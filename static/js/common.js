@@ -31,15 +31,12 @@ $("#tabFrame").on("click", ".folder", function () {
     if (confirm("Clear " + this.title + "?"))
         history("/remove/" + this.title);
 }).on("click", ".mp4", function () {
-    if(window.document.location.pathname=="/dlna")
+    if (window.document.location.pathname == "/dlna")
         dlnaLoad(this.title);
     else
         window.location.href = "/play/" + this.title;
 }).on("click", ".dlna", function () {
     dlnaLoad(this.title);
-    // $.get("/dlnaload/" + this.title, function(){
-        // out('Loaded.');
-    // });
 });
 
 function dlnaLoad(media) {
@@ -99,7 +96,6 @@ $(document).on('touchmove', function (e) {
                 } else if (time < 0) {
                     time = Math.max(-60, time);
                 }
-                
             }
         }
     }
@@ -110,54 +106,64 @@ $(document).on('touchend', function (e) {
     if (Math.abs(y / x) < 0.25) {
         if (Math.abs(x) > RANGE) {
             time = Math.floor(x / 11);
-                if (!isNaN($("video").get(0).duration)) {
-                    if (time > 0) {
-                        time = Math.min(60, time);
-                        text = time + "S>><br>";
-                    } else if (time < 0) {
-                        time = Math.max(-60, time);
-                        text = "<<" + -time + "S<br>";
-                    }
-                    $("video").get(0).currentTime += time;
+            if (!isNaN($("video").get(0).duration)) {
+                if (time > 0) {
+                    time = Math.min(60, time);
+                    text = time + "S>><br>";
+                } else if (time < 0) {
+                    time = Math.max(-60, time);
+                    text = "<<" + -time + "S<br>";
                 }
+                $("video").get(0).currentTime += time;
+            }
         }
-    } 
-    else
+    } else
         showSidebar();
 });
 
+/**
+ * Render file list box from ajax
+ *
+ * @method filelist
+ * @param {String} str
+ */
 function filelist(str) {
     $.ajax({
-            url: encodeURI(str),
-            dataType: "json",
-            timeout : 999,
-            type: "get",
-            success: function (data) {
-                if ($('#navtab li:eq(1)').attr('class') != 'active')
-                    $("#navtab li:eq(1) a").tab("show");
-                $("#clear").hide();
-                var html = "";
-                var icon = {"folder": "folder-close", "mp4": "film", "video": "film", "other": "file"};
-                $.each(data, function (i, n) {
-                    size = "";
-                    if(n["size"])
-                        size = "<br><small>" + n["size"] +"</small>";
-                    dlna = "";
-                    if(icon[n["type"]]=="film")
-                        dlna = " class='dlna' title='" + n["path"] + "'";
-                    html += "<tr>" +
-                              "<td" + dlna + "><i class='glyphicon glyphicon-" + icon[n["type"]] + "'></i></td>" +
-                              "<td class='filelist " + n["type"] + "' title='" + n["path"] + "'>" + n["filename"] + size + "</td>" +
-                              "<td class='move' title='" + n["path"] + "'>" +
-                                "<i class='glyphicon glyphicon-remove-circle'></i>" +
-                              "</td>" +
-                            "</tr>"
-                });
-                $('#list').empty().append(html);
-            },
-            error: function(xhr){
-                out(xhr.statusText);
-            }
+        url: encodeURI(str),
+        dataType: "json",
+        timeout: 999,
+        type: "get",
+        success: function (data) {
+            if ($('#navtab li:eq(1)').attr('class') != 'active')
+                $("#navtab li:eq(1) a").tab("show");
+            $("#clear").hide();
+            var html = "";
+            var icon = {
+                "folder": "folder-close",
+                "mp4": "film",
+                "video": "film",
+                "other": "file"
+            };
+            $.each(data, function (i, n) {
+                size = "";
+                if (n["size"])
+                    size = "<br><small>" + n["size"] + "</small>";
+                dlna = "";
+                if (icon[n["type"]] == "film")
+                    dlna = " class='dlna' title='" + n["path"] + "'";
+                html += "<tr>" +
+                "<td" + dlna + "><i class='glyphicon glyphicon-" + icon[n["type"]] + "'></i></td>" +
+                "<td class='filelist " + n["type"] + "' title='" + n["path"] + "'>" + n["filename"] + size + "</td>" +
+                "<td class='move' title='" + n["path"] + "'>" +
+                "<i class='glyphicon glyphicon-remove-circle'></i>" +
+                "</td>" +
+                "</tr>"
+            });
+            $('#list').empty().append(html);
+        },
+        error: function (xhr) {
+            out(xhr.statusText);
+        }
     });
 }
 
@@ -169,39 +175,41 @@ function filelist(str) {
  */
 function history(str) {
     $.ajax({
-            url: encodeURI(str),
-            dataType: "json",
-            timeout : 999,
-            type: "get",
-            success: function (data) {
-                if ($('#navtab li:eq(0)').attr('class') != 'active')
-                    $("#navtab li:eq(0) a").tab("show");
-                $("#clear").show();
-                var html = "";
-                $.each(data, function (i, n) {
-                    html += "<tr><td class='folder' title='/" + n["path"] + "'>" +
-                                "<i class='glyphicon glyphicon-folder-close'></i>" +
-                              "</td>" +
-                              "<td class='dlna' title='" + n["filename"] + "'>" +
-                                "<i class='glyphicon glyphicon-film'></i>" +
-                              "</td>" +
-                              "<td class='filelist mp4' title='" + n["filename"] + "'>" + n["filename"] + 
-                                "<br><small>" + n["latest_date"] + " | " + 
-                                secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small>" + 
-                              "</td>" + 
-                              "<td class='remove' title='" + n["filename"] + "'>" +
-                                "<i class='glyphicon glyphicon-remove-circle'></i>" + 
-                              "</td></tr>";
-                });
-                $('#list').empty().append(html);
-            },
-            error: function(xhr){
-                out(xhr.statusText);
-            }
+        url: encodeURI(str),
+        dataType: "json",
+        timeout: 999,
+        type: "get",
+        success: function (data) {
+            if ($('#navtab li:eq(0)').attr('class') != 'active')
+                $("#navtab li:eq(0) a").tab("show");
+            $("#clear").show();
+            var html = "";
+            $.each(data, function (i, n) {
+                html += "<tr><td class='folder' title='/" + n["path"] + "'>" +
+                "<i class='glyphicon glyphicon-folder-close'></i>" +
+                "</td>" +
+                "<td class='dlna' title='" + n["filename"] + "'>" +
+                "<i class='glyphicon glyphicon-film'></i>" +
+                "</td>" +
+                "<td class='filelist mp4' title='" + n["filename"] + "'>" + n["filename"] +
+                "<br><small>" + n["latest_date"] + " | " +
+                secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small>" +
+                "</td>" +
+                "<td class='remove' title='" + n["filename"] + "'>" +
+                "<i class='glyphicon glyphicon-remove-circle'></i>" +
+                "</td></tr>";
+            });
+            $('#list').empty().append(html);
+        },
+        error: function (xhr) {
+            out(xhr.statusText);
+        }
     });
 }
 
 /**
+ * Convert Second to Time Format
+ *
  * @method secondToTime
  * @param {Integer} time
  * @return {String}
@@ -211,6 +219,8 @@ function secondToTime(time) {
 }
 
 /**
+ * Convert Time format to seconds
+ *
  * @method timeToSecond
  * @param {String} time
  * @return {Integer}
