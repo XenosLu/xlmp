@@ -57,7 +57,7 @@
           </li>
           <li>
             <a onClick="if(confirm('Restart ?'))$.post('/restart');">
-            <i class="glyphicon glyphicon-off"></i>restart</a>
+            <i class="glyphicon glyphicon-off"></i>reboot</a>
           </li>
         </ul>
       </div><!-- .btn-group .dropup -->
