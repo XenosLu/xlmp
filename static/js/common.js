@@ -2,7 +2,6 @@ var RANGE = 12;  //minimum touch move range in px
 var text = "";  //temp output text
 
 
-
 window.onload = adapt;
 window.onresize = adapt;
 //$(window).resize(adapt);
@@ -17,7 +16,7 @@ $("#clear").click(function () {
 
 //dialog close button
 $(".close").click(function () {
-    $('#dialog').hide(250);
+    $("#dialog").hide(250);
 });
 
 //table buttons
@@ -35,23 +34,31 @@ $("#tabFrame").on("click", ".folder", function () {
         dlnaLoad(this.title);
     else
         window.location.href = "/play/" + this.title;
+}).on("click", ".video", function () {
+    if (window.document.location.pathname == "/dlna")
+        dlnaLoad(this.title);
 }).on("click", ".dlna", function () {
     dlnaLoad(this.title);
 });
 
+/**
+ * Load media through DLNA
+ *
+ * @method dlnaLoad
+ * @param {String} media
+ */
 function dlnaLoad(media) {
     $.get("/dlnaload/" + media, function () {
-        out('Loaded.');
+        out("Loaded.");
     });
 }
 
 function showSidebar() {
     //$("#sidebar").show(600).delay(9999).hide(300);
-    //out('show sidebar');
 }
 
 function showDialog() {
-    if ($('#navtab li:eq(0)').attr('class') == 'active')
+    if ($("#navtab li:eq(0)").attr("class") == "active")
         history("/list");
     $("#dialog").show(250);
 }
@@ -79,11 +86,11 @@ function rate(x) {
     $("video").get(0).playbackRate = x;
 }
 
-$(document).on('touchstart', function (e) {
+$(document).on("touchstart", function (e) {
     var x0 = e.originalEvent.touches[0].screenX;
     var y0 = e.originalEvent.touches[0].screenY;
 });
-$(document).on('touchmove', function (e) {
+$(document).on("touchmove", function (e) {
     var x = e.changedTouches[0].screenX - x0;
     var y = e.changedTouches[0].screenY - y0;
     if (Math.abs(y / x) < 0.25) {
@@ -100,7 +107,7 @@ $(document).on('touchmove', function (e) {
         }
     }
 });
-$(document).on('touchend', function (e) {
+$(document).on("touchend", function (e) {
     var x = e.changedTouches[0].screenX - x0;
     var y = e.changedTouches[0].screenY - y0;
     if (Math.abs(y / x) < 0.25) {
@@ -134,7 +141,7 @@ function filelist(str) {
         timeout: 999,
         type: "get",
         success: function (data) {
-            if ($('#navtab li:eq(1)').attr('class') != 'active')
+            if ($("#navtab li:eq(1)").attr("class") != "active")
                 $("#navtab li:eq(1) a").tab("show");
             $("#clear").hide();
             var html = "";
@@ -159,7 +166,7 @@ function filelist(str) {
                 "</td>" +
                 "</tr>"
             });
-            $('#list').empty().append(html);
+            $("#list").empty().append(html);
         },
         error: function (xhr) {
             out(xhr.statusText);
@@ -180,18 +187,23 @@ function history(str) {
         timeout: 999,
         type: "get",
         success: function (data) {
-            if ($('#navtab li:eq(0)').attr('class') != 'active')
+            if ($("#navtab li:eq(0)").attr("class") != "active")
                 $("#navtab li:eq(0) a").tab("show");
             $("#clear").show();
             var html = "";
             $.each(data, function (i, n) {
+                var mediaType;
+                if ((n["filename"]).lastIndexOf('.mp4') > 0)
+                    mediaType = "mp4";
+                else
+                    mediaType = "video";
                 html += "<tr><td class='folder' title='/" + n["path"] + "'>" +
                 "<i class='glyphicon glyphicon-folder-close'></i>" +
                 "</td>" +
                 "<td class='dlna' title='" + n["filename"] + "'>" +
                 "<i class='glyphicon glyphicon-film'></i>" +
                 "</td>" +
-                "<td class='filelist mp4' title='" + n["filename"] + "'>" + n["filename"] +
+                "<td class='filelist "+ mediaType + "' title='" + n["filename"] + "'>" + n["filename"] +
                 "<br><small>" + n["latest_date"] + " | " +
                 secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small>" +
                 "</td>" +
@@ -215,7 +227,8 @@ function history(str) {
  * @return {String}
  */
 function secondToTime(time) {
-    return ("0" + Math.floor(time / 3600)).slice(-2) + ":" + ("0" + Math.floor(time %3600 / 60)).slice(-2) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
+    return ("0" + Math.floor(time / 3600)).slice(-2) + ":" +
+    ("0" + Math.floor(time % 3600 / 60)).slice(-2) + ":" + (time % 60 / 100).toFixed(2).slice(-2);
 }
 
 /**
