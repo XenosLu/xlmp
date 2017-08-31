@@ -138,7 +138,7 @@ function filelist(str) {
     $.ajax({
         url: encodeURI(str),
         dataType: "json",
-        timeout: 999,
+        timeout: 1999,
         type: "get",
         success: function (data) {
             if ($("#navtab li:eq(1)").attr("class") != "active")
@@ -184,7 +184,7 @@ function history(str) {
     $.ajax({
         url: encodeURI(str),
         dataType: "json",
-        timeout: 999,
+        timeout: 1999,
         type: "get",
         success: function (data) {
             if ($("#navtab li:eq(0)").attr("class") != "active")
