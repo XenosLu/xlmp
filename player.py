@@ -60,7 +60,7 @@ class DMRTracker(Thread):
                     if self.state['CurrentTransportState'] is None:
                         print('No DMR currently.')
                         self.dmr = None
-                        break
+                        continue
                     for i in ('RelTime', 'TrackDuration'):
                         self.state[i] = position_info[i][0]
                     if self.state['CurrentTransportState'] == 'PLAYING':
@@ -184,25 +184,33 @@ def search_dmr():
 @route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|rmvb))$>')
 def dlna_load(src):
     """Video DLNA play page"""
+    print('start loading')
+    if not tracker.dmr:
+        return 'no DMR'
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         abort(404, 'File not found.')
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try:  # set trackuri,if failed stop and retry
         tracker.dmr.stop()
         sleep(0.85)
-        # while tracker.state['CurrentTransportState'] not in ['STOPPED', 'NO_MEDIA_PRESENT']:
+        # while tracker.state['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
             # sleep(0.1)
             # print(tracker.state['CurrentTransportState'])
         tracker.dmr.set_current_media(url)
         print('loaded')
-        tracker.dmr.play()  # TRANSITIONING
+        # tracker.dmr.play()
+        while tracker.state['CurrentTransportState'] not in ('PLAYING', 'TRANSITIONING'):
+            sleep(0.1)
+            print('waiting for playing...')
+            print(tracker.state['CurrentTransportState'])
+            tracker.dmr.play()
         position = load_history(src)
         if position:
             time0 = time()
             while tracker.state['TrackDuration'] == '00:00:00':
                 sleep(0.1)
                 print('Waiting for duration correctly recognized')
-                if (time() - time0) > 10:
+                if (time() - time0) > 9:
                     dlna_load(src)
                     print('reload position: %s in %fs' % (second_to_time(position), time() - time0))
             print('load position: %s in %fs' % (second_to_time(position), time() - time0))
@@ -342,7 +350,8 @@ def fs_dir(path):
             up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]
         for file in os.listdir('%s/%s' % (VIDEO_PATH, path)):
             if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, file)):
-                list_folder.append({'filename': file, 'type': 'folder', 'path': '/%s%s' % (path, file)})
+                list_folder.append({'filename': file, 'type': 'folder',
+                                    'path': '/%s%s' % (path, file)})
             elif re.match('.*\.((?i)mp)4$', file):
                 list_mp4.append({'filename': file, 'type': 'mp4',
                                 'path': '%s%s' % (path, file), 'size': get_size(path, file)})
