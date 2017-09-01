@@ -57,12 +57,22 @@ function showSidebar() {
     //$("#sidebar").show(600).delay(9999).hide(300);
 }
 
+/**
+ * Show Dialog
+ *
+ * @method showDialog
+ */
 function showDialog() {
     if ($("#navtab li:eq(0)").attr("class") == "active")
         history("/list");
     $("#dialog").show(250);
 }
 
+/**
+ * Auto adjust video size and dialog hieght
+ *
+ * @method adapt
+ */
 function adapt() {
     $("#videosize").text("orign");
     $("#tabFrame").css("max-height", ($(window).height() - 240) + "px");
@@ -79,11 +89,6 @@ function adapt() {
             $("video").get(0).style.height = $(window).height() + "px";
         }
     }
-}
-
-function rate(x) {
-    out(x + "X");
-    $("video").get(0).playbackRate = x;
 }
 
 $(document).on("touchstart", function (e) {
