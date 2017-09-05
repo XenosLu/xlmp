@@ -66,15 +66,12 @@ class DMRTracker(Thread):
                     if self.state['CurrentTransportState'] == 'PLAYING':
                         self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI'][0]))
                         save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']), time_to_second(self.state['TrackDuration']))
-                    print(self.state)
+                    # print(self.state)
                 except TypeError as e:
                     print('TypeError: %s\n%s' % (e, traceback.format_exc()))
                 except Exception as e:
                     print('DMR Tracker Exception: %s\n%s' % (e, traceback.format_exc()))
-                for i in range(1):
-                    sleep(1)
-                    # print('tick: %s' % time())
-                    # RelTime += 1
+                sleep(1)
             else:
                 sleep(5)
                 self.discover_dmr()
@@ -127,6 +124,7 @@ def get_size(*filename):
 
 
 def load_history(name):
+    print('pwd: %s' % os.getcwd())
     position = run_sql('select POSITION from history where FILENAME=?', name)
     if len(position) == 0:
         return 0
@@ -152,6 +150,11 @@ def list_history():
 def index():
     if tracker.dmr:
         redirect('/dlna')
+    return template('index')
+
+    
+@route('/index')
+def index_o():
     return template('index')
 
 
@@ -185,36 +188,40 @@ def search_dmr():
 def dlna_load(src):
     """Video DLNA play page"""
     print('start loading')
+    print(tracker.state)
     if not tracker.dmr:
-        return 'no DMR'
+        abort(500, 'no DMR.')
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         abort(404, 'File not found.')
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try:  # set trackuri,if failed stop and retry
-        tracker.dmr.stop()
-        sleep(0.85)
-        # while tracker.state['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
-            # sleep(0.1)
-            # print(tracker.state['CurrentTransportState'])
+        # tracker.dmr.stop()
+        # sleep(0.85)
+        while tracker.state['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
+            tracker.dmr.stop()
+            print('waiting for stopping...current state: %s' % tracker.state['CurrentTransportState'])
+            sleep(0.1)
         tracker.dmr.set_current_media(url)
-        print('loaded')
+        print('url loaded')
         # tracker.dmr.play()
         while tracker.state['CurrentTransportState'] not in ('PLAYING', 'TRANSITIONING'):
-            sleep(0.1)
-            print('waiting for playing...')
-            print(tracker.state['CurrentTransportState'])
             tracker.dmr.play()
+            print('waiting for playing...current state: %s' % tracker.state['CurrentTransportState'])
+            sleep(0.1)
         position = load_history(src)
         if position:
             time0 = time()
+            sleep(0.5)
             while tracker.state['TrackDuration'] == '00:00:00':
                 sleep(0.1)
                 print('Waiting for duration correctly recognized')
-                if (time() - time0) > 9:
-                    dlna_load(src)
+                if (time() - time0) > 5:
                     print('reload position: %s in %fs' % (second_to_time(position), time() - time0))
+                    dlna_load(src)
+                    return
             print('load position: %s in %fs' % (second_to_time(position), time() - time0))
             tracker.dmr.seek(second_to_time(position))
+        print(tracker.state)
     except Exception as e:
         print(e)
 
@@ -290,6 +297,14 @@ def save(src):
     position = request.forms.get('position')
     duration = request.forms.get('duration')
     save_history(src, position, duration)
+
+
+@route('/deploy')
+def deploy():
+    """deploy"""
+    if sys.platform == 'win32':
+        os.system("E:\\onedrive\\GitHub\\发布.cmd")
+        return 'Sent.'
 
 
 @post('/suspend')
@@ -376,6 +391,5 @@ tracker.start()
 
 if __name__ == '__main__':  # for debug
     os.system('start http://127.0.0.1:8081/')  # open the page automatic
-    # os.system('start http://127.0.0.1:8081/dlna/test.mp4')  # open the page automatic
     # run(host='0.0.0.0', port=8081, debug=True, reloader=True)  # run demo server
     run(host='0.0.0.0', port=8081, debug=True)  # run demo server
