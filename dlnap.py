@@ -34,15 +34,18 @@ import traceback
 import mimetypes
 from contextlib import contextmanager
 
+import xmltodict  # xmltodict==0.11.0
 
 import os
 py3 = sys.version_info[0] == 3
 if py3:
     from urllib.request import urlopen
+    from urllib.request import Request
     from http.server import HTTPServer
     from http.server import BaseHTTPRequestHandler
 else:
     from urllib2 import urlopen
+    from urllib2 import Request
     from BaseHTTPServer import BaseHTTPRequestHandler
     from BaseHTTPServer import HTTPServer
 
@@ -61,158 +64,159 @@ SSDP_ALL = "ssdp:all"
 # =================================================================================================
 # XML to DICT
 #
-def _get_tag_value(x, i = 0):
-   """ Get the nearest to 'i' position xml tag name.
+# def _get_tag_value(x, i = 0):
+   # """ Get the nearest to 'i' position xml tag name.
 
-   x -- xml string
-   i -- position to start searching tag from
-   return -- (tag, value) pair.
-      e.g
-         <d>
-            <e>value4</e>
-         </d>
-      result is ('d', '<e>value4</e>')
-   """
-   x = x.strip()
-   value = ''
-   tag = ''
+   # x -- xml string
+   # i -- position to start searching tag from
+   # return -- (tag, value) pair.
+      # e.g
+         # <d>
+            # <e>value4</e>
+         # </d>
+      # result is ('d', '<e>value4</e>')
+   # """
+   # x = x.strip()
+   # value = ''
+   # tag = ''
 
-   # skip <? > tag
-   if x[i:].startswith('<?'):
-      i += 2
-      while i < len(x) and x[i] != '<':
-         i += 1
+   # # skip <? > tag
+   # if x[i:].startswith('<?'):
+      # i += 2
+      # while i < len(x) and x[i] != '<':
+         # i += 1
 
-   # check for empty tag like '</tag>'
-   if x[i:].startswith('</'):
-      i += 2
-      in_attr = False
-      while i < len(x) and x[i] != '>':
-         if x[i] == ' ':
-            in_attr = True
-         if not in_attr:
-            tag += x[i]
-         i += 1
-      return (tag.strip(), '', x[i+1:])
+   # # check for empty tag like '</tag>'
+   # if x[i:].startswith('</'):
+      # i += 2
+      # in_attr = False
+      # while i < len(x) and x[i] != '>':
+         # if x[i] == ' ':
+            # in_attr = True
+         # if not in_attr:
+            # tag += x[i]
+         # i += 1
+      # return (tag.strip(), '', x[i+1:])
 
-   # not an xml, treat like a value
-   if not x[i:].startswith('<'):
-      return ('', x[i:], '')
+   # # not an xml, treat like a value
+   # if not x[i:].startswith('<'):
+      # return ('', x[i:], '')
 
-   i += 1 # <
+   # i += 1 # <
 
-   # read first open tag
-   in_attr = False
-   while i < len(x) and x[i] != '>':
-      # get rid of attributes
-      if x[i] == ' ':
-         in_attr = True
-      if not in_attr:
-         tag += x[i]
-      i += 1
+   # # read first open tag
+   # in_attr = False
+   # while i < len(x) and x[i] != '>':
+      # # get rid of attributes
+      # if x[i] == ' ':
+         # in_attr = True
+      # if not in_attr:
+         # tag += x[i]
+      # i += 1
 
-   i += 1 # >
+   # i += 1 # >
 
-   while i < len(x):
-      value += x[i]
-      if x[i] == '>' and value.endswith('</' + tag + '>'):
-         # Note: will not work with xml like <a> <a></a> </a>
-         close_tag_len = len(tag) + 2 # />
-         value = value[:-close_tag_len]
-         break
-      i += 1
-   return (tag.strip(), value[:-1], x[i+1:])
+   # while i < len(x):
+      # value += x[i]
+      # if x[i] == '>' and value.endswith('</' + tag + '>'):
+         # # Note: will not work with xml like <a> <a></a> </a>
+         # close_tag_len = len(tag) + 2 # />
+         # value = value[:-close_tag_len]
+         # break
+      # i += 1
+   # return (tag.strip(), value[:-1], x[i+1:])
 
-def _xml2dict(s, ignoreUntilXML = False):
 
-   """ Convert xml to dictionary.
+# def _xml2dict(s, ignoreUntilXML = False):
+    # """ Convert xml to dictionary.
 
-   <?xml version="1.0"?>
-   <a any_tag="tag value">
-      <b> <bb>value1</bb> </b>
-      <b> <bb>value2</bb> </b>
-      </c>
-      <d>
-         <e>value4</e>
-      </d>
-      <g>value</g>
-   </a>
+    # <?xml version="1.0"?>
+    # <a any_tag="tag value">
+      # <b> <bb>value1</bb> </b>
+      # <b> <bb>value2</bb> </b>
+      # </c>
+      # <d>
+         # <e>value4</e>
+      # </d>
+      # <g>value</g>
+    # </a>
 
-   =>
+    # =>
 
-   { 'a':
-     {
-         'b': [ {'bb':value1}, {'bb':value2} ],
-         'c': [],
-         'd':
-         {
-           'e': [value4]
-         },
-         'g': [value]
-     }
-   }
-   """
-   if ignoreUntilXML:
-      s = ''.join(re.findall(".*?(<.*)", s, re.M))
+    # { 'a':
+     # {
+         # 'b': [ {'bb':value1}, {'bb':value2} ],
+         # 'c': [],
+         # 'd':
+         # {
+           # 'e': [value4]
+         # },
+         # 'g': [value]
+     # }
+    # }
+    # """
+    # if ignoreUntilXML:
+        # s = ''.join(re.findall(".*?(<.*)", s, re.M))
 
-   d = {}
-   while s:
-      tag, value, s = _get_tag_value(s)
-      value = value.strip()
-      isXml, dummy, dummy2 = _get_tag_value(value)
-      if tag not in d:
-         d[tag] = []
-      if not isXml:
-         if not value:
-            continue
-         d[tag].append(value.strip())
-      else:
-         if tag not in d:
-            d[tag] = []
-         d[tag].append(_xml2dict(value))
-   return d
+    # d = {}
+    # while s:
+        # tag, value, s = _get_tag_value(s)
+        # value = value.strip()
+        # isXml, dummy, dummy2 = _get_tag_value(value)
+        # if tag not in d:
+            # d[tag] = []
+        # if not isXml:
+            # if not value:
+                # continue
+            # d[tag].append(value.strip())
+        # else:
+            # if tag not in d:
+                # d[tag] = []
+            # d[tag].append(_xml2dict(value))
+    # return d
 
-s = """
-   hello
-   this is a bad
-   strings
+# s = """
+   # hello
+   # this is a bad
+   # strings
 
-   <?xml version="1.0"?>
-   <a any_tag="tag value">
-      <b><bb>value1</bb></b>
-      <b><bb>value2</bb> <v>value3</v></b>
-      </c>
-      <d>
-         <e>value4</e>
-      </d>
-      <g>value</g>
-   </a>
-"""
+   # <?xml version="1.0"?>
+   # <a any_tag="tag value">
+      # <b><bb>value1</bb></b>
+      # <b><bb>value2</bb> <v>value3</v></b>
+      # </c>
+      # <d>
+         # <e>value4</e>
+      # </d>
+      # <g>value</g>
+   # </a>
+# """
+
 
 def _xpath(d, path):
-   """ Return value from xml dictionary at path.
+    """ Return value from xml dictionary at path.
 
-   d -- xml dictionary
-   path -- string path like root/device/serviceList/service@serviceType=URN_AVTransport/controlURL
-   return -- value at path or None if path not found
-   """
+    d -- xml dictionary
+    path -- string path like root/device/serviceList/service@serviceType=URN_AVTransport/controlURL
+    return -- value at path or None if path not found
+    """
 
-   for p in path.split('/'):
-      tag_attr = p.split('@')
-      tag = tag_attr[0]
-      if tag not in d:
-         return None
+    for p in path.split('/'):
+        tag_attr = p.split('@')
+        tag = tag_attr[0]
+        if tag not in d:
+            return None
 
-      attr = tag_attr[1] if len(tag_attr) > 1 else ''
-      if attr:
-         a, aval = attr.split('=')
-         for s in d[tag]:
-            if s[a] == [aval]:
-               d = s
-               break
-      else:
+        attr = tag_attr[1] if len(tag_attr) > 1 else ''
+        if attr:
+            a, aval = attr.split('=')
+            for s in d[tag]:
+                if s[a] == [aval]:
+                    d = s
+                    break
+        else:
          d = d[tag][0]
-   return d
+    return d
 #
 # XML to DICT
 # =================================================================================================
@@ -221,147 +225,152 @@ def _xpath(d, path):
 running = False
 class DownloadProxy(BaseHTTPRequestHandler):
 
-   def log_message(self, format, *args):
-      pass
+    def log_message(self, format, *args):
+        pass
 
-   def log_request(self, code='-', size='-'):
-      pass
+    def log_request(self, code='-', size='-'):
+        pass
 
-   def response_success(self):
-      url = self.path[1:] # replace '/'
+    def response_success(self):
+        url = self.path[1:] # replace '/'
 
-      if os.path.exists(url):
-         f = open(url)
-         content_type = mimetypes.guess_type(url)[0]
-      else:
-         f = urlopen(url=url)
+        if os.path.exists(url):
+            f = open(url)
+            content_type = mimetypes.guess_type(url)[0]
+        else:
+            f = urlopen(url=url)
 
-         if py3:
-            content_type = f.getheader("Content-Type")
-         else:
-            content_type = f.info().getheaders("Content-Type")[0]
-
-      self.send_response(200, "ok")
-      self.send_header('Access-Control-Allow-Origin', '*')
-      self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
-      self.send_header("Access-Control-Allow-Headers", "X-Requested-With")
-      self.send_header("Access-Control-Allow-Headers", "Content-Type")
-      self.send_header("Content-Type", content_type)
-      self.end_headers()
-
-   def do_OPTIONS(self):
-      self.response_success()
-
-   def do_HEAD(self):
-      self.response_success()
-
-   def do_GET(self):
-      global running
-      url = self.path[1:] # replace '/'
-
-      content_type = ''
-      if os.path.exists(url):
-         f = open(url)
-         content_type = mimetypes.guess_type(url)[0]
-         size = os.path.getsize(url)
-      elif not url or not url.startswith('http'):
-         self.response_success()
-         return
-      else:
-         f = urlopen(url=url)
-
-      try:
-         if not content_type:
             if py3:
-               content_type = f.getheader("Content-Type")
-               size = f.getheader("Content-Length")
+                content_type = f.getheader("Content-Type")
             else:
-               content_type = f.info().getheaders("Content-Type")[0]
-               size = f.info().getheaders("Content-Length")[0]
+                content_type = f.info().getheaders("Content-Type")[0]
 
-         self.send_response(200)
-         self.send_header('Access-Control-Allow-Origin', '*')
-         self.send_header("Content-Type", content_type)
-         self.send_header("Content-Disposition", 'attachment; filename="{}"'.format(os.path.basename(url)))
-         self.send_header("Content-Length", str(size))
-         self.end_headers()
-         shutil.copyfileobj(f, self.wfile)
-      finally:
-         running = False
-         f.close()
+        self.send_response(200, "ok")
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+        self.send_header("Access-Control-Allow-Headers", "X-Requested-With")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Content-Type", content_type)
+        self.end_headers()
 
-def runProxy(ip = '', port = 8000):
-   global running
-   running = True
-   DownloadProxy.protocol_version = "HTTP/1.0"
-   httpd = HTTPServer((ip, port), DownloadProxy)
-   while running:
-      httpd.handle_request()
+    def do_OPTIONS(self):
+        self.response_success()
+
+    def do_HEAD(self):
+        self.response_success()
+
+    def do_GET(self):
+        global running
+        url = self.path[1:] # replace '/'
+
+        content_type = ''
+        if os.path.exists(url):
+            f = open(url)
+            content_type = mimetypes.guess_type(url)[0]
+            size = os.path.getsize(url)
+        elif not url or not url.startswith('http'):
+            self.response_success()
+            return
+        else:
+            f = urlopen(url=url)
+
+        try:
+            if not content_type:
+                if py3:
+                    content_type = f.getheader("Content-Type")
+                    size = f.getheader("Content-Length")
+                else:
+                    content_type = f.info().getheaders("Content-Type")[0]
+                    size = f.info().getheaders("Content-Length")[0]
+
+            self.send_response(200)
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header("Content-Type", content_type)
+            self.send_header("Content-Disposition", 'attachment; filename="{}"'.format(os.path.basename(url)))
+            self.send_header("Content-Length", str(size))
+            self.end_headers()
+            shutil.copyfileobj(f, self.wfile)
+        finally:
+            running = False
+            f.close()
+
+
+def runProxy(ip='', port=8000):
+    global running
+    running = True
+    DownloadProxy.protocol_version = "HTTP/1.0"
+    httpd = HTTPServer((ip, port), DownloadProxy)
+    while running:
+        httpd.handle_request()
 
 #
 # PROXY
 # =================================================================================================
 
-def _get_port(location):
-   """ Extract port number from url.
 
-   location -- string like http://anyurl:port/whatever/path
-   return -- port number
-   """
-   port = re.findall('http://.*?:(\d+).*', location)
-   return int(port[0]) if port else 80
+def _get_port(location):
+    """ Extract port number from url.
+
+    location -- string like http://anyurl:port/whatever/path
+    return -- port number
+    """
+    port = re.findall('http://.*?:(\d+).*', location)
+    return int(port[0]) if port else 80
 
 
 def _get_control_url(xml, urn):
-   """ Extract AVTransport contol url from device description xml
+    """ Extract AVTransport contol url from device description xml
 
-   xml -- device description xml
-   return -- control url or empty string if wasn't found
-   """
-   return _xpath(xml, 'root/device/serviceList/service@serviceType={}/controlURL'.format(urn))
+    xml -- device description xml
+    return -- control url or empty string if wasn't found
+    """
+    return _xpath(xml, 'root/device/serviceList/service@serviceType={}/controlURL'.format(urn))
+
 
 @contextmanager
 def _send_udp(to, packet):
-   """ Send UDP message to group
+    """ Send UDP message to group
 
-   to -- (host, port) group to send the packet to
-   packet -- message to send
-   """
-   sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-   sock.sendto(packet.encode(), to)
-   yield sock
-   sock.close()
+    to -- (host, port) group to send the packet to
+    packet -- message to send
+    """
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+    sock.sendto(packet.encode(), to)
+    yield sock
+    sock.close()
+
 
 def _unescape_xml(xml):
    """ Replace escaped xml symbols with real ones.
    """
    return xml.replace('&lt;', '<').replace('&gt;', '>').replace('&quot;', '"')
 
-def _send_tcp(to, payload):
-   """ Send TCP message to group
 
-   to -- (host, port) group to send to payload to
-   payload -- message to send
-   """
-   try:
-      sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-      sock.settimeout(5)
-      sock.connect(to)
-      sock.sendall(payload.encode('utf-8'))
+# def _send_tcp(to, payload):
+    # """ Send TCP message to group
 
-      data = sock.recv(2048)
-      if py3:
-         data = data.decode('utf-8')
-      data = _xml2dict(_unescape_xml(data), True)
+    # to -- (host, port) group to send to payload to
+    # payload -- message to send
+    # """
+    # try:
+        # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # sock.settimeout(5)
+        # sock.connect(to)
+        # sock.sendall(payload.encode('utf-8'))
 
-      errorDescription = _xpath(data, 's:Envelope/s:Body/s:Fault/detail/UPnPError/errorDescription')
-      if errorDescription is not None:
-         logging.error(errorDescription)
-   except Exception as e:
-      data = ''
-   finally:
-      sock.close()
-   return data
+        # data = sock.recv(2048)
+        # if py3:
+            # data = data.decode('utf-8')
+        # data = _xml2dict(_unescape_xml(data), True)
+
+        # errorDescription = _xpath(data, 's:Envelope/s:Body/s:Fault/detail/UPnPError/errorDescription')
+        # if errorDescription is not None:
+            # logging.error(errorDescription)
+    # except Exception as e:
+        # data = ''
+    # finally:
+        # sock.close()
+    # return data
 
 
 def _get_location_url(raw):
@@ -375,73 +384,104 @@ def _get_location_url(raw):
         return t[0]
     return ''
 
-def _get_friendly_name(xml):
-   """ Extract device name from description xml
 
-   xml -- device description xml
-   return -- device name
-   """
-   name = _xpath(xml, 'root/device/friendlyName')
-   return name if name is not None else 'Unknown'
+def _get_friendly_name(xml):
+    """ Extract device name from description xml
+
+    xml -- device description xml
+    return -- device name
+    """
+    name = _xpath(xml, 'root/device/friendlyName')
+    return name if name is not None else 'Unknown'
+
 
 class DlnapDevice:
-   """ Represents DLNA/UPnP device.
-   """
+    """ Represents DLNA/UPnP device.
+    """
 
-   def __init__(self, raw, ip):
-      self.__logger = logging.getLogger(self.__class__.__name__)
-      self.__logger.info('=> New DlnapDevice (ip = {}) initialization..'.format(ip))
+    def __init__(self, raw, ip):
+        self.__logger = logging.getLogger(self.__class__.__name__)
+        self.__logger.info('=> New DlnapDevice (ip = {}) initialization..'.format(ip))
 
-      self.ip = ip
-      self.ssdp_version = 1
+        self.ip = ip
+        self.ssdp_version = 1
 
-      self.port = None
-      self.name = 'Unknown'
-      self.control_url = None
-      self.rendering_control_url = None
-      self.has_av_transport = False
+        self.port = None
+        self.name = 'Unknown'
+        self.control_url = None
+        self.rendering_control_url = None
+        self.has_av_transport = False
 
-      try:
-         self.__raw = raw.decode()
-         self.location = _get_location_url(self.__raw)
-         self.__logger.info('location: {}'.format(self.location))
+        try:
+            self.__raw = raw.decode()
+            self.location = _get_location_url(self.__raw)
+            self.__logger.info('location: {}'.format(self.location))
 
-         self.port = _get_port(self.location)
-         self.__logger.info('port: {}'.format(self.port))
+            self.port = _get_port(self.location)
+            self.__logger.info('port: {}'.format(self.port))
 
-         raw_desc_xml = urlopen(self.location).read().decode()
+            raw_desc_xml = urlopen(self.location).read().decode()
 
-         self.__desc_xml = _xml2dict(raw_desc_xml)
-         self.__logger.debug('description xml: {}'.format(self.__desc_xml))
+############---new---############
+            # test only
+            # os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
+            # raw_desc_xml = open('description.xml').read()
+            # raw_desc_xml_new = raw_desc_xml.encode()
+            # test end
 
-         self.name = _get_friendly_name(self.__desc_xml)
-         self.__logger.info('friendlyName: {}'.format(self.name))
+            # raw_desc_xml_new = urlopen(self.location).read()
 
-         self.control_url = _get_control_url(self.__desc_xml, URN_AVTransport)
-         self.__logger.info('control_url: {}'.format(self.control_url))
+            desc_dict = xmltodict.parse(raw_desc_xml)
+            self.__logger.debug('description xml: {}'.format(desc_dict))
+            
+            try:
+                self.name = desc_dict['root']['device']['friendlyName']
+            except Exception as e:
+                self.__logger.warning('DlnapDevice friendlyName retrive failed:\n{}'.format(traceback.format_exc()))
+                self.name = 'Unknown'
+            self.__logger.info('friendlyName: {}'.format(self.name))
 
-         self.rendering_control_url = _get_control_url(self.__desc_xml, URN_RenderingControl)
-         self.__logger.info('rendering_control_url: {}'.format(self.rendering_control_url))
+            services_url = {i['serviceType']:i['controlURL'] for i in desc_dict['root']['device']['serviceList']['service']}
 
-         self.has_av_transport = self.control_url is not None
-         self.__logger.info('=> Initialization completed'.format(ip))
-      except Exception as e:
-         self.__logger.warning('DlnapDevice (ip = {}) init exception:\n{}'.format(ip, traceback.format_exc()))
+            self.control_url = services_url[URN_AVTransport]
+            self.__logger.info('control_url: {}'.format(self.control_url))
 
-   def __repr__(self):
-      return '{} @ {}'.format(self.name, self.ip)
+            self.rendering_control_url = services_url[URN_RenderingControl]
+            self.__logger.info('rendering_control_url: {}'.format(self.rendering_control_url))
 
-   def __eq__(self, d):
-      return self.name == d.name and self.ip == d.ip
+############---end---############
 
-   def _payload_from_template(self, action, data, urn):
-      """ Assembly payload from template.
-      """
-      fields = ''
-      for tag, value in data.items():
-        fields += '<{tag}>{value}</{tag}>'.format(tag=tag, value=value)
+            # self.__desc_xml = _xml2dict(raw_desc_xml)
+            # self.__logger.debug('description xml: {}'.format(self.__desc_xml))
 
-      payload = """<?xml version="1.0" encoding="utf-8"?>
+            # self.name = _get_friendly_name(self.__desc_xml)
+            # self.__logger.info('friendlyName: {}'.format(self.name))
+
+            # self.control_url = _get_control_url(self.__desc_xml, URN_AVTransport)
+            # self.__logger.info('control_url: {}'.format(self.control_url))
+
+            # self.rendering_control_url = _get_control_url(self.__desc_xml, URN_RenderingControl)
+            # self.__logger.info('rendering_control_url: {}'.format(self.rendering_control_url))
+
+            self.has_av_transport = self.control_url is not None
+            self.__logger.info('=> Initialization completed'.format(ip))
+        except Exception as e:
+            self.__logger.warning('DlnapDevice (ip = {}) init exception:\n{}'.format(ip, traceback.format_exc()))
+
+    def __repr__(self):
+        return '{} @ {}'.format(self.name, self.ip)
+
+    def __eq__(self, d):
+        return self.name == d.name and self.ip == d.ip
+
+    @staticmethod
+    def _payload_from_template(action, data, urn):
+        """ Assembly payload from template.
+        """
+        fields = ''
+        for tag, value in data.items():
+            fields += '<{tag}>{value}</{tag}>'.format(tag=tag, value=value)
+        payload = """<?xml version="1.0" encoding="utf-8"?>
          <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
             <s:Body>
                <u:{action} xmlns:u="{urn}">
@@ -449,157 +489,230 @@ class DlnapDevice:
                </u:{action}>
             </s:Body>
          </s:Envelope>""".format(action=action, urn=urn, fields=fields)
-      return payload
+        return payload
 
-   def _create_packet(self, action, data):
-      """ Create packet to send to device control url.
+    # def _create_packet(self, action, data):
+        # """ Create packet to send to device control url.
 
-      action -- control action
-      data -- dictionary with XML fields value
-      """
-      if action in ["SetVolume", "SetMute", "GetVolume"]:
-          url = self.rendering_control_url
-          urn = URN_RenderingControl_Fmt.format(self.ssdp_version)
-      else:
-          url = self.control_url
-          urn = URN_AVTransport_Fmt.format(self.ssdp_version)
-      payload = self._payload_from_template(action=action, data=data, urn=urn)
+        # action -- control action
+        # data -- dictionary with XML fields value
+        # """
+        # if action in ["SetVolume", "SetMute", "GetVolume"]:
+            # url = self.rendering_control_url
+            # urn = URN_RenderingControl_Fmt.format(self.ssdp_version)
+        # else:
+            # url = self.control_url
+            # urn = URN_AVTransport_Fmt.format(self.ssdp_version)
+        # payload = self._payload_from_template(action=action, data=data, urn=urn)
 
-      packet = "\r\n".join([
-         'POST {} HTTP/1.1'.format(url),
-         'User-Agent: {}/{}'.format(__file__, __version__),
-         'Accept: */*',
-         'Content-Type: text/xml; charset="utf-8"',
-         'HOST: {}:{}'.format(self.ip, self.port),
-         'Content-Length: {}'.format(len(payload)),
-         'SOAPACTION: "{}#{}"'.format(urn, action),
-         'Connection: close',
-         '',
-         payload,
-         ])
+        # packet = "\r\n".join([
+            # 'POST {} HTTP/1.1'.format(url),
+            # 'User-Agent: {}/{}'.format(__file__, __version__),
+            # 'Accept: */*',
+            # 'Content-Type: text/xml; charset="utf-8"',
+            # 'HOST: {}:{}'.format(self.ip, self.port),
+            # 'Content-Length: {}'.format(len(payload)),
+            # 'SOAPACTION: "{}#{}"'.format(urn, action),
+            # 'Connection: close',
+            # '',
+            # payload,
+            # ])
 
-      self.__logger.debug(packet)
-      return packet
+        # self.__logger.debug(packet)
+        # return packet
 
-   def set_current_media(self, url, instance_id = 0):
-      """ Set media to playback.
+    def _soap_request(self, action, data):
+        if action in ["SetVolume", "SetMute", "GetVolume"]:
+            url = self.rendering_control_url
+            urn = URN_RenderingControl_Fmt.format(self.ssdp_version)
+        else:
+            url = self.control_url
+            urn = URN_AVTransport_Fmt.format(self.ssdp_version)
+        soap_url = 'http://{}:{}{}'.format(self.ip, self.port, url)
+        headers = {'Content-type': 'text/xml',
+                   'SOAPACTION': '"{}#{}"'.format(urn, action),
+                   'charset': 'utf-8',
+                   'User-Agent': '{}/{}'.format(__file__, __version__)}
+        self.__logger.debug(headers)
+        payload = self._payload_from_template(action=action, data=data, urn=urn)
+        self.__logger.debug(payload)
+        try:
+            req = Request(soap_url,data=payload.encode(), headers=headers)
+            res = urlopen(req)
+            if res.code == 200:
+                data = res.read()
+                self.__logger.debug(data.decode())
+                response = xmltodict.parse(data)
+                try:
+                    error_description = response['s:Envelope']['s:Body']['s:Fault']['detail']['UPnPError']['errorDescription']
+                    logging.error(error_description)
+                    return None
+                except:
+                    return response
+            # data = _unescape_xml(data)
+        except Exception as e:
+            logging.error(e)
 
-      url -- media url
-      instance_id -- device instance id
-      """
-      packet = self._create_packet('SetAVTransportURI', {'InstanceID':instance_id, 'CurrentURI':url, 'CurrentURIMetaData':'' })
-      _send_tcp((self.ip, self.port), packet)
+    def set_current_media(self, url, instance_id=0):
+        """ Set media to playback.
 
-   def play(self, instance_id = 0):
-      """ Play media that was already set as current.
+        url -- media url
+        instance_id -- device instance id
+        """
+        response = self._soap_request('SetAVTransportURI',
+                                      {'InstanceID': instance_id, 'CurrentURI': url, 'CurrentURIMetaData': ''})
+        try:
+            response['s:Envelope']['s:Body']['u:SetAVTransportURIResponse']
+            return True
+        except:
+            # Unexpected response
+            return False
 
-      instance_id -- device instance id
-      """
-      packet = self._create_packet('Play', {'InstanceID': instance_id, 'Speed': 1})
-      _send_tcp((self.ip, self.port), packet)
+    def play(self, instance_id=0):
+        """ Play media that was already set as current.
 
-   def pause(self, instance_id = 0):
-      """ Pause media that is currently playing back.
+        instance_id -- device instance id
+        """
+        response = self._soap_request('Play', {'InstanceID': instance_id, 'Speed': 1})
+        try:
+            response['s:Envelope']['s:Body']['u:PlayResponse']
+            return True
+        except:
+            # Unexpected response
+            return False
 
-      instance_id -- device instance id
-      """
-      packet = self._create_packet('Pause', {'InstanceID': instance_id, 'Speed':1})
-      _send_tcp((self.ip, self.port), packet)
+    def pause(self, instance_id=0):
+        """ Pause media that is currently playing back.
 
-   def stop(self, instance_id = 0):
-      """ Stop media that is currently playing back.
+        instance_id -- device instance id
+        """
+        response = self._soap_request('Pause', {'InstanceID': instance_id, 'Speed': 1})
+        try:
+            response['s:Envelope']['s:Body']['u:PauseResponse']
+            return True
+        except:
+            # Unexpected response
+            return False
 
-      instance_id -- device instance id
-      """
-      packet = self._create_packet('Stop', {'InstanceID': instance_id, 'Speed': 1})
-      _send_tcp((self.ip, self.port), packet)
+    def stop(self, instance_id=0):
+        """ Stop media that is currently playing back.
+
+        instance_id -- device instance id
+        """
+        response = self._soap_request('Stop', {'InstanceID': instance_id, 'Speed': 1})
+        try:
+            response['s:Envelope']['s:Body']['u:StopResponse']
+            return True
+        except:
+            # Unexpected response
+            return False
+
+    def seek(self, position, instance_id=0):
+        """
+        Seek position
+        """
+        response = self._soap_request('Seek', {'InstanceID': instance_id, 'Unit': 'REL_TIME', 'Target': position})
+        try:
+            response['s:Envelope']['s:Body']['u:SeekResponse']
+            return True
+        except:
+            # Unexpected response
+            return False
+
+    def volume(self, volume=10, instance_id=0):
+        """ Stop media that is currently playing back.
+
+        instance_id -- device instance id
+        """
+        response = self._soap_request('SetVolume',
+                                     {'InstanceID': instance_id, 'DesiredVolume': volume, 'Channel': 'Master'})
+        try:
+            response['s:Envelope']['s:Body']['u:SetVolumeResponse']
+            return True
+        except:
+            # Unexpected response
+            return False
+
+    def get_volume(self, instance_id=0):
+        """
+        get volume
+        """
+        response = self._soap_request('GetVolume', {'InstanceID': instance_id, 'Channel': 'Master'})
+        if response:
+            return response['s:Envelope']['s:Body']['u:GetVolumeResponse']['CurrentVolume']
+
+    def mute(self, instance_id=0):
+        """ Stop media that is currently playing back.
+
+        instance_id -- device instance id
+        """
+        response = self._soap_request('SetMute', {'InstanceID': instance_id, 'DesiredMute': '1', 'Channel': 'Master'})
+        try:
+            response['s:Envelope']['s:Body']['u:SetMuteResponse']
+            return True
+        except:
+            # Unexpected response
+            return False
+
+    def unmute(self, instance_id=0):
+        """ Stop media that is currently playing back.
+
+        instance_id -- device instance id
+        """
+        response = self._soap_request('SetMute', {'InstanceID': instance_id, 'DesiredMute': '0', 'Channel': 'Master'})
+        try:
+            response['s:Envelope']['s:Body']['u:SetMuteResponse']
+            return True
+        except:
+            # Unexpected response
+            return False
+
+    def info(self, instance_id=0):
+        """ Transport info.
+
+        instance_id -- device instance id
+        """
+        response = self._soap_request('GetTransportInfo', {'InstanceID': instance_id})
+        if response:
+            return dict(response['s:Envelope']['s:Body']['u:GetTransportInfoResponse'])
+
+    def media_info(self, instance_id=0):
+        """ Media info.
+
+        instance_id -- device instance id
+        """
+        response = self._soap_request('GetMediaInfo', {'InstanceID': instance_id})
+        if response:
+            return dict(response['s:Envelope']['s:Body']['u:GetMediaInfoResponse'])
+        # packet = self._create_packet('GetMediaInfo', {'InstanceID': instance_id})
+        # return _send_tcp((self.ip, self.port), packet)
+
+    def position_info(self, instance_id=0):
+        """ Position info.
+        instance_id -- device instance id
+        """
+        response = self._soap_request('GetPositionInfo', {'InstanceID': instance_id})
+        if response:
+            return dict(response['s:Envelope']['s:Body']['u:GetPositionInfoResponse'])
+
+    def set_next(self, url):
+        pass
+
+    def next(self):
+        pass
 
 
-   def seek(self, position, instance_id = 0):
-      """
-      Seek position
-      """
-      packet = self._create_packet('Seek', {'InstanceID':instance_id, 'Unit':'REL_TIME', 'Target': position })
-      _send_tcp((self.ip, self.port), packet)
+def discover(name='', ip='', timeout=1, st=SSDP_ALL, mx=3, ssdp_version=1):
+    """ Discover UPnP devices in the local network.
 
-
-   def volume(self, volume=10, instance_id = 0):
-      """ Stop media that is currently playing back.
-
-      instance_id -- device instance id
-      """
-      packet = self._create_packet('SetVolume', {'InstanceID': instance_id, 'DesiredVolume': volume, 'Channel': 'Master'})
-
-      _send_tcp((self.ip, self.port), packet)
-      
-      
-   def get_volume(self, instance_id = 0):
-      """
-      get volume
-      """
-      packet = self._create_packet('GetVolume', {'InstanceID':instance_id, 'Channel': 'Master'})
-      return _send_tcp((self.ip, self.port), packet)
-
-
-   def mute(self, instance_id = 0):
-      """ Stop media that is currently playing back.
-
-      instance_id -- device instance id
-      """
-      packet = self._create_packet('SetMute', {'InstanceID': instance_id, 'DesiredMute': '1', 'Channel': 'Master'})
-      _send_tcp((self.ip, self.port), packet)
-
-   def unmute(self, instance_id = 0):
-      """ Stop media that is currently playing back.
-
-      instance_id -- device instance id
-      """
-      packet = self._create_packet('SetMute', {'InstanceID': instance_id, 'DesiredMute': '0', 'Channel': 'Master'})
-      _send_tcp((self.ip, self.port), packet)
-
-   def info(self, instance_id=0):
-      """ Transport info.
-
-      instance_id -- device instance id
-      """
-      packet = self._create_packet('GetTransportInfo', {'InstanceID': instance_id})
-      return _send_tcp((self.ip, self.port), packet)
-
-   def media_info(self, instance_id=0):
-      """ Media info.
-
-      instance_id -- device instance id
-      """
-      packet = self._create_packet('GetMediaInfo', {'InstanceID': instance_id})
-      return _send_tcp((self.ip, self.port), packet)
-
-
-   def position_info(self, instance_id=0):
-      """ Position info.
-      instance_id -- device instance id
-      """
-      packet = self._create_packet('GetPositionInfo', {'InstanceID': instance_id})
-      return _send_tcp((self.ip, self.port), packet)
-
-
-   def set_next(self, url):
-      pass
-
-   def next(self):
-      pass
-
-
-def discover(name = '', ip = '', timeout = 1, st = SSDP_ALL, mx = 3, ssdp_version = 1):
-   """ Discover UPnP devices in the local network.
-
-   name -- name or part of the name to filter devices
-   timeout -- timeout to perform discover
-   st -- st field of discovery packet
-   mx -- mx field of discovery packet
-   return -- list of DlnapDevice
-   """
-   st = st.format(ssdp_version)
-   payload = "\r\n".join([
+    name -- name or part of the name to filter devices
+    timeout -- timeout to perform discover
+    st -- st field of discovery packet
+    mx -- mx field of discovery packet
+    return -- list of DlnapDevice
+    """
+    st = st.format(ssdp_version)
+    payload = "\r\n".join([
               'M-SEARCH * HTTP/1.1',
               'User-Agent: {}/{}'.format(__file__, __version__),
               'HOST: {}:{}'.format(*SSDP_GROUP),
@@ -609,36 +722,35 @@ def discover(name = '', ip = '', timeout = 1, st = SSDP_ALL, mx = 3, ssdp_versio
               'MX: {}'.format(mx),
               '',
               ''])
-   devices = []
-   with _send_udp(SSDP_GROUP, payload) as sock:
-      start = time.time()
-      while True:
-         if time.time() - start > timeout:
-            # timed out
-            break
-         r, w, x = select.select([sock], [], [sock], 1)
-         if sock in r:
-             data, addr = sock.recvfrom(1024)
-             if ip and addr[0] != ip:
-                continue
+    devices = []
+    with _send_udp(SSDP_GROUP, payload) as sock:
+        start = time.time()
+        while True:
+            if time.time() - start > timeout:
+                # timed out
+                break
+            r, w, x = select.select([sock], [], [sock], 1)
+            if sock in r:
+                data, addr = sock.recvfrom(1024)
+                if ip and addr[0] != ip:
+                    continue
 
-             d = DlnapDevice(data, addr[0])
-             d.ssdp_version = ssdp_version
-             if d not in devices:
-                if not name or name is None or name.lower() in d.name.lower():
-                   if not ip:
-                      devices.append(d)
-                   elif d.has_av_transport:
-                      # no need in further searching by ip
-                      devices.append(d)
-                      break
-
-         elif sock in x:
-             raise Exception('Getting response failed')
-         else:
-             # Nothing to read
-             pass
-   return devices
+                d = DlnapDevice(data, addr[0])
+                d.ssdp_version = ssdp_version
+                if d not in devices:
+                    if not name or name is None or name.lower() in d.name.lower():
+                        if not ip:
+                            devices.append(d)
+                    elif d.has_av_transport:
+                        # no need in further searching by ip
+                        devices.append(d)
+                        break
+            elif sock in x:
+                raise Exception('Getting response failed')
+            else:
+                # Nothing to read
+                pass
+    return devices
 
 if __name__ == '__main__':
    import getopt
