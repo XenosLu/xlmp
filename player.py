@@ -54,17 +54,21 @@ class DMRTracker(Thread):
                 try:
                     self.state['CurrentDMR'] = str(self.dmr)
                     self.state['DMRs'] = [str(i) for i in self.all_devices]
-                    self.state['CurrentVolume'] = dlnap._xpath(self.dmr.get_volume(), 's:Envelope/s:Body/u:GetVolumeResponse/CurrentVolume')
-                    self.state['CurrentTransportState'] = dlnap._xpath(self.dmr.info(), 's:Envelope/s:Body/u:GetTransportInfoResponse/CurrentTransportState')
-                    position_info = dlnap._xpath(self.dmr.position_info(), 's:Envelope/s:Body/u:GetPositionInfoResponse')
-                    if self.state['CurrentTransportState'] is None:
+                    self.state['CurrentVolume'] = self.dmr.get_volume()
+                    if not self.state['CurrentVolume']:
                         print('No DMR currently.')
                         self.dmr = None
                         continue
+                    self.state['CurrentTransportState'] = self.dmr.info()['CurrentTransportState']
+                    # if self.state['CurrentTransportState'] is None:
+                        # print('No DMR currently.')
+                        # self.dmr = None
+                        # continue
+                    position_info = self.dmr.position_info()
                     for i in ('RelTime', 'TrackDuration'):
-                        self.state[i] = position_info[i][0]
+                        self.state[i] = position_info[i]
                     if self.state['CurrentTransportState'] == 'PLAYING':
-                        self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI'][0]))
+                        self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI']))
                         save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']), time_to_second(self.state['TrackDuration']))
                     # print(self.state)
                 except TypeError as e:
@@ -118,7 +122,7 @@ def get_size(*filename):
     elif size < 1024:
         return '%dB' % size
     else:
-        unit = ('', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y', 'B')
+        unit = ' KMGTPEZYB'
         l = min(int(math.floor(math.log(size, 1024))), 9)
         return '%.1f%sB' % (size/1024.0**l, unit[l])
 
@@ -208,19 +212,20 @@ def dlna_load(src):
             tracker.dmr.play()
             print('waiting for playing...current state: %s' % tracker.state['CurrentTransportState'])
             sleep(0.1)
+        sleep(0.5)
+        time0 = time()
+        print('checking duration to make sure loaded...')
+        while tracker.state['TrackDuration'] == '00:00:00':
+            sleep(0.1)
+            print('Waiting for duration correctly recognized')
+            if (time() - time0) > 5:
+                print('reload position: in %fs' % (time() - time0))
+                dlna_load(src)
+                return
         position = load_history(src)
         if position:
-            time0 = time()
-            sleep(0.5)
-            while tracker.state['TrackDuration'] == '00:00:00':
-                sleep(0.1)
-                print('Waiting for duration correctly recognized')
-                if (time() - time0) > 5:
-                    print('reload position: %s in %fs' % (second_to_time(position), time() - time0))
-                    dlna_load(src)
-                    return
-            print('load position: %s in %fs' % (second_to_time(position), time() - time0))
             tracker.dmr.seek(second_to_time(position))
+            print('load position: %s in %fs' % (second_to_time(position), time() - time0))
         print(tracker.state)
     except Exception as e:
         print(e)
