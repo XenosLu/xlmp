@@ -5,7 +5,7 @@
     <ul class="dropdown-menu" role="menu">
     </ul>
   </div>
-  <h2 id="src"></h2>
+  <h3 id="src"></h3>
   <span id="state"></span>
   <br>
   <button type="button" class="btn btn-success btn-lg glyphicon glyphicon-play" onclick="$.get('/dlnaplay')">
