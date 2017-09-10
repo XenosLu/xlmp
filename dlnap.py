@@ -57,172 +57,16 @@ URN_AVTransport = "urn:schemas-upnp-org:service:AVTransport:1"
 URN_AVTransport_Fmt = "urn:schemas-upnp-org:service:AVTransport:{}"
 
 URN_RenderingControl = "urn:schemas-upnp-org:service:RenderingControl:1"
-URN_RenderingControl_Fmt = "urn:schemas-upnp-org:service:RenderingControl:{}"
+# URN_RenderingControl_Fmt = "urn:schemas-upnp-org:service:RenderingControl:{}"
 
 SSDP_ALL = "ssdp:all"
 
 # =================================================================================================
-# XML to DICT
-#
-# def _get_tag_value(x, i = 0):
-   # """ Get the nearest to 'i' position xml tag name.
-
-   # x -- xml string
-   # i -- position to start searching tag from
-   # return -- (tag, value) pair.
-      # e.g
-         # <d>
-            # <e>value4</e>
-         # </d>
-      # result is ('d', '<e>value4</e>')
-   # """
-   # x = x.strip()
-   # value = ''
-   # tag = ''
-
-   # # skip <? > tag
-   # if x[i:].startswith('<?'):
-      # i += 2
-      # while i < len(x) and x[i] != '<':
-         # i += 1
-
-   # # check for empty tag like '</tag>'
-   # if x[i:].startswith('</'):
-      # i += 2
-      # in_attr = False
-      # while i < len(x) and x[i] != '>':
-         # if x[i] == ' ':
-            # in_attr = True
-         # if not in_attr:
-            # tag += x[i]
-         # i += 1
-      # return (tag.strip(), '', x[i+1:])
-
-   # # not an xml, treat like a value
-   # if not x[i:].startswith('<'):
-      # return ('', x[i:], '')
-
-   # i += 1 # <
-
-   # # read first open tag
-   # in_attr = False
-   # while i < len(x) and x[i] != '>':
-      # # get rid of attributes
-      # if x[i] == ' ':
-         # in_attr = True
-      # if not in_attr:
-         # tag += x[i]
-      # i += 1
-
-   # i += 1 # >
-
-   # while i < len(x):
-      # value += x[i]
-      # if x[i] == '>' and value.endswith('</' + tag + '>'):
-         # # Note: will not work with xml like <a> <a></a> </a>
-         # close_tag_len = len(tag) + 2 # />
-         # value = value[:-close_tag_len]
-         # break
-      # i += 1
-   # return (tag.strip(), value[:-1], x[i+1:])
-
-
-# def _xml2dict(s, ignoreUntilXML = False):
-    # """ Convert xml to dictionary.
-
-    # <?xml version="1.0"?>
-    # <a any_tag="tag value">
-      # <b> <bb>value1</bb> </b>
-      # <b> <bb>value2</bb> </b>
-      # </c>
-      # <d>
-         # <e>value4</e>
-      # </d>
-      # <g>value</g>
-    # </a>
-
-    # =>
-
-    # { 'a':
-     # {
-         # 'b': [ {'bb':value1}, {'bb':value2} ],
-         # 'c': [],
-         # 'd':
-         # {
-           # 'e': [value4]
-         # },
-         # 'g': [value]
-     # }
-    # }
-    # """
-    # if ignoreUntilXML:
-        # s = ''.join(re.findall(".*?(<.*)", s, re.M))
-
-    # d = {}
-    # while s:
-        # tag, value, s = _get_tag_value(s)
-        # value = value.strip()
-        # isXml, dummy, dummy2 = _get_tag_value(value)
-        # if tag not in d:
-            # d[tag] = []
-        # if not isXml:
-            # if not value:
-                # continue
-            # d[tag].append(value.strip())
-        # else:
-            # if tag not in d:
-                # d[tag] = []
-            # d[tag].append(_xml2dict(value))
-    # return d
-
-# s = """
-   # hello
-   # this is a bad
-   # strings
-
-   # <?xml version="1.0"?>
-   # <a any_tag="tag value">
-      # <b><bb>value1</bb></b>
-      # <b><bb>value2</bb> <v>value3</v></b>
-      # </c>
-      # <d>
-         # <e>value4</e>
-      # </d>
-      # <g>value</g>
-   # </a>
-# """
-
-
-def _xpath(d, path):
-    """ Return value from xml dictionary at path.
-
-    d -- xml dictionary
-    path -- string path like root/device/serviceList/service@serviceType=URN_AVTransport/controlURL
-    return -- value at path or None if path not found
-    """
-
-    for p in path.split('/'):
-        tag_attr = p.split('@')
-        tag = tag_attr[0]
-        if tag not in d:
-            return None
-
-        attr = tag_attr[1] if len(tag_attr) > 1 else ''
-        if attr:
-            a, aval = attr.split('=')
-            for s in d[tag]:
-                if s[a] == [aval]:
-                    d = s
-                    break
-        else:
-         d = d[tag][0]
-    return d
-#
-# XML to DICT
-# =================================================================================================
 # PROXY
 #
 running = False
+
+
 class DownloadProxy(BaseHTTPRequestHandler):
 
     def log_message(self, format, *args):
@@ -232,7 +76,7 @@ class DownloadProxy(BaseHTTPRequestHandler):
         pass
 
     def response_success(self):
-        url = self.path[1:] # replace '/'
+        url = self.path[1:]  # replace '/'
 
         if os.path.exists(url):
             f = open(url)
@@ -318,13 +162,16 @@ def _get_port(location):
     return int(port[0]) if port else 80
 
 
-def _get_control_url(xml, urn):
+def _get_control_urls(xml):
     """ Extract AVTransport contol url from device description xml
 
     xml -- device description xml
     return -- control url or empty string if wasn't found
     """
-    return _xpath(xml, 'root/device/serviceList/service@serviceType={}/controlURL'.format(urn))
+    try:
+        return {i['serviceType']:i['controlURL'] for i in xml['root']['device']['serviceList']['service']}
+    except:
+        return
 
 
 @contextmanager
@@ -343,34 +190,7 @@ def _send_udp(to, packet):
 def _unescape_xml(xml):
    """ Replace escaped xml symbols with real ones.
    """
-   return xml.replace('&lt;', '<').replace('&gt;', '>').replace('&quot;', '"')
-
-
-# def _send_tcp(to, payload):
-    # """ Send TCP message to group
-
-    # to -- (host, port) group to send to payload to
-    # payload -- message to send
-    # """
-    # try:
-        # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # sock.settimeout(5)
-        # sock.connect(to)
-        # sock.sendall(payload.encode('utf-8'))
-
-        # data = sock.recv(2048)
-        # if py3:
-            # data = data.decode('utf-8')
-        # data = _xml2dict(_unescape_xml(data), True)
-
-        # errorDescription = _xpath(data, 's:Envelope/s:Body/s:Fault/detail/UPnPError/errorDescription')
-        # if errorDescription is not None:
-            # logging.error(errorDescription)
-    # except Exception as e:
-        # data = ''
-    # finally:
-        # sock.close()
-    # return data
+   return xml.decode().replace('&lt;', '<').replace('&gt;', '>').replace('&quot;', '"')
 
 
 def _get_location_url(raw):
@@ -391,8 +211,10 @@ def _get_friendly_name(xml):
     xml -- device description xml
     return -- device name
     """
-    name = _xpath(xml, 'root/device/friendlyName')
-    return name if name is not None else 'Unknown'
+    try:
+        return xml['root']['device']['friendlyName']
+    except Exception as e:
+        return 'Unknown'
 
 
 class DlnapDevice:
@@ -420,48 +242,21 @@ class DlnapDevice:
             self.port = _get_port(self.location)
             self.__logger.info('port: {}'.format(self.port))
 
-            raw_desc_xml = urlopen(self.location).read().decode()
-
-############---new---############
-            # test only
-            # os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
-            # raw_desc_xml = open('description.xml').read()
-            # raw_desc_xml_new = raw_desc_xml.encode()
-            # test end
-
-            # raw_desc_xml_new = urlopen(self.location).read()
+            raw_desc_xml = urlopen(self.location, timeout=5).read().decode()
 
             desc_dict = xmltodict.parse(raw_desc_xml)
             self.__logger.debug('description xml: {}'.format(desc_dict))
-            
-            try:
-                self.name = desc_dict['root']['device']['friendlyName']
-            except Exception as e:
-                self.__logger.warning('DlnapDevice friendlyName retrive failed:\n{}'.format(traceback.format_exc()))
-                self.name = 'Unknown'
+
+            self.name = _get_friendly_name(desc_dict)
             self.__logger.info('friendlyName: {}'.format(self.name))
 
-            services_url = {i['serviceType']:i['controlURL'] for i in desc_dict['root']['device']['serviceList']['service']}
-
+            services_url = _get_control_urls(desc_dict)
+            
             self.control_url = services_url[URN_AVTransport]
             self.__logger.info('control_url: {}'.format(self.control_url))
 
             self.rendering_control_url = services_url[URN_RenderingControl]
             self.__logger.info('rendering_control_url: {}'.format(self.rendering_control_url))
-
-############---end---############
-
-            # self.__desc_xml = _xml2dict(raw_desc_xml)
-            # self.__logger.debug('description xml: {}'.format(self.__desc_xml))
-
-            # self.name = _get_friendly_name(self.__desc_xml)
-            # self.__logger.info('friendlyName: {}'.format(self.name))
-
-            # self.control_url = _get_control_url(self.__desc_xml, URN_AVTransport)
-            # self.__logger.info('control_url: {}'.format(self.control_url))
-
-            # self.rendering_control_url = _get_control_url(self.__desc_xml, URN_RenderingControl)
-            # self.__logger.info('rendering_control_url: {}'.format(self.rendering_control_url))
 
             self.has_av_transport = self.control_url is not None
             self.__logger.info('=> Initialization completed'.format(ip))
@@ -491,40 +286,18 @@ class DlnapDevice:
          </s:Envelope>""".format(action=action, urn=urn, fields=fields)
         return payload
 
-    # def _create_packet(self, action, data):
-        # """ Create packet to send to device control url.
-
-        # action -- control action
-        # data -- dictionary with XML fields value
-        # """
-        # if action in ["SetVolume", "SetMute", "GetVolume"]:
-            # url = self.rendering_control_url
-            # urn = URN_RenderingControl_Fmt.format(self.ssdp_version)
-        # else:
-            # url = self.control_url
-            # urn = URN_AVTransport_Fmt.format(self.ssdp_version)
-        # payload = self._payload_from_template(action=action, data=data, urn=urn)
-
-        # packet = "\r\n".join([
-            # 'POST {} HTTP/1.1'.format(url),
-            # 'User-Agent: {}/{}'.format(__file__, __version__),
-            # 'Accept: */*',
-            # 'Content-Type: text/xml; charset="utf-8"',
-            # 'HOST: {}:{}'.format(self.ip, self.port),
-            # 'Content-Length: {}'.format(len(payload)),
-            # 'SOAPACTION: "{}#{}"'.format(urn, action),
-            # 'Connection: close',
-            # '',
-            # payload,
-            # ])
-
-        # self.__logger.debug(packet)
-        # return packet
-
     def _soap_request(self, action, data):
+        """ Send SOAP Request to DMR devices
+
+        action -- control action
+        data -- dictionary with XML fields value
+        """
+        if not self.control_url:
+            return None
         if action in ["SetVolume", "SetMute", "GetVolume"]:
             url = self.rendering_control_url
-            urn = URN_RenderingControl_Fmt.format(self.ssdp_version)
+            # urn = URN_RenderingControl_Fmt.format(self.ssdp_version)
+            urn = URN_RenderingControl
         else:
             url = self.control_url
             urn = URN_AVTransport_Fmt.format(self.ssdp_version)
@@ -538,18 +311,18 @@ class DlnapDevice:
         self.__logger.debug(payload)
         try:
             req = Request(soap_url,data=payload.encode(), headers=headers)
-            res = urlopen(req)
+            res = urlopen(req, timeout=5)
             if res.code == 200:
                 data = res.read()
                 self.__logger.debug(data.decode())
-                response = xmltodict.parse(data)
+                # response = xmltodict.parse(data)
+                response = xmltodict.parse(_unescape_xml(data))
                 try:
                     error_description = response['s:Envelope']['s:Body']['s:Fault']['detail']['UPnPError']['errorDescription']
                     logging.error(error_description)
                     return None
                 except:
                     return response
-            # data = _unescape_xml(data)
         except Exception as e:
             logging.error(e)
 
@@ -684,8 +457,6 @@ class DlnapDevice:
         response = self._soap_request('GetMediaInfo', {'InstanceID': instance_id})
         if response:
             return dict(response['s:Envelope']['s:Body']['u:GetMediaInfoResponse'])
-        # packet = self._create_packet('GetMediaInfo', {'InstanceID': instance_id})
-        # return _send_tcp((self.ip, self.port), packet)
 
     def position_info(self, instance_id=0):
         """ Position info.
@@ -753,189 +524,189 @@ def discover(name='', ip='', timeout=1, st=SSDP_ALL, mx=3, ssdp_version=1):
     return devices
 
 if __name__ == '__main__':
-   import getopt
-
-   def usage():
-      print('{} [--ip <device ip>] [-d[evice] <name>] [--all] [-t[imeout] <seconds>] [--play <url>] [--pause] [--stop] [--proxy]'.format(__file__))
-      print(' --ip <device ip> - ip address for faster access to the known device')
-      print(' --device <device name or part of the name> - discover devices with this name as substring')
-      print(' --all - flag to discover all upnp devices, not only devices with AVTransport ability')
-      print(' --play <url> - set current url for play and start playback it. In case of url is empty - continue playing recent media.')
-      print(' --pause - pause current playback')
-      print(' --stop - stop current playback')
-      print(' --mute - mute playback')
-      print(' --unmute - unmute playback')
-      print(' --volume <vol> - set current volume for playback')
-      print(' --seek <position in HH:MM:SS> - set current position for playback')
-      print(' --timeout <seconds> - discover timeout')
-      print(' --ssdp-version <version> - discover devices by protocol version, default 1')
-      print(' --proxy - use local proxy on proxy port')
-      print(' --proxy-port <port number> - proxy port to listen incomming connections from devices, default 8000')
-      print(' --help - this help')
-
-   def version():
-      print(__version__)
-
-   try:
-      opts, args = getopt.getopt(sys.argv[1:], "hvd:t:i:", [   # information arguments
-                                                               'help',
-                                                               'version',
-                                                               'log=',
-
-                                                               # device arguments
-                                                               'device=',
-                                                               'ip=',
-
-                                                               # action arguments
-                                                               'play=',
-                                                               'pause',
-                                                               'stop',
-                                                               'volume=',
-                                                               'mute',
-                                                               'unmute',
-                                                               'seek=',
-
-
-                                                               # discover arguments
-                                                               'list',
-                                                               'all',
-                                                               'timeout=',
-                                                               'ssdp-version=',
-
-                                                               # transport info
-                                                               'info',
-                                                               'media-info',
-
-                                                               # download proxy
-                                                               'proxy',
-                                                               'proxy-port='])
-   except getopt.GetoptError:
-      usage()
-      sys.exit(1)
-
-   device = ''
-   url = ''
-   vol = 10
-   position = '00:00:00'
-   timeout = 1
-   action = ''
-   logLevel = logging.WARN
-   compatibleOnly = True
-   ip = ''
-   proxy = False
-   proxy_port = 8000
-   ssdp_version = 1
-   for opt, arg in opts:
-      if opt in ('-h', '--help'):
-         usage()
-         sys.exit(0)
-      elif opt in ('-v', '--version'):
-         version()
-         sys.exit(0)
-      elif opt in ('--log'):
-         if arg.lower() == 'debug':
-             logLevel = logging.DEBUG
-         elif arg.lower() == 'info':
-             logLevel = logging.INFO
-         elif arg.lower() == 'warn':
-             logLevel = logging.WARN
-      elif opt in ('--all'):
-         compatibleOnly = False
-      elif opt in ('-d', '--device'):
-         device = arg
-      elif opt in ('-t', '--timeout'):
-         timeout = float(arg)
-      elif opt in ('--ssdp-version'):
-         ssdp_version = int(arg)
-      elif opt in ('-i', '--ip'):
-         ip = arg
-         compatibleOnly = False
-         timeout = 10
-      elif opt in ('--list'):
-         action = 'list'
-      elif opt in ('--play'):
-         action = 'play'
-         url = arg
-      elif opt in ('--pause'):
-         action = 'pause'
-      elif opt in ('--stop'):
-         action = 'stop'
-      elif opt in ('--volume'):
-         action = 'volume'
-         vol = arg
-      elif opt in ('--seek'):
-         action = 'seek'
-         position = arg
-      elif opt in ('--mute'):
-         action = 'mute'
-      elif opt in ('--unmute'):
-         action = 'unmute'
-      elif opt in ('--info'):
-         action = 'info'
-      elif opt in ('--media-info'):
-         action = 'media-info'
-      elif opt in ('--proxy'):
-         proxy = True
-      elif opt in ('--proxy-port'):
-         proxy_port = int(arg)
-
-   logging.basicConfig(level=logLevel)
-
-   st = URN_AVTransport_Fmt if compatibleOnly else SSDP_ALL
-   allDevices = discover(name=device, ip=ip, timeout=timeout, st=st, ssdp_version=ssdp_version)
-   if not allDevices:
-      print('No compatible devices found.')
-      sys.exit(1)
-
-   if action in ('', 'list'):
-      print('Discovered devices:')
-      for d in allDevices:
-         print(' {} {}'.format('[a]' if d.has_av_transport else '[x]', d))
-      sys.exit(0)
-
-   d = allDevices[0]
-   print(d)
-
-   if url.lower().replace('https://', '').replace('www.', '').startswith('youtube.'):
-      import subprocess
-      process = subprocess.Popen(['youtube-dl', '-g', url], stdout = subprocess.PIPE)
-      url, err = process.communicate()
-
-   if url.lower().startswith('https://'):
-      proxy = True
-
-   if proxy:
-      ip = socket.gethostbyname(socket.gethostname())
-      t = threading.Thread(target=runProxy, kwargs={'ip' : ip, 'port' : proxy_port})
-      t.start()
-      time.sleep(2)
-
-   if action == 'play':
-      try:
-         d.stop()
-         url = 'http://{}:{}/{}'.format(ip, proxy_port, url) if proxy else url
-         d.set_current_media(url=url)
-         d.play()
-      except Exception as e:
-         print('Device is unable to play media.')
-         logging.warn('Play exception:\n{}'.format(traceback.format_exc()))
-         sys.exit(1)
-   elif action == 'pause':
-      d.pause()
-   elif action == 'stop':
-      d.stop()
-   elif action == 'volume':
-      d.volume(vol)
-   elif action == 'seek':
-      d.seek(position)
-   elif action == 'mute':
-      d.mute()
-   elif action == 'unmute':
-      d.unmute()
-   elif action == 'info':
-      print(d.info())
-   elif action == 'media-info':
-      print(d.media_info())
-
-   if proxy:
-      t.join()
+    import getopt
+    
+    def usage():
+        print('{} [--ip <device ip>] [-d[evice] <name>] [--all] [-t[imeout] <seconds>] [--play <url>] [--pause] [--stop] [--proxy]'.format(__file__))
+        print('  --ip <device ip> - ip address for faster access to the known device')
+        print('  --device <device name or part of the name> - discover devices with this name as substring')
+        print('  --all - flag to discover all upnp devices, not only devices with AVTransport ability')
+        print('  --play <url> - set current url for play and start playback it. In case of url is empty - continue playing recent media.')
+        print('  --pause - pause current playback')
+        print('  --stop - stop current playback')
+        print('  --mute - mute playback')
+        print('  --unmute - unmute playback')
+        print('  --volume <vol> - set current volume for playback')
+        print('  --seek <position in HH:MM:SS> - set current position for playback')
+        print('  --timeout <seconds> - discover timeout')
+        print('  --ssdp-version <version> - discover devices by protocol version, default 1')
+        print('  --proxy - use local proxy on proxy port')
+        print('  --proxy-port <port number> - proxy port to listen incomming connections from devices, default 8000')
+        print('  --help - this help')
+    
+    def version():
+        print(__version__)
+    
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "hvd:t:i:", [   # information arguments
+                                                                'help',
+                                                                'version',
+                                                                'log=',
+    
+                                                                # device arguments
+                                                                'device=',
+                                                                'ip=',
+    
+                                                                # action arguments
+                                                                'play=',
+                                                                'pause',
+                                                                'stop',
+                                                                'volume=',
+                                                                'mute',
+                                                                'unmute',
+                                                                'seek=',
+    
+    
+                                                                # discover arguments
+                                                                'list',
+                                                                'all',
+                                                                'timeout=',
+                                                                'ssdp-version=',
+    
+                                                                # transport info
+                                                                'info',
+                                                                'media-info',
+    
+                                                                # download proxy
+                                                                'proxy',
+                                                                'proxy-port='])
+    except getopt.GetoptError:
+        usage()
+        sys.exit(1)
+    
+    device = ''
+    url = ''
+    vol = 10
+    position = '00:00:00'
+    timeout = 1
+    action = ''
+    logLevel = logging.WARN
+    compatibleOnly = True
+    ip = ''
+    proxy = False
+    proxy_port = 8000
+    ssdp_version = 1
+    for opt, arg in opts:
+        if opt in ('-h', '--help'):
+            usage()
+            sys.exit(0)
+        elif opt in ('-v', '--version'):
+            version()
+            sys.exit(0)
+        elif opt in ('--log'):
+            if arg.lower() == 'debug':
+                logLevel = logging.DEBUG
+            elif arg.lower() == 'info':
+                logLevel = logging.INFO
+            elif arg.lower() == 'warn':
+                logLevel = logging.WARN
+        elif opt in ('--all'):
+            compatibleOnly = False
+        elif opt in ('-d', '--device'):
+            device = arg
+        elif opt in ('-t', '--timeout'):
+            timeout = float(arg)
+        elif opt in ('--ssdp-version'):
+            ssdp_version = int(arg)
+        elif opt in ('-i', '--ip'):
+            ip = arg
+            compatibleOnly = False
+            timeout = 10
+        elif opt in ('--list'):
+            action = 'list'
+        elif opt in ('--play'):
+            action = 'play'
+            url = arg
+        elif opt in ('--pause'):
+            action = 'pause'
+        elif opt in ('--stop'):
+            action = 'stop'
+        elif opt in ('--volume'):
+            action = 'volume'
+            vol = arg
+        elif opt in ('--seek'):
+            action = 'seek'
+            position = arg
+        elif opt in ('--mute'):
+            action = 'mute'
+        elif opt in ('--unmute'):
+            action = 'unmute'
+        elif opt in ('--info'):
+            action = 'info'
+        elif opt in ('--media-info'):
+            action = 'media-info'
+        elif opt in ('--proxy'):
+            proxy = True
+        elif opt in ('--proxy-port'):
+            proxy_port = int(arg)
+    
+    logging.basicConfig(level=logLevel)
+    
+    st = URN_AVTransport_Fmt if compatibleOnly else SSDP_ALL
+    allDevices = discover(name=device, ip=ip, timeout=timeout, st=st, ssdp_version=ssdp_version)
+    if not allDevices:
+        print('No compatible devices found.')
+        sys.exit(1)
+    
+    if action in ('', 'list'):
+        print('Discovered devices:')
+        for d in allDevices:
+            print(' {} {}'.format('[a]' if d.has_av_transport else '[x]', d))
+        sys.exit(0)
+    
+    d = allDevices[0]
+    print(d)
+    
+    if url.lower().replace('https://', '').replace('www.', '').startswith('youtube.'):
+        import subprocess
+        process = subprocess.Popen(['youtube-dl', '-g', url], stdout=subprocess.PIPE)
+        url, err = process.communicate()
+    
+    if url.lower().startswith('https://'):
+        proxy = True
+    
+    if proxy:
+        ip = socket.gethostbyname(socket.gethostname())
+        t = threading.Thread(target=runProxy, kwargs={'ip': ip, 'port': proxy_port})
+        t.start()
+        time.sleep(2)
+    
+    if action == 'play':
+        try:
+            d.stop()
+            url = 'http://{}:{}/{}'.format(ip, proxy_port, url) if proxy else url
+            d.set_current_media(url=url)
+            d.play()
+        except Exception as e:
+            print('Device is unable to play media.')
+            logging.warn('Play exception:\n{}'.format(traceback.format_exc()))
+            sys.exit(1)
+    elif action == 'pause':
+        d.pause()
+    elif action == 'stop':
+        d.stop()
+    elif action == 'volume':
+        d.volume(vol)
+    elif action == 'seek':
+        d.seek(position)
+    elif action == 'mute':
+        d.mute()
+    elif action == 'unmute':
+        d.unmute()
+    elif action == 'info':
+        print(d.info())
+    elif action == 'media-info':
+        print(d.media_info())
+    
+    if proxy:
+        t.join()
