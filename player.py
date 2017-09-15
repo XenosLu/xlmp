@@ -20,7 +20,7 @@ from urllib.parse import quote, unquote
 from time import sleep, time
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
-sys.path.append('lib')
+sys.path = ['lib'] + sys.path  # added libpath
 
 from bottle import abort, post, redirect, request, route, run, static_file, template  # v1.2
 from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap

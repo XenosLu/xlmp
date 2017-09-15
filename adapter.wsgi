@@ -1,7 +1,7 @@
 import sys
 import os
-import bottle
+from lib.bottle import default_app
 sys.path = [os.path.dirname(os.path.abspath(__file__))] + sys.path
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 import player  # This loads your application
-application = bottle.default_app()
+application = default_app()
