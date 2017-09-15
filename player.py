@@ -1,5 +1,12 @@
 ﻿#!/usr/bin/python3
 # -*- coding:utf-8 -*-
+
+from threading import Thread, Event
+
+# import gevent
+# from gevent import monkey
+# monkey.patch_all()
+
 import os
 import sys
 import shutil
@@ -10,7 +17,7 @@ import re
 import traceback
 from urllib.parse import quote, unquote
 from time import sleep, time
-from threading import Thread, Event
+
 
 from bottle import route, post, template, static_file, abort, request, redirect, run  # pip install bottle  # 1.2
 
@@ -128,7 +135,6 @@ def get_size(*filename):
 
 
 def load_history(name):
-    print('pwd: %s' % os.getcwd())
     position = run_sql('select POSITION from history where FILENAME=?', name)
     if len(position) == 0:
         return 0
@@ -201,22 +207,25 @@ def dlna_load(src):
     try:  # set trackuri,if failed stop and retry
         # tracker.dmr.stop()
         # sleep(0.85)
-        while tracker.state['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
+        while tracker.dmr.info()['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
+        # while tracker.state['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
             tracker.dmr.stop()
             print('waiting for stopping...current state: %s' % tracker.state['CurrentTransportState'])
-            sleep(0.1)
-        tracker.dmr.set_current_media(url)
+            sleep(0.3)
+        print(tracker.dmr.set_current_media(url))
         print('url loaded')
         # tracker.dmr.play()
-        while tracker.state['CurrentTransportState'] not in ('PLAYING', 'TRANSITIONING'):
+        while tracker.dmr.info()['CurrentTransportState'] not in ('PLAYING', 'TRANSITIONING'):
+        # while tracker.state['CurrentTransportState'] not in ('PLAYING', 'TRANSITIONING'):
             tracker.dmr.play()
             print('waiting for playing...current state: %s' % tracker.state['CurrentTransportState'])
-            sleep(0.1)
+            sleep(0.2)
         sleep(0.5)
         time0 = time()
         print('checking duration to make sure loaded...')
-        while tracker.state['TrackDuration'] == '00:00:00':
-            sleep(0.1)
+        while tracker.dmr.position_info()['TrackDuration'] == '00:00:00':
+        # while tracker.state['TrackDuration'] == '00:00:00':
+            sleep(0.2)
             print('Waiting for duration correctly recognized')
             if (time() - time0) > 5:
                 print('reload position: in %fs' % (time() - time0))
@@ -383,6 +392,8 @@ def fs_dir(path):
                                   'path': '%s%s' % (path, file), 'size': get_size(path, file)})
         return json.dumps(up + list_folder + list_mp4 + list_video + list_other)
     except Exception as e:
+        print('pwd: %s' % os.getcwd())
+        print(os.listdir())
         abort(404, str(e))
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
@@ -397,4 +408,8 @@ tracker.start()
 if __name__ == '__main__':  # for debug
     os.system('start http://127.0.0.1:8081/')  # open the page automatic
     # run(host='0.0.0.0', port=8081, debug=True, reloader=True)  # run demo server
-    run(host='0.0.0.0', port=8081, debug=True)  # run demo server
+    try:
+        gevent
+        run(host='0.0.0.0', port=8081, debug=True, server='gevent')  # run demo server
+    except:
+        run(host='0.0.0.0', port=8081, debug=True)  # run demo server
