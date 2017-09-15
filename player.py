@@ -18,10 +18,8 @@ import traceback
 from urllib.parse import quote, unquote
 from time import sleep, time
 
-
-from bottle import route, post, template, static_file, abort, request, redirect, run  # pip install bottle  # 1.2
-
-import dlnap  # https://github.com/ttopholm/dlnap
+from lib.bottle import route, post, template, static_file, abort, request, redirect, run  # pip install bottle  # 1.2
+from lib.dlnap import discover, URN_AVTransport_Fmt  # https://github.com/ttopholm/dlnap
 
 VIDEO_PATH = './static/mp4'  # mp4 file path
 
@@ -42,7 +40,8 @@ class DMRTracker(Thread):
         
     def discover_dmr(self):
         # print('Searching DMR device...')
-        self.all_devices = dlnap.discover(name='', ip='', timeout=3, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
+        # self.all_devices = dlnap.discover(name='', ip='', timeout=3, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
+        self.all_devices = discover(name='', ip='', timeout=3, st=URN_AVTransport_Fmt, ssdp_version=1)
         if len(self.all_devices) > 0:
             self.dmr = self.all_devices[0]
             print('Found DMR device: %s' % self.dmr)
