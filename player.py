@@ -7,19 +7,20 @@ from threading import Thread, Event
 # from gevent import monkey
 # monkey.patch_all()
 
+import json
+import math
 import os
-import sys
+import re
 import shutil
 import sqlite3
-import math
-import json
-import re
+import sys
 import traceback
+
 from urllib.parse import quote, unquote
 from time import sleep, time
 
-from lib.bottle import route, post, template, static_file, abort, request, redirect, run  # pip install bottle  # 1.2
-from lib.dlnap import discover, URN_AVTransport_Fmt  # https://github.com/ttopholm/dlnap
+from lib.bottle import abort, post, redirect, request, route, run, static_file, template  # v1.2
+from lib.dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
 
 VIDEO_PATH = './static/mp4'  # mp4 file path
 
