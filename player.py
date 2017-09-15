@@ -19,8 +19,11 @@ import traceback
 from urllib.parse import quote, unquote
 from time import sleep, time
 
-from lib.bottle import abort, post, redirect, request, route, run, static_file, template  # v1.2
-from lib.dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
+os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
+sys.path.append('lib')
+
+from bottle import abort, post, redirect, request, route, run, static_file, template  # v1.2
+from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
 
 VIDEO_PATH = './static/mp4'  # mp4 file path
 
@@ -396,7 +399,6 @@ def fs_dir(path):
         print(os.listdir())
         abort(404, str(e))
 
-os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 # Initialize DataBase
 run_sql('''create table if not exists history
                 (FILENAME text PRIMARY KEY not null,
