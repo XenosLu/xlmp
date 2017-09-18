@@ -24,6 +24,7 @@ sys.path = ['lib'] + sys.path  # added libpath
 
 from bottle import abort, post, redirect, request, route, run, static_file, template  # v1.2
 from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
+# import dlnap
 
 VIDEO_PATH = './static/mp4'  # mp4 file path
 
@@ -40,10 +41,10 @@ class DMRTracker(Thread):
         self.__flag.set()
         self.__running = Event()
         self.__running.set()
+        print('Starting DMR search...')
         self.discover_dmr()
         
     def discover_dmr(self):
-        # print('Searching DMR device...')
         # self.all_devices = dlnap.discover(name='', ip='', timeout=3, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
         self.all_devices = discover(name='', ip='', timeout=3, st=URN_AVTransport_Fmt, ssdp_version=1)
         if len(self.all_devices) > 0:
@@ -200,12 +201,12 @@ def search_dmr():
 @route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|rmvb))$>')
 def dlna_load(src):
     """Video DLNA play page"""
-    print('start loading')
-    print(tracker.state)
-    if not tracker.dmr:
-        abort(500, 'no DMR.')
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         abort(404, 'File not found.')
+    if not tracker.dmr:
+        abort(500, 'no DMR.')
+    print('start loading')
+    print(tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try:  # set trackuri,if failed stop and retry
         # tracker.dmr.stop()
@@ -228,9 +229,9 @@ def dlna_load(src):
         print('checking duration to make sure loaded...')
         while tracker.dmr.position_info()['TrackDuration'] == '00:00:00':
         # while tracker.state['TrackDuration'] == '00:00:00':
-            sleep(0.2)
+            sleep(0.3)
             print('Waiting for duration correctly recognized')
-            if (time() - time0) > 5:
+            if (time() - time0) > 8:
                 print('reload position: in %fs' % (time() - time0))
                 dlna_load(src)
                 return
