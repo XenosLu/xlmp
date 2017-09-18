@@ -71,17 +71,13 @@ class DMRTracker(Thread):
                         self.dmr = None
                         continue
                     self.state['CurrentTransportState'] = self.dmr.info()['CurrentTransportState']
-                    # if self.state['CurrentTransportState'] is None:
-                        # print('No DMR currently.')
-                        # self.dmr = None
-                        # continue
                     position_info = self.dmr.position_info()
                     for i in ('RelTime', 'TrackDuration'):
                         self.state[i] = position_info[i]
                     if self.state['CurrentTransportState'] == 'PLAYING':
                         self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI']))
-                        save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']), time_to_second(self.state['TrackDuration']))
-                    # print(self.state)
+                        save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']),
+                                     time_to_second(self.state['TrackDuration']))
                 except TypeError as e:
                     print('TypeError: %s\n%s' % (e, traceback.format_exc()))
                 except Exception as e:
@@ -208,14 +204,12 @@ def dlna_load(src):
     print('start loading')
     print(tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
-    try:  # set trackuri,if failed stop and retry
-        # tracker.dmr.stop()
-        # sleep(0.85)
+    try:  # set trackuri, if failed stop and retry
         while tracker.dmr.info()['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
         # while tracker.state['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
             tracker.dmr.stop()
             print('waiting for stopping...current state: %s' % tracker.state['CurrentTransportState'])
-            sleep(0.3)
+            sleep(0.85)
         print(tracker.dmr.set_current_media(url))
         print('url loaded')
         # tracker.dmr.play()
@@ -229,7 +223,7 @@ def dlna_load(src):
         print('checking duration to make sure loaded...')
         while tracker.dmr.position_info()['TrackDuration'] == '00:00:00':
         # while tracker.state['TrackDuration'] == '00:00:00':
-            sleep(0.3)
+            sleep(0.5)
             print('Waiting for duration correctly recognized')
             if (time() - time0) > 8:
                 print('reload position: in %fs' % (time() - time0))
@@ -241,7 +235,7 @@ def dlna_load(src):
             print('load position: %s in %fs' % (second_to_time(position), time() - time0))
         print(tracker.state)
     except Exception as e:
-        print(e)
+        print('DLNA load exception: %s\n%s' % (e, traceback.format_exc()))
 
 
 @route('/dlnaplay')
