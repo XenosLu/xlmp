@@ -225,7 +225,7 @@ def dlna_load(src):
         # while tracker.state['TrackDuration'] == '00:00:00':
             sleep(0.5)
             print('Waiting for duration correctly recognized')
-            if (time() - time0) > 8:
+            if (time() - time0) > 10:
                 print('reload position: in %fs' % (time() - time0))
                 dlna_load(src)
                 return
