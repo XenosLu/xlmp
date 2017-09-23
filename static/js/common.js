@@ -76,9 +76,9 @@ function showDialog() {
 function adapt() {
     $("#videosize").text("orign");
     $("#tabFrame").css("max-height", ($(window).height() - 240) + "px");
-    // if (!isNaN($("video").get(0).duration)) {
+    if (!isNaN($("video").get(0).duration)) {
     // if (!isNaN($("video").get(0))) {
-    if (!isNaN($("video"))) {
+    // if (!isNaN($("video"))) {
         var video_ratio = $("video").get(0).videoWidth / $("video").get(0).videoHeight;
         var page_ratio = $(window).width() / $(window).height();
         if (page_ratio < video_ratio) {
