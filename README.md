@@ -16,6 +16,6 @@
 + adapter.wsgi    wsgi adapter
 + player.py 	  main
 + player.tpl      html template
-+ player.db       auto-generated play history list db
++ player.db       auto-generated sqlite3 db to store play history
 + player.css      CSS file
 + dlnap.py        dlna playback support, original by cherezov and ttopholm

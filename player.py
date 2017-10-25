@@ -24,7 +24,6 @@ sys.path = ['lib'] + sys.path  # added libpath
 
 from bottle import abort, post, redirect, request, route, run, static_file, template  # v1.2
 from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
-# import dlnap
 
 VIDEO_PATH = './static/mp4'  # mp4 file path
 
@@ -43,7 +42,7 @@ class DMRTracker(Thread):
         self.__running.set()
         print('Starting DMR search...')
         self.discover_dmr()
-        
+
     def discover_dmr(self):
         # self.all_devices = dlnap.discover(name='', ip='', timeout=3, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
         self.all_devices = discover(name='', ip='', timeout=3, st=URN_AVTransport_Fmt, ssdp_version=1)
@@ -57,6 +56,12 @@ class DMRTracker(Thread):
                 self.dmr = i
                 return True
         return False
+        
+    def get_transport_state(self):
+        try:
+            return self.dmr.info()['CurrentTransportState']
+        except:
+            return
 
     def run(self):
         while self.__running.isSet():
@@ -84,7 +89,7 @@ class DMRTracker(Thread):
                     print('DMR Tracker Exception: %s\n%s' % (e, traceback.format_exc()))
                 sleep(1)
             else:
-                sleep(5)
+                sleep(4)
                 self.discover_dmr()
 
     def pause(self):
@@ -194,7 +199,7 @@ def search_dmr():
     tracker.discover_dmr()
 
 
-@route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|rmvb))$>')
+@route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb))$>')
 def dlna_load(src):
     """Video DLNA play page"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
@@ -205,8 +210,9 @@ def dlna_load(src):
     print(tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try:  # set trackuri, if failed stop and retry
-        while tracker.dmr.info()['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
         # while tracker.state['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
+        # while tracker.dmr.info()['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
+        while tracker.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
             tracker.dmr.stop()
             print('waiting for stopping...current state: %s' % tracker.state['CurrentTransportState'])
             sleep(0.85)
@@ -232,7 +238,7 @@ def dlna_load(src):
         position = load_history(src)
         if position:
             tracker.dmr.seek(second_to_time(position))
-            print('load position: %s in %fs' % (second_to_time(position), time() - time0))
+            print('loaded position: %s in %fs' % (second_to_time(position), time() - time0))
         print(tracker.state)
     except Exception as e:
         print('DLNA load exception: %s\n%s' % (e, traceback.format_exc()))
@@ -291,12 +297,12 @@ def remove(src):
 @route('/move/<src:path>')
 def move(src):
     """Move file to 'old' folder"""
-    file = '%s/%s' % (VIDEO_PATH, src)
+    filename = '%s/%s' % (VIDEO_PATH, src)
     dir_old = '%s/%s/old' % (VIDEO_PATH, os.path.dirname(src))
     if not os.path.exists(dir_old):
         os.mkdir(dir_old)
     try:
-        shutil.move(file, dir_old)  # gonna do something when file is occupied
+        shutil.move(filename, dir_old)  # gonna do something when file is occupied
     except Exception as e:
         print(str(e))
         abort(404, str(e))
@@ -359,7 +365,7 @@ def static(filename):
     return static_file(filename, root='./static')
 
 
-@route('/video/<src:re:.*\.((?i)(mp4|mkv|avi|rmvb))$>')
+@route('/video/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb))$>')
 def static_video(src):
     """video file access
        To support large file(>2GB), you should use web server to deal with static files.
@@ -375,19 +381,19 @@ def fs_dir(path):
         up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
         if path:
             up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]
-        for file in os.listdir('%s/%s' % (VIDEO_PATH, path)):
-            if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, file)):
-                list_folder.append({'filename': file, 'type': 'folder',
-                                    'path': '/%s%s' % (path, file)})
-            elif re.match('.*\.((?i)mp)4$', file):
-                list_mp4.append({'filename': file, 'type': 'mp4',
-                                'path': '%s%s' % (path, file), 'size': get_size(path, file)})
-            elif re.match('.*\.((?i)(mkv|avi|rmvb))$', file):
-                list_video.append({'filename': file, 'type': 'video',
-                                   'path': '%s%s' % (path, file), 'size': get_size(path, file)})
+        for filename in os.listdir('%s/%s' % (VIDEO_PATH, path)):
+            if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
+                list_folder.append({'filename': filename, 'type': 'folder',
+                                    'path': '/%s%s' % (path, filename)})
+            elif re.match('.*\.((?i)mp)4$', filename):
+                list_mp4.append({'filename': filename, 'type': 'mp4',
+                                'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+            elif re.match('.*\.((?i)(mkv|avi|flv|rmvb))$', filename):
+                list_video.append({'filename': filename, 'type': 'video',
+                                   'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
             else:
-                list_other.append({'filename': file, 'type': 'other',
-                                  'path': '%s%s' % (path, file), 'size': get_size(path, file)})
+                list_other.append({'filename': filename, 'type': 'other',
+                                  'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
         return json.dumps(up + list_folder + list_mp4 + list_video + list_other)
     except Exception as e:
         print('pwd: %s' % os.getcwd())
