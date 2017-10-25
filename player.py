@@ -56,7 +56,7 @@ class DMRTracker(Thread):
                 self.dmr = i
                 return True
         return False
-        
+
     def get_transport_state(self):
         try:
             return self.dmr.info()['CurrentTransportState']
@@ -167,7 +167,7 @@ def index():
         redirect('/dlna')
     return template('index')
 
-    
+
 @route('/index')
 def index_o():
     return template('index')
@@ -193,7 +193,7 @@ def set_dlna_dmr(dmr):
     else:
         return 'Failed'
 
-        
+
 @route('/searchdmr')
 def search_dmr():
     tracker.discover_dmr()
@@ -219,7 +219,8 @@ def dlna_load(src):
         print(tracker.dmr.set_current_media(url))
         print('url loaded')
         # tracker.dmr.play()
-        while tracker.dmr.info()['CurrentTransportState'] not in ('PLAYING', 'TRANSITIONING'):
+        while tracker.get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
+        # while tracker.dmr.info()['CurrentTransportState'] not in ('PLAYING', 'TRANSITIONING'):
         # while tracker.state['CurrentTransportState'] not in ('PLAYING', 'TRANSITIONING'):
             tracker.dmr.play()
             print('waiting for playing...current state: %s' % tracker.state['CurrentTransportState'])
