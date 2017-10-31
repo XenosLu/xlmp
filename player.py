@@ -40,11 +40,13 @@ class DMRTracker(Thread):
         self.__flag.set()
         self.__running = Event()
         self.__running.set()
-        print('Starting DMR search...')
-        self.discover_dmr()
+        print('DMR Tracker initialized.')
+        # self.discover_dmr()
 
     def discover_dmr(self):
-        # self.all_devices = dlnap.discover(name='', ip='', timeout=3, st=dlnap.URN_AVTransport_Fmt, ssdp_version=1)
+        # print('Starting DMR search...')
+        if self.dmr:
+            print('Current DMR: %s' % self.dmr)
         self.all_devices = discover(name='', ip='', timeout=3, st=URN_AVTransport_Fmt, ssdp_version=1)
         if len(self.all_devices) > 0:
             self.dmr = self.all_devices[0]
@@ -89,8 +91,8 @@ class DMRTracker(Thread):
                     print('DMR Tracker Exception: %s\n%s' % (e, traceback.format_exc()))
                 sleep(1)
             else:
-                sleep(4)
                 self.discover_dmr()
+                sleep(4)
 
     def pause(self):
         self.__flag.clear()
@@ -100,7 +102,7 @@ class DMRTracker(Thread):
 
     def stop(self):
         self.__flag.set()
-        self.__running.clear()  
+        self.__running.clear()
 
 
 def run_sql(sql, *args):
@@ -165,17 +167,17 @@ def list_history():
 def index():
     if tracker.dmr:
         redirect('/dlna')
-    return template('index')
+    return template('index.tpl')
 
 
 @route('/index')
 def index_o():
-    return template('index')
+    return template('index.tpl')
 
 
 @route('/dlna')
 def dlna():
-    return template('dlna_player')
+    return template('dlna_player.tpl')
 
 
 @route('/play/<src:re:.*\.((?i)mp)4$>')
@@ -183,7 +185,7 @@ def play(src):
     """Video play page"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         redirect('/')
-    return template('player', src=src, title=src, position=load_history(src))
+    return template('player.tpl', src=src, title=src, position=load_history(src))
 
 
 @route('/setdmr/<dmr>')
