@@ -1,5 +1,5 @@
 ﻿
-% rebase('base.tpl', title='DMC - Light mp4 Player')
+% rebase('base.tpl', title='DMC - Light Media Player')
 <body>
   % include('common.tpl')
   % include('dlna.tpl')

@@ -4,7 +4,7 @@
   % include('common.tpl')
   % include('dlna.tpl')
   <!-- <video poster controls preload='meta'>No video support!</video> -->
-  <video src="/video/{{src}}" poster controls preload='meta'>No video support!</video>
+  <video src="/video/{{src}}" poster controls preload="meta">No video support!</video>
 </body>
 % include('common_script.tpl')
 <script>

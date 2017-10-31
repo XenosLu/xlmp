@@ -1,6 +1,6 @@
-# lwmps - Light web mp4 play system
+# lwmps - Light web media play system
 ### lwmps is a light web media play system based on WSGI. Original developed in PHP, now rewrited in Python3.
-### You can play mp4 video from other device through any html5 web browser in your LAN.
+### You can play media video from other device through any html5 web browser in your LAN.
 
 ### I'm working on to add dlna playback support, and already works in an ungracefully way.
 ### It can achieve the DMC + DMS Roles in DLNA
