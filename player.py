@@ -19,7 +19,7 @@ sys.path = ['lib'] + sys.path  # added libpath
 from bottle import abort, post, redirect, request, route, run, static_file, template  # v0.12
 from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
 
-VIDEO_PATH = './static/mp4'  # mp4 file path
+VIDEO_PATH = './static/media'  # mp4 file path
 
 
 class DMRTracker(Thread):
