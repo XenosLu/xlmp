@@ -27,8 +27,8 @@ $("#tabFrame").on("click", ".folder", function () {
         filelist("/move/" + this.title);
     }
 }).on("click", ".remove", function () {
-    if (confirm("Clear " + this.title + "?"))
-        history("/remove/" + this.title);
+    if (confirm("Clear " + escape(this.title) + "?"))
+        history("/remove/" + escape(this.title));
 }).on("click", ".mp4", function () {
     if (window.document.location.pathname == "/dlna")
         dlnaLoad(this.title);
