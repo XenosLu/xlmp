@@ -1,12 +1,5 @@
 ﻿#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-
-from threading import Thread, Event
-
-# import gevent
-# from gevent import monkey
-# monkey.patch_all()
-
 import json
 import math
 import os
@@ -16,13 +9,14 @@ import sqlite3
 import sys
 import traceback
 
+from threading import Thread, Event
 from urllib.parse import quote, unquote
 from time import sleep, time
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 sys.path = ['lib'] + sys.path  # added libpath
 
-from bottle import abort, post, redirect, request, route, run, static_file, template  # v1.2
+from bottle import abort, post, redirect, request, route, run, static_file, template  # v0.12
 from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
 
 VIDEO_PATH = './static/mp4'  # mp4 file path
@@ -412,10 +406,12 @@ tracker = DMRTracker()
 tracker.start()
 
 if __name__ == '__main__':  # for debug
-    os.system('start http://127.0.0.1:8081/')  # open the page automatic
-    # run(host='0.0.0.0', port=8081, debug=True, reloader=True)  # run demo server
+    from platform import system
+    from imp import find_module
+    if system()=='Windows':
+        os.system('start http://127.0.0.1:8081/')  # open the page automatic
     try:
-        gevent
-        run(host='0.0.0.0', port=8081, debug=True, server='gevent')  # run demo server
+        find_module('meinheld')
+        run(host='0.0.0.0', port=8081, debug=True, server='meinheld')  # run demo server use meinheld
     except:
         run(host='0.0.0.0', port=8081, debug=True)  # run demo server
