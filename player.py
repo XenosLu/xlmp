@@ -379,6 +379,8 @@ def fs_dir(path):
         if path:
             up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]
         for filename in os.listdir('%s/%s' % (VIDEO_PATH, path)):
+            if filename.startswith('.'):
+                continue
             if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
                 list_folder.append({'filename': filename, 'type': 'folder',
                                     'path': '/%s%s' % (path, filename)})
