@@ -163,14 +163,14 @@ function filelist(str) {
                 var dlna = "";
                 if (icon[n["type"]] === "film")
                     dlna = ' class="dlna" title="' + n["path"] + '"';
-                var download_link = "";
-                if(icon[n["type"]]==="film")
-                    download_link = '<a href="/video/' + n["path"] + '" class="glyphicon glyphicon-download-alt"></a>';                
-                var td = new Array(4);
+                // var download_link = "";
+                // if(icon[n["type"]]==="film")
+                    // download_link = '<a href="/video/' + n["path"] + '" class="glyphicon glyphicon-download-alt"></a>';                
+                var td = new Array(3);
                 td[0] = "<td" + dlna + '><i class="glyphicon glyphicon-' + icon[n["type"]] + '"></i></td>';
-                td[1] = "<td>" + download_link + "</td>";
-                td[2] = '<td class="filelist ' + n["type"] + '" title="' + n["path"] + '">' + n["filename"] + size + "</td>";
-                td[3] = '<td class="move" title="' + n["path"] + '">' +'<i class="glyphicon glyphicon-remove-circle"></i></td>';
+                // td[1] = "<td>" + download_link + "</td>";
+                td[1] = '<td class="filelist ' + n["type"] + '" title="' + n["path"] + '">' + n["filename"] + size + "</td>";
+                td[2] = '<td class="move" title="' + n["path"] + '">' +'<i class="glyphicon glyphicon-remove-circle"></i></td>';
                 html += "<tr>" + td.join("") + "</tr>";
             });
             $("#list").empty().append(html);
