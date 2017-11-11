@@ -356,6 +356,18 @@ def restart():
     return 'restarting...'
 
 
+@route('/backup')
+def backup():
+    """backup history"""
+    if sys.platform != 'win32':
+        return os.system('cp player.db %s' % VIDEO_PATH)
+
+@route('/restore')
+def restore():
+    """restore history"""
+    if sys.platform != 'win32':
+        return os.system('cp %s player.db' % VIDEO_PATH)
+
 @route('/static/<filename:path>')
 def static(filename):
     """Static file access"""
@@ -411,9 +423,8 @@ tracker = DMRTracker()
 tracker.start()
 
 if __name__ == '__main__':  # for debug
-    from platform import system
     from imp import find_module
-    if system()=='Windows':
+    if sys.platform == 'win32':
         os.system('start http://127.0.0.1:8081/')  # open the page automatic for debug
     try:
         find_module('meinheld')
