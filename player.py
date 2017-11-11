@@ -428,6 +428,6 @@ if __name__ == '__main__':  # for debug
         os.system('start http://127.0.0.1:8081/')  # open the page automatic for debug
     try:
         find_module('meinheld')
-        run(host='0.0.0.0', port=8081, debug=True, server='meinheld')  # run demo server use meinheld
+        run(host='127.0.0.1', port=8081, debug=True, server='meinheld')  # run demo server use meinheld
     except:
         run(host='0.0.0.0', port=8081, debug=True)  # run demo server
