@@ -21,7 +21,10 @@ $(".close").click(function () {
 
 //table buttons
 $("#tabFrame").on("click", ".folder", function () {
-    filelist("/fs" + this.title + "/");
+    sub_path = this.title;
+    if(sub_path=="/")
+        sub_path="";
+    filelist("/fs" + sub_path + "/");
 }).on("click", ".move", function () {
     if (confirm("Move " + this.title + " to old?")) {
         filelist("/move/" + this.title);
@@ -204,8 +207,7 @@ function history(str) {
                     mediaType = "mp4";
                 else
                     mediaType = "video";
-                if(n["path"]=="/")
-                    n["path"]="";
+
                 html += '<tr><td class="folder" title="/' + n["path"] + '">' +
                 '<i class="glyphicon glyphicon-folder-close"></i>' +
                 "</td>" +
