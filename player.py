@@ -366,7 +366,7 @@ def backup():
 def restore():
     """restore history"""
     if sys.platform != 'win32':
-        return os.system('cp %s player.db' % VIDEO_PATH)
+        return os.system('cp %s/player.db .' % VIDEO_PATH)
 
 @route('/static/<filename:path>')
 def static(filename):
