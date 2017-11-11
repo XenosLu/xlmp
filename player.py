@@ -360,13 +360,13 @@ def restart():
 def backup():
     """backup history"""
     if sys.platform != 'win32':
-        return os.system('cp player.db %s' % VIDEO_PATH)
+        return os.system('cp -f player.db %s' % VIDEO_PATH)
 
 @route('/restore')
 def restore():
     """restore history"""
     if sys.platform != 'win32':
-        return os.system('cp %s/player.db .' % VIDEO_PATH)
+        return os.system('cp -f %s/player.db .' % VIDEO_PATH)
 
 @route('/static/<filename:path>')
 def static(filename):
