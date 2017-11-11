@@ -204,6 +204,8 @@ function history(str) {
                     mediaType = "mp4";
                 else
                     mediaType = "video";
+                if(n["path"]=="/")
+                    n["path"]="";
                 html += '<tr><td class="folder" title="/' + n["path"] + '">' +
                 '<i class="glyphicon glyphicon-folder-close"></i>' +
                 "</td>" +
