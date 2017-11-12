@@ -360,7 +360,7 @@ def restart():
 def backup():
     """backup history"""
     if sys.platform != 'win32':
-        os.system('cp -f %s/player.db %s/player.db.bak' % VIDEO_PATH)
+        os.system('cp -f %s/player.db %s/player.db.bak' % (VIDEO_PATH, VIDEO_PATH))
         return os.system('cp -f player.db %s' % VIDEO_PATH)
 
 
