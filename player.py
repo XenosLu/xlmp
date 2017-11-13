@@ -20,6 +20,7 @@ from bottle import abort, post, redirect, request, route, run, static_file, temp
 from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
 
 VIDEO_PATH = './static/media'  # media file path
+HISTORY_FILE = 'player.db'  # history db file name
 
 
 class DMRTracker(Thread):
@@ -100,7 +101,7 @@ class DMRTracker(Thread):
 
 
 def run_sql(sql, *args):
-    with sqlite3.connect('player.db') as conn:
+    with sqlite3.connect(HISTORY_FILE) as conn:
         try:
             cursor = conn.execute(sql, args)
             result = cursor.fetchall()
@@ -360,15 +361,15 @@ def restart():
 def backup():
     """backup history"""
     if sys.platform != 'win32':
-        os.system('cp -f %s/player.db %s/player.db.bak' % (VIDEO_PATH, VIDEO_PATH))
-        return os.system('cp -f player.db %s' % VIDEO_PATH)
+        os.system('cp -f %s/%s %s/%s.bak' % (VIDEO_PATH, HISTORY_FILE, VIDEO_PATH, HISTORY_FILE))
+        return os.system('cp -f %s %s' % (HISTORY_FILE, VIDEO_PATH))
 
 
 @route('/restore')
 def restore():
     """restore history"""
     if sys.platform != 'win32':
-        return os.system('cp -f %s/player.db .' % VIDEO_PATH)
+        return os.system('cp -f %s/%s .' % (HISTORY_FILE, VIDEO_PATH))
 
 
 @route('/static/<filename:path>')
