@@ -369,7 +369,7 @@ def backup():
 def restore():
     """restore history"""
     if sys.platform != 'win32':
-        return os.system('cp -f %s/%s .' % (HISTORY_FILE, VIDEO_PATH))
+        return os.system('cp -f %s/%s .' % (VIDEO_PATH, HISTORY_FILE))
 
 
 @route('/static/<filename:path>')
