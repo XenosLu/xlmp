@@ -1,4 +1,4 @@
-# lwmps simple demo v14
+## xlmp
 FROM alpine:3.6
 LABEL maintainer="xenos <xenos.lu@gmail.com>"
 # ENV TZ 'Asia/Shanghai'
