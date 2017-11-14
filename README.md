@@ -10,7 +10,7 @@
 
 ## Suggestted install steps:
     docker pull xenocider/xlmp
-### make sure your 80 port is unusable    
+### make sure your 80 port is not occupied    
     docker run -itd --net="host" /home/user/media:/opt/xlmp/static/media/ xenocider/xlmp
 ### /home/user/meida should be replace by your own media folder
 
