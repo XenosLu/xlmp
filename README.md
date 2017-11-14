@@ -5,7 +5,7 @@
 
 ### I'm working on to add dlna playback support, and already works in an ungracefully way.
 ### It can achieve the DMC + DMS Roles in DLNA
-##  I already put it in docker container, and works good. I'll try publish it by docker as next step.
+###  I already put it in docker container, and works good. I'll try publish it by docker as next step.
 ## install steps:
 ### 1. install Python3.4.4(suggested)
 ### 2. run 'python player.py' as a debug demo server
