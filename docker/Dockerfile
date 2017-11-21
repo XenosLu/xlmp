@@ -5,10 +5,10 @@ LABEL maintainer="xenos <xenos.lu@gmail.com>"
 
 # RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 RUN apk upgrade --update \
-    && apk add python3 \  # install python3
-    && apk add gcc libc-dev python3-dev \  ####################
-    && pip3 install meinheld \  # ########## install meinheld #
-    && apk del gcc libc-dev python3-dev \  ####################
+    && apk add python3 \
+    && apk add gcc libc-dev python3-dev \
+    && pip3 install meinheld \
+    && apk del gcc libc-dev python3-dev \
     && apk add git \
     && apk add supervisor \
     && apk add nginx \
