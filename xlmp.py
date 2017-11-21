@@ -8,6 +8,7 @@ import shutil
 import sqlite3
 import sys
 import traceback
+import logging
 
 from threading import Thread, Event
 from urllib.parse import quote, unquote
@@ -18,6 +19,11 @@ sys.path = ['lib'] + sys.path  # added libpath
 
 from bottle import abort, post, redirect, request, route, run, static_file, template  # v0.12
 from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
+
+# initialize logging
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
 
 VIDEO_PATH = './static/media'  # media file path
 HISTORY_FILE = 'history.db'  # history db file name
@@ -35,17 +41,16 @@ class DMRTracker(Thread):
         self.__flag.set()
         self.__running = Event()
         self.__running.set()
-        print('DMR Tracker initialized.')
-        # self.discover_dmr()
+        logging.info('DMR Tracker initialized.')
 
     def discover_dmr(self):
-        # print('Starting DMR search...')
+        logging.debug('Starting DMR search...')
         if self.dmr:
-            print('Current DMR: %s' % self.dmr)
+            logging.info('Current DMR: %s' % self.dmr)
         self.all_devices = discover(name='', ip='', timeout=3, st=URN_AVTransport_Fmt, ssdp_version=1)
         if len(self.all_devices) > 0:
             self.dmr = self.all_devices[0]
-            print('Found DMR device: %s' % self.dmr)
+            logging.info('Found DMR device: %s' % self.dmr)
 
     def set_dmr(self, str_dmr):
         for i in self.all_devices:
@@ -69,7 +74,7 @@ class DMRTracker(Thread):
                     self.state['DMRs'] = [str(i) for i in self.all_devices]
                     self.state['CurrentVolume'] = self.dmr.get_volume()
                     if not self.state['CurrentVolume']:
-                        print('No DMR currently.')
+                        logging.info('No DMR currently.')
                         self.dmr = None
                         continue
                     self.state['CurrentTransportState'] = self.dmr.info()['CurrentTransportState']
@@ -81,9 +86,9 @@ class DMRTracker(Thread):
                         save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']),
                                      time_to_second(self.state['TrackDuration']))
                 except TypeError as e:
-                    print('TypeError: %s\n%s' % (e, traceback.format_exc()))
+                    logging.warning('TypeError: %s\n%s' % (e, traceback.format_exc()))
                 except Exception as e:
-                    print('DMR Tracker Exception: %s\n%s' % (e, traceback.format_exc()))
+                    logging.warning('DMR Tracker Exception: %s\n%s' % (e, traceback.format_exc()))
                 sleep(1)
             else:
                 self.discover_dmr()
@@ -109,18 +114,26 @@ def run_sql(sql, *args):
             if cursor.rowcount > 0:
                 conn.commit()
         except Exception as e:
-            print(str(e))
+            logging.warning(str(e))
             result = ()
     return result
 
 
-def second_to_time(second):  # turn seconds into hh:mm:ss time format
+def second_to_time(second):
+    """ Turn time in seconds into "hh:mm:ss" format
+    
+    second: int value
+    """
     m, s = divmod(second, 60)
     h, m = divmod(second/60, 60)
     return '%02d:%02d:%02d' % (h, m, s)
 
 
-def time_to_second(time_str):  # turn hh:mm:ss time format into seconds
+def time_to_second(time_str):
+    """ Turn time in "hh:mm:ss" format into seconds
+    
+    time_str: string like "hh:mm:ss"
+    """
     return sum([int(i)*60**n for n, i in enumerate(str(time_str).split(':')[::-1])])
 
 
@@ -203,43 +216,42 @@ def dlna_load(src):
         abort(404, 'File not found.')
     if not tracker.dmr:
         abort(500, 'no DMR.')
-    print('start loading')
-    print(tracker.state)
+    logging.info('start loading... tracker state:%s' % tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try:  # set trackuri, if failed stop and retry
         # while tracker.state['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
         # while tracker.dmr.info()['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
         while tracker.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
             tracker.dmr.stop()
-            print('waiting for stopping...current state: %s' % tracker.state['CurrentTransportState'])
+            logging.info('waiting for stopping...current state: %s' % tracker.state['CurrentTransportState'])
             sleep(0.85)
-        print(tracker.dmr.set_current_media(url))
-        print('url loaded')
+        logging.info(tracker.dmr.set_current_media(url))
+        logging.info('url loaded')
         # tracker.dmr.play()
         while tracker.get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
         # while tracker.dmr.info()['CurrentTransportState'] not in ('PLAYING', 'TRANSITIONING'):
         # while tracker.state['CurrentTransportState'] not in ('PLAYING', 'TRANSITIONING'):
             tracker.dmr.play()
-            print('waiting for playing...current state: %s' % tracker.state['CurrentTransportState'])
+            logging.info('waiting for playing...current state: %s' % tracker.state['CurrentTransportState'])
             sleep(0.2)
         sleep(0.5)
         time0 = time()
-        print('checking duration to make sure loaded...')
+        logging.info('checking duration to make sure loaded...')
         while tracker.dmr.position_info()['TrackDuration'] == '00:00:00':
         # while tracker.state['TrackDuration'] == '00:00:00':
             sleep(0.5)
-            print('Waiting for duration correctly recognized')
+            logging.info('Waiting for duration correctly recognized')
             if (time() - time0) > 10:
-                print('reload position: in %fs' % (time() - time0))
+                logging.info('reload position: in %fs' % (time() - time0))
                 dlna_load(src)
                 return
         position = load_history(src)
         if position:
             tracker.dmr.seek(second_to_time(position))
-            print('loaded position: %s in %fs' % (second_to_time(position), time() - time0))
-        print(tracker.state)
+            logging.info('loaded position: %s in %fs' % (second_to_time(position), time() - time0))
+        logging.info(tracker.state)
     except Exception as e:
-        print('DLNA load exception: %s\n%s' % (e, traceback.format_exc()))
+        logging.warning('DLNA load exception: %s\n%s' % (e, traceback.format_exc()))
 
 
 @route('/dlnaplay')
@@ -302,7 +314,7 @@ def move(src):
     try:
         shutil.move(filename, dir_old)  # gonna do something when file is occupied
     except Exception as e:
-        print(str(e))
+        logging.warning(str(e))
         abort(404, str(e))
     return fs_dir('%s/' % os.path.dirname(src))
 
@@ -416,8 +428,7 @@ def fs_dir(path):
                                   'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
         return json.dumps(up + list_folder + list_mp4 + list_video + list_other)
     except Exception as e:
-        print('pwd: %s' % os.getcwd())
-        print(os.listdir())
+        logging.warning('dir exception: %s pwd: %s' % (e, os.getcwd()))
         abort(404, str(e))
 
 # Initialize DataBase
