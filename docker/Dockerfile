@@ -18,11 +18,12 @@ RUN apk upgrade --update \
 
 # RUN apk add python3
 # RUN apk add py3-bottle
-
+# supervisord config file
 COPY supervisord.conf /etc/supervisord.conf
-
+# nginx config file
 COPY xlmp.conf /etc/nginx/conf.d/
-
+# web icon for ios used by nginx
+COPY apple-touch-icon.png /opt/static/apple-touch-icon.png
 # COPY xlmp /etc/init.d/
 # RUN chmod 755 /etc/init.d/xlmp
 
@@ -30,6 +31,7 @@ COPY xlmp.conf /etc/nginx/conf.d/
 # RUN apk add git
 RUN git clone https://github.com/XenosLu/xlmp.git /opt/xlmp
 
-COPY apple-touch-icon.png /opt/static/apple-touch-icon.png
+
+VOLUME ["/data"]
 
 CMD ["/usr/bin/supervisord"]
