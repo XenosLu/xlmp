@@ -25,7 +25,8 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
 
-VIDEO_PATH = './static/media'  # media file path
+# VIDEO_PATH = './static/media'  # media file path
+VIDEO_PATH = './media'  # media file path
 HISTORY_FILE = 'history.db'  # history db file name
 
 

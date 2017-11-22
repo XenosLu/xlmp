@@ -143,3 +143,4 @@ static/mp4/test.mp4
 *.db
 testdlna.py
 static/media/test.mp4
+media/test.mp4
