@@ -1,0 +1,4 @@
+#!/bin/sh
+cd /opt/xlmp
+git pull
+kill -9 $(ps -ef |grep xlmp.py | grep -v grep | awk '{print $1}')

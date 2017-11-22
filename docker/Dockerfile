@@ -24,6 +24,10 @@ COPY supervisord.conf /etc/supervisord.conf
 COPY xlmp.conf /etc/nginx/conf.d/
 # web icon for ios used by nginx
 COPY apple-touch-icon.png /opt/static/apple-touch-icon.png
+
+COPY deploy /bin
+RUN chmod 755 /bin/deploy
+
 # COPY xlmp /etc/init.d/
 # RUN chmod 755 /etc/init.d/xlmp
 
