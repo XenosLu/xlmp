@@ -226,8 +226,8 @@ def dlna_load(src):
             tracker.dmr.stop()
             logging.info('waiting for stopping...current state: %s' % tracker.state['CurrentTransportState'])
             sleep(0.85)
-        logging.info(tracker.dmr.set_current_media(url))
-        logging.info('url loaded')
+        if tracker.dmr.set_current_media(url):
+            logging.info('url loaded')
         # tracker.dmr.play()
         while tracker.get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
         # while tracker.dmr.info()['CurrentTransportState'] not in ('PLAYING', 'TRANSITIONING'):
