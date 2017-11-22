@@ -26,7 +26,7 @@ COPY xlmp.conf /etc/nginx/conf.d/
 COPY apple-touch-icon.png /opt/static/apple-touch-icon.png
 
 COPY deploy /bin
-RUN chmod 755 /bin/deploy
+RUN chmod +x /bin/deploy
 
 # COPY xlmp /etc/init.d/
 # RUN chmod 755 /etc/init.d/xlmp
@@ -35,7 +35,5 @@ RUN chmod 755 /bin/deploy
 # RUN apk add git
 RUN git clone https://github.com/XenosLu/xlmp.git /opt/xlmp
 
-
-VOLUME ["/data"]
 
 CMD ["/usr/bin/supervisord"]
