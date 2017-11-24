@@ -28,11 +28,9 @@ COPY deploy /bin
 RUN chmod +x /bin/deploy
 
 # COPY xlmp /etc/init.d/
-# RUN chmod 755 /etc/init.d/xlmp
-
+# RUN chmod +x /etc/init.d/xlmp
 
 # RUN apk add git
 RUN git clone https://github.com/XenosLu/xlmp.git /opt/xlmp
-
 
 CMD ["/usr/bin/supervisord"]
