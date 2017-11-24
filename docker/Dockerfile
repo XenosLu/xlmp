@@ -16,7 +16,6 @@ RUN apk upgrade --update \
     && rm -f /etc/nginx/conf.d/default.conf \
     && rm -rf /var/cache/apk/* /tmp/*
 
-# RUN apk add python3
 # RUN apk add py3-bottle
 # supervisord config file
 COPY supervisord.conf /etc/supervisord.conf
