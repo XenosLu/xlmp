@@ -12,7 +12,7 @@ var update = true;
 
 get_dmr_state();
 $("#dlna").show(250);
-var inter = setInterval("get_dmr_state()",1000);
+var inter = setInterval("get_dmr_state()",1200);
 $("#position-bar").on("change", function() {
     $.get("/dlnaseek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
     update = true;
@@ -22,11 +22,13 @@ $("#position-bar").on("change", function() {
 });
 $("#volume_up").click(function() {
     if (vol < 100)
-        $.get("/dlnavolume/" + (vol + 1));
+        $.get("/dlnavolumeup/");
+        //$.get("/dlnavolume/" + (vol + 1));
 });
 $("#volume_down").click(function() {
     if (vol > 0)
-        $.get("/dlnavolume/" + (vol - 1));
+        $.get("/dlnavolumedown/");
+        //$.get("/dlnavolume/" + (vol - 1));
 });
 $("#volume-bar").on("change",function() {
     //$.get("/dlnavolume/" + $(this).val());

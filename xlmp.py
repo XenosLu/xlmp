@@ -25,7 +25,6 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
 
-# VIDEO_PATH = './static/media'  # media file path
 VIDEO_PATH = './media'  # media file path
 HISTORY_FILE = 'history.db'  # history db file name
 
@@ -283,6 +282,18 @@ def dlna_info():
 def dlna_volume(v):
     """Set volume through DLNA"""
     tracker.dmr.volume(v)
+
+
+@route('/dlnavolumeup/')
+def dlna_volume_up():
+    """Set volume through DLNA"""
+    tracker.dmr.volume(tracker.dmr.get_volume() + 1)
+
+
+@route('/dlnavolumedown/')
+def dlna_volume_down():
+    """Set volume through DLNA"""
+    tracker.dmr.volume(tracker.dmr.get_volume() - 1)
 
 
 @route('/dlnaseek/<position>')
