@@ -31,6 +31,7 @@ RUN chmod +x /bin/deploy
 # RUN chmod +x /etc/init.d/xlmp
 
 # RUN apk add git
-RUN git clone https://github.com/XenosLu/xlmp.git /opt/xlmp
+# RUN git clone https://github.com/XenosLu/xlmp.git /opt/xlmp
+RUN git clone https://github.com/XenosLu/xlmp.git /xlmp
 
 CMD ["/usr/bin/supervisord"]
