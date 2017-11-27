@@ -259,7 +259,7 @@ def dlna_play():
     """Play video through DLNA"""
     try:
         tracker.dmr.play()
-    except Exceptin as e:
+    except Exception as e:
         return 'failed: %s' % e
 
 
