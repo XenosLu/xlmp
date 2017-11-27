@@ -257,7 +257,10 @@ def dlna_load(src):
 @route('/dlnaplay')
 def dlna_play():
     """Play video through DLNA"""
-    tracker.dmr.play()
+    try:
+        tracker.dmr.play()
+    except Exceptin as e:
+        return 'failed: %s' % e
 
 
 @route('/dlnapause')
