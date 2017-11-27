@@ -215,7 +215,7 @@ def dlna_load(src):
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         abort(404, 'File not found.')
     if not tracker.dmr:
-        abort(500, 'no DMR.')
+        abort(500, 'No DMR currently.')
     logging.info('start loading... tracker state:%s' % tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try:  # set trackuri, if failed stop and retry
@@ -257,10 +257,10 @@ def dlna_load(src):
 @route('/dlnaplay')
 def dlna_play():
     """Play video through DLNA"""
+    if not tracker.dmr:
+        abort(500, 'No DMR currently.')
     try:
         tracker.dmr.play()
-    except AttributeError as e:
-        return 'no DMR'
     except Exception as e:
         return 'failed: %s' % e
 
@@ -268,12 +268,16 @@ def dlna_play():
 @route('/dlnapause')
 def dlna_pause():
     """Pause video through DLNA"""
+    if not tracker.dmr:
+        abort(500, 'No DMR currently.')
     tracker.dmr.pause()
 
 
 @route('/dlnastop')
 def dlna_stop():
     """Stop video through DLNA"""
+    if not tracker.dmr:
+        abort(500, 'No DMR currently.')
     tracker.dmr.stop()
 
 
