@@ -22,7 +22,8 @@ COPY supervisord.conf /etc/supervisord.conf
 # nginx config file
 COPY xlmp.conf /etc/nginx/conf.d/
 # web icon for ios used by nginx
-COPY apple-touch-icon.png /opt/static/apple-touch-icon.png
+# COPY apple-touch-icon.png /opt/static/apple-touch-icon.png
+COPY apple-touch-icon.png /static/apple-touch-icon.png
 
 COPY deploy /bin
 RUN chmod +x /bin/deploy
@@ -31,7 +32,7 @@ RUN chmod +x /bin/deploy
 # RUN chmod +x /etc/init.d/xlmp
 
 # RUN apk add git
-# RUN git clone https://github.com/XenosLu/xlmp.git /opt/xlmp
 RUN git clone https://github.com/XenosLu/xlmp.git /xlmp
+# VOL /xlmp/media
 
 CMD ["/usr/bin/supervisord"]
