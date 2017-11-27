@@ -394,7 +394,8 @@ def restart():
 def backup():
     """backup history"""
     if sys.platform != 'win32':
-        os.system('cp -f %s/%s %s/%s.bak' % (VIDEO_PATH, HISTORY_FILE, VIDEO_PATH, HISTORY_FILE))
+        # os.system('cp -f %s/%s %s/%s.bak' % (VIDEO_PATH, HISTORY_FILE, VIDEO_PATH, HISTORY_FILE))
+        os.system('cp -f {path}/{file} {path}/{file}.bak'.format(path=VIDEO_PATH, file=HISTORY_FILE)
         os.system('cp -f %s %s' % (HISTORY_FILE, VIDEO_PATH))
     redirect('/')
 
