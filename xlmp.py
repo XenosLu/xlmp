@@ -259,6 +259,8 @@ def dlna_play():
     """Play video through DLNA"""
     try:
         tracker.dmr.play()
+    except AttributeError as e:
+        return 'no DMR'
     except Exception as e:
         return 'failed: %s' % e
 
