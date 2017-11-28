@@ -36,4 +36,4 @@ RUN git clone https://github.com/XenosLu/xlmp.git /xlmp
 # VOL /xlmp/media
 
 # CMD ["/usr/bin/supervisord"]
-CMD ["/usr/bin/supervisord","-c","/xlmp/docker/supervisord.conf"]
+CMD ["/usr/bin/supervisord", "-c", "/xlmp/docker/supervisord.conf"]
