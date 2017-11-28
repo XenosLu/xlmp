@@ -17,10 +17,9 @@ from time import sleep, time
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 sys.path = ['lib'] + sys.path  # added libpath
 
-from bottle import abort, post, redirect, request, route, run, static_file, template  # v0.12
-from bottle import default_app
+from bottle import abort, post, redirect, request, route, run, static_file, template, default_app
 from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
-application = default_app()
+app = default_app()
 
 # initialize logging
 logging.basicConfig(level=logging.INFO,
