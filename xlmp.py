@@ -298,13 +298,13 @@ def dlna_volume(v):
 @route('/dlnavolumeup/')
 def dlna_volume_up():
     """Set volume through DLNA"""
-    tracker.dmr.volume(tracker.dmr.get_volume() + 1)
+    tracker.dmr.volume(int(tracker.dmr.get_volume()) + 1)
 
 
 @route('/dlnavolumedown/')
 def dlna_volume_down():
     """Set volume through DLNA"""
-    tracker.dmr.volume(tracker.dmr.get_volume() - 1)
+    tracker.dmr.volume(int(tracker.dmr.get_volume()) - 1)
 
 
 @route('/dlnaseek/<position>')
