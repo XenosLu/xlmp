@@ -1,5 +1,5 @@
 #!/bin/sh
 cd /xlmp
 git pull
-# kill -9 $(ps -ef |grep xlmp.py | grep -v grep | awk '{print $1}') && echo Stopped.
-kill -9 $(cat /var/run/xlmp.pid) && echo Stopped.
+kill -9 $(ps -ef |grep xlmp.py | grep -v grep | awk '{print $1}') && echo Stopped.
+# kill -9 $(cat /var/run/xlmp.pid) && echo Stopped.
