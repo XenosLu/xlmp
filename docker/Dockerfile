@@ -19,7 +19,7 @@ RUN apk upgrade --update \
 
 # RUN apk add py3-bottle
 # supervisord config file
-COPY supervisord.conf /etc/supervisord.conf
+# COPY supervisord.conf /etc/supervisord.conf
 # nginx config file
 COPY xlmp.conf /etc/nginx/conf.d/
 # web icon for ios used by nginx
@@ -36,4 +36,5 @@ RUN chmod +x /bin/deploy
 RUN git clone https://github.com/XenosLu/xlmp.git /xlmp
 # VOL /xlmp/media
 
-CMD ["/usr/bin/supervisord"]
+# CMD ["/usr/bin/supervisord"]
+CMD ["/usr/bin/supervisord","-c","/xlmp/docker/supervisord.conf"]
