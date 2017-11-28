@@ -18,7 +18,9 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 sys.path = ['lib'] + sys.path  # added libpath
 
 from bottle import abort, post, redirect, request, route, run, static_file, template  # v0.12
+from bottle import default_app
 from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
+application = default_app()
 
 # initialize logging
 logging.basicConfig(level=logging.INFO,
@@ -395,7 +397,7 @@ def backup():
     """backup history"""
     if sys.platform != 'win32':
         # os.system('cp -f %s/%s %s/%s.bak' % (VIDEO_PATH, HISTORY_FILE, VIDEO_PATH, HISTORY_FILE))
-        os.system('cp -f {path}/{file} {path}/{file}.bak'.format(path=VIDEO_PATH, file=HISTORY_FILE)
+        os.system('cp -f {path}/{file} {path}/{file}.bak'.format(path=VIDEO_PATH, file=HISTORY_FILE))
         os.system('cp -f %s %s' % (HISTORY_FILE, VIDEO_PATH))
     redirect('/')
 

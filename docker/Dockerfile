@@ -8,6 +8,7 @@ RUN apk upgrade --update \
     && apk add python3 \
     && apk add gcc libc-dev python3-dev \
     && pip3 install meinheld \
+    && pip3 install gunicorn \
     && apk del gcc libc-dev python3-dev \
     && apk add git \
     && apk add supervisor \
