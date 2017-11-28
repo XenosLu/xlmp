@@ -22,10 +22,9 @@ RUN apk upgrade --update \
 # COPY supervisord.conf /etc/supervisord.conf
 # nginx config file
 COPY xlmp.conf /etc/nginx/conf.d/
-# web icon for ios used by nginx
-# COPY apple-touch-icon.png /opt/static/apple-touch-icon.png
+# web icon for IOS used by nginx
 COPY apple-touch-icon.png /static/apple-touch-icon.png
-
+# deploy script
 COPY deploy /bin
 RUN chmod +x /bin/deploy
 

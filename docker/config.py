@@ -27,10 +27,10 @@ daemon = False
 proc_name = 'xlmp'
 
 # 进程pid记录文件
-pidfile = 'app.pid'
+pidfile = '/var/run/xlmp.pid'
 
 loglevel = 'debug'
-logfile = 'debug.log'
-accesslog = 'access.log'
-errorlog = 'error.log'
+logfile = '/var/log/debug.log'
+accesslog = '/var/log/access.log'
+errorlog = '/var/log/error.log'
 access_log_format = '%(h)s %(t)s %(U)s %(q)s'
