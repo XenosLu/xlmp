@@ -8,6 +8,8 @@ RUN apk upgrade --update \
     && apk add python3 \
     && apk add gcc libc-dev python3-dev \
     && pip3 install meinheld \
+    && pip3 install you-get \
+    && apk add ffmpeg
     # && pip3 install gunicorn \
     && apk del gcc libc-dev python3-dev \
     && apk add git \
@@ -31,7 +33,7 @@ RUN chmod +x /bin/deploy
 # COPY xlmp /etc/init.d/
 # RUN chmod +x /etc/init.d/xlmp
 
-# RUN apk add git
+# git clone
 RUN git clone https://github.com/XenosLu/xlmp.git /xlmp
 # VOL /xlmp/media
 
