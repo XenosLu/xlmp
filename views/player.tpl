@@ -1,4 +1,4 @@
-﻿
+
 % rebase('base.tpl')
 <body>
   % include('common.tpl')

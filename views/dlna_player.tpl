@@ -1,4 +1,4 @@
-﻿
+
 % rebase('base.tpl', title='DMC - Light Media Player')
 <body>
   % include('common.tpl')
