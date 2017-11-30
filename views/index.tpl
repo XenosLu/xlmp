@@ -6,5 +6,6 @@
 </body>
 % include('common_script.tpl')
 <script>
-showDialog();
+//showDialog();
+toggleDialog();
 </script>
