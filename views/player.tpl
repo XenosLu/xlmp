@@ -3,7 +3,6 @@
 <body>
   % include('common.tpl')
   % include('dlna.tpl')
-  <!-- <video poster controls preload='meta'>No video support!</video> -->
   <video src="/video/{{src}}" poster controls preload="meta">No video support!</video>
 </body>
 % include('common_script.tpl')
@@ -12,7 +11,6 @@ var lastplaytime = 0;  //in seconds
 
 $("#videosize").show();
 $("#rate").show();
-//$("video").attr("src", "/video/{{src}}").on("error", function () {
 $("video").on("error", function () {
     out("error");
 }).on("loadeddata", function () {  //auto load position
