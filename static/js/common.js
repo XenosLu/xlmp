@@ -1,7 +1,6 @@
 var RANGE = 12;  //minimum touch move range in px
 var text = "";  //temp output text
 
-
 window.onload = adapt;
 window.onresize = adapt;
 $(document).mousemove(showSidebar);
@@ -11,15 +10,9 @@ $("#clear").click(function () {
         history("/clear");
 });
 
-//$("#history").click(showDialog);
+// Dialog toggle
 $("#history").click(toggleDialog);
-
-//dialog close button
 $(".close").click(toggleDialog);
-// $(".close").click(function () {
-    // $("#history").removeClass("active");
-    // $("#dialog").hide(250);
-// });
 
 //table buttons
 $("#tabFrame").on("click", ".folder", function () {
@@ -104,13 +97,8 @@ function adapt() {
     console.log(document.body.clientHeight);
     console.log(document.body.offsetHeight);
     console.log(window.screen.availHeight);
-    // if (!isNaN($("video").get(0).duration)) {
     if ($("video").length == 1) {
-        console.log('Video exist');
-    // if (!isNaN($("video").get(0))) {
-    // if (!isNaN($("video"))) {
         var video_ratio = $("video").get(0).videoWidth / $("video").get(0).videoHeight;
-        // var page_ratio = $(window).width() / $(window).height();
         var page_ratio = $(window).width() / $(window).height();
         if (page_ratio < video_ratio) {
             $("video").get(0).style.width = $(window).width() + "px";
@@ -128,7 +116,6 @@ $(document).on("touchstart", function (e) {
     
 });
 $(document).on("touchmove", function (e) {
-    
     var x = e.changedTouches[0].screenX - x0;
     var y = e.changedTouches[0].screenY - y0;
     if (Math.abs(y / x) < 0.25) {
