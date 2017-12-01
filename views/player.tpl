@@ -2,12 +2,12 @@
 % rebase('base.tpl')
 <body>
   % include('common.tpl')
-  % include('dlna.tpl')
   <video src="/video/{{src}}" poster controls preload="meta">No video support!</video>
 </body>
 % include('common_script.tpl')
 <script>
 var lastplaytime = 0;  //in seconds
+var text = "";  //temp output text
 
 $("#videosize").show();
 $("#rate").show();
@@ -54,6 +54,48 @@ $("#videosize").click(function () {
         if ($("video").get(0).width < $(window).width() && $("video").get(0).height < $(window).height()) {
             $("video").get(0).style.width = $("video").get(0).videoWidth + "px";
             $("video").get(0).style.height = $("video").get(0).videoHeight + "px";
+        }
+    }
+});
+
+$(document).on("touchstart", function (e) {
+    var x0 = e.originalEvent.touches[0].screenX;
+    var y0 = e.originalEvent.touches[0].screenY;
+    
+});
+$(document).on("touchmove", function (e) {
+    var x = e.changedTouches[0].screenX - x0;
+    var y = e.changedTouches[0].screenY - y0;
+    if (Math.abs(y / x) < 0.25) {
+        if (Math.abs(x) > RANGE) {
+            time = Math.floor(x / 11);
+            //out(time);
+            if (!isNaN($("video").get(0).duration)) {
+                if (time > 0) {
+                    time = Math.min(60, time);
+                } else if (time < 0) {
+                    time = Math.max(-60, time);
+                }
+            }
+        }
+    }
+});
+$(document).on("touchend", function (e) {
+    var x = e.changedTouches[0].screenX - x0;
+    var y = e.changedTouches[0].screenY - y0;
+    if (Math.abs(y / x) < 0.25) {
+        if (Math.abs(x) > RANGE) {
+            time = Math.floor(x / 11);
+            if (!isNaN($("video").get(0).duration)) {
+                if (time > 0) {
+                    time = Math.min(60, time);
+                    text = time + "S>><br>";
+                } else if (time < 0) {
+                    time = Math.max(-60, time);
+                    text = "<<" + -time + "S<br>";
+                }
+                $("video").get(0).currentTime += time;
+            }
         }
     }
 });

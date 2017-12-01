@@ -11,8 +11,7 @@ var vol = 0;
 var update = true;
 
 $("#dlna_toggle").addClass("active");
-$("#dlna_toggle").attr("href","/index"); 
-//$("#dlna_toggle a").attr("href","/index"); 
+$("#dlna_toggle").attr("href","/index");
 
 get_dmr_state();
 $("#dlna").show(250);
@@ -90,8 +89,7 @@ function get_dmr_state(){
     });
 }
 function set_dmr(dmr) {
-    //window.location.href = "setdmr/" + dmr;
-    $.get("setdmr/" + dmr);
+    $.get("/setdmr/" + dmr);
 }
 function offset_value(current, value, max) {
     if (value < current)

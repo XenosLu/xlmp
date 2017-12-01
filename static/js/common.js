@@ -1,5 +1,4 @@
 var RANGE = 12;  //minimum touch move range in px
-var text = "";  //temp output text
 
 window.onload = adapt;
 window.onresize = adapt;
@@ -109,49 +108,6 @@ function adapt() {
         }
     }
 }
-
-$(document).on("touchstart", function (e) {
-    var x0 = e.originalEvent.touches[0].screenX;
-    var y0 = e.originalEvent.touches[0].screenY;
-    
-});
-$(document).on("touchmove", function (e) {
-    var x = e.changedTouches[0].screenX - x0;
-    var y = e.changedTouches[0].screenY - y0;
-    if (Math.abs(y / x) < 0.25) {
-        if (Math.abs(x) > RANGE) {
-            time = Math.floor(x / 11);
-            //out(time);
-            if (!isNaN($("video").get(0).duration)) {
-                if (time > 0) {
-                    time = Math.min(60, time);
-                } else if (time < 0) {
-                    time = Math.max(-60, time);
-                }
-            }
-        }
-    }
-});
-$(document).on("touchend", function (e) {
-    var x = e.changedTouches[0].screenX - x0;
-    var y = e.changedTouches[0].screenY - y0;
-    if (Math.abs(y / x) < 0.25) {
-        if (Math.abs(x) > RANGE) {
-            time = Math.floor(x / 11);
-            if (!isNaN($("video").get(0).duration)) {
-                if (time > 0) {
-                    time = Math.min(60, time);
-                    text = time + "S>><br>";
-                } else if (time < 0) {
-                    time = Math.max(-60, time);
-                    text = "<<" + -time + "S<br>";
-                }
-                $("video").get(0).currentTime += time;
-            }
-        }
-    } else
-        showSidebar();
-});
 
 /**
  * Render file list box from ajax
