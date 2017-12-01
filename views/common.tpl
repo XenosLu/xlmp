@@ -14,18 +14,9 @@
       <li><a href='/backup'><i class="glyphicon glyphicon-cog"></i>backup</a></li>
       <li><a href='/restore'><i class="glyphicon glyphicon-cog"></i>restore</a></li>
       <li role="separator" class="divider"></li>
-      <li>
-        <a onClick="if(confirm('Suspend ?'))$.post('/suspend');">
-        <i class="glyphicon glyphicon-off"></i>suspend</a>
-      </li>
-      <li>
-        <a onClick="if(confirm('Shutdown ?'))$.post('/shutdown');">
-        <i class="glyphicon glyphicon-off"></i>shutdown</a>
-      </li>
-      <li>
-        <a onClick="if(confirm('Restart ?'))$.post('/restart');">
-        <i class="glyphicon glyphicon-off"></i>reboot</a>
-      </li>
+      <li><a id="suspend"><i class="glyphicon glyphicon-off"></i>suspend</a></li>
+      <li><a id="shutdown"><i class="glyphicon glyphicon-off"></i>shutdown</a></li>
+      <li><a id="restart"><i class="glyphicon glyphicon-off"></i>reboot</a></li>
     </ul>
   </div>
 </div>

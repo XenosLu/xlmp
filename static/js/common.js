@@ -2,14 +2,23 @@ var RANGE = 12;  //minimum touch move range in px
 
 window.onload = adapt;
 window.onresize = adapt;
-$(document).mousemove(showSidebar);
+// $(document).mousemove(showSidebar);
 
+//buttons
 $("#clear").click(function () {
     if (confirm("Clear all history?"))
         history("/clear");
 });
-
-// Dialog toggle
+$("#suspend").click(function() {
+    if(confirm("Suspend ?"))$.post("/suspend");
+});
+$("#shutdown").click(function() {
+    if(confirm("Shutdown ?"))$.post("/shutdown");
+});
+$("#restart").click(function() {
+    if(confirm("Restart ?"))$.post("/restart");
+});
+// Dialog open/close toggle buttons
 $("#history").click(toggleDialog);
 $(".close").click(toggleDialog);
 
@@ -48,10 +57,6 @@ function dlnaLoad(media) {
     });
 }
 
-function showSidebar() {
-    //$("#sidebar").show(600).delay(9999).hide(300);
-}
-
 /**
  * Show Dialog
  *
@@ -88,18 +93,20 @@ function toggleDialog() {
  * @method adapt
  */
 function adapt() {
-    $("#videosize").text("orign");
     $("#tabFrame").css("max-height", ($(window).height() - 240) + "px");
     if ($("video").length == 1) {
+        $("#videosize").text("orign");
         var video_ratio = $("video").get(0).videoWidth / $("video").get(0).videoHeight;
         var page_ratio = $(window).width() / $(window).height();
         if (page_ratio < video_ratio) {
-            $("video").get(0).style.width = $(window).width() + "px";
-            $("video").get(0).style.height = Math.floor($(window).width() / video_ratio) + "px";
+            var width= $(window).width() + "px";
+            var height = Math.floor($(window).width() / video_ratio) + "px";
         } else {
-            $("video").get(0).style.width = Math.floor($(window).height() * video_ratio) + "px";
-            $("video").get(0).style.height = $(window).height() + "px";
+            var width= Math.floor($(window).height() * video_ratio) + "px";
+            var height = $(window).height() + "px";
         }
+        $("video").get(0).style.width = width;
+        $("video").get(0).style.height = height;
     }
 }
 
@@ -157,7 +164,7 @@ function history(str) {
         timeout: 1999,
         type: "get",
         success: function (data) {
-            if ($("#navtab li:eq(0)").attr("class") != "active")
+            if (!$("#navtab li:eq(0)").hasClass("active"))
                 $("#navtab li:eq(0) a").tab("show");
             $("#clear").show();
             var html = "";
@@ -166,9 +173,9 @@ function history(str) {
                 if ((n["filename"]).lastIndexOf('.mp4') > 0)
                     mediaType = "mp4";
                 var td = new Array(4);
-                td[0] = '<td class="folder" title="/' + n["path"] + '">' + '<i class="glyphicon glyphicon-folder-close"></i>' + "</td>";
+                td[0] = '<td class="folder" title="/' + n["path"] + '">' + '<i class="glyphicon glyphicon-folder-close"></i></td>';
                 td[1] = '<td><i class="glyphicon glyphicon-film"></i></td>';
-                td[2] = '<td class="filelist '+ mediaType + '" title="' + n["filename"] + '">' + n["filename"] + "<br><small>" + n["latest_date"] + " | " + secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small>" + "</td>";
+                td[2] = '<td class="filelist '+ mediaType + '" title="' + n["filename"] + '">' + n["filename"] + "<br><small>" + n["latest_date"] + " | " + secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small></td>";
                 td[3] = '<td class="remove" title="' + n["filename"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i>' + "</td>";
                 html += "<tr>" + td.join("") + "</tr>";
             });
@@ -213,7 +220,7 @@ function timeToSecond(time) {
 function out(text) {
     if (text != "") {
         $("#output").remove();
-        $(document.body).append("<div id='output'>" + text + "</div>");
+        $(document.body).append('<div id="output">' + text + "</div>");
         $("#output").fadeTo(250, 0.7).delay(1800).fadeOut(625);
     };
 }
