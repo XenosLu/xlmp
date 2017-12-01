@@ -1,10 +1,12 @@
 <div id="sidebar" class="btn-toolbar" role="toolbar">
   <div class="btn-group" role="group">
-    <button id="history" type="button" class="btn btn-default"><i class="glyphicon glyphicon-th-list"></i></button>
+    <button id="history" type="button" class="btn btn-default">
+      <i class="glyphicon glyphicon-th-list"></i>
+    </button>
     <a id="dlna_toggle" href="/dlna" type="button" class="btn btn-default">DLNA</a>
   </div>
   <div class="btn-group dropdown">
-    <button type="button" class="btn btn-default dropdown-toggle collapsed"  data-toggle="dropdown">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
       more
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
@@ -20,7 +22,6 @@
     </ul>
   </div>
 </div>
-
 <!-- <div id="sidebar"> -->
   <!-- <button id="history" type="button" class="btn btn-default"> -->
     <!-- <i class="glyphicon glyphicon-list-alt"></i> -->
@@ -66,25 +67,6 @@
         </ul>
       </div><!-- #rate .btn-group .dropup -->
       <button id="clear" type="button" class="btn btn-default">Clear History</button>
-      <!-- <div class="btn-group dropup"> -->
-        <!-- <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.post('/suspend');"> -->
-          <!-- <i class="glyphicon glyphicon-off"></i> -->
-        <!-- </button> -->
-        <!-- <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"> -->
-          <!-- <span class="caret"></span> -->
-        <!-- </button> -->
-        <!-- <ul class="dropdown-menu" role="menu"> -->
-          <!-- <li> -->
-            <!-- <a onClick="if(confirm('Shutdown ?'))$.post('/shutdown');"> -->
-            <!-- <i class="glyphicon glyphicon-off"></i>shutdown</a> -->
-          <!-- </li> -->
-          <!-- <li> -->
-            <!-- <a onClick="if(confirm('Restart ?'))$.post('/restart');"> -->
-            <!-- <i class="glyphicon glyphicon-off"></i>reboot</a> -->
-          <!-- </li> -->
-        <!-- </ul> -->
-      <!-- </div> -->
-      <!-- .btn-group .dropup -->
-    </div>
+    </div><!-- .panel-footer -->
   </div><!-- #panel -->
 </div><!-- #dialog -->
