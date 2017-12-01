@@ -84,8 +84,9 @@ $(document).on("touchmove", function (e) {
 $(document).on("touchend", function (e) {
     var x = e.changedTouches[0].screenX - x0;
     var y = e.changedTouches[0].screenY - y0;
+    out(x + 'x' + y);
     if (Math.abs(y / x) < 0.25) {
-    out('test');
+    out(x + 'x' + y);
         if (Math.abs(x) > RANGE) {
             time = Math.floor(x / 11);
             if (!isNaN($("video").get(0).duration)) {
