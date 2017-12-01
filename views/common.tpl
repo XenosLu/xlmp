@@ -1,50 +1,99 @@
 <!-- <nav class="navbar navbar-default navbar-fixed-top"> -->
 <!-- <nav class="navbar navbar-default"> -->
-<nav class="navbar-default">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/">XLMP</a>
-      <!-- <button class="navbar-brand btn btn-default" id="history"><i class="glyphicon glyphicon-list-alt"></i></button> -->
-      <!-- <a class="navbar-brand btn btn-default" id="dlna_toggle" href="/dlna">DLNA</a> -->
-      <!-- <ul class="nav navbar-nav"> -->
-        <!-- <li id="history"><a><i class="glyphicon glyphicon-th-list"></i></a></li> -->
-        <!-- <li id="dlna_toggle"><a href="/dlna">DLNA</a></li> -->
-      <!-- </ul> -->
-        <div class="btn-group" role="group" aria-label="...">
-          <button id="history" type="button" class="navbar-brand btn btn-default"><i class="glyphicon glyphicon-th-list"></i></button>
-          <a id="dlna_toggle" href="/dlna" type="button" class="navbar-brand  btn btn-default">DLNA</a>
-        </div>
-    </div>
+<!-- <nav class="navbar-default navbar-light bg-faded"> -->
+  <!-- <div class="container-fluid"> -->
+    <!-- <!-- Brand and toggle get grouped for better mobile display -->
+    <!-- <div class="navbar-header"> -->
+      <!-- <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false"> -->
+        <!-- <span class="icon-bar"></span> -->
+        <!-- <span class="icon-bar"></span> -->
+        <!-- <span class="icon-bar"></span> -->
+      <!-- </button> -->
+      <!-- <a class="navbar-brand" href="/">XLMP</a> -->
+      <!-- <!-- <button class="navbar-brand btn btn-default" id="history"><i class="glyphicon glyphicon-list-alt"></i></button> -->
+      <!-- <!-- <a class="navbar-brand btn btn-default" id="dlna_toggle" href="/dlna">DLNA</a> -->
+      <!-- <!-- <ul class="nav navbar-nav navbar-left"> -->
+        <!-- <!-- <li id="history"><a><i class="glyphicon glyphicon-th-list"></i></a></li> -->
+        <!-- <!-- <li id="dlna_toggle"><a href="/dlna">DLNA</a></li> -->
+      <!-- <!-- </ul> -->
+        <!-- <div class="btn-group" role="group" aria-label="..."> -->
+          <!-- <!-- <button id="history" type="button" class="navbar-brand btn btn-default"><i class="glyphicon glyphicon-th-list"></i></button> -->
+          <!-- <!-- <a id="dlna_toggle" href="/dlna" type="button" class="navbar-brand  btn btn-default">DLNA</a> -->
+        <!-- </div> -->
+    <!-- </div> -->
 
-    <div class="collapse navbar-collapse" id="navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-off"></i><span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li>
-              <a onClick="if(confirm('Suspend ?'))$.post('/suspend');">
-              <i class="glyphicon glyphicon-off"></i>suspend</a>
-            </li>
-            <li>
-              <a onClick="if(confirm('Shutdown ?'))$.post('/shutdown');">
-              <i class="glyphicon glyphicon-off"></i>shutdown</a>
-            </li>
-            <li>
-              <a onClick="if(confirm('Restart ?'))$.post('/restart');">
-              <i class="glyphicon glyphicon-off"></i>reboot</a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
+    <!-- <div class="collapse navbar-collapse" id="navbar-collapse-1"> -->
+      <!-- <ul class="nav navbar-nav navbar-right"> -->
+        <!-- <li class="dropdown"> -->
+          <!-- <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-off"></i><span class="caret"></span></a> -->
+          <!-- <ul class="dropdown-menu"> -->
+            <!-- <li> -->
+              <!-- <a onClick="if(confirm('Suspend ?'))$.post('/suspend');"> -->
+              <!-- <i class="glyphicon glyphicon-off"></i>suspend</a> -->
+            <!-- </li> -->
+            <!-- <li> -->
+              <!-- <a onClick="if(confirm('Shutdown ?'))$.post('/shutdown');"> -->
+              <!-- <i class="glyphicon glyphicon-off"></i>shutdown</a> -->
+            <!-- </li> -->
+            <!-- <li> -->
+              <!-- <a onClick="if(confirm('Restart ?'))$.post('/restart');"> -->
+              <!-- <i class="glyphicon glyphicon-off"></i>reboot</a> -->
+            <!-- </li> -->
+          <!-- </ul> -->
+        <!-- </li> -->
+      <!-- </ul> -->
+    <!-- </div><!-- /.navbar-collapse -->
+  <!-- </div><!-- /.container-fluid -->
+<!-- </nav> -->
+
+<div class="btn-toolbar" role="toolbar">
+  <div class="btn-group" role="group">
+    <button id="history" type="button" class="btn btn-default"><i class="glyphicon glyphicon-th-list"></i></button>
+    <a id="dlna_toggle" href="/dlna" type="button" class="btn btn-default">DLNA</a>
+  </div>
+  <!-- <div class="btn-group" role="group"> -->
+    <!-- <button type="button" class="btn btn-default">Left</button> -->
+    <!-- <button type="button" class="btn btn-default">Middle</button> -->
+    <!-- <button type="button" class="btn btn-default">Right</button> -->
+  <!-- </div> -->
+  
+  <div class="btn-group dropdown">
+    <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.post('/suspend');">
+      <i class="glyphicon glyphicon-off"></i>
+    </button>
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li>
+        <a onClick="if(confirm('Shutdown ?'))$.post('/shutdown');">
+        <i class="glyphicon glyphicon-off"></i>shutdown</a>
+      </li>
+      <li>
+        <a onClick="if(confirm('Restart ?'))$.post('/restart');">
+        <i class="glyphicon glyphicon-off"></i>reboot</a>
+      </li>
+    </ul>
+  </div>
+  <div class="btn-group dropdown">
+    <button type="button" class="btn btn-default dropdown-toggle collapsed"  data-toggle="dropdown">
+      more
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li>
+        <a onClick="if(confirm('Shutdown ?'))$.post('/shutdown');">
+        <i class="glyphicon glyphicon-off"></i>shutdown</a>
+      </li>
+      <li>
+        <a onClick="if(confirm('Restart ?'))$.post('/restart');">
+        <i class="glyphicon glyphicon-off"></i>reboot</a>
+      </li>
+    </ul>
+  </div>
+</div>
 
 <!-- <div id="sidebar"> -->
   <!-- <button id="history" type="button" class="btn btn-default"> -->
