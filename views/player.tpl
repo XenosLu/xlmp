@@ -85,6 +85,7 @@ $(document).on("touchend", function (e) {
     var x = e.changedTouches[0].screenX - x0;
     var y = e.changedTouches[0].screenY - y0;
     if (Math.abs(y / x) < 0.25) {
+    out('test');
         if (Math.abs(x) > RANGE) {
             time = Math.floor(x / 11);
             if (!isNaN($("video").get(0).duration)) {
