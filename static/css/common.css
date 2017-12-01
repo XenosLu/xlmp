@@ -21,6 +21,11 @@ body {
     -moz-user-select: none;
     user-select: none;
     font-family: AppleSDGothicNeo-Regular;
+    /* for touch */
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    /*****************/
 }
 footer {
     position: absolute;
@@ -92,7 +97,7 @@ input[type=range]::-moz-range-thumb {
     opacity: 0.4;
     /* display: none; */
     position: fixed;
-    top: 3%;
+    top: 0%;
     z-index: 9;
 }
 #output {

@@ -51,12 +51,6 @@
     <button id="history" type="button" class="btn btn-default"><i class="glyphicon glyphicon-th-list"></i></button>
     <a id="dlna_toggle" href="/dlna" type="button" class="btn btn-default">DLNA</a>
   </div>
-  <!-- <div class="btn-group" role="group"> -->
-    <!-- <button type="button" class="btn btn-default">Left</button> -->
-    <!-- <button type="button" class="btn btn-default">Middle</button> -->
-    <!-- <button type="button" class="btn btn-default">Right</button> -->
-  <!-- </div> -->
-  
   <div class="btn-group dropdown">
     <button type="button" class="btn btn-default dropdown-toggle collapsed"  data-toggle="dropdown">
       more
@@ -65,6 +59,9 @@
       <span class="icon-bar"></span>
     </button>
     <ul class="dropdown-menu" role="menu">
+      <li><a href='/backup'><i class="glyphicon glyphicon-cog"></i>backup</a></li>
+      <li><a href='/restore'><i class="glyphicon glyphicon-cog"></i>restore</a></li>
+      <li role="separator" class="divider"></li>
       <li>
         <a onClick="if(confirm('Suspend ?'))$.post('/suspend');">
         <i class="glyphicon glyphicon-off"></i>suspend</a>

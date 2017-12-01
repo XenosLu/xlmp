@@ -77,7 +77,7 @@ function showDialog() {
 }
 
 /**
- * Toggle Dialog
+ * Toggle Dialog open/close
  *
  * @method toggleDialog
  */
@@ -126,8 +126,10 @@ function adapt() {
 $(document).on("touchstart", function (e) {
     var x0 = e.originalEvent.touches[0].screenX;
     var y0 = e.originalEvent.touches[0].screenY;
+    
 });
 $(document).on("touchmove", function (e) {
+    
     var x = e.changedTouches[0].screenX - x0;
     var y = e.changedTouches[0].screenY - y0;
     if (Math.abs(y / x) < 0.25) {
@@ -145,6 +147,7 @@ $(document).on("touchmove", function (e) {
     }
 });
 $(document).on("touchend", function (e) {
+    out('test');
     var x = e.changedTouches[0].screenX - x0;
     var y = e.changedTouches[0].screenY - y0;
     if (Math.abs(y / x) < 0.25) {
