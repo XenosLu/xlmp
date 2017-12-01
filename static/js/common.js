@@ -34,8 +34,6 @@ $("#tabFrame").on("click", ".folder", function () {
 }).on("click", ".video", function () {
     if (window.document.location.pathname == "/dlna")
         dlnaLoad(this.title);
-}).on("click", ".dlna", function () {
-    dlnaLoad(this.title);
 });
 
 /**
@@ -92,10 +90,6 @@ function toggleDialog() {
 function adapt() {
     $("#videosize").text("orign");
     $("#tabFrame").css("max-height", ($(window).height() - 240) + "px");
-    console.log($(window).height());
-    console.log(document.body.clientHeight);
-    console.log(document.body.offsetHeight);
-    console.log(window.screen.availHeight);
     if ($("video").length == 1) {
         var video_ratio = $("video").get(0).videoWidth / $("video").get(0).videoHeight;
         var page_ratio = $(window).width() / $(window).height();
@@ -171,20 +165,12 @@ function history(str) {
                 var mediaType = "video";
                 if ((n["filename"]).lastIndexOf('.mp4') > 0)
                     mediaType = "mp4";
-
-                html += '<tr><td class="folder" title="/' + n["path"] + '">' +
-                '<i class="glyphicon glyphicon-folder-close"></i>' +
-                "</td>" +
-                '<td class="dlna" title="' + n["filename"] + '">' +
-                '<i class="glyphicon glyphicon-film"></i>' +
-                "</td>" +
-                '<td class="filelist '+ mediaType + '" title="' + n["filename"] + '">' + n["filename"] +
-                "<br><small>" + n["latest_date"] + " | " +
-                secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small>" +
-                "</td>" +
-                '<td class="remove" title="' + n["filename"] + '">' +
-                '<i class="glyphicon glyphicon-remove-circle"></i>' +
-                "</td></tr>";
+                var td = new Array(4);
+                td[0] = '<td class="folder" title="/' + n["path"] + '">' + '<i class="glyphicon glyphicon-folder-close"></i>' + "</td>";
+                td[1] = '<td><i class="glyphicon glyphicon-film"></i></td>';
+                td[2] = '<td class="filelist '+ mediaType + '" title="' + n["filename"] + '">' + n["filename"] + "<br><small>" + n["latest_date"] + " | " + secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small>" + "</td>";
+                td[3] = '<td class="remove" title="' + n["filename"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i>' + "</td>";
+                html += "<tr>" + td.join("") + "</tr>";
             });
             $('#list').empty().append(html);
         },
