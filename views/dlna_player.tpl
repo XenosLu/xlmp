@@ -26,12 +26,10 @@ $("#position-bar").on("change", function() {
 $("#volume_up").click(function() {
     if (vol < 100)
         $.get("/dlnavolumeup/");
-        //$.get("/dlnavolume/" + (vol + 1));
 });
 $("#volume_down").click(function() {
     if (vol > 0)
         $.get("/dlnavolumedown/");
-        //$.get("/dlnavolume/" + (vol - 1));
 });
 $("#volume-bar").on("change",function() {
     //$.get("/dlnavolume/" + $(this).val());

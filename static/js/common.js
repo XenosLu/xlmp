@@ -135,16 +135,9 @@ function filelist(str) {
             $.each(data, function (i, n) {
                 var size = "";
                 if (n["size"])
-                    size = "<br><small>" + n["size"] + "</small>";
-                var dlna = "";
-                if (icon[n["type"]] === "film")
-                    dlna = ' class="dlna" title="' + n["path"] + '"';
-                // var download_link = "";
-                // if(icon[n["type"]]==="film")
-                    // download_link = '<a href="/video/' + n["path"] + '" class="glyphicon glyphicon-download-alt"></a>';                
+                    size = "<br><small>" + n["size"] + "</small>";              
                 var td = new Array(3);
-                td[0] = "<td" + dlna + '><i class="glyphicon glyphicon-' + icon[n["type"]] + '"></i></td>';
-                // td[1] = "<td>" + download_link + "</td>";
+                td[0] = '<td><i class="glyphicon glyphicon-' + icon[n["type"]] + '"></i></td>';
                 td[1] = '<td class="filelist ' + n["type"] + '" title="' + n["path"] + '">' + n["filename"] + size + "</td>";
                 td[2] = '<td class="move" title="' + n["path"] + '">' +'<i class="glyphicon glyphicon-remove-circle"></i></td>';
                 html += "<tr>" + td.join("") + "</tr>";
@@ -175,11 +168,9 @@ function history(str) {
             $("#clear").show();
             var html = "";
             $.each(data, function (i, n) {
-                var mediaType;
+                var mediaType = "video";
                 if ((n["filename"]).lastIndexOf('.mp4') > 0)
                     mediaType = "mp4";
-                else
-                    mediaType = "video";
 
                 html += '<tr><td class="folder" title="/' + n["path"] + '">' +
                 '<i class="glyphicon glyphicon-folder-close"></i>' +

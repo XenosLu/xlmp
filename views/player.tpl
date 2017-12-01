@@ -58,6 +58,7 @@ $("#videosize").click(function () {
     }
 });
 
+/* touch for ipad start */
 $(document).on("touchstart", function (e) {
     var x0 = e.originalEvent.touches[0].screenX;
     var y0 = e.originalEvent.touches[0].screenY;
@@ -99,6 +100,7 @@ $(document).on("touchend", function (e) {
         }
     }
 });
+/***********************************************************/
 
 /**
  * Set play rate
