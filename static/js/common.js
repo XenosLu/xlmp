@@ -105,7 +105,6 @@ function adapt() {
     console.log(document.body.clientHeight);
     console.log(document.body.offsetHeight);
     console.log(window.screen.availHeight);
-    console.log(window.screenTop);
     // if (!isNaN($("video").get(0).duration)) {
     if ($("video").length == 1) {
         console.log('Video exist');
@@ -113,13 +112,13 @@ function adapt() {
     // if (!isNaN($("video"))) {
         var video_ratio = $("video").get(0).videoWidth / $("video").get(0).videoHeight;
         // var page_ratio = $(window).width() / $(window).height();
-        var page_ratio = $(window).width() / ($(window).height() - 52);
+        var page_ratio = $(window).width() / $(window).height();
         if (page_ratio < video_ratio) {
             $("video").get(0).style.width = $(window).width() + "px";
             $("video").get(0).style.height = Math.floor($(window).width() / video_ratio) + "px";
         } else {
-            $("video").get(0).style.width = Math.floor(($(window).height() - 52) * video_ratio) + "px";
-            $("video").get(0).style.height = ($(window).height() - 52) + "px";
+            $("video").get(0).style.width = Math.floor($(window).height() * video_ratio) + "px";
+            $("video").get(0).style.height = $(window).height() + "px";
         }
     }
 }

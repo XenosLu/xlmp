@@ -46,7 +46,7 @@
   <!-- </div><!-- /.container-fluid -->
 <!-- </nav> -->
 
-<div class="btn-toolbar" role="toolbar">
+<div id="sidebar" class="btn-toolbar" role="toolbar">
   <div class="btn-group" role="group">
     <button id="history" type="button" class="btn btn-default"><i class="glyphicon glyphicon-th-list"></i></button>
     <a id="dlna_toggle" href="/dlna" type="button" class="btn btn-default">DLNA</a>
@@ -58,24 +58,6 @@
   <!-- </div> -->
   
   <div class="btn-group dropdown">
-    <button type="button" class="btn btn-default" onClick="if(confirm('Suspend ?'))$.post('/suspend');">
-      <i class="glyphicon glyphicon-off"></i>
-    </button>
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu">
-      <li>
-        <a onClick="if(confirm('Shutdown ?'))$.post('/shutdown');">
-        <i class="glyphicon glyphicon-off"></i>shutdown</a>
-      </li>
-      <li>
-        <a onClick="if(confirm('Restart ?'))$.post('/restart');">
-        <i class="glyphicon glyphicon-off"></i>reboot</a>
-      </li>
-    </ul>
-  </div>
-  <div class="btn-group dropdown">
     <button type="button" class="btn btn-default dropdown-toggle collapsed"  data-toggle="dropdown">
       more
       <span class="icon-bar"></span>
@@ -83,6 +65,10 @@
       <span class="icon-bar"></span>
     </button>
     <ul class="dropdown-menu" role="menu">
+      <li>
+        <a onClick="if(confirm('Suspend ?'))$.post('/suspend');">
+        <i class="glyphicon glyphicon-off"></i>suspend</a>
+      </li>
       <li>
         <a onClick="if(confirm('Shutdown ?'))$.post('/shutdown');">
         <i class="glyphicon glyphicon-off"></i>shutdown</a>
