@@ -7,20 +7,17 @@ window.onresize = adapt;
 //$(window).resize(adapt);
 $(document).mousemove(showSidebar);
 
+$("#history").click(showDialog);
+
 $("#clear").click(function () {
     if (confirm("Clear all history?"))
         history("/clear");
 });
 
-//$("#history").click(showDialog);
-$("#history").click(toggleDialog);
-
 //dialog close button
-$(".close").click(toggleDialog);
-// $(".close").click(function () {
-    // $("#history").removeClass("active");
-    // $("#dialog").hide(250);
-// });
+$(".close").click(function () {
+    $("#dialog").hide(250);
+});
 
 //table buttons
 $("#tabFrame").on("click", ".folder", function () {
@@ -67,30 +64,11 @@ function showSidebar() {
  * Show Dialog
  *
  * @method showDialog
- * to be delete
  */
 function showDialog() {
     if ($("#navtab li:eq(0)").attr("class") == "active")
         history("/list");
-    $("#history").addClass("active");
     $("#dialog").show(250);
-}
-
-/**
- * Toggle Dialog
- *
- * @method toggleDialog
- */
-function toggleDialog() {
-    if($("#history").hasClass("active")) {
-        $("#history").removeClass("active");
-        $("#dialog").hide(250);
-    } else {
-        if ($("#navtab li:eq(0)").attr("class") == "active")
-            history("/list");
-        $("#history").addClass("active");
-        $("#dialog").show(250);
-    }
 }
 
 /**
@@ -101,25 +79,17 @@ function toggleDialog() {
 function adapt() {
     $("#videosize").text("orign");
     $("#tabFrame").css("max-height", ($(window).height() - 240) + "px");
-    console.log($(window).height());
-    console.log(document.body.clientHeight);
-    console.log(document.body.offsetHeight);
-    console.log(window.screen.availHeight);
-    console.log(window.screenTop);
-    // if (!isNaN($("video").get(0).duration)) {
-    if ($("video").length == 1) {
-        console.log('Video exist');
+    if (!isNaN($("video").get(0).duration)) {
     // if (!isNaN($("video").get(0))) {
     // if (!isNaN($("video"))) {
         var video_ratio = $("video").get(0).videoWidth / $("video").get(0).videoHeight;
-        // var page_ratio = $(window).width() / $(window).height();
-        var page_ratio = $(window).width() / ($(window).height() - 52);
+        var page_ratio = $(window).width() / $(window).height();
         if (page_ratio < video_ratio) {
             $("video").get(0).style.width = $(window).width() + "px";
             $("video").get(0).style.height = Math.floor($(window).width() / video_ratio) + "px";
         } else {
-            $("video").get(0).style.width = Math.floor(($(window).height() - 52) * video_ratio) + "px";
-            $("video").get(0).style.height = ($(window).height() - 52) + "px";
+            $("video").get(0).style.width = Math.floor($(window).height() * video_ratio) + "px";
+            $("video").get(0).style.height = $(window).height() + "px";
         }
     }
 }

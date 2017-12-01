@@ -10,10 +10,6 @@ var reltime = 0;
 var vol = 0;
 var update = true;
 
-$("#dlna_toggle").addClass("active");
-$("#dlna_toggle").attr("href","/index"); 
-//$("#dlna_toggle a").attr("href","/index"); 
-
 get_dmr_state();
 $("#dlna").show(250);
 var inter = setInterval("get_dmr_state()",1200);
