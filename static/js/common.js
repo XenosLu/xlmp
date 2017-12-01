@@ -4,7 +4,6 @@ var text = "";  //temp output text
 
 window.onload = adapt;
 window.onresize = adapt;
-//$(window).resize(adapt);
 $(document).mousemove(showSidebar);
 
 $("#clear").click(function () {
@@ -147,7 +146,6 @@ $(document).on("touchmove", function (e) {
     }
 });
 $(document).on("touchend", function (e) {
-    out('test');
     var x = e.changedTouches[0].screenX - x0;
     var y = e.changedTouches[0].screenY - y0;
     if (Math.abs(y / x) < 0.25) {
