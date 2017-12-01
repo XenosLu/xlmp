@@ -60,33 +60,21 @@ $("#videosize").click(function () {
 
 /* touch for ipad start */
 $(document).on("touchstart", function (e) {
-    var x0 = e.originalEvent.touches[0].screenX;
-    var y0 = e.originalEvent.touches[0].screenY;
-    
+    x0 = e.originalEvent.touches[0].screenX;
+    y0 = e.originalEvent.touches[0].screenY;
 });
 $(document).on("touchmove", function (e) {
-    var x = e.changedTouches[0].screenX - x0;
-    var y = e.changedTouches[0].screenY - y0;
-    if (Math.abs(y / x) < 0.25) {
-        if (Math.abs(x) > RANGE) {
-            time = Math.floor(x / 11);
-            //out(time);
-            if (!isNaN($("video").get(0).duration)) {
-                if (time > 0) {
-                    time = Math.min(60, time);
-                } else if (time < 0) {
-                    time = Math.max(-60, time);
-                }
-            }
-        }
-    }
+    x = e.changedTouches[0].screenX - x0;
+    y = e.changedTouches[0].screenY - y0;
+    time = Math.floor(x / 11);
+    if (!isNaN($("video").get(0).duration))
+        out(time);
 });
 $(document).on("touchend", function (e) {
-    var x = e.changedTouches[0].screenX - x0;
-    var y = e.changedTouches[0].screenY - y0;
-    out(x + 'x' + y);
+    x1 = e.changedTouches[0].screenX;
+    x = e.changedTouches[0].screenX - x0;
+    y = e.changedTouches[0].screenY - y0;
     if (Math.abs(y / x) < 0.25) {
-    out(x + 'x' + y);
         if (Math.abs(x) > RANGE) {
             time = Math.floor(x / 11);
             if (!isNaN($("video").get(0).duration)) {

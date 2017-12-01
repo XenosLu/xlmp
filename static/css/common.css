@@ -21,11 +21,6 @@ body {
     -moz-user-select: none;
     user-select: none;
     font-family: AppleSDGothicNeo-Regular;
-    /* for touch */
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    /*****************/
 }
 footer {
     position: absolute;
