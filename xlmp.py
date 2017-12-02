@@ -211,7 +211,7 @@ def search_dmr():
     tracker.discover_dmr()
 
 
-@route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb))$>')
+@route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
 def dlna_load(src):
     """Video DLNA play page"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
@@ -416,7 +416,7 @@ def static(filename):
     return static_file(filename, root='./static')
 
 
-@route('/video/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb))$>')
+@route('/video/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
 def static_video(src):
     """video file access
        To support large file(>2GB), you should use web server to deal with static files.
@@ -444,7 +444,7 @@ def fs_dir(path):
             elif re.match('.*\.((?i)mp)4$', filename):
                 list_mp4.append({'filename': filename, 'type': 'mp4',
                                 'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-            elif re.match('.*\.((?i)(mkv|avi|flv|rmvb))$', filename):
+            elif re.match('.*\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
                 list_video.append({'filename': filename, 'type': 'video',
                                    'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
             else:
