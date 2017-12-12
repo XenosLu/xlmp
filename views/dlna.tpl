@@ -6,7 +6,7 @@
     </ul>
   </div>
   <h3 id="src"></h3>
-  <div><span id="state">state</span></div>
+  <div><span id="state"></span></div>
   <div class="btn-group" role="group">
     <button type="button" class="btn btn-success btn-lg glyphicon glyphicon-play" onclick="$.get('/dlnaplay')"></button>
     <button type="button" class="btn btn-danger btn-lg glyphicon glyphicon-pause" onclick="$.get('/dlnapause')"></button>
