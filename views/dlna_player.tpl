@@ -15,7 +15,7 @@ $("#dlna_toggle").attr("href","/index");
 
 get_dmr_state();
 $("#dlna").show(250);
-var inter = setInterval("get_dmr_state()",1200);
+var inter = setInterval("get_dmr_state()",1100);
 $("#position-bar").on("change", function() {
     $.get("/dlnaseek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
     update = true;
@@ -33,6 +33,7 @@ $("#volume_down").click(function() {
         $.get("/dlnavolumedown/");
         out(vol);
 });
+/*
 $("#volume-bar").on("change",function() {
     //$.get("/dlnavolume/" + $(this).val());
     $.get("/dlnavolume/" + offset_value(vol, $(this).val(), $(this).attr("max")));
@@ -42,7 +43,7 @@ $("#volume-bar").on("change",function() {
     out(offset_value(vol, $(this).val(), $(this).attr("max")));
     update = false;
 });
-
+*/
 
 function get_dmr_state(){
     $.ajax({
@@ -51,35 +52,37 @@ function get_dmr_state(){
         timeout: 999,
         type: "GET",
         success: function (data) {
-            reltime = timeToSecond(data["RelTime"]);
-            vol = Number(data["CurrentVolume"]);
-            if(update) {
-                $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
-                //$("#volume-bar").val(vol);
+            if(!$.isEmptyObject(data)){
+                reltime = timeToSecond(data["RelTime"]);
+                vol = Number(data["CurrentVolume"]);
+                if(update) {
+                    $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
+                    //$("#volume-bar").val(vol);
+                }
+                $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
+                $('#src').text(decodeURI(data["TrackURI"]));
+                
+                $("#dmr button").text(data["CurrentDMR"]);
+                $("#dmr ul").empty().append('<li><a href="#" onclick="$.get(\'/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
+                for (x in data["DMRs"]) {
+                    $("#dmr ul").append('<li><a href="#" onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
+                }
+                
+                $("#state").text(data["CurrentTransportState"]);
+                /*
+                if ($("#state").text() == "PLAYING") {
+                    $(".glyphicon-play").hide();
+                    $(".glyphicon-pause").show();
+                } else {
+                    $(".glyphicon-play").show();
+                    $(".glyphicon-pause").hide();
+                }
+                */
+                if(reltime >= 90)
+                    $(".glyphicon-chevron-down").hide();
+                else
+                    $(".glyphicon-chevron-down").show();
             }
-            $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
-            $('#src').text(decodeURI(data["TrackURI"]));
-            
-            $("#dmr button").text(data["CurrentDMR"]);
-            $("#dmr ul").empty().append('<li><a href="#" onclick="$.get(\'/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
-            for (x in data["DMRs"]) {
-                $("#dmr ul").append('<li><a href="#" onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
-            }
-            
-            $("#state").text(data["CurrentTransportState"]);
-            /*
-            if ($("#state").text() == "PLAYING") {
-                $(".glyphicon-play").hide();
-                $(".glyphicon-pause").show();
-            } else {
-                $(".glyphicon-play").show();
-                $(".glyphicon-pause").hide();
-            }
-            */
-            if(reltime >= 90)
-                $(".glyphicon-chevron-down").hide();
-            else
-                $(".glyphicon-chevron-down").show();
         },
         error: function(xhr, err) {
             if(err != "parsererror")
