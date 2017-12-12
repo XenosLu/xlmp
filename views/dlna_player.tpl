@@ -26,10 +26,12 @@ $("#position-bar").on("change", function() {
 $("#volume_up").click(function() {
     //if (vol < 100)
         $.get("/dlnavolumeup/");
+    out(vol);
 });
 $("#volume_down").click(function() {
     //if (vol > 0)
         $.get("/dlnavolumedown/");
+        out(vol);
 });
 $("#volume-bar").on("change",function() {
     //$.get("/dlnavolume/" + $(this).val());
@@ -53,8 +55,7 @@ function get_dmr_state(){
             vol = Number(data["CurrentVolume"]);
             if(update) {
                 $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
-                //$("#volume-bar").val(data["CurrentVolume"]);
-                $("#volume-bar").val(vol);
+                //$("#volume-bar").val(vol);
             }
             $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
             $('#src').text(decodeURI(data["TrackURI"]));
