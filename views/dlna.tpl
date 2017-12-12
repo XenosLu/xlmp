@@ -6,11 +6,12 @@
     </ul>
   </div>
   <h3 id="src"></h3>
-  <span id="state"></span>
-  <br>
-  <button type="button" class="btn btn-success btn-lg glyphicon glyphicon-play" onclick="$.get('/dlnaplay')"></button>
-  <button type="button" class="btn btn-danger btn-lg glyphicon glyphicon-pause" onclick="$.get('/dlnapause')"></button>
-  <button type="button" class="btn btn-danger btn-lg glyphicon glyphicon-stop" onclick="$.get('/dlnastop')"></button>
+  <div><span id="state">state</span></div>
+  <div class="btn-group" role="group">
+    <button type="button" class="btn btn-success btn-lg glyphicon glyphicon-play" onclick="$.get('/dlnaplay')"></button>
+    <button type="button" class="btn btn-danger btn-lg glyphicon glyphicon-pause" onclick="$.get('/dlnapause')"></button>
+    <button type="button" class="btn btn-danger btn-lg glyphicon glyphicon-stop" onclick="$.get('/dlnastop')"></button>
+  </div>
   <div class="btn-group dropdown">
     <button type="button" class="btn btn-info btn-lg dropdown-toggle glyphicon glyphicon-chevron-down" data-toggle="dropdown">
     </button>
@@ -24,7 +25,7 @@
   </div>
     <h3 id="position"></h3>
     <input type="range" id="position-bar" min="0" max="0">
-    <input type="range" id="volume-bar" min="0" max="100">
+    <!-- <input type="range" id="volume-bar" min="0" max="100"> -->
     <button id="volume_down" type="button" class="btn btn-warning btn-lg glyphicon glyphicon-minus">
     <button id="volume_up" type="button" class="btn btn-warning btn-lg glyphicon glyphicon-plus">
   </button>
