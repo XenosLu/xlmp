@@ -24,11 +24,11 @@ $("#position-bar").on("change", function() {
     update = false;
 });
 $("#volume_up").click(function() {
-    if (vol < 100)
+    //if (vol < 100)
         $.get("/dlnavolumeup/");
 });
 $("#volume_down").click(function() {
-    if (vol > 0)
+    //if (vol > 0)
         $.get("/dlnavolumedown/");
 });
 $("#volume-bar").on("change",function() {
