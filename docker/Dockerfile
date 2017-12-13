@@ -4,7 +4,7 @@ LABEL maintainer="xenos <xenos.lu@gmail.com>"
 ENV TZ 'Asia/Shanghai'
 
 # RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
-RUN apk upgrade --update \
+RUN apk add tzdata --update \
     && apk add python3 \
     && apk add gcc libc-dev python3-dev \
     && pip3 install meinheld \
@@ -19,6 +19,8 @@ RUN apk upgrade --update \
     && rm -f /etc/nginx/conf.d/default.conf \
     && rm -rf /var/cache/apk/* /tmp/*
 
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+    
 # RUN apk add py3-bottle
 # supervisord config file
 # COPY supervisord.conf /etc/supervisord.conf
