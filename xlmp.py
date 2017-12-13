@@ -218,18 +218,23 @@ def dlna_load_new(src):
         abort(404, 'File not found.')
     if not tracker.dmr:
         abort(500, 'No DMR currently.')
-    try_time = 0
-    while try_time < 3:
-        if dlna_load(src):
+    logging.info('start loading... tracker state:%s' % tracker.state)
+    url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
+    try_time = 1
+    while try_time <= 3:
+        if dlna_load(url):
+            logging.info('load url: %s success in %s time(s)' % (url, try_time))
+            position = load_history(src)
+            if position:
+                tracker.dmr.seek(second_to_time(position))
+                logging.info('loaded position: %s in %fs' % (second_to_time(position), time() - time0))
             return 'Success'
         try_time += 1
         sleep(1)
-    abort(500, 'Maximum retry attempts was exceeded')
+    abort(500, 'Load aborted because of maximum retry attempts was exceeded')
 
 
-def dlna_load(src):
-    logging.info('start loading... tracker state:%s' % tracker.state)
-    url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
+def dlna_load(url):
     try:  # set trackuri, if failed stop and retry
         # while tracker.state['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
         while tracker.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
@@ -242,7 +247,7 @@ def dlna_load(src):
         # while tracker.state['CurrentTransportState'] not in ('PLAYING', 'TRANSITIONING'):
             tracker.dmr.play()
             logging.info('waiting for playing...current state: %s' % tracker.state['CurrentTransportState'])
-            sleep(0.2)
+            sleep(0.3)
         sleep(0.5)
         time0 = time()
         logging.info('checking duration to make sure loaded...')
@@ -254,10 +259,6 @@ def dlna_load(src):
                 logging.info('reload position: in %fs' % (time() - time0))
                 # dlna_load(src)
                 return False
-        position = load_history(src)
-        if position:
-            tracker.dmr.seek(second_to_time(position))
-            logging.info('loaded position: %s in %fs' % (second_to_time(position), time() - time0))
         logging.info(tracker.state)
     except Exception as e:
         logging.warning('DLNA load exception: %s\n%s' % (e, traceback.format_exc()))
