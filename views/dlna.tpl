@@ -8,12 +8,19 @@
   <h3 id="src"></h3>
   <div><span id="state"></span></div>
   <div class="btn-group" role="group">
-    <button type="button" class="btn btn-success btn-lg glyphicon glyphicon-play" onclick="$.get('/dlnaplay')"></button>
-    <button type="button" class="btn btn-danger btn-lg glyphicon glyphicon-pause" onclick="$.get('/dlnapause')"></button>
-    <button type="button" class="btn btn-danger btn-lg glyphicon glyphicon-stop" onclick="$.get('/dlnastop')"></button>
+    <button type="button" class="btn btn-success btn-lg" onclick="$.get('/dlnaplay')">
+      <i class="glyphicon glyphicon-play"></i>
+    </button>
+    <button type="button" class="btn btn-danger btn-lg" onclick="$.get('/dlnapause')">
+      <i class="glyphicon glyphicon-pause"></i>
+    </button>
+    <button type="button" class="btn btn-danger btn-lg" onclick="$.get('/dlnastop')">
+      <i class="glyphicon glyphicon-stop"></i>
+    </button>
   </div>
   <div class="btn-group dropdown">
-    <button type="button" class="btn btn-info btn-lg dropdown-toggle glyphicon glyphicon-chevron-down" data-toggle="dropdown">
+    <button type="button" class="btn btn-info btn-lg dropdown-toggle" data-toggle="dropdown">
+      <i class="glyphicon glyphicon-chevron-down"></i>
     </button>
     <ul class="dropdown-menu" role="menu">
       <li><a href="#" onclick="$.get('/dlnaseek/00:00:15')">00:15</a></li>
