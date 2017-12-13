@@ -243,57 +243,57 @@ def dlna_load(src):
     """request for load Video through DLNA"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         return 'Error: File not found.'
-        abort(404, 'File not found.')
+        # abort(404, 'File not found.')
     if not tracker.dmr:
         return 'Error: No DMR currently.'
-        abort(500, 'No DMR currently.')
+        # abort(500, 'No DMR currently.')
     logging.info('start loading... tracker state:%s' % tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try_time = 1
     while try_time <= 3:
-        # if dlna_load(url):
+        # if dlna_load_old(url):
         if tracker.load(url):
             logging.info('load url: %s success in %s time(s)' % (url, try_time))
             position = load_history(src)
             if position:
                 tracker.dmr.seek(second_to_time(position))
                 logging.info('loaded position: %s in %fs' % (second_to_time(position), time() - time0))
-            return 'Load Success.'
+            return 'Load Successed.'
         try_time += 1
         sleep(1)
     return 'Error: Load aborted because of maximum retry attempts was exceeded'
-    abort(500, 'Load aborted because of maximum retry attempts was exceeded')
+    # abort(500, 'Load aborted because of maximum retry attempts was exceeded')
 
 
-def dlna_load_old(url):
-    try:  # set trackuri, if failed stop and retry
-        # while tracker.state['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
-        while tracker.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
-            tracker.dmr.stop()
-            logging.info('waiting for stopping...current state: %s' % tracker.state['CurrentTransportState'])
-            sleep(0.85)
-        if tracker.dmr.set_current_media(url):
-            logging.info('url loaded')
-        while tracker.get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
-        # while tracker.state['CurrentTransportState'] not in ('PLAYING', 'TRANSITIONING'):
-            tracker.dmr.play()
-            logging.info('waiting for playing...current state: %s' % tracker.state['CurrentTransportState'])
-            sleep(0.3)
-        sleep(0.5)
-        time0 = time()
-        logging.info('checking duration to make sure loaded...')
-        while tracker.dmr.position_info()['TrackDuration'] == '00:00:00':
-        # while tracker.state['TrackDuration'] == '00:00:00':
-            sleep(0.5)
-            logging.info('Waiting for duration correctly recognized')
-            if (time() - time0) > 10:
-                logging.info('reload position: in %fs' % (time() - time0))
-                return False
-        logging.info(tracker.state)
-    except Exception as e:
-        logging.warning('DLNA load exception: %s\n%s' % (e, traceback.format_exc()))
-        return False
-    return True
+# def dlna_load_old(url):
+    # try:  # set trackuri, if failed stop and retry
+        # # while tracker.state['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
+        # while tracker.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
+            # tracker.dmr.stop()
+            # logging.info('waiting for stopping...current state: %s' % tracker.state['CurrentTransportState'])
+            # sleep(0.85)
+        # if tracker.dmr.set_current_media(url):
+            # logging.info('url loaded')
+        # while tracker.get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
+        # # while tracker.state['CurrentTransportState'] not in ('PLAYING', 'TRANSITIONING'):
+            # tracker.dmr.play()
+            # logging.info('waiting for playing...current state: %s' % tracker.state['CurrentTransportState'])
+            # sleep(0.3)
+        # sleep(0.5)
+        # time0 = time()
+        # logging.info('checking duration to make sure loaded...')
+        # while tracker.dmr.position_info()['TrackDuration'] == '00:00:00':
+        # # while tracker.state['TrackDuration'] == '00:00:00':
+            # sleep(0.5)
+            # logging.info('Waiting for duration correctly recognized')
+            # if (time() - time0) > 10:
+                # logging.info('reload position: in %fs' % (time() - time0))
+                # return False
+        # logging.info(tracker.state)
+    # except Exception as e:
+        # logging.warning('DLNA load exception: %s\n%s' % (e, traceback.format_exc()))
+        # return False
+    # return True
 
 
 @route('/dlnaplay')
