@@ -105,6 +105,33 @@ class DMRTracker(Thread):
     def stop(self):
         self.__flag.set()
         self.__running.clear()
+        
+    def load(self, url):
+        try:  # set trackuri, if failed stop and retry
+            while self.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
+                self.dmr.stop()
+                logging.info('waiting for stopping...current state: %s' % self.state['CurrentTransportState'])
+                sleep(0.85)
+            if self.dmr.set_current_media(url):
+                logging.info('url loaded')
+            while self.get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
+                self.dmr.play()
+                logging.info('waiting for playing...current state: %s' % self.state['CurrentTransportState'])
+                sleep(0.3)
+            sleep(0.5)
+            time0 = time()
+            logging.info('checking duration to make sure loaded...')
+            while self.dmr.position_info()['TrackDuration'] == '00:00:00':
+                sleep(0.5)
+                logging.info('Waiting for duration correctly recognized')
+                if (time() - time0) > 10:
+                    logging.info('reload position: in %fs' % (time() - time0))
+                    return False
+            logging.info(self.state)
+        except Exception as e:
+            logging.warning('DLNA load exception: %s\n%s' % (e, traceback.format_exc()))
+            return False
+        return True
 
 
 def run_sql(sql, *args):
@@ -212,7 +239,7 @@ def search_dmr():
 
 
 @route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
-def dlna_load_new(src):
+def dlna_load_req(src):
     """request for load Video through DLNA"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         abort(404, 'File not found.')
@@ -222,7 +249,8 @@ def dlna_load_new(src):
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try_time = 1
     while try_time <= 3:
-        if dlna_load(url):
+        # if dlna_load(url):
+        if tracker.load(url):
             logging.info('load url: %s success in %s time(s)' % (url, try_time))
             position = load_history(src)
             if position:
@@ -257,7 +285,6 @@ def dlna_load(url):
             logging.info('Waiting for duration correctly recognized')
             if (time() - time0) > 10:
                 logging.info('reload position: in %fs' % (time() - time0))
-                # dlna_load(src)
                 return False
         logging.info(tracker.state)
     except Exception as e:
