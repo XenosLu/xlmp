@@ -10,7 +10,7 @@ var vol = 0;
 var update = true;
 
 $("#dlna_toggle").addClass("active");
-$("#dlna_toggle").attr("href","/index");
+$("#dlna_toggle").attr("href", "/index");
 
 get_dmr_state();
 $("#dlna").show(250);
