@@ -7,10 +7,11 @@
   </div>
   <div class="btn-group dropdown">
     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-      more
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
+      <i class="glyphicon glyphicon-chevron-down"></i>
+      <!-- more -->
+      <!-- <span class="icon-bar"></span> -->
+      <!-- <span class="icon-bar"></span> -->
+      <!-- <span class="icon-bar"></span> -->
     </button>
     <ul class="dropdown-menu" role="menu">
       <li><a href='#' onclick="$.get('/deploy')"><i class="glyphicon glyphicon-cog"></i>deploy</a></li>
