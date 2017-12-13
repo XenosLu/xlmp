@@ -1,7 +1,7 @@
 ## xlmp
 FROM alpine:3.6
 LABEL maintainer="xenos <xenos.lu@gmail.com>"
-# ENV TZ 'Asia/Shanghai'
+ENV TZ 'Asia/Shanghai'
 
 # RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 RUN apk upgrade --update \
