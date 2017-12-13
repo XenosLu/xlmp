@@ -212,26 +212,33 @@ def search_dmr():
 
 
 @route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
-def dlna_load(src):
-    """Video DLNA play page"""
+def dlna_load_new(src):
+    """request for load Video through DLNA"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         abort(404, 'File not found.')
     if not tracker.dmr:
         abort(500, 'No DMR currently.')
+    try_time = 0
+    while try_time < 3:
+        if dlna_load(src):
+            return 'Success'
+        try_time += 1
+        sleep(1)
+    abort(500, 'Maximum retry attempts was exceeded')
+
+
+def dlna_load(src):
     logging.info('start loading... tracker state:%s' % tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try:  # set trackuri, if failed stop and retry
         # while tracker.state['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
-        # while tracker.dmr.info()['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
         while tracker.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
             tracker.dmr.stop()
             logging.info('waiting for stopping...current state: %s' % tracker.state['CurrentTransportState'])
             sleep(0.85)
         if tracker.dmr.set_current_media(url):
             logging.info('url loaded')
-        # tracker.dmr.play()
         while tracker.get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
-        # while tracker.dmr.info()['CurrentTransportState'] not in ('PLAYING', 'TRANSITIONING'):
         # while tracker.state['CurrentTransportState'] not in ('PLAYING', 'TRANSITIONING'):
             tracker.dmr.play()
             logging.info('waiting for playing...current state: %s' % tracker.state['CurrentTransportState'])
@@ -245,8 +252,8 @@ def dlna_load(src):
             logging.info('Waiting for duration correctly recognized')
             if (time() - time0) > 10:
                 logging.info('reload position: in %fs' % (time() - time0))
-                dlna_load(src)
-                return
+                # dlna_load(src)
+                return False
         position = load_history(src)
         if position:
             tracker.dmr.seek(second_to_time(position))
@@ -254,7 +261,8 @@ def dlna_load(src):
         logging.info(tracker.state)
     except Exception as e:
         logging.warning('DLNA load exception: %s\n%s' % (e, traceback.format_exc()))
-        abort(500, e)
+        return False
+    return True
 
 
 @route('/dlnaplay')
