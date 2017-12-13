@@ -34,12 +34,14 @@ $("video").on("error", function () {
             }
         });
     }
-}).on("progress", function () {  //show buffered
+}).on("progress", function () { //show buffered
     var str = "";
     if (new Date().getTime() - lastplaytime > 1000) {
         for (i = 0, t = this.buffered.length; i < t; i++) {
-            if (this.currentTime >= this.buffered.start(i) && this.currentTime <= this.buffered.end(i))
+            if (this.currentTime >= this.buffered.start(i) && this.currentTime <= this.buffered.end(i)) {
                 str = secondToTime(this.buffered.start(i)) + "-" + secondToTime(this.buffered.end(i)) + "<br>";
+                break;
+            }
         }
         out(str + "<small>buffering...</small>");
     }
