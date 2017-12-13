@@ -13,10 +13,10 @@
       <span class="icon-bar"></span>
     </button>
     <ul class="dropdown-menu" role="menu">
-      <li><a href='/deploy'><i class="glyphicon glyphicon-cog"></i>deploy</a></li>
+      <li><a href='#' onclick="$.get('/deploy')"><i class="glyphicon glyphicon-cog"></i>deploy</a></li>
       <li role="separator" class="divider"></li>
-      <li><a href='/backup'><i class="glyphicon glyphicon-cog"></i>backup</a></li>
-      <li><a href='/restore'><i class="glyphicon glyphicon-cog"></i>restore</a></li>
+      <li><a href="/backup"><i class="glyphicon glyphicon-cog"></i>backup</a></li>
+      <li><a href="/restore"><i class="glyphicon glyphicon-cog"></i>restore</a></li>
       <li role="separator" class="divider"></li>
       <li><a id="suspend"><i class="glyphicon glyphicon-off"></i>suspend</a></li>
       <li><a id="shutdown"><i class="glyphicon glyphicon-off"></i>shutdown</a></li>
