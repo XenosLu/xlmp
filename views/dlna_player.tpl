@@ -1,4 +1,3 @@
-
 % rebase('base.tpl', title='DMC - Light Media Player')
 <body>
   % include('common.tpl')
@@ -25,13 +24,13 @@ $("#position-bar").on("change", function() {
 });
 $("#volume_up").click(function() {
     //if (vol < 100)
-        $.get("/dlnavolumeup/");
+    $.get("/dlnavolumeup/");
     out(vol);
 });
 $("#volume_down").click(function() {
     //if (vol > 0)
-        $.get("/dlnavolumedown/");
-        out(vol);
+    $.get("/dlnavolumedown/");
+    out(vol);
 });
 /*
 $("#volume-bar").on("change",function() {

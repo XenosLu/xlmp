@@ -254,6 +254,7 @@ def dlna_load(src):
         logging.info(tracker.state)
     except Exception as e:
         logging.warning('DLNA load exception: %s\n%s' % (e, traceback.format_exc()))
+        abort(500, e)
 
 
 @route('/dlnaplay')
@@ -298,6 +299,7 @@ def dlna_volume(v):
 @route('/dlnavolumeup/')
 def dlna_volume_up():
     """Set volume through DLNA"""
+    # tracker maybe None
     current_vol = int(tracker.dmr.get_volume())
     if current_vol < 100:
         tracker.dmr.volume(current_vol + 1)
