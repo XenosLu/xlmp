@@ -6,15 +6,11 @@
     <a id="dlna_toggle" href="/dlna" type="button" class="btn btn-default">DLNA</a>
   </div>
   <div class="btn-group dropdown">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+    <button type="button" class="btn btn-default dropdown-toggle " data-toggle="dropdown">
       <i class="glyphicon glyphicon-chevron-down"></i>
-      <!-- more -->
-      <!-- <span class="icon-bar"></span> -->
-      <!-- <span class="icon-bar"></span> -->
-      <!-- <span class="icon-bar"></span> -->
     </button>
     <ul class="dropdown-menu" role="menu">
-      <li><a href='#' onclick="$.get('/deploy')"><i class="glyphicon glyphicon-cog"></i>deploy</a></li>
+      <li><a onclick="$.get('/deploy')"><i class="glyphicon glyphicon-cog"></i>deploy</a></li>
       <li role="separator" class="divider"></li>
       <li><a href="/backup"><i class="glyphicon glyphicon-cog"></i>backup</a></li>
       <li><a href="/restore"><i class="glyphicon glyphicon-cog"></i>restore</a></li>
