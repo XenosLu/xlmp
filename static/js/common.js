@@ -52,22 +52,9 @@ $("#tabFrame").on("click", ".folder", function () {
  * @param {String} media
  */
 function dlnaLoad(media) {
-    // $.get("/dlnaload/" + media, function () {
-        // out("Loaded.");
-    // });
-    
-    $.ajax({
-        url: "/dlnaload/" + media,
-        timeout: 1999,
-        type: "get",
-        success: function (data) {
-            out("Loaded.");
-        },
-        error: function (xhr) {
-            out(xhr.statusText);
-        }
+    $.get("/dlnaload/" + media, function (data) {
+        out(data);
     });
-    
 }
 
 /**

@@ -239,11 +239,13 @@ def search_dmr():
 
 
 @route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
-def dlna_load_req(src):
+def dlna_load(src):
     """request for load Video through DLNA"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
+        return 'Error: File not found.'
         abort(404, 'File not found.')
     if not tracker.dmr:
+        return 'Error: No DMR currently.'
         abort(500, 'No DMR currently.')
     logging.info('start loading... tracker state:%s' % tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
@@ -256,13 +258,14 @@ def dlna_load_req(src):
             if position:
                 tracker.dmr.seek(second_to_time(position))
                 logging.info('loaded position: %s in %fs' % (second_to_time(position), time() - time0))
-            return 'Success'
+            return 'Load Success.'
         try_time += 1
         sleep(1)
+    return 'Error: Load aborted because of maximum retry attempts was exceeded'
     abort(500, 'Load aborted because of maximum retry attempts was exceeded')
 
 
-def dlna_load(url):
+def dlna_load_old(url):
     try:  # set trackuri, if failed stop and retry
         # while tracker.state['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
         while tracker.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
