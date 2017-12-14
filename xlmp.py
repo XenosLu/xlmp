@@ -107,7 +107,7 @@ class DMRTracker(Thread):
         self.__running.clear()
         
     def load(self, url):
-        try:  # set trackuri, if failed stop and retry
+        try:
             while self.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
                 self.dmr.stop()
                 logging.info('waiting for stopping...current state: %s' % self.state['CurrentTransportState'])
@@ -125,7 +125,7 @@ class DMRTracker(Thread):
                 sleep(0.5)
                 logging.info('Waiting for duration correctly recognized')
                 if (time() - time0) > 10:
-                    logging.info('reload position: in %fs' % (time() - time0))
+                    logging.info('load duration failed in %fs' % (time() - time0))
                     return False
             logging.info(self.state)
         except Exception as e:
@@ -250,50 +250,19 @@ def dlna_load(src):
     logging.info('start loading... tracker state:%s' % tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try_time = 1
-    while try_time <= 3:
-        # if dlna_load_old(url):
+    while try_time < 4:
         if tracker.load(url):
             logging.info('load url: %s success in %s time(s)' % (url, try_time))
             position = load_history(src)
             if position:
                 tracker.dmr.seek(second_to_time(position))
-                logging.info('loaded position: %s in %fs' % (second_to_time(position), time() - time0))
+                logging.info('loaded position: %s' % second_to_time(position))
             return 'Load Successed.'
         try_time += 1
         sleep(1)
-    return 'Error: Load aborted because of maximum retry attempts was exceeded'
+    logging.warn('Load aborted because of attempts was exceeded')
+    return 'Error: Load aborted because of attempts was exceeded'
     # abort(500, 'Load aborted because of maximum retry attempts was exceeded')
-
-
-# def dlna_load_old(url):
-    # try:  # set trackuri, if failed stop and retry
-        # # while tracker.state['CurrentTransportState'] not in ('STOPPED', 'NO_MEDIA_PRESENT'):
-        # while tracker.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
-            # tracker.dmr.stop()
-            # logging.info('waiting for stopping...current state: %s' % tracker.state['CurrentTransportState'])
-            # sleep(0.85)
-        # if tracker.dmr.set_current_media(url):
-            # logging.info('url loaded')
-        # while tracker.get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
-        # # while tracker.state['CurrentTransportState'] not in ('PLAYING', 'TRANSITIONING'):
-            # tracker.dmr.play()
-            # logging.info('waiting for playing...current state: %s' % tracker.state['CurrentTransportState'])
-            # sleep(0.3)
-        # sleep(0.5)
-        # time0 = time()
-        # logging.info('checking duration to make sure loaded...')
-        # while tracker.dmr.position_info()['TrackDuration'] == '00:00:00':
-        # # while tracker.state['TrackDuration'] == '00:00:00':
-            # sleep(0.5)
-            # logging.info('Waiting for duration correctly recognized')
-            # if (time() - time0) > 10:
-                # logging.info('reload position: in %fs' % (time() - time0))
-                # return False
-        # logging.info(tracker.state)
-    # except Exception as e:
-        # logging.warning('DLNA load exception: %s\n%s' % (e, traceback.format_exc()))
-        # return False
-    # return True
 
 
 @route('/dlnaplay')
@@ -337,23 +306,22 @@ def dlna_volume(v):
 
 @route('/dlnavolumeup/')
 def dlna_volume_up():
-    """Set volume through DLNA"""
-    # tracker maybe None
+    """Tune up volume through DLNA"""
+    if not tracker.dmr:
+        abort(500, 'No DMR currently.')
     current_vol = int(tracker.dmr.get_volume())
     if current_vol < 100:
         tracker.dmr.volume(current_vol + 1)
-    # return
-    # tracker.dmr.volume(int(tracker.dmr.get_volume()) + 1)
 
 
 @route('/dlnavolumedown/')
 def dlna_volume_down():
-    """Set volume through DLNA"""
+    """Tune down volume through DLNA"""
+    if not tracker.dmr:
+        abort(500, 'No DMR currently.')
     current_vol = int(tracker.dmr.get_volume())
     if current_vol > 0:
         tracker.dmr.volume(current_vol - 1)
-    # return
-    # tracker.dmr.volume(int(tracker.dmr.get_volume()) - 1)
 
 
 @route('/dlnaseek/<position>')
