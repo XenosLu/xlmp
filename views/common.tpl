@@ -1,12 +1,12 @@
 <div id="sidebar" class="btn-toolbar" role="toolbar">
   <div class="btn-group" role="group">
-    <button id="history" type="button" class="btn btn-default">
+    <button id="history" type="button" class="btn btn-default btn-lg">
       <i class="glyphicon glyphicon-th-list"></i>
     </button>
-    <a id="dlna_toggle" href="/dlna" type="button" class="btn btn-default">DLNA</a>
+    <a id="dlna_toggle" href="/dlna" type="button" class="btn btn-default btn-lg">DLNA</a>
   </div>
   <div class="btn-group dropdown">
-    <button type="button" class="btn btn-default dropdown-toggle " data-toggle="dropdown">
+    <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
       <i class="glyphicon glyphicon-chevron-down"></i>
     </button>
     <ul class="dropdown-menu" role="menu">
