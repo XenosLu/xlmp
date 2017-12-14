@@ -113,7 +113,7 @@ class DMRTracker(Thread):
                 logging.info('waiting for stopping...current state: %s' % self.state['CurrentTransportState'])
                 sleep(0.85)
             if self.dmr.set_current_media(url):
-                logging.info('url loaded')
+                logging.info('loaded %s' % url)
             while self.get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
                 self.dmr.play()
                 logging.info('waiting for playing...current state: %s' % self.state['CurrentTransportState'])
@@ -243,10 +243,8 @@ def dlna_load(src):
     """request for load Video through DLNA"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         return 'Error: File not found.'
-        # abort(404, 'File not found.')
     if not tracker.dmr:
         return 'Error: No DMR currently.'
-        # abort(500, 'No DMR currently.')
     logging.info('start loading... tracker state:%s' % tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try_time = 1
@@ -262,7 +260,6 @@ def dlna_load(src):
         sleep(1)
     logging.warn('Load aborted because of attempts was exceeded')
     return 'Error: Load aborted because of attempts was exceeded'
-    # abort(500, 'Load aborted because of maximum retry attempts was exceeded')
 
 
 @route('/dlnaplay')
@@ -309,9 +306,13 @@ def dlna_volume_up():
     """Tune up volume through DLNA"""
     if not tracker.dmr:
         abort(500, 'No DMR currently.')
-    current_vol = int(tracker.dmr.get_volume())
-    if current_vol < 100:
-        tracker.dmr.volume(current_vol + 1)
+    new_vol = int(tracker.dmr.get_volume()) + 1
+    if new_vol > 100:
+        return 'maximum exceeded'
+    if tracker.dmr.volume(new_vol):
+        return new_vol
+    else:
+        return 'failed'
 
 
 @route('/dlnavolumedown/')
