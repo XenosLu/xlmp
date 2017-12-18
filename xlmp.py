@@ -74,13 +74,19 @@ class DMRTracker(Thread):
                 try:
                     self.state['CurrentDMR'] = str(self.dmr)
                     self.state['DMRs'] = [str(i) for i in self.all_devices]
-                    self.state['CurrentVolume'] = self.dmr.get_volume()
-                    if not self.state['CurrentVolume']:
+                    # self.state['CurrentVolume'] = self.dmr.get_volume()
+                    # if not self.state['CurrentVolume']:
+                        # logging.info('No DMR currently.')
+                        # self.dmr = None
+                        # continue
+                    self.state['CurrentTransportState'] = self.dmr.info()['CurrentTransportState']
+                    if not self.state['CurrentTransportState']:
                         logging.info('No DMR currently.')
                         self.dmr = None
                         continue
-                    self.state['CurrentTransportState'] = self.dmr.info()['CurrentTransportState']
+                    sleep(0.1)
                     position_info = self.dmr.position_info()
+                    sleep(0.1)
                     for i in ('RelTime', 'TrackDuration'):
                         self.state[i] = position_info[i]
                     if self.state['CurrentTransportState'] == 'PLAYING':
@@ -94,7 +100,7 @@ class DMRTracker(Thread):
                 sleep(1)
             else:
                 self.discover_dmr()
-                sleep(4)
+                sleep(2)
 
     def pause(self):
         self.__flag.clear()

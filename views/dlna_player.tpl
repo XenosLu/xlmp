@@ -6,7 +6,7 @@
 % include('common_script.tpl')
 <script>
 var reltime = 0;
-var vol = 0;
+//var vol = 0;
 var update = true;
 
 $("#dlna_toggle").addClass("active");
@@ -59,7 +59,7 @@ function get_dmr_state(){
         success: function (data) {
             if(!$.isEmptyObject(data)){
                 reltime = timeToSecond(data["RelTime"]);
-                vol = Number(data["CurrentVolume"]);
+                //vol = Number(data["CurrentVolume"]);
                 if(update) {
                     $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
                     //$("#volume-bar").val(vol);
