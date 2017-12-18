@@ -20,7 +20,7 @@
     </button>
   </div>
   <div class="btn-group dropdown">
-    <button type="button" class="btn btn-info btn-lg dropdown-toggle" data-toggle="dropdown">
+    <button id="position_menu" type="button" class="btn btn-info btn-lg dropdown-toggle" data-toggle="dropdown">
       <i class="glyphicon glyphicon-chevron-down"></i>
     </button>
     <ul class="dropdown-menu" role="menu">
