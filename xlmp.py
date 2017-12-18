@@ -344,8 +344,8 @@ def dlna_volume_control(control):
         vol -=1
     else:
         return 'unknown command'
-    if tracker.dmr.volume(new_vol):
-        return new_vol
+    if tracker.dmr.volume(vol):
+        return vol
     else:
         return 'failed'
 

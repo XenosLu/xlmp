@@ -28,7 +28,7 @@ $("#volume_up").click(function() {
     $.get("/dlnavol/up", function(result){
         out(result);
     });
-    out(vol);
+    //out(vol);
 });
 $("#volume_down").click(function() {
     //if (vol > 0)
@@ -36,7 +36,7 @@ $("#volume_down").click(function() {
         out(result);
     });
     //$.get("/dlnavolumedown/");
-    out(vol);
+    //out(vol);
 });
 /*
 $("#volume-bar").on("change",function() {
