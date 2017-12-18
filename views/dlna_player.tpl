@@ -24,12 +24,18 @@ $("#position-bar").on("change", function() {
 });
 $("#volume_up").click(function() {
     //if (vol < 100)
-    $.get("/dlnavolumeup/");
+    //$.get("/dlnavolumeup/");
+    $.get("/dlnavol/up", function(result){
+        out(result);
+    });
     out(vol);
 });
 $("#volume_down").click(function() {
     //if (vol > 0)
-    $.get("/dlnavolumedown/");
+    $.get("/dlnavol/down", function(result){
+        out(result);
+    });
+    //$.get("/dlnavolumedown/");
     out(vol);
 });
 /*
@@ -69,18 +75,11 @@ function get_dmr_state(){
                 
                 $("#state").text(data["CurrentTransportState"]);
                 /*
-                if ($("#state").text() == "PLAYING") {
-                    $(".glyphicon-play").hide();
-                    $(".glyphicon-pause").show();
-                } else {
-                    $(".glyphicon-play").show();
-                    $(".glyphicon-pause").hide();
-                }
-                */
                 if(reltime >= 90)
                     $(".glyphicon-chevron-down").hide();
                 else
                     $(".glyphicon-chevron-down").show();
+                */
             }
         },
         error: function(xhr, err) {
