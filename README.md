@@ -14,7 +14,7 @@ xlmp诞生的主要目的是为了方便通过其他设备来观看电脑中的�
 ## Suggestted install steps:
     docker pull xenocider/xlmp
 ### make sure your 80 port is not occupied    
-    docker run -itd --net="host" -v /home/user/media:/xlmp/media/ xenocider/xlmp
+    docker run -itd --net=host -v /home/user/media:/xlmp/media/ xenocider/xlmp
 ### /home/user/meida should be replace by your own media folder
 
 
@@ -23,7 +23,9 @@ xlmp诞生的主要目的是为了方便通过其他设备来观看电脑中的�
 + README.md       readme
 + adapter.wsgi    wsgi adapter
 + xlmp.py 	      main
-+ views/          html template
-+ player.db       auto-generated sqlite3-db to store play history
++ views/          html templates
++ history.db      auto-generated sqlite3-db to store play history
 + static/         web static files
 + lib/            python lib
++ docker/         docker build files
++ media/          media folder
