@@ -1,4 +1,12 @@
 # xlmp - Xenos' Light media player
+
+[![](https://images.microbadger.com/badges/version/xenocider/xlmp.svg)](https://microbadger.com/images/xenocider/xlmp "Get your own version badge on microbadger.com")
+[![](https://images.microbadger.com/badges/image/xenocider/xlmp.svg)](https://microbadger.com/images/xenocider/xlmp "Get your own image badge on microbadger.com")
+
+[![Docker Pulls](https://img.shields.io/docker/pulls/xenocider/xlmp.svg)](https://hub.docker.com/r/xenocider/xlmp/ "Docker Pulls")
+[![Docker Stars](https://img.shields.io/docker/stars/xenocider/xlmp.svg)](https://hub.docker.com/r/xenocider/xlmp/ "Docker Stars")
+[![Docker Automated](https://img.shields.io/docker/automated/xenocider/xlmp.svg)](https://hub.docker.com/r/xenocider/xlmp/ "Docker Automated")
+
 Updated in 2017.12.19
 xlmp是一个基于web的媒体播放器，最初用php开发，之后改用了python3。
 xlmp诞生的主要目的是为了方便通过其他设备来观看电脑中的视频。起初，是为了在ipad和手机里，之后，则还包括了带DLNA投屏功能的电视机（或电视盒子）。
