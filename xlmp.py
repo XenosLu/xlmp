@@ -122,13 +122,13 @@ class DMRTracker(Thread):
         try:
             while self.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
                 self.dmr.stop()
-                logging.info('waiting for stopping...current state: %s' % self.state['CurrentTransportState'])
+                logging.info('Waiting for stopping...current state: %s' % self.state['CurrentTransportState'])
                 sleep(0.85)
             if self.dmr.set_current_media(url):
-                logging.info('loaded %s' % url)
+                logging.info('Loaded %s' % url)
             while self.get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
                 self.dmr.play()
-                logging.info('waiting for playing...current state: %s' % self.state['CurrentTransportState'])
+                logging.info('Waiting for playing...current state: %s' % self.state['CurrentTransportState'])
                 sleep(0.3)
             sleep(0.5)
             time0 = time()
@@ -137,7 +137,7 @@ class DMRTracker(Thread):
                 sleep(0.5)
                 logging.info('Waiting for duration correctly recognized')
                 if (time() - time0) > 10:
-                    logging.info('load duration failed in %fs' % (time() - time0))
+                    logging.info('Load duration failed in %fs' % (time() - time0))
                     return False
             logging.info(self.state)
         except Exception as e:
@@ -262,15 +262,15 @@ def dlna_load(src):
     try_time = 1
     while try_time < 4:
         if tracker.load(url):
-            logging.info('load url: %s success in %s time(s)' % (url, try_time))
+            logging.info('Loaded url: %s success in %s time(s)' % (url, try_time))
             position = load_history(src)
             if position:
                 tracker.dmr.seek(second_to_time(position))
-                logging.info('loaded position: %s' % second_to_time(position))
+                logging.info('Loaded position: %s' % second_to_time(position))
             return 'Load Successed.'
         try_time += 1
         sleep(1)
-    logging.warn('Load aborted because of attempts was exceeded')
+    logging.warning('Load aborted because of attempts was exceeded')
     return 'Error: Load aborted because of attempts was exceeded'
 
 
