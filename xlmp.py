@@ -74,19 +74,25 @@ class DMRTracker(Thread):
                 try:
                     self.state['CurrentDMR'] = str(self.dmr)
                     self.state['DMRs'] = [str(i) for i in self.all_devices]
-                    self.state['CurrentVolume'] = self.dmr.get_volume()
-                    if not self.state['CurrentVolume']:
-                        logging.info('No DMR currently.')
-                        self.dmr = None
-                        continue
+                    # self.state['CurrentVolume'] = self.dmr.get_volume()
+                    # if not self.state['CurrentVolume']:
+                        # logging.info('No DMR currently.')
+                        # self.dmr = None
+                        # continue
+                    sleep(0.1)
+                    # info = self.dmr.info()
+                    # if not info:
+                        # logging.info('No DMR currently.')
+                        # self.dmr = None
+                        # continue
                     self.state['CurrentTransportState'] = self.dmr.info()['CurrentTransportState']
-                    if not self.state['CurrentTransportState']:
-                        logging.info('No DMR currently.')
-                        self.dmr = None
-                        continue
+                    # self.state['CurrentTransportState'] = info['CurrentTransportState']
                     sleep(0.1)
                     position_info = self.dmr.position_info()
-                    sleep(0.1)
+                    if not position_info:
+                        logging.info('No DMR currently.')
+                        self.dmr = None
+                        continue
                     for i in ('RelTime', 'TrackDuration'):
                         self.state[i] = position_info[i]
                     if self.state['CurrentTransportState'] == 'PLAYING':
@@ -301,38 +307,38 @@ def dlna_info():
     return tracker.state
 
 
-@route('/dlnavolume/<v>')
-def dlna_volume(v):
-    """Set volume through DLNA"""
-    tracker.dmr.volume(v)
+# @route('/dlnavolume/<v>')
+# def dlna_volume(v):
+    # """Set volume through DLNA"""
+    # tracker.dmr.volume(v)
 
 
-@route('/dlnavolumeup/')
-def dlna_volume_up():
-    """Tune up volume through DLNA"""
-    if not tracker.dmr:
-        abort(500, 'No DMR currently.')
-    new_vol = int(tracker.dmr.get_volume()) + 1
-    if new_vol > 100:
-        return 'maximum exceeded'
-    if tracker.dmr.volume(new_vol):
-        return new_vol
-    else:
-        return 'failed'
+# @route('/dlnavolumeup/')
+# def dlna_volume_up():
+    # """Tune up volume through DLNA"""
+    # if not tracker.dmr:
+        # abort(500, 'No DMR currently.')
+    # new_vol = int(tracker.dmr.get_volume()) + 1
+    # if new_vol > 100:
+        # return 'maximum exceeded'
+    # if tracker.dmr.volume(new_vol):
+        # return new_vol
+    # else:
+        # return 'failed'
 
 
-@route('/dlnavolumedown/')
-def dlna_volume_down():
-    """Tune down volume through DLNA"""
-    if not tracker.dmr:
-        abort(500, 'No DMR currently.')
-    new_vol = int(tracker.dmr.get_volume()) - 1
-    if new_vol < 0:
-        return 'minimum exceeded'
-    if tracker.dmr.volume(new_vol):
-        return new_vol
-    else:
-        return 'failed'
+# @route('/dlnavolumedown/')
+# def dlna_volume_down():
+    # """Tune down volume through DLNA"""
+    # if not tracker.dmr:
+        # abort(500, 'No DMR currently.')
+    # new_vol = int(tracker.dmr.get_volume()) - 1
+    # if new_vol < 0:
+        # return 'minimum exceeded'
+    # if tracker.dmr.volume(new_vol):
+        # return new_vol
+    # else:
+        # return 'failed'
     # current_vol = int(tracker.dmr.get_volume())
     # if current_vol > 0:
         # tracker.dmr.volume(current_vol - 1)
