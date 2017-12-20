@@ -74,11 +74,11 @@ class DMRTracker(Thread):
                 try:
                     self.state['CurrentDMR'] = str(self.dmr)
                     self.state['DMRs'] = [str(i) for i in self.all_devices]
-                    # self.state['CurrentVolume'] = self.dmr.get_volume()
-                    # if not self.state['CurrentVolume']:
-                        # logging.info('No DMR currently.')
-                        # self.dmr = None
-                        # continue
+                    self.state['CurrentVolume'] = self.dmr.get_volume()
+                    if not self.state['CurrentVolume']:
+                        logging.info('No DMR currently.')
+                        self.dmr = None
+                        continue
                     self.state['CurrentTransportState'] = self.dmr.info()['CurrentTransportState']
                     if not self.state['CurrentTransportState']:
                         logging.info('No DMR currently.')
