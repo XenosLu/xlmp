@@ -33,7 +33,6 @@
   </div>
     <h3 id="position"></h3>
     <input type="range" id="position-bar" min="0" max="0">
-    <!-- <input type="range" id="volume-bar" min="0" max="100"> -->
     <button id="volume_down" type="button" class="btn btn-warning btn-lg glyphicon glyphicon-minus">
     <button id="volume_up" type="button" class="btn btn-warning btn-lg glyphicon glyphicon-plus">
   </button>

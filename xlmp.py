@@ -314,54 +314,17 @@ def dlna_info():
     """Get play info through DLNA"""
     return tracker.state
 
-
-# @route('/dlnavolume/<v>')
-# def dlna_volume(v):
-    # """Set volume through DLNA"""
-    # tracker.dmr.volume(v)
-
-
-# @route('/dlnavolumeup/')
-# def dlna_volume_up():
-    # """Tune up volume through DLNA"""
-    # if not tracker.dmr:
-        # abort(500, 'No DMR currently.')
-    # new_vol = int(tracker.dmr.get_volume()) + 1
-    # if new_vol > 100:
-        # return 'maximum exceeded'
-    # if tracker.dmr.volume(new_vol):
-        # return new_vol
-    # else:
-        # return 'failed'
-
-
-# @route('/dlnavolumedown/')
-# def dlna_volume_down():
-    # """Tune down volume through DLNA"""
-    # if not tracker.dmr:
-        # abort(500, 'No DMR currently.')
-    # new_vol = int(tracker.dmr.get_volume()) - 1
-    # if new_vol < 0:
-        # return 'minimum exceeded'
-    # if tracker.dmr.volume(new_vol):
-        # return new_vol
-    # else:
-        # return 'failed'
-    # current_vol = int(tracker.dmr.get_volume())
-    # if current_vol > 0:
-        # tracker.dmr.volume(current_vol - 1)
-
         
 @route('/dlnavol/<control>')
 def dlna_volume_control(control):
-    """Tune down volume through DLNA"""
+    """Tune volume through DLNA"""
     if not tracker.dmr:
         abort(500, 'No DMR currently.')
     vol = int(tracker.dmr.get_volume())
     if control == 'up':
-        vol +=1
+        vol += 1
     elif control == 'down':
-        vol -=1
+        vol -= 1
     else:
         return 'unknown command'
     if vol <0 or vol > 100:

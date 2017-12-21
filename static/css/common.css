@@ -2,9 +2,14 @@
 .glyphicon-film, .glyphicon-folder-close, .glyphicon-remove-circle, .glyphicon-file {
     font-size: 1.8em;
 }
-.glyphicon-remove-circle {
+/* .glyphicon-remove-circle { */
+    /* color: grey; */
+/* } */
+/* test */
+.remove {
     color: grey;
 }
+/* test end */
 .close {
     font-size: 2.5em;
     margin-right: 0.25em;
@@ -144,22 +149,6 @@ input[type=range]::-moz-range-thumb {
     height: 5.2em;
     width: 3.3em;
     padding: 1.5em;
-    background-clip: content-box;
-    background-color: #F1F2F6;
-    border: None;
-}
-#volume-bar {
-    background-color: #F0AD4E;
-    width: 16em;
-    height: 1.5em;
-    /* margin-top: 3.5em; */
-    margin-top: 1.5em;
-}
-#volume-bar::-webkit-slider-thumb{
-    -webkit-appearance: none;
-    height: 3.2em;
-    width: 3.8em;
-    padding: 1em;
     background-clip: content-box;
     background-color: #F1F2F6;
     border: None;

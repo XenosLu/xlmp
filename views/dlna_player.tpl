@@ -6,7 +6,6 @@
 % include('common_script.tpl')
 <script>
 var reltime = 0;
-//var vol = 0;
 var update = true;
 
 $("#dlna_toggle").addClass("active");
@@ -23,32 +22,23 @@ $("#position-bar").on("change", function() {
     update = false;
 });
 $("#volume_up").click(function() {
-    //if (vol < 100)
-    //$.get("/dlnavolumeup/");
+/*
     $.get("/dlnavol/up", function(result){
         out(result);
     });
-    //out(vol);
+*/
+    dlnavol("up");
 });
 $("#volume_down").click(function() {
-    //if (vol > 0)
     $.get("/dlnavol/down", function(result){
         out(result);
     });
-    //$.get("/dlnavolumedown/");
-    //out(vol);
 });
-/*
-$("#volume-bar").on("change",function() {
-    //$.get("/dlnavolume/" + $(this).val());
-    $.get("/dlnavolume/" + offset_value(vol, $(this).val(), $(this).attr("max")));
-    update = true;
-}).on("input", function() {
-    //out($(this).val());
-    out(offset_value(vol, $(this).val(), $(this).attr("max")));
-    update = false;
-});
-*/
+functin dlnavol(control) {
+    $.get("/dlnavol/" + control, function(result){
+        out(result);
+    });
+}
 
 function get_dmr_state(){
     $.ajax({
@@ -59,10 +49,8 @@ function get_dmr_state(){
         success: function (data) {
             if(!$.isEmptyObject(data)){
                 reltime = timeToSecond(data["RelTime"]);
-                //vol = Number(data["CurrentVolume"]);
                 if(update) {
                     $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
-                    //$("#volume-bar").val(vol);
                 }
                 $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
                 $('#src').text(decodeURI(data["TrackURI"]));
