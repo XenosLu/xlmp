@@ -8,9 +8,10 @@
 var lastplaytime = 0;  //in seconds
 var text = "";  //temp output text
 
-$("#videosize").show();
+$(".player-show").show();
+//$("#videosize").show();
 // $("#rate").show();
-$("#rate").css("display", "inline");
+//$("#rate").css("display", "inline");
 $("video").on("error", function () {
     out("error");
 }).on("loadeddata", function () {  //auto load position
