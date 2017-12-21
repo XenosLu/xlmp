@@ -341,12 +341,12 @@ class DlnapDevice:
             # Unexpected response
             return False
 
-    def play(self, instance_id=0):
+    def play(self, instance_id=0, speed=1):
         """ Play media that was already set as current.
 
         instance_id -- device instance id
         """
-        response = self._soap_request('Play', {'InstanceID': instance_id, 'Speed': 1})
+        response = self._soap_request('Play', {'InstanceID': instance_id, 'Speed': speed})
         try:
             response['s:Envelope']['s:Body']['u:PlayResponse']
             return True
