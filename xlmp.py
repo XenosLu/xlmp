@@ -314,8 +314,10 @@ def result(r):
 
 @route('/dlnaplay')
 @route('/dlnaplay/<speed>')
-@check_dmr_exist
+# @check_dmr_exist
 def dlna_play(speed=1):
+    if not tracker.dmr:
+        return 'Error: No DMR.'
     try:
         return result(tracker.dmr.play(speed=float(speed)))
     except Exception as e:
@@ -323,9 +325,11 @@ def dlna_play(speed=1):
 
 
 @route('/dlnapause')
-@check_dmr_exist
+# @check_dmr_exist
 def dlna_pause():
     """Pause video through DLNA"""
+    if not tracker.dmr:
+        return 'Error: No DMR.'
     return result(tracker.dmr.pause())
 
 
