@@ -34,7 +34,7 @@ $("#volume_down").click(function() {
         out(result);
     });
 });
-functin dlnavol(control) {
+function dlnavol(control) {
     $.get("/dlnavol/" + control, function(result){
         out(result);
     });
