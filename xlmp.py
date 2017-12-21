@@ -158,9 +158,11 @@ tracker.start()
 
 
 def check_dmr_exist(func):
-    def no_dmr(*args):
-        return 'Error: No DMR.'
     global tracker
+    def no_dmr(*args):
+        return str(tracker.dmr)
+        return 'Error: No DMR.'
+    return no_dmr
     if not tracker.dmr:
         return no_dmr
     return func
@@ -334,7 +336,7 @@ def dlna_pause():
 
 
 @route('/dlnastop')
-# @check_dmr_exist
+@check_dmr_exist
 def dlna_stop():
     """Stop video through DLNA"""
     if not tracker.dmr:
@@ -361,7 +363,7 @@ def dlna_volume_control(control):
         vol -= 1
     else:
         return 'unknown command'
-    if vol <0 or vol > 100:
+    if vol < 0 or vol > 100:
         return 'volume range exceeded'
     elif tracker.dmr.volume(vol):
         return str(vol)
