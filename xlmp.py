@@ -105,7 +105,7 @@ class DMRTracker(Thread):
                     logging.warning('TypeError: %s\n%s' % (e, traceback.format_exc()))
                     self.__retry += 1
                     logging.info('DMR RETRY: %d' % self.__retry)
-                    if self.__retry > 3:
+                    if self.__retry >= 3:
                         self.__retry = 0
                         logging.info('No DMR currently.')
                         self.dmr = None
