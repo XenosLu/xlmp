@@ -270,9 +270,11 @@ def search_dmr():
 
 
 @route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
-@check_dmr_exist
+# @check_dmr_exist
 def dlna_load(src):
     """request for load Video through DLNA"""
+    if not tracker.dmr:
+        return 'Error: No DMR.'
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         return 'Error: File not found.'
     logging.info('start loading... tracker state:%s' % tracker.state)
