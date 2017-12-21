@@ -319,7 +319,7 @@ def dlna_play(speed=1):
     if not tracker.dmr:
         return 'Error: No DMR.'
     try:
-        return result(tracker.dmr.play(speed=float(speed)))
+        return result(tracker.dmr.play(speed=speed))
     except Exception as e:
         return 'play failed: %s' % e
 
