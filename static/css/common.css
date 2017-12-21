@@ -85,8 +85,7 @@ footer, .remove, .filelist.other, .filelist small {
     color: grey;
 }
 #sidebar{
-    opacity: 0.4;
-    /* display: none; */
+    opacity: 0.5;
     position: fixed;
     top: 0%;
     z-index: 9;
@@ -153,5 +152,8 @@ footer, .remove, .filelist.other, .filelist small {
     margin-top: 3em;
 }
 #volume_up, #volume_down {
-    margin: 2.5em;
+    margin: 2em;
+}
+#dmr {
+    margin-top: 4em;
 }
