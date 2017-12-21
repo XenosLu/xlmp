@@ -33,9 +33,7 @@ HISTORY_FILE = 'history.db'  # history db file name
 
 class DMRTracker(Thread):
     """Digital Media Renderer"""
-    state = {}  # dmr device state
-    dmr = None  # dmr device object
-    all_devices = None  # dmr device object
+
 
     def __init__(self, *args, **kwargs):
         super(DMRTracker, self).__init__(*args, **kwargs)
@@ -43,6 +41,10 @@ class DMRTracker(Thread):
         self.__flag.set()
         self.__running = Event()
         self.__running.set()
+        self.state = {}  # dmr device state
+        self.dmr = None  # dmr device object
+        self.all_devices = []  # dmr device object
+        self.__retry = 0
         logging.info('DMR Tracker initialized.')
 
     def discover_dmr(self):
@@ -80,19 +82,19 @@ class DMRTracker(Thread):
                         # self.dmr = None
                         # continue
                     sleep(0.1)
-                    # info = self.dmr.info()
+                    info = self.dmr.info()
                     # if not info:
                         # logging.info('No DMR currently.')
                         # self.dmr = None
                         # continue
-                    self.state['CurrentTransportState'] = self.dmr.info()['CurrentTransportState']
-                    # self.state['CurrentTransportState'] = info['CurrentTransportState']
+                    # self.state['CurrentTransportState'] = self.dmr.info()['CurrentTransportState']
+                    self.state['CurrentTransportState'] = info['CurrentTransportState']
                     sleep(0.1)
                     position_info = self.dmr.position_info()
-                    if not position_info:
-                        logging.info('No DMR currently.')
-                        self.dmr = None
-                        continue
+                    # if not position_info:
+                        # logging.info('No DMR currently.')
+                        # self.dmr = None
+                        # continue
                     for i in ('RelTime', 'TrackDuration'):
                         self.state[i] = position_info[i]
                     if self.state['CurrentTransportState'] == 'PLAYING':
@@ -101,6 +103,12 @@ class DMRTracker(Thread):
                                      time_to_second(self.state['TrackDuration']))
                 except TypeError as e:
                     logging.warning('TypeError: %s\n%s' % (e, traceback.format_exc()))
+                    self.__retry += 1
+                    logging.info('DMR RETRY: %d' % self.__retry)
+                    if self.__retry > 3:
+                        self.__retry = 0
+                        logging.info('No DMR currently.')
+                        self.dmr = None
                 except Exception as e:
                     logging.warning('DMR Tracker Exception: %s\n%s' % (e, traceback.format_exc()))
                 sleep(1)
@@ -356,7 +364,9 @@ def dlna_volume_control(control):
         vol -=1
     else:
         return 'unknown command'
-    if tracker.dmr.volume(vol):
+    if vol <0 or vol > 100:
+        return 'volume range exceeded'
+    elif tracker.dmr.volume(vol):
         return str(vol)
     else:
         return 'failed'
