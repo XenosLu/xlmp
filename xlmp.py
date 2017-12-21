@@ -295,13 +295,13 @@ def dlna_load(src):
 
 @route('/dlnaplay')
 @route('/dlnaplay/<speed>')
-def dlna_play_with_speed(speed=1):
+def dlna_play(speed=1):
     if not tracker.dmr:
         abort(500, 'No DMR currently.')
     try:
         tracker.dmr.play(speed=float(speed))
     except Exception as e:
-        return 'play with speed failed: %s' % e
+        return 'play failed: %s' % e
 
 
 @route('/dlnapause')
@@ -330,7 +330,8 @@ def dlna_info():
 def dlna_volume_control(control):
     """Tune volume through DLNA"""
     if not tracker.dmr:
-        abort(500, 'No DMR currently.')
+        return 'No DMR currently.'
+        # abort(500, 'No DMR currently.')
     vol = int(tracker.dmr.get_volume())
     if control == 'up':
         vol += 1
