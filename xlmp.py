@@ -334,9 +334,11 @@ def dlna_pause():
 
 
 @route('/dlnastop')
-@check_dmr_exist
+# @check_dmr_exist
 def dlna_stop():
     """Stop video through DLNA"""
+    if not tracker.dmr:
+        return 'Error: No DMR.'
     return result(tracker.dmr.stop())
 
 
@@ -347,9 +349,11 @@ def dlna_info():
 
         
 @route('/dlnavol/<control>')
-@check_dmr_exist
+# @check_dmr_exist
 def dlna_volume_control(control):
     """Tune volume through DLNA"""
+    if not tracker.dmr:
+        return 'Error: No DMR.'
     vol = int(tracker.dmr.get_volume())
     if control == 'up':
         vol += 1
@@ -366,9 +370,11 @@ def dlna_volume_control(control):
 
 
 @route('/dlnaseek/<position>')
-@check_dmr_exist
+# @check_dmr_exist
 def dlna_seek(position):
     """Seek video through DLNA"""
+    if not tracker.dmr:
+        return 'Error: No DMR.'
     tracker.dmr.seek(position)
 
 
