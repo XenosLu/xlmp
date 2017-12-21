@@ -282,19 +282,20 @@ def dlna_load(src):
     return 'Error: Load aborted because of attempts was exceeded'
 
 
-@route('/dlnaplay')
-def dlna_play():
-    """Play video through DLNA"""
-    if not tracker.dmr:
-        abort(500, 'No DMR currently.')
-    try:
-        tracker.dmr.play()
-    except Exception as e:
-        return 'play failed: %s' % e
 
-        
+# def dlna_play():
+    # """Play video through DLNA"""
+    # if not tracker.dmr:
+        # abort(500, 'No DMR currently.')
+    # try:
+        # tracker.dmr.play()
+    # except Exception as e:
+        # return 'play failed: %s' % e
+
+
+@route('/dlnaplay')
 @route('/dlnaplay/<speed>')
-def dlna_play_with_speed(speed):
+def dlna_play_with_speed(speed=1):
     if not tracker.dmr:
         abort(500, 'No DMR currently.')
     try:
