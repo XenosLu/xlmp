@@ -2,14 +2,6 @@
 .glyphicon-film, .glyphicon-folder-close, .glyphicon-remove-circle, .glyphicon-file {
     font-size: 1.8em;
 }
-/* .glyphicon-remove-circle { */
-    /* color: grey; */
-/* } */
-/* test */
-.remove {
-    color: grey;
-}
-/* test end */
 .close {
     font-size: 2.5em;
     margin-right: 0.25em;
@@ -31,7 +23,6 @@ footer {
     position: absolute;
     bottom: 0;
     width: 100%;
-    color: grey;
 }
 a {
     cursor: default;
@@ -90,7 +81,7 @@ input[type=range]::-moz-range-thumb {
 .filelist.video {
     color: #46CC93;
 }
-.filelist.other, .filelist small {
+footer, .remove, .filelist.other, .filelist small {
     color: grey;
 }
 #sidebar{
