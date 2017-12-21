@@ -290,7 +290,17 @@ def dlna_play():
     try:
         tracker.dmr.play()
     except Exception as e:
-        return 'failed: %s' % e
+        return 'play failed: %s' % e
+
+        
+@route('/dlnaplay/<speed>')
+def dlna_play_with_speed(speed):
+    if not tracker.dmr:
+        abort(500, 'No DMR currently.')
+    try:
+        tracker.dmr.play(speed=float(speed))
+    except Exception as e:
+        return 'play with speed failed: %s' % e
 
 
 @route('/dlnapause')

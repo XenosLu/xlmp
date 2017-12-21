@@ -62,11 +62,12 @@ function get_dmr_state(){
                 }
                 
                 $("#state").text(data["CurrentTransportState"]);
-
+                /*
                 if(reltime >= 90)
                     $("#position_menu").hide();
                 else
                     $("#position_menu").show();
+                */
             }
         },
         error: function(xhr, err) {
