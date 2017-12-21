@@ -158,7 +158,7 @@ tracker.start()
 
 
 def check_dmr_exist(func):
-    def no_dmr():
+    def no_dmr(**args):
         return 'Error: No DMR.'
     if not tracker.dmr:
         return no_dmr
