@@ -158,16 +158,11 @@ tracker.start()
 
 
 def check_dmr_exist(func):
-    global tracker
     def no_dmr(*args):
-        return str(tracker.dmr)
-        return 'Error: No DMR.'
-    logging.info(tracker.dmr)
-    if not tracker.dmr:
-        logging.info('no dmr')
-        return no_dmr
-    logging.info('dmr')
-    return func
+        if not tracker.dmr:
+            return 'Error: No DMR.'
+        return func(*args)
+    return no_dmr
 
 
 def run_sql(sql, *args):
@@ -341,8 +336,8 @@ def dlna_pause():
 @check_dmr_exist
 def dlna_stop():
     """Stop video through DLNA"""
-    if not tracker.dmr:
-        return 'Error: No DMR.'
+    # if not tracker.dmr:
+        # return 'Error: No DMR.'
     return result(tracker.dmr.stop())
 
 
