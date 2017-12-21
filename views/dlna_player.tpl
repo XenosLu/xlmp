@@ -12,7 +12,7 @@ $("#dlna_toggle").addClass("active");
 $("#dlna_toggle").attr("href", "/index");
 
 get_dmr_state();
-$("#dlna").show(250);
+$(".dlna-show").show();
 var inter = setInterval("get_dmr_state()",1100);
 $("#position-bar").on("change", function() {
     $.get("/dlnaseek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));

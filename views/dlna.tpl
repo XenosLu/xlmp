@@ -1,4 +1,4 @@
-<div class="col-xs-12 col-sm-6 col-md-5" id="dlna">
+<div class="dlna-show col-xs-12 col-sm-6 col-md-5">
   <br><br>
   <div id="dmr" class="btn-group dropdown">
     <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>
@@ -24,15 +24,11 @@
       <i class="glyphicon glyphicon-chevron-down"></i>
     </button>
     <ul class="dropdown-menu" role="menu">
-      <li><a href="#" onclick="$.get('/dlnaseek/00:00:15')">00:15</a></li>
-      <li><a href="#" onclick="$.get('/dlnaseek/00:00:30')">00:30</a></li>
-      <li><a href="#" onclick="$.get('/dlnaseek/00:01:00')">01:00</a></li>
-      <li class="divider"></li>
-      <li><a href="#" onclick="$.get('/dlnaseek/00:01:30')">01:30</a></li>
-      <li class="divider"></li>
-      <li><a href="#" onclick="$.get('/dlnaplay/1.5')">1.5x</a></li>
-      <li><a href="#" onclick="$.get('/dlnaplay/2')">2x</a></li>
-      <li><a href="#" onclick="$.get('/dlnaplay/3')">3x</a></li>
+      <li><a onclick="$.get('/dlnaseek/00:00:15')">00:15</a></li>
+      <li><a onclick="$.get('/dlnaseek/00:00:30')">00:30</a></li>
+      <li><a onclick="$.get('/dlnaseek/00:01:00')">01:00</a></li>
+      <li role="separator" class="divider"></li>
+      <li><a onclick="$.get('/dlnaseek/00:01:30')">01:30</a></li>
     </ul>
   </div>
     <h3 id="position"></h3>

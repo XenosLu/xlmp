@@ -18,6 +18,17 @@
       <li><a id="suspend"><i class="glyphicon glyphicon-off"></i>suspend</a></li>
       <li><a id="shutdown"><i class="glyphicon glyphicon-off"></i>shutdown</a></li>
       <li><a id="restart"><i class="glyphicon glyphicon-off"></i>reboot</a></li>
+      <!-- dlna-show start -->
+      <li class="dlna-show divider" role="separator"></li>
+      <li class="dlna-show"><a onclick="$.get('/dlnaplay/1.5')">1.5x</a></li>
+      <li class="dlna-show"><a onclick="$.get('/dlnaplay/2')">2x</a></li>
+      <li class="dlna-show"><a onclick="$.get('/dlnaplay/3')">3x</a></li>
+      <li class="dlna-show divider" role="separator"></li>
+      <li class="dlna-show"><a onclick="$.get('/dlnaseek/00:00:15')">00:15</a></li>
+      <li class="dlna-show"><a onclick="$.get('/dlnaseek/00:00:30')">00:30</a></li>
+      <li class="dlna-show"><a onclick="$.get('/dlnaseek/00:01:00')">01:00</a></li>
+      <li class="dlna-show"><a onclick="$.get('/dlnaseek/00:01:30')">01:30</a></li>
+      <!-- dlna-show end -->
     </ul>
   </div>
 </div>

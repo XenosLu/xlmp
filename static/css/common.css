@@ -8,7 +8,7 @@
     margin-top: 0.05em;
 }
 .dropdown-menu {
-    opacity: 0.8;
+    opacity: 0.9;
     min-width: 6em;
 }
 /*** modified bootstrap style ***/
@@ -102,16 +102,16 @@ footer, .remove, .filelist.other, .filelist small {
     box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
     text-shadow: 0.1em 0.1em 0.4em #666;
 }
-#videosize, #rate, #dlna {
+.dlna-show button {
+    opacity: 0.8;
+    box-shadow: inset 0px 0px 9px 0px #F1F2F6;
+}
+.dlna-show, .player-show, #videosize, #rate {
     display: none;
 }
 #dialog {
     display: none;
     z-index: 10;
-}
-#dlna button {
-    opacity: 0.8;
-    box-shadow: inset 0px 0px 9px 0px #F1F2F6;
 }
 #panel {
     opacity: 0.88;
