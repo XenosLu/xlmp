@@ -151,7 +151,7 @@ footer, .remove, .filelist.other, .filelist small {
 #position {
     margin-top: 3em;
 }
-#volume_up, #volume_down {
+.volume {
     margin: 2em;
 }
 #dmr {

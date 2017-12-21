@@ -152,6 +152,17 @@ class DMRTracker(Thread):
             logging.warning('DLNA load exception: %s\n%s' % (e, traceback.format_exc()))
             return False
         return True
+        
+tracker = DMRTracker()
+tracker.start()
+
+
+def check_dmr_exist(func):
+    def no_dmr():
+        return 'Error: No DMR.'
+    if not tracker.dmr:
+        return no_dmr
+    return func
 
 
 def run_sql(sql, *args):
@@ -259,12 +270,11 @@ def search_dmr():
 
 
 @route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
+@check_dmr_exist
 def dlna_load(src):
     """request for load Video through DLNA"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         return 'Error: File not found.'
-    if not tracker.dmr:
-        return 'Error: No DMR currently.'
     logging.info('start loading... tracker state:%s' % tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try_time = 1
@@ -282,7 +292,6 @@ def dlna_load(src):
     return 'Error: Load aborted because of attempts was exceeded'
 
 
-
 # def dlna_play():
     # """Play video through DLNA"""
     # if not tracker.dmr:
@@ -293,31 +302,35 @@ def dlna_load(src):
         # return 'play failed: %s' % e
 
 
+def result(r):
+    if r:
+        return 'Success!'
+    else:
+        return 'Error: Failed!'
+
+
 @route('/dlnaplay')
 @route('/dlnaplay/<speed>')
+@check_dmr_exist
 def dlna_play(speed=1):
-    if not tracker.dmr:
-        abort(500, 'No DMR currently.')
     try:
-        tracker.dmr.play(speed=float(speed))
+        return result(tracker.dmr.play(speed=float(speed)))
     except Exception as e:
         return 'play failed: %s' % e
 
 
 @route('/dlnapause')
+@check_dmr_exist
 def dlna_pause():
     """Pause video through DLNA"""
-    if not tracker.dmr:
-        abort(500, 'No DMR currently.')
-    tracker.dmr.pause()
+    return result(tracker.dmr.pause())
 
 
 @route('/dlnastop')
+@check_dmr_exist
 def dlna_stop():
     """Stop video through DLNA"""
-    if not tracker.dmr:
-        abort(500, 'No DMR currently.')
-    tracker.dmr.stop()
+    return result(tracker.dmr.stop())
 
 
 @route('/dlnainfo')
@@ -327,11 +340,9 @@ def dlna_info():
 
         
 @route('/dlnavol/<control>')
+@check_dmr_exist
 def dlna_volume_control(control):
     """Tune volume through DLNA"""
-    if not tracker.dmr:
-        return 'No DMR currently.'
-        # abort(500, 'No DMR currently.')
     vol = int(tracker.dmr.get_volume())
     if control == 'up':
         vol += 1
@@ -348,6 +359,7 @@ def dlna_volume_control(control):
 
 
 @route('/dlnaseek/<position>')
+@check_dmr_exist
 def dlna_seek(position):
     """Seek video through DLNA"""
     tracker.dmr.seek(position)
@@ -498,8 +510,7 @@ run_sql('''create table if not exists history
                 (FILENAME text PRIMARY KEY not null,
                 POSITION float not null,
                 DURATION float, LATEST_DATE datetime not null);''')
-tracker = DMRTracker()
-tracker.start()
+
 
 if __name__ == '__main__':  # for debug
     from imp import find_module

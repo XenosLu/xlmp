@@ -37,12 +37,15 @@ $("#tabFrame").on("click", ".folder", function () {
         history("/remove/" + this.title.replace(/\?/g, "%3F"));
 }).on("click", ".mp4", function () {
     if (window.document.location.pathname == "/dlna")
-        dlnaLoad(this.title);
+        //dlnaLoad(this.title);
+        get("/dlnaload/" + this.title);
+    
     else
         window.location.href = "/play/" + this.title;
 }).on("click", ".video", function () {
     if (window.document.location.pathname == "/dlna")
-        dlnaLoad(this.title);
+        //dlnaLoad(this.title);
+        get("/dlnaload/" + this.title);
 });
 
 /**
@@ -51,8 +54,22 @@ $("#tabFrame").on("click", ".folder", function () {
  * @method dlnaLoad
  * @param {String} media
  */
+ /*
 function dlnaLoad(media) {
     $.get("/dlnaload/" + media, function (data) {
+        out(data);
+    });
+}
+*/
+
+/**
+ * Ajax get and out result
+ *
+ * @method get
+ * @param {String} url
+ */
+function get(url) {
+    $.get(url, function(data){
         out(data);
     });
 }

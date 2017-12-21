@@ -7,13 +7,13 @@
   <h3 id="src"></h3>
   <div><span id="state"></span></div>
   <div class="btn-group">
-    <button class="btn btn-success btn-lg" type="button" onclick="$.get('/dlnaplay')">
+    <button class="btn btn-success btn-lg" type="button" onclick="get('/dlnaplay')">
       <i class="glyphicon glyphicon-play"></i>
     </button>
-    <button class="btn btn-danger btn-lg" type="button" onclick="$.get('/dlnapause')">
+    <button class="btn btn-danger btn-lg" type="button" onclick="get('/dlnapause')">
       <i class="glyphicon glyphicon-pause"></i>
     </button>
-    <button class="btn btn-danger btn-lg" type="button" onclick="$.get('/dlnastop')">
+    <button class="btn btn-danger btn-lg" type="button" onclick="get('/dlnastop')">
       <i class="glyphicon glyphicon-stop"></i>
     </button>
   </div>
@@ -31,7 +31,9 @@
   <!-- </div> -->
     <h3 id="position"></h3>
     <input type="range" id="position-bar" min="0" max="0">
-    <button id="volume_down" type="button" class="btn btn-warning btn-lg glyphicon glyphicon-minus">
-    <button id="volume_up" type="button" class="btn btn-warning btn-lg glyphicon glyphicon-plus">
+    <!-- <button id="volume_down" type="button" class="volume btn btn-warning btn-lg glyphicon glyphicon-minus"> -->
+    <button  onclick="get('/dlnavol/down');" type="button" class="volume btn btn-warning btn-lg glyphicon glyphicon-minus">
+    <!-- <button id="volume_up" type="button" class="volume btn btn-warning btn-lg glyphicon glyphicon-plus"> -->
+    <button onclick="get('/dlnavol/up');" type="button" class="volume btn btn-warning btn-lg glyphicon glyphicon-plus">
   </button>
 </div>

@@ -21,24 +21,6 @@ $("#position-bar").on("change", function() {
     out(secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
     update = false;
 });
-$("#volume_up").click(function() {
-/*
-    $.get("/dlnavol/up", function(result){
-        out(result);
-    });
-*/
-    dlnavol("up");
-});
-$("#volume_down").click(function() {
-    $.get("/dlnavol/down", function(result){
-        out(result);
-    });
-});
-function dlnavol(control) {
-    $.get("/dlnavol/" + control, function(result){
-        out(result);
-    });
-}
 
 function get_dmr_state(){
     $.ajax({
