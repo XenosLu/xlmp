@@ -102,7 +102,8 @@ class DMRTracker(Thread):
                         save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']),
                                      time_to_second(self.state['TrackDuration']))
                 except TypeError as e:
-                    logging.warning('TypeError: %s\n%s' % (e, traceback.format_exc()))
+                    # logging.warning('TypeError: %s\n%s' % (e, traceback.format_exc()))
+                    logging.warning('TypeError: %s' % e)
                     self.__retry += 1
                     logging.info('DMR RETRY: %d' % self.__retry)
                     if self.__retry >= 3:
@@ -186,6 +187,8 @@ def second_to_time(second):
     """
     m, s = divmod(second, 60)
     h, m = divmod(second/60, 60)
+    return '%02d:%02d:%06.3f' % (h, m, s)
+    return '%02d:%02d:%04.1f' % (h, m, s)
     return '%02d:%02d:%02d' % (h, m, s)
 
 
@@ -194,7 +197,7 @@ def time_to_second(time_str):
     
     time_str: string like "hh:mm:ss"
     """
-    return sum([int(i)*60**n for n, i in enumerate(str(time_str).split(':')[::-1])])
+    return sum([float(i)*60**n for n, i in enumerate(str(time_str).split(':')[::-1])])
 
 
 def get_size(*filename):
@@ -357,7 +360,10 @@ def dlna_seek(position):
     """Seek video through DLNA"""
     # if not tracker.dmr:
         # return 'Error: No DMR.'
-    tracker.dmr.seek(position)
+    if ':' in position:
+        return result(tracker.dmr.seek(position))
+    else:
+        return result(tracker.dmr.seek(second_to_time(float(position))))
 
 
 @route('/clear')
