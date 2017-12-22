@@ -39,7 +39,6 @@ $("#tabFrame").on("click", ".folder", function () {
     if (window.document.location.pathname == "/dlna")
         //dlnaLoad(this.title);
         get("/dlnaload/" + this.title);
-    
     else
         window.location.href = "/play/" + this.title;
 }).on("click", ".video", function () {

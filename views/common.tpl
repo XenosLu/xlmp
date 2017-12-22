@@ -30,10 +30,10 @@
       <li><a onclick="$.get('/dlnaseek/00:00:30')">00:30</a></li>
       <li><a onclick="$.get('/dlnaseek/00:01:00')">01:00</a></li>
       <li><a onclick="$.get('/dlnaseek/00:01:30')">01:30</a></li>
-      <li class="divider"></li>
-      <li><a onclick="$.get('/dlnaplay/1.5')">1.5x</a></li>
-      <li><a onclick="$.get('/dlnaplay/2')">2x</a></li>
-      <li><a onclick="$.get('/dlnaplay/3')">3x</a></li>
+      <!-- <li class="divider"></li> -->
+      <!-- <li><a onclick="$.get('/dlnaplay/1.5')">1.5x</a></li> -->
+      <!-- <li><a onclick="$.get('/dlnaplay/2')">2x</a></li> -->
+      <!-- <li><a onclick="$.get('/dlnaplay/3')">3x</a></li> -->
     </ul>
   </div>
   <!-- player menu -->
