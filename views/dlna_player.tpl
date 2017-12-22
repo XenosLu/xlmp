@@ -36,20 +36,14 @@ function get_dmr_state(){
                 }
                 $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
                 $('#src').text(decodeURI(data["TrackURI"]));
-                
+
                 $("#dmr button").text(data["CurrentDMR"]);
-                $("#dmr ul").empty().append('<li><a href="#" onclick="$.get(\'/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
+                $("#dmr ul").empty().append('<li><a onclick="$.get(\'/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
                 for (x in data["DMRs"]) {
-                    $("#dmr ul").append('<li><a href="#" onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
+                    $("#dmr ul").append('<li><a onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
                 }
                 
                 $("#state").text(data["CurrentTransportState"]);
-                /*
-                if(reltime >= 90)
-                    $("#position_menu").hide();
-                else
-                    $("#position_menu").show();
-                */
             }
         },
         error: function(xhr, err) {

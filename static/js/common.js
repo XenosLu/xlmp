@@ -37,29 +37,13 @@ $("#tabFrame").on("click", ".folder", function () {
         history("/remove/" + this.title.replace(/\?/g, "%3F"));
 }).on("click", ".mp4", function () {
     if (window.document.location.pathname == "/dlna")
-        //dlnaLoad(this.title);
         get("/dlnaload/" + this.title);
     else
         window.location.href = "/play/" + this.title;
 }).on("click", ".video", function () {
     if (window.document.location.pathname == "/dlna")
-        //dlnaLoad(this.title);
         get("/dlnaload/" + this.title);
 });
-
-/**
- * Load media through DLNA
- *
- * @method dlnaLoad
- * @param {String} media
- */
- /*
-function dlnaLoad(media) {
-    $.get("/dlnaload/" + media, function (data) {
-        out(data);
-    });
-}
-*/
 
 /**
  * Ajax get and out result
