@@ -294,16 +294,6 @@ def dlna_load(src):
     return 'Error: Load aborted because of attempts was exceeded'
 
 
-# def dlna_play():
-    # """Play video through DLNA"""
-    # if not tracker.dmr:
-        # abort(500, 'No DMR currently.')
-    # try:
-        # tracker.dmr.play()
-    # except Exception as e:
-        # return 'play failed: %s' % e
-
-
 def result(r):
     if r:
         return 'Success!'
@@ -312,23 +302,18 @@ def result(r):
 
 
 @route('/dlnaplay')
-@route('/dlnaplay/<speed>')
-# @check_dmr_exist
-def dlna_play(speed=1):
-    if not tracker.dmr:
-        return 'Error: No DMR.'
+@check_dmr_exist
+def dlna_play():
     try:
-        return result(tracker.dmr.play(speed=speed))
+        return result(tracker.dmr.play())
     except Exception as e:
-        return 'play failed: %s' % e
+        return 'Play failed: %s' % e
 
 
 @route('/dlnapause')
-# @check_dmr_exist
+@check_dmr_exist
 def dlna_pause():
     """Pause video through DLNA"""
-    if not tracker.dmr:
-        return 'Error: No DMR.'
     return result(tracker.dmr.pause())
 
 
@@ -336,8 +321,6 @@ def dlna_pause():
 @check_dmr_exist
 def dlna_stop():
     """Stop video through DLNA"""
-    # if not tracker.dmr:
-        # return 'Error: No DMR.'
     return result(tracker.dmr.stop())
 
 
@@ -348,11 +331,11 @@ def dlna_info():
 
         
 @route('/dlnavol/<control>')
-# @check_dmr_exist
+@check_dmr_exist
 def dlna_volume_control(control):
     """Tune volume through DLNA"""
-    if not tracker.dmr:
-        return 'Error: No DMR.'
+    # if not tracker.dmr:
+        # return 'Error: No DMR.'
     vol = int(tracker.dmr.get_volume())
     if control == 'up':
         vol += 1
@@ -369,11 +352,11 @@ def dlna_volume_control(control):
 
 
 @route('/dlnaseek/<position>')
-# @check_dmr_exist
+@check_dmr_exist
 def dlna_seek(position):
     """Seek video through DLNA"""
-    if not tracker.dmr:
-        return 'Error: No DMR.'
+    # if not tracker.dmr:
+        # return 'Error: No DMR.'
     tracker.dmr.seek(position)
 
 
