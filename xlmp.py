@@ -162,7 +162,7 @@ def check_dmr_exist(func):
     def no_dmr(*args, **kwargs):
         if not tracker.dmr:
             return 'Error: No DMR.'
-        return func(*args)
+        return func(*args, **kwargs)
     return no_dmr
 
 
@@ -187,9 +187,9 @@ def second_to_time(second):
     """
     m, s = divmod(second, 60)
     h, m = divmod(second/60, 60)
+    # return '%02d:%02d:%02d' % (h, m, s)
     return '%02d:%02d:%06.3f' % (h, m, s)
-    return '%02d:%02d:%04.1f' % (h, m, s)
-    return '%02d:%02d:%02d' % (h, m, s)
+    # return '%02d:%02d:%04.1f' % (h, m, s)
 
 
 def time_to_second(time_str):
@@ -358,9 +358,8 @@ def dlna_volume_control(control):
 @check_dmr_exist
 def dlna_seek(position):
     """Seek video through DLNA"""
-    # if not tracker.dmr:
-        # return 'Error: No DMR.'
     if ':' in position:
+        # return position
         return result(tracker.dmr.seek(position))
     else:
         return result(tracker.dmr.seek(second_to_time(float(position))))
