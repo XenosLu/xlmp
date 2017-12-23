@@ -44,7 +44,7 @@ class DMRTracker(Thread):
         self.state = {}  # dmr device state
         self.dmr = None  # dmr device object
         self.all_devices = []  # dmr device object
-        self.__retry = 0
+        self.__failure = 0
         logging.info('DMR Tracker initialized.')
 
     def discover_dmr(self):
@@ -88,13 +88,13 @@ class DMRTracker(Thread):
                         save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']),
                                      time_to_second(self.state['TrackDuration']))
                 except TypeError as e:
-                    self.__retry += 1
+                    self.__failure += 1
                     # logging.warning('TypeError: %s\n%s' % (e, traceback.format_exc()))
                     # logging.warning('Losing DMR. TypeError: %s' % e)
-                    # logging.info('DMR RETRY: %d' % self.__retry)
-                    logging.info('Losing DMR count: %d\nTypeError: %s' % (self.__retry, e))
-                    if self.__retry >= 3:
-                        self.__retry = 0
+                    # logging.info('DMR RETRY: %d' % self.__failure)
+                    logging.info('Losing DMR count: %d\nTypeError: %s' % (self.__failure, e))
+                    if self.__failure >= 3:
+                        self.__failure = 0
                         logging.info('No DMR currently.')
                         self.dmr = None
                 except Exception as e:
