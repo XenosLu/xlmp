@@ -76,25 +76,11 @@ class DMRTracker(Thread):
                 try:
                     self.state['CurrentDMR'] = str(self.dmr)
                     self.state['DMRs'] = [str(i) for i in self.all_devices]
-                    # self.state['CurrentVolume'] = self.dmr.get_volume()
-                    # if not self.state['CurrentVolume']:
-                        # logging.info('No DMR currently.')
-                        # self.dmr = None
-                        # continue
                     sleep(0.1)
                     info = self.dmr.info()
-                    # if not info:
-                        # logging.info('No DMR currently.')
-                        # self.dmr = None
-                        # continue
-                    # self.state['CurrentTransportState'] = self.dmr.info()['CurrentTransportState']
                     self.state['CurrentTransportState'] = info['CurrentTransportState']
                     sleep(0.1)
                     position_info = self.dmr.position_info()
-                    # if not position_info:
-                        # logging.info('No DMR currently.')
-                        # self.dmr = None
-                        # continue
                     for i in ('RelTime', 'TrackDuration'):
                         self.state[i] = position_info[i]
                     if self.state['CurrentTransportState'] == 'PLAYING':
@@ -102,10 +88,11 @@ class DMRTracker(Thread):
                         save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']),
                                      time_to_second(self.state['TrackDuration']))
                 except TypeError as e:
-                    # logging.warning('TypeError: %s\n%s' % (e, traceback.format_exc()))
-                    logging.warning('TypeError: %s' % e)
                     self.__retry += 1
-                    logging.info('DMR RETRY: %d' % self.__retry)
+                    # logging.warning('TypeError: %s\n%s' % (e, traceback.format_exc()))
+                    # logging.warning('Losing DMR. TypeError: %s' % e)
+                    # logging.info('DMR RETRY: %d' % self.__retry)
+                    logging.info('Losing DMR count: %d\nTypeError: %s' % (self.__retry, e))
                     if self.__retry >= 3:
                         self.__retry = 0
                         logging.info('No DMR currently.')
