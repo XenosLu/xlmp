@@ -86,7 +86,7 @@ footer, .remove, .filelist.other, .filelist small {
     color: grey;
 }
 #sidebar{
-    opacity: 0.5;
+    opacity: 0.8;
     position: fixed;
     top: 0%;
     z-index: 9;
