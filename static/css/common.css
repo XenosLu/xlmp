@@ -10,6 +10,7 @@
 .dropdown-menu {
     /* opacity: 0.9; */
     min-width: 6em;
+    font-size: 1.5em;
 }
 /*** modified bootstrap style ***/
 body {
