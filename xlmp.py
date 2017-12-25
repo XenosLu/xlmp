@@ -174,9 +174,7 @@ def second_to_time(second):
     """
     m, s = divmod(second, 60)
     h, m = divmod(second/60, 60)
-    # return '%02d:%02d:%02d' % (h, m, s)
     return '%02d:%02d:%06.3f' % (h, m, s)
-    # return '%02d:%02d:%04.1f' % (h, m, s)
 
 
 def time_to_second(time_str):
@@ -260,11 +258,11 @@ def search_dmr():
 
 
 @route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
-# @check_dmr_exist
+@check_dmr_exist
 def dlna_load(src):
     """request for load Video through DLNA"""
-    if not tracker.dmr:
-        return 'Error: No DMR.'
+    # if not tracker.dmr:
+        # return 'Error: No DMR.'
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         return 'Error: File not found.'
     logging.info('start loading... tracker state:%s' % tracker.state)
@@ -286,7 +284,7 @@ def dlna_load(src):
 
 def result(r):
     if r:
-        return 'Success!'
+        return 'Done.'
     else:
         return 'Error: Failed!'
 
@@ -320,7 +318,8 @@ def dlna_info():
     return tracker.state
 
         
-@route('/dlnavol/<control>')
+# @route('/dlnavol/<control>')
+@route('/dlnavol/<control:re:(up|down)>')
 @check_dmr_exist
 def dlna_volume_control(control):
     """Tune volume through DLNA"""
