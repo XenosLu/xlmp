@@ -330,8 +330,8 @@ def dlna_volume_control(control):
         vol += 1
     elif control == 'down':
         vol -= 1
-    else:
-        return 'unknown command'
+    # else:
+        # return 'unknown command'
     if vol < 0 or vol > 100:
         return 'volume range exceeded'
     elif tracker.dmr.volume(vol):
@@ -348,6 +348,7 @@ def dlna_seek(position):
         # return position
         return result(tracker.dmr.seek(position))
     else:
+        # return second_to_time(float(position))
         return result(tracker.dmr.seek(second_to_time(float(position))))
 
 
