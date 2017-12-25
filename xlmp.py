@@ -87,11 +87,9 @@ class DMRTracker(Thread):
                         self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI']))
                         save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']),
                                      time_to_second(self.state['TrackDuration']))
+                    self.__failure = 0
                 except TypeError as e:
                     self.__failure += 1
-                    # logging.warning('TypeError: %s\n%s' % (e, traceback.format_exc()))
-                    # logging.warning('Losing DMR. TypeError: %s' % e)
-                    # logging.info('DMR RETRY: %d' % self.__failure)
                     logging.info('Losing DMR count: %d\nTypeError: %s' % (self.__failure, e))
                     if self.__failure >= 3:
                         self.__failure = 0
@@ -102,7 +100,7 @@ class DMRTracker(Thread):
                 sleep(1)
             else:
                 self.discover_dmr()
-                sleep(2)
+                sleep(2.5)
 
     def pause(self):
         self.__flag.clear()
