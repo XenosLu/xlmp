@@ -92,7 +92,7 @@ class DMRTracker(Thread):
                     self.__failure += 1
                     logging.info('Losing DMR count: %d\nTypeError: %s' % (self.__failure, e))
                     if self.__failure >= 3:
-                        self.__failure = 0
+                        # self.__failure = 0
                         logging.info('No DMR currently.')
                         self.dmr = None
                 except Exception as e:
