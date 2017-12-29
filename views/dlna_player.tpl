@@ -34,6 +34,7 @@ function get_dmr_state(){
             type: "GET",
             success: function (data) {
                 if ($.isEmptyObject(data)) {
+                    $("#state").text('No DMR');
                     console.log('set wait to 3 for empty');
                     wait = 3;
                 } else {
