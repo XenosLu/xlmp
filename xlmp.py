@@ -22,14 +22,14 @@ from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/d
 
 app = default_app()
 
+VIDEO_PATH = './media'  # media file path
+# HISTORY_FILE = '.history.db'  # history db file name
+HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
+
 # initialize logging
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
-
-VIDEO_PATH = './media'  # media file path
-HISTORY_FILE = '.history.db'  # history db file name
-HISTORY_DB_FILE = './media/.history.db'
 
 
 class DMRTracker(Thread):
@@ -118,7 +118,7 @@ class DMRTracker(Thread):
         try:
             while self.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
                 self.dmr.stop()
-                logging.info('Waiting for stopping...current state: %s' % self.state['CurrentTransportState'])
+                logging.info('Waiting for stopped...current state: %s' % self.state['CurrentTransportState'])
                 sleep(0.85)
             if self.dmr.set_current_media(url):
                 logging.info('Loaded %s' % url)
@@ -261,8 +261,6 @@ def search_dmr():
 @check_dmr_exist
 def dlna_load(src):
     """request for load Video through DLNA"""
-    # if not tracker.dmr:
-        # return 'Error: No DMR.'
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         return 'Error: File not found.'
     logging.info('start loading... tracker state:%s' % tracker.state)
@@ -325,15 +323,11 @@ def dlna_info():
 @check_dmr_exist
 def dlna_volume_control(control):
     """Tune volume through DLNA"""
-    # if not tracker.dmr:
-        # return 'Error: No DMR.'
     vol = int(tracker.dmr.get_volume())
     if control == 'up':
         vol += 1
     elif control == 'down':
         vol -= 1
-    # else:
-        # return 'unknown command'
     if vol < 0 or vol > 100:
         return 'volume range exceeded'
     elif tracker.dmr.volume(vol):
@@ -347,10 +341,8 @@ def dlna_volume_control(control):
 def dlna_seek(position):
     """Seek video through DLNA"""
     if ':' in position:
-        # return position
         return result(tracker.dmr.seek(position))
     else:
-        # return second_to_time(float(position))
         return result(tracker.dmr.seek(second_to_time(float(position))))
 
 
@@ -435,7 +427,6 @@ def restart():
 @route('/backup')
 def backup():
     """backup history"""
-    # logging.info(shutil.copyfile(HISTORY_DB_FILE, '%s.bak' % HISTORY_DB_FILE))
     return shutil.copyfile(HISTORY_DB_FILE, '%s.bak' % HISTORY_DB_FILE)
     # if sys.platform != 'win32':
         # os.system('cp -f {path}/{file} {path}/{file}.bak'.format(path=VIDEO_PATH, file=HISTORY_FILE))
@@ -446,7 +437,6 @@ def backup():
 @route('/restore')
 def restore():
     """restore history"""
-    # logging.info(shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE))
     return shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE)
     # if sys.platform != 'win32':
         # os.system('cp -f %s/%s .' % (VIDEO_PATH, HISTORY_FILE))
