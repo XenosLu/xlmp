@@ -90,7 +90,8 @@ class DMRTracker(Thread):
                     self.__failure = 0
                 except TypeError as e:
                     self.__failure += 1
-                    logging.info('Losing DMR count: %d\nTypeError: %s' % (self.__failure, e))
+                    # logging.info('Losing DMR count: %d\nTypeError: %s' % (self.__failure, e))
+                    logging.info('Losing DMR count: %d' % self.__failure)
                     if self.__failure >= 3:
                         # self.__failure = 0
                         logging.info('No DMR currently.')
@@ -266,14 +267,16 @@ def dlna_load(src):
     logging.info('start loading... tracker state:%s' % tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     try_time = 1
-    while try_time < 4:
+    while try_time <= 3:
         if tracker.load(url):
-            logging.info('Loaded url: %s success in %s time(s)' % (url, try_time))
+            logging.info('Loaded url: %s successed' % url)
+            # logging.info('Loaded url: %s success in %s time(s)' % (url, try_time))
             position = load_history(src)
             if position:
                 tracker.dmr.seek(second_to_time(position))
                 logging.info('Loaded position: %s' % second_to_time(position))
             return 'Load Successed.'
+        logging.info('Load failed for %s time(s)' % try_time)
         try_time += 1
         sleep(1)
     logging.warning('Load aborted because of attempts was exceeded')
