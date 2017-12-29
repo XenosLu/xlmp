@@ -154,7 +154,7 @@ def check_dmr_exist(func):
 
 
 def run_sql(sql, *args):
-    with sqlite3.connect(HISTORY_FILE) as conn:
+    with sqlite3.connect(HISTORY_DB_FILE) as conn:
         try:
             cursor = conn.execute(sql, args)
             result = cursor.fetchall()
