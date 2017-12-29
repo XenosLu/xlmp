@@ -13,7 +13,7 @@ $("#dlna_toggle").attr("href", "/index");
 
 get_dmr_state();
 $(".dlna-show").show();
-var inter = setInterval("get_dmr_state()",1100);
+var inter = setInterval("get_dmr_state()", 1100);
 $("#position-bar").on("change", function() {
     $.get("/dlnaseek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
     update = true;
@@ -42,13 +42,16 @@ function get_dmr_state(){
                 for (x in data["DMRs"]) {
                     $("#dmr ul").append('<li><a onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
                 }
-                
+
                 $("#state").text(data["CurrentTransportState"]);
             }
         },
         error: function(xhr, err) {
             if(err != "parsererror")
-                out("DLNAINFO: " + xhr.statusText);
+                $("#state").text(xhr.statusText);
+                // out("DLNAINFO: " + xhr.statusText);
+            else
+                $("#state").text(err);
         }
     });
 }
