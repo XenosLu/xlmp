@@ -26,16 +26,13 @@
       <i class="glyphicon glyphicon-chevron-down"></i>
     </button>
     <ul class="dropdown-menu">
-      <li><a onclick="get('/dlnaseek/00:00:15')">00:15</a></li>
-      <!-- <li><a onclick="get('/dlnaseek/00:00:30')">00:30</a></li> -->
+      <li><a onclick="get('/dlnaseek/15')">00:15</a></li>
       <li><a onclick="get('/dlnaseek/30')">00:30</a></li>
-      <li><a onclick="get('/dlnaseek/00:01:00')">01:00</a></li>
-      <!-- <li><a onclick="get('/dlnaseek/00:01:30')">01:30</a></li> -->
+      <li><a onclick="get('/dlnaseek/60')">01:00</a></li>
       <li><a onclick="get('/dlnaseek/90')">01:30</a></li>
     </ul>
   </div>
   <!-- player menu -->
-  <!-- <button class="player-show btn btn-default btn-lg" id="videosize" type="button">orign</button> -->
   <div id="rate" class="player-show btn-group dropdown">
     <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
       <i class="glyphicon glyphicon-chevron-down"></i>
