@@ -435,18 +435,19 @@ def restart():
 @route('/backup')
 def backup():
     """backup history"""
-    if sys.platform != 'win32':
-        os.system('cp -f {path}/{file} {path}/{file}.bak'.format(path=VIDEO_PATH, file=HISTORY_FILE))
-        os.system('cp -f %s %s' % (HISTORY_FILE, VIDEO_PATH))
+    logging.info(shutil.copyfile(HISTORY_DB_FILE, '%s.bak' % HISTORY_DB_FILE))
+    # if sys.platform != 'win32':
+        # os.system('cp -f {path}/{file} {path}/{file}.bak'.format(path=VIDEO_PATH, file=HISTORY_FILE))
+        # os.system('cp -f %s %s' % (HISTORY_FILE, VIDEO_PATH))
     redirect('/')
 
 
-@route('/restore')
-def restore():
-    """restore history"""
-    if sys.platform != 'win32':
-        os.system('cp -f %s/%s .' % (VIDEO_PATH, HISTORY_FILE))
-    redirect('/')
+# @route('/restore')
+# def restore():
+    # """restore history"""
+    # if sys.platform != 'win32':
+        # os.system('cp -f %s/%s .' % (VIDEO_PATH, HISTORY_FILE))
+    # redirect('/')
 
 
 @route('/static/<filename:path>')

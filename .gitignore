@@ -141,3 +141,4 @@ $RECYCLE.BIN/
 *.db
 media/test.mp4
 *.old
+*.bak
