@@ -7,7 +7,7 @@
     </ul>
   </div>
   <h3 id="src"></h3>
-  <div><span id="state"></span>No State</div>
+  <div><span id="state">No State</span></div>
   <div class="btn-group">
     <button class="btn btn-success btn-lg" type="button" onclick="get('/dlnaplay')">
       <i class="glyphicon glyphicon-play"></i>
