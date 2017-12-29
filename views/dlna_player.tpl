@@ -34,6 +34,7 @@ function get_dmr_state(){
             type: "GET",
             success: function (data) {
                 if ($.isEmptyObject(data)) {
+                    console.log('set wait to 3 for empty');
                     wait = 3;
                 } else {
                     reltime = timeToSecond(data["RelTime"]);
@@ -58,6 +59,7 @@ function get_dmr_state(){
                 // out("DLNAINFO: " + xhr.statusText);
                 else
                     $("#state").text(err);
+                console.log('set wait to 3 for error');
                 wait = 3;
             }
         });
