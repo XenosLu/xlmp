@@ -29,7 +29,7 @@ logging.basicConfig(level=logging.INFO,
 
 VIDEO_PATH = './media'  # media file path
 HISTORY_FILE = '.history.db'  # history db file name
-# HISTORY_DB_FILE = 'history.db'
+HISTORY_DB_FILE = './media/.history.db'
 
 
 class DMRTracker(Thread):
