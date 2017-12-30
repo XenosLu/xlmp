@@ -96,6 +96,7 @@ class DMRTracker(Thread):
                     if self.__failure >= 3:
                         # self.__failure = 0
                         logging.info('No DMR currently.')
+                        self.state = {}
                         self.dmr = None
                 except Exception as e:
                     logging.warning('DMR Tracker Exception: %s\n%s' % (e, traceback.format_exc()))
