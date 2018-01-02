@@ -119,13 +119,13 @@ class DMRTracker(Thread):
         try:
             while self.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
                 self.dmr.stop()
-                logging.info('Waiting for stopped...current state: %s' % self.state['CurrentTransportState'])
+                logging.info('Waiting for DMR stopped...')
                 sleep(0.85)
             if self.dmr.set_current_media(url):
                 logging.info('Loaded %s' % url)
             while self.get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
                 self.dmr.play()
-                logging.info('Waiting for playing...current state: %s' % self.state['CurrentTransportState'])
+                logging.info('Waiting for DMR playing...')
                 sleep(0.3)
             sleep(0.5)
             time0 = time()
