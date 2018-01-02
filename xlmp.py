@@ -23,7 +23,6 @@ from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/d
 app = default_app()
 
 VIDEO_PATH = './media'  # media file path
-# HISTORY_FILE = '.history.db'  # history db file name
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
 
 # initialize logging
@@ -88,7 +87,9 @@ class DMRTracker(Thread):
                         self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI']))
                         save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']),
                                      time_to_second(self.state['TrackDuration']))
-                    self.__failure = 0
+                    if self.__failure > 0:
+                        logging.info('reset failure count from %d to 0' % self.__failure)
+                        self.__failure = 0
                 except TypeError as e:
                     self.__failure += 1
                     # logging.info('Losing DMR count: %d\nTypeError: %s' % (self.__failure, e))
@@ -318,8 +319,7 @@ def dlna_info():
     """Get play info through DLNA"""
     return tracker.state
 
-        
-# @route('/dlnavol/<control>')
+
 @route('/dlnavol/<control:re:(up|down)>')
 @check_dmr_exist
 def dlna_volume_control(control):
