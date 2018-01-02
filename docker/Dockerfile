@@ -10,6 +10,7 @@ RUN apk add tzdata --update \
     && pip3 install meinheld \
     && pip3 install you-get \
     && apk add ffmpeg \
+    && apk add curl \
     # && pip3 install gunicorn \
     && apk del gcc libc-dev python3-dev \
     && apk add git \
