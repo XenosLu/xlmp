@@ -391,57 +391,40 @@ def deploy():
         return os.system('/bin/deploy')
 
 
-@post('/suspend')
-def suspend():
-    """Suepend server"""
-    if sys.platform == 'win32':
-        import ctypes
-        dll = ctypes.WinDLL('powrprof.dll')
-        if dll.SetSuspendState(0, 1, 0):
-            return 'Suspending...'
-        else:
-            return 'Suspend Failure!'
-    else:
-        return 'OS not supported!'
+# @post('/suspend')
+# def suspend():
+    # """Suepend server"""
+    # if sys.platform == 'win32':
+        # import ctypes
+        # dll = ctypes.WinDLL('powrprof.dll')
+        # if dll.SetSuspendState(0, 1, 0):
+            # return 'Suspending...'
+        # else:
+            # return 'Suspend Failure!'
+    # else:
+        # return 'OS not supported!'
 
 
-@post('/shutdown')
-def shutdown():
-    """Shutdown server"""
-    if sys.platform == 'win32':
-        os.system("shutdown.exe -f -s -t 0")
-    else:
-        os.system("sudo /sbin/shutdown -h now")
-    return 'shutting down...'
-
-
-@post('/restart')
-def restart():
-    """Restart server"""
-    if sys.platform == 'win32':
-        os.system('shutdown.exe -f -r -t 0')
-    else:
-        os.system('sudo /sbin/shutdown -r now')
-    return 'restarting...'
+# @post('/shutdown')
+# def shutdown():
+    # """Shutdown server"""
+    # if sys.platform == 'win32':
+        # os.system("shutdown.exe -f -s -t 0")
+    # else:
+        # os.system("sudo /sbin/shutdown -h now")
+    # return 'shutting down...'
 
 
 @route('/backup')
 def backup():
     """backup history"""
     return shutil.copyfile(HISTORY_DB_FILE, '%s.bak' % HISTORY_DB_FILE)
-    # if sys.platform != 'win32':
-        # os.system('cp -f {path}/{file} {path}/{file}.bak'.format(path=VIDEO_PATH, file=HISTORY_FILE))
-        # os.system('cp -f %s %s' % (HISTORY_FILE, VIDEO_PATH))
-    # redirect('/')
 
 
 @route('/restore')
 def restore():
     """restore history"""
     return shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE)
-    # if sys.platform != 'win32':
-        # os.system('cp -f %s/%s .' % (VIDEO_PATH, HISTORY_FILE))
-    # redirect('/')
 
 
 @route('/static/<filename:path>')

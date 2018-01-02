@@ -17,7 +17,6 @@
       <!-- <li class="divider"></li> -->
       <!-- <li><a id="suspend"><i class="glyphicon glyphicon-off"></i>suspend</a></li> -->
       <!-- <li><a id="shutdown"><i class="glyphicon glyphicon-off"></i>shutdown</a></li> -->
-      <!-- <li><a id="restart"><i class="glyphicon glyphicon-off"></i>reboot</a></li> -->
     </ul>
   </div>
   <!-- dlna menu -->
