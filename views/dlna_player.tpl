@@ -57,7 +57,6 @@ function get_dmr_state(){
             error: function (xhr, err) {
                 if (err != "parsererror")
                     $("#state").text(xhr.statusText);
-                // out("DLNAINFO: " + xhr.statusText);
                 else
                     $("#state").text(err);
                 console.log('set wait to 3 for error');

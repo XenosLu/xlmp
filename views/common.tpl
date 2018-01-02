@@ -12,14 +12,12 @@
     <ul class="dropdown-menu">
       <li><a onclick="$.get('/deploy')"><i class="glyphicon glyphicon-cog"></i>deploy</a></li>
       <li class="divider"></li>
-      <!-- <li><a href="/backup"><i class="glyphicon glyphicon-cog"></i>backup</a></li> -->
       <li><a onclick="get('/backup')"><i class="glyphicon glyphicon-cog"></i>backup</a></li>
-      <!-- <li><a href="/restore"><i class="glyphicon glyphicon-cog"></i>restore</a></li> -->
       <li><a onclick="get('/restore')"><i class="glyphicon glyphicon-cog"></i>restore</a></li>
-      <li class="divider"></li>
-      <li><a id="suspend"><i class="glyphicon glyphicon-off"></i>suspend</a></li>
-      <li><a id="shutdown"><i class="glyphicon glyphicon-off"></i>shutdown</a></li>
-      <li><a id="restart"><i class="glyphicon glyphicon-off"></i>reboot</a></li>
+      <!-- <li class="divider"></li> -->
+      <!-- <li><a id="suspend"><i class="glyphicon glyphicon-off"></i>suspend</a></li> -->
+      <!-- <li><a id="shutdown"><i class="glyphicon glyphicon-off"></i>shutdown</a></li> -->
+      <!-- <li><a id="restart"><i class="glyphicon glyphicon-off"></i>reboot</a></li> -->
     </ul>
   </div>
   <!-- dlna menu -->
