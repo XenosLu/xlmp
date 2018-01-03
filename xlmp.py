@@ -41,9 +41,9 @@ class DMRTracker(Thread):
         self.__flag.set()
         self.__running = Event()
         self.__running.set()
-        self.state = {}  # dmr device state
-        self.dmr = None  # dmr device object
-        self.all_devices = []  # dmr device object
+        self.state = {}  # DMR device state
+        self.dmr = None  # DMR device object
+        self.all_devices = []  # DMR device list
         self.__failure = 0
         logging.info('DMR Tracker initialized.')
 
@@ -92,7 +92,6 @@ class DMRTracker(Thread):
                         self.__failure = 0
                 except TypeError as e:
                     self.__failure += 1
-                    # logging.info('Losing DMR count: %d\nTypeError: %s' % (self.__failure, e))
                     logging.info('Losing DMR count: %d' % self.__failure)
                     if self.__failure >= 3:
                         # self.__failure = 0
