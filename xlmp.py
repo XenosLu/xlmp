@@ -206,7 +206,7 @@ def load_history(name):
 
 
 def save_history(src, position, duration):
-    if float(position) < 10 or float(duration) < 10:
+    if float(position) < 10:
         return
     run_sql('''replace into history (FILENAME, POSITION, DURATION, LATEST_DATE)
                values(? , ?, ?, DateTime('now', 'localtime'));''', src, position, duration)
