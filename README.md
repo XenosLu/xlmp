@@ -32,8 +32,8 @@ xlmp诞生的主要目的是为了方便通过其他设备来观看电脑中的�
 + adapter.wsgi    wsgi adapter
 + xlmp.py 	      main
 + views/          html templates
-+ history.db      auto-generated sqlite3-db to store play history
 + static/         web static files
 + lib/            python lib
 + docker/         docker build files
 + media/          media folder
++ media/.history.db      auto-generated sqlite3-db to store play history
