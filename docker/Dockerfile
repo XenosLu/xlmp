@@ -1,5 +1,8 @@
 ## xlmp
-FROM alpine:3.7
+# FROM alpine:3.7
+FROM alpine:3.5
+# FROM python:3.5.4-alpine3.4
+
 LABEL maintainer="xenos <xenos.lu@gmail.com>"
 ENV TZ 'Asia/Shanghai'
 
