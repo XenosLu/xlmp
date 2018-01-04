@@ -1,14 +1,14 @@
 ## xlmp
-# FROM alpine:3.7
-FROM alpine:3.5
-# FROM python:3.5.4-alpine3.4
+# FROM alpine:3.7 164.6MB
+# FROM alpine:3.5  # 168.2MB
+FROM python:3.5.4-alpine3.4
 
 LABEL maintainer="xenos <xenos.lu@gmail.com>"
 ENV TZ 'Asia/Shanghai'
 
 # RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 RUN apk add tzdata --update \
-    && apk add python3 \
+    # && apk add python3 \
     && apk add gcc libc-dev python3-dev \
     && pip3 install meinheld \
     && pip3 install pycrypto \
