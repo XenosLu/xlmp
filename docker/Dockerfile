@@ -9,11 +9,13 @@ RUN apk add tzdata --update-cache \
     && apk add python3 \
     && apk add gcc libc-dev python3-dev \
     && pip3 install meinheld==0.6.1 \
+    # you-get #################################
     && pip3 install pycrypto==2.6.1 \
     # && pip3 install pycryptodome==3.4.7 \
     && pip3 install you-get \
     && apk add ffmpeg \
     && apk add curl \
+    ###########################################
     # && pip3 install gunicorn \
     && apk del gcc libc-dev python3-dev \
     && apk add git \
