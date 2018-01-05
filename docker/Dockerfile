@@ -22,12 +22,12 @@ RUN apk add tzdata --update \
     && apk add nginx \
     && mkdir /run/nginx \
     && rm -f /etc/nginx/conf.d/default.conf \
-    && rm -rf /var/cache/apk/* /tmp/*
+    && rm -rf /var/cache/apk/* /tmp/* /root/.cache
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # RUN apk add py3-bottle
-# nginx config file
+# copy nginx config file
 COPY xlmp.conf /etc/nginx/conf.d/
 # web icon for IOS used by nginx
 # COPY apple-touch-icon.png /static/apple-touch-icon.png
