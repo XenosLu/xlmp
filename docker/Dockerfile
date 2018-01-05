@@ -6,11 +6,11 @@ FROM alpine:3.5
 LABEL maintainer="xenos <xenos.lu@gmail.com>"
 ENV TZ 'Asia/Shanghai'
 
-RUN apk add tzdata --update \
+RUN apk add tzdata --update-cache \
     && apk add python3 \
     && apk add gcc libc-dev python3-dev \
     && pip3 install meinheld==0.6.1 \
-    && pip3 install pycrypto \
+    && pip3 install pycrypto==2.6.1 \
     # && pip3 install pycryptodome==3.4.7 \
     && pip3 install you-get \
     && apk add ffmpeg \
