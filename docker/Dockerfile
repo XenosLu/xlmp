@@ -27,16 +27,20 @@ RUN apk add tzdata --update \
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # RUN apk add py3-bottle
+
 # copy nginx config file
 COPY xlmp.conf /etc/nginx/conf.d/
+
 # web icon for IOS used by nginx
 # COPY apple-touch-icon.png /static/apple-touch-icon.png
+
 # deploy script
 COPY deploy /bin
 RUN chmod +x /bin/deploy
 
 # git clone
 RUN git clone https://github.com/XenosLu/xlmp.git /xlmp
+
 # VOL /xlmp/media
 
 CMD ["/usr/bin/supervisord", "-c", "/xlmp/docker/supervisord.conf"]
