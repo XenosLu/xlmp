@@ -6,6 +6,8 @@ LABEL maintainer="xenos <xenos.lu@gmail.com>"
 ENV TZ 'Asia/Shanghai'
 
 RUN apk add tzdata --update-cache \
+    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone \
     && apk add python3 \
     && apk add gcc libc-dev python3-dev \
     && pip3 install meinheld==0.6.1 \
@@ -17,8 +19,6 @@ RUN apk add tzdata --update-cache \
     && mkdir /run/nginx \
     && rm -f /etc/nginx/conf.d/default.conf \
     && rm -rf /var/cache/apk/* /tmp/* /root/.cache
-
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # RUN apk add py3-bottle
 
