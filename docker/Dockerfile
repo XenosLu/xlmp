@@ -31,9 +31,6 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # copy nginx config file
 COPY xlmp.conf /etc/nginx/conf.d/
 
-# web icon for IOS used by nginx
-# COPY apple-touch-icon.png /static/apple-touch-icon.png
-
 # deploy script
 COPY deploy /bin
 RUN chmod +x /bin/deploy
