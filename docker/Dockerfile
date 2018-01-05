@@ -11,8 +11,8 @@ RUN apk add tzdata --update \
     && apk add python3 \
     && apk add gcc libc-dev python3-dev \
     && pip3 install meinheld \
-    # && pip3 install pycrypto \
-    && apk add py-crypto \
+    && pip3 install pycrypto \
+    # && apk add py-crypto \
     && pip3 install you-get \
     && apk add ffmpeg \
     && apk add curl \
