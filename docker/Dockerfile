@@ -11,7 +11,7 @@ RUN apk add tzdata --update \
     && apk add gcc libc-dev python3-dev \
     && pip3 install meinheld==0.6.1 \
     # && pip3 install pycrypto \
-    && pip3 install pip install pycryptodome==3.4.7 \
+    && pip3 install pycryptodome==3.4.7 \
     && pip3 install you-get \
     && apk add ffmpeg \
     && apk add curl \
