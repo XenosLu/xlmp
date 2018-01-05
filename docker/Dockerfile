@@ -1,6 +1,5 @@
 ## xlmp
-# FROM alpine:3.7 164.6MB
-# 168.2MB
+# FROM alpine:3.7
 FROM alpine:3.5
 
 LABEL maintainer="xenos <xenos.lu@gmail.com>"
