@@ -26,8 +26,8 @@ RUN apk add tzdata --update-cache \
 COPY xlmp.conf /etc/nginx/conf.d/
 
 # deploy script
-COPY deploy /bin
-RUN chmod +x /bin/deploy
+COPY deploy /usr/local/bin
+RUN chmod +x /usr/local/bin/deploy
 
 # git clone
 RUN git clone https://github.com/XenosLu/xlmp.git /xlmp
