@@ -5,7 +5,6 @@ FROM alpine:3.5
 LABEL maintainer="xenos <xenos.lu@gmail.com>"
 ENV PS1 '[\u@\h \W]\$'
 ENV TZ 'Asia/Shanghai'
-ENV HOSTNAME "xlmp"
 
 RUN apk add tzdata --update-cache \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
