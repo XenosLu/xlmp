@@ -18,6 +18,7 @@ COPY deploy /usr/local/bin
 RUN chmod +x /usr/local/bin/deploy
 
 # git clone
+RUN git clone https://github.com/XenosLu/dlnap.git /xlmp/dlnap
 RUN git clone https://github.com/XenosLu/xlmp.git /xlmp
 
 # VOL /xlmp/media
