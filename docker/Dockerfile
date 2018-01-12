@@ -8,8 +8,6 @@ RUN apk add --no-cache git \
     && mkdir /run/nginx \
     && rm -f /etc/nginx/conf.d/default.conf
 
-# RUN apk add py3-bottle
-
 # copy nginx config file
 COPY xlmp.conf /etc/nginx/conf.d/
 
@@ -19,8 +17,7 @@ RUN chmod +x /usr/local/bin/deploy
 
 # git clone
 RUN git clone https://github.com/XenosLu/xlmp.git /xlmp
-RUN git clone https://github.com/XenosLu/dlnap.git /tmp/dlnap
+# RUN git clone https://github.com/XenosLu/dlnap.git /tmp/dlnap
 
 # VOL /xlmp/media
-
 CMD ["/usr/bin/supervisord", "-c", "/xlmp/docker/supervisord.conf"]
