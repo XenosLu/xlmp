@@ -6,8 +6,9 @@ RUN apk add --no-cache git \
     && apk add  --no-cache supervisor \
     && apk add  --no-cache nginx \
     && mkdir /run/nginx \
-    && rm -f /etc/nginx/conf.d/default.conf \
-    && rm -rf /var/cache/apk/* /tmp/* /root/.cache
+    && rm -f /etc/nginx/conf.d/default.conf
+    # \
+    # && rm -rf /var/cache/apk/* /tmp/* /root/.cache
 
 # RUN apk add py3-bottle
 
