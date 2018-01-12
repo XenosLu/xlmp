@@ -15,9 +15,9 @@ LABEL maintainer="xenos <xenos.lu@gmail.com>"
     # && pip3 install meinheld==0.6.1 \
     # # && pip3 install gunicorn \
     # && apk del gcc libc-dev python3-dev \
-RUN apk add git --update \
-    && apk add supervisor \
-    && apk add nginx \
+RUN apk add --no-cache git \
+    && apk add  --no-cache supervisor \
+    && apk add  --no-cache nginx \
     && mkdir /run/nginx \
     && rm -f /etc/nginx/conf.d/default.conf \
     && rm -rf /var/cache/apk/* /tmp/* /root/.cache
