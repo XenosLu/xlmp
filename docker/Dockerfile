@@ -1,20 +1,7 @@
 ## xlmp
-# FROM alpine:3.7
-# FROM alpine:3.5
 FROM xenocider/container:meinheld
-
 LABEL maintainer="xenos <xenos.lu@gmail.com>"
-# ENV PS1 '[\u@\h \W]\$'
-# ENV TZ 'Asia/Shanghai'
 
-# RUN apk add tzdata --update-cache \
-    # && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
-    # && echo $TZ > /etc/timezone \
-    # && apk add python3 \
-    # && apk add gcc libc-dev python3-dev \
-    # && pip3 install meinheld==0.6.1 \
-    # # && pip3 install gunicorn \
-    # && apk del gcc libc-dev python3-dev \
 RUN apk add --no-cache git \
     && apk add  --no-cache supervisor \
     && apk add  --no-cache nginx \
