@@ -14,10 +14,10 @@ from threading import Thread, Event
 from urllib.parse import quote, unquote
 from time import sleep, time
 
+from bottle import abort, post, redirect, request, route, run, static_file, template, default_app
+
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 sys.path = ['lib'] + sys.path  # added libpath
-
-from bottle import abort, post, redirect, request, route, run, static_file, template, default_app
 from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
 
 app = default_app()
