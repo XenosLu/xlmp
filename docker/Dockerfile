@@ -19,5 +19,7 @@ RUN chmod +x /usr/local/bin/deploy
 RUN git clone https://github.com/XenosLu/xlmp.git /xlmp
 # RUN git clone https://github.com/XenosLu/dlnap.git /tmp/dlnap
 
+EXPOSE 80
+
 # VOL /xlmp/media
 CMD ["/usr/bin/supervisord", "-c", "/xlmp/docker/supervisord.conf"]
