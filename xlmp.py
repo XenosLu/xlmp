@@ -387,7 +387,7 @@ def save(src):
 def deploy():
     """deploy"""
     if sys.platform == 'linux':
-        return os.system('/bin/deploy')
+        return os.system('/usr/local/bin/deploy')
 
 
 # @post('/suspend')
