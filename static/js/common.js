@@ -29,7 +29,7 @@ $("#tabFrame").on("click", ".folder", function () {
         sub_path="";
     filelist("/fs" + sub_path + "/");
 }).on("click", ".move", function () {
-    if (confirm("Move " + this.title + " to old?")) {
+    if (confirm("Move " + this.title + " to .old?")) {
         filelist("/move/" + this.title);
     }
 }).on("click", ".remove", function () {
