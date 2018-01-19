@@ -362,9 +362,9 @@ def remove(src):
 
 @route('/move/<src:path>')
 def move(src):
-    """Move file to 'old' folder"""
+    """Move file to '.old' folder"""
     filename = '%s/%s' % (VIDEO_PATH, src)
-    dir_old = '%s/%s/old' % (VIDEO_PATH, os.path.dirname(src))
+    dir_old = '%s/%s/.old' % (VIDEO_PATH, os.path.dirname(src))
     if not os.path.exists(dir_old):
         os.mkdir(dir_old)
     try:
