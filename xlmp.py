@@ -66,7 +66,8 @@ class DMRTracker(Thread):
     def get_transport_state(self):
         try:
             return self.dmr.info()['CurrentTransportState']
-        except:
+        except Exception as e:
+            logging.info(e)
             return
 
     def run(self):
@@ -90,7 +91,7 @@ class DMRTracker(Thread):
                     if self.__failure > 0:
                         logging.info('reset failure count from %d to 0' % self.__failure)
                         self.__failure = 0
-                except TypeError as e:
+                except TypeError:
                     self.__failure += 1
                     logging.info('Losing DMR count: %d' % self.__failure)
                     if self.__failure >= 3:
@@ -158,14 +159,14 @@ def run_sql(sql, *args):
     with sqlite3.connect(HISTORY_DB_FILE) as conn:
         try:
             cursor = conn.execute(sql, args)
-            result = cursor.fetchall()
+            ret = cursor.fetchall()
             cursor.close()
             if cursor.rowcount > 0:
                 conn.commit()
         except Exception as e:
             logging.warning(str(e))
-            result = ()
-    return result
+            ret = ()
+    return ret
 
 
 def second_to_time(second):
@@ -485,5 +486,5 @@ if __name__ == '__main__':  # for debug
     try:
         find_module('meinheld')
         run(host='127.0.0.1', port=8081, debug=True, server='meinheld')  # run demo server use meinheld
-    except:
+    except Exception:
         run(host='0.0.0.0', port=8081, debug=True)  # run demo server
