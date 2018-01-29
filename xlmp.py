@@ -281,7 +281,9 @@ def dlna_load(src):
     """request for load Video through DLNA"""
     # return get_next_file(src)
     # if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
+    
     if not os.path.exists(os.path.join(VIDEO_PATH, src)):
+        logging.warning('File not found: %s' % src)
         return 'Error: File not found.'
     logging.info('start loading... tracker state:%s' % tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
