@@ -80,9 +80,9 @@ class DMRTracker(Thread):
                     sleep(0.1)
                     info = self.dmr.info()
                     self.state['CurrentTransportState'] = info['CurrentTransportState']
-                    sleep(0.1)
-                    media_info = self.dmr.media_info()
-                    self.state['NextURI'] = media_info['NextURI']
+                    # sleep(0.1)
+                    # media_info = self.dmr.media_info()
+                    # self.state['NextURI'] = media_info['NextURI']
                     sleep(0.1)
                     position_info = self.dmr.position_info()
                     for i in ('RelTime', 'TrackDuration'):
@@ -285,9 +285,7 @@ def dlna_load(src):
         return 'Error: File not found.'
     logging.info('start loading... tracker state:%s' % tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
-    next_file = get_next_file(src)
-    if next_file:
-        next_url = 'http://%s/video%s' % (request.urlparts.netloc, quote(next_file))
+
     try_time = 1
     while try_time <= 3:
         if tracker.load(url):
@@ -297,8 +295,7 @@ def dlna_load(src):
             if position:
                 tracker.dmr.seek(second_to_time(position))
                 logging.info('Loaded position: %s' % second_to_time(position))
-            if next_url:
-                tracker.dmr.set_next(next_url)
+
             return 'Load Successed.'
         logging.info('Load failed for %s time(s)' % try_time)
         try_time += 1
@@ -326,10 +323,16 @@ def dlna_play():
 @route('/dlnanext')
 @check_dmr_exist
 def dlna_next():
-    try:
-        return result(tracker.dmr.next())
-    except Exception as e:
-        return 'Play next failed: %s' % e
+    next_file = get_next_file(tracker.state['TrackURI'])
+    if next_file:
+        dlna_load(next_file)
+        # next_url = 'http://%s/video%s' % (request.urlparts.netloc, quote(next_file))
+    # if next_url:
+        # tracker.dmr.set_next(next_url)
+    # try:
+        # return result(tracker.dmr.next())
+    # except Exception as e:
+        # return 'Play next failed: %s' % e
 
 
 @route('/dlnapause')
