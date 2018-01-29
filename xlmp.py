@@ -81,6 +81,9 @@ class DMRTracker(Thread):
                     info = self.dmr.info()
                     self.state['CurrentTransportState'] = info['CurrentTransportState']
                     sleep(0.1)
+                    media_info = self.dmr.media_info()
+                    self.state['NextURI'] = media_info['NextURI']
+                    sleep(0.1)
                     position_info = self.dmr.position_info()
                     for i in ('RelTime', 'TrackDuration'):
                         self.state[i] = position_info[i]
