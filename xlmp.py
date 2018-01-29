@@ -328,7 +328,7 @@ def dlna_next():
     next_file = get_next_file(tracker.state['TrackURI'])
     logging.info('set next file: %s' % next_file)
     if next_file:
-        dlna_load(next_file)
+        dlna_load(next_file[1:])
         # next_url = 'http://%s/video%s' % (request.urlparts.netloc, quote(next_file))
     # if next_url:
         # tracker.dmr.set_next(next_url)
