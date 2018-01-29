@@ -258,12 +258,27 @@ def set_dlna_dmr(dmr):
 def search_dmr():
     tracker.discover_dmr()
 
+    
+def get_next_file(src):
+    path = '%s/%s' % (VIDEO_PATH, src)
+    filename = os.path.basename(path)
+    filepath = os.path.dirname(path)
+    dirs = os.listdir(filepath)
+    next_index = dirs.index(filename) + 1
+    if next_index > len(dirs):
+        return None
+    else:
+        return ('%s/%s' % (filepath, dirs[next_index])).replace(VIDEO_PATH, '')
+        # return os.path.join(filepath, dirs[next_index])
+
 
 @route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
 @check_dmr_exist
 def dlna_load(src):
     """request for load Video through DLNA"""
-    if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
+    # return get_next_file(src)
+    # if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
+    if not os.path.exists(os.path.join(VIDEO_PATH, src)):
         return 'Error: File not found.'
     logging.info('start loading... tracker state:%s' % tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
