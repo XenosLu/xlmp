@@ -267,6 +267,7 @@ def get_next_file(src):
     filename = os.path.basename(path)
     filepath = os.path.dirname(path)
     dirs = os.listdir(filepath)
+    dirs.sort()
     next_index = dirs.index(filename) + 1
     if next_index > len(dirs):
         return None
