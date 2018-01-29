@@ -466,12 +466,33 @@ class DlnapDevice:
         if response:
             return dict(response['s:Envelope']['s:Body']['u:GetPositionInfoResponse'])
 
-    def set_next(self, url):
-        pass
+    def set_next(self, url, instance_id=0):
+        """ Set next media to playback.
 
-    def next(self):
-        pass
+        url -- media url
+        instance_id -- device instance id
+        """
+        response = self._soap_request('SetNextAVTransportURI',
+                                      {'InstanceID': instance_id, 'NextURI': url, 'NextURIMetaData': ''})
+        try:
+            response['s:Envelope']['s:Body']['u:SetNextAVTransportURIResponse']
+            return True
+        except:
+            # Unexpected response
+            return False
 
+    def next(self, instance_id=0):
+        """ Play media that was already set as next.
+
+        instance_id -- device instance id
+        """
+        response = self._soap_request('Next', {'InstanceID': instance_id})
+        try:
+            response['s:Envelope']['s:Body']['u:NextResponse']
+            return True
+        except:
+            # Unexpected response
+            return False
 
 def discover(name='', ip='', timeout=1, st=SSDP_ALL, mx=3, ssdp_version=1):
     """ Discover UPnP devices in the local network.
