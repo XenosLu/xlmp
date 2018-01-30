@@ -275,8 +275,6 @@ def get_next_file(src):
         t = '%s/%s' % (filepath, dirs[next_index])
         t = t.replace(VIDEO_PATH, '')
         return t.lstrip('/')
-        # return ('%s/%s' % (filepath, dirs[next_index])).replace(VIDEO_PATH, '').lstrip('/')
-        # return os.path.join(filepath, dirs[next_index])
 
 
 @route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
@@ -397,13 +395,17 @@ def remove(src):
 def move(src):
     """Move file to '.old' folder"""
     filename = '%s/%s' % (VIDEO_PATH, src)
+    # filename = os.path.join(VIDEO_PATH, src)
+    print(filename)
     dir_old = '%s/%s/.old' % (VIDEO_PATH, os.path.dirname(src))
+    # dir_old = os.path.join(VIDEO_PATH, os.path.dirname(src), '.old')
+    print(dir_old)
     if not os.path.exists(dir_old):
         os.mkdir(dir_old)
     try:
         shutil.move(filename, dir_old)  # gonna do something when file is occupied
     except Exception as e:
-        logging.warning(str(e))
+        logging.warning('move file failed: %s' % e)
         abort(404, str(e))
     return fs_dir('%s/' % os.path.dirname(src))
 
