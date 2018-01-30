@@ -490,11 +490,9 @@ def fs_dir(path):
         up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
         if path:
             up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]
-        # dir_list = os.listdir('%s/%s' % (VIDEO_PATH, path))
         dir_list = os.listdir(os.path.join(VIDEO_PATH, path.strip('/\\')))
         logging.info('path old: %s/%s, path new: %s' % (VIDEO_PATH, path, os.path.join(VIDEO_PATH, path.strip('/\\'))))
         dir_list.sort()
-        # for filename in os.listdir('%s/%s' % (VIDEO_PATH, path)):
         for filename in dir_list:
             if filename.startswith('.'):
                 continue
