@@ -89,7 +89,7 @@ class DMRTracker(Thread):
                     if self.state['CurrentTransportState'] == 'PLAYING':
                         self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI']))
                         logging.info('current trackuri: %s' % self.state['TrackURI'])
-                        logging.info('new trackuri:     %s' % url2pathname(position_info['TrackURI'))
+                        logging.info('new trackuri:     %s' % url2pathname(position_info['TrackURI'])
                         save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']),
                                      time_to_second(self.state['TrackDuration']))
                     if self.__failure > 0:
