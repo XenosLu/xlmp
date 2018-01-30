@@ -35,7 +35,6 @@ logging.basicConfig(level=logging.INFO,
 class DMRTracker(Thread):
     """Digital Media Renderer"""
 
-
     def __init__(self, *args, **kwargs):
         super(DMRTracker, self).__init__(*args, **kwargs)
         self.__flag = Event()
@@ -268,7 +267,7 @@ def get_next_file(src):
     # filename = os.path.basename(fullname)
     filepath = os.path.dirname(fullname)
     dirs = os.listdir(filepath)
-    dirs = [file for file in dirs if not os.path.isfile(os.path.join(filepath, file))]
+    dirs = [i for i in dirs if not os.path.isfile(os.path.join(filepath, i))]
     dirs.sort()
     next_index = dirs.index(os.path.basename(fullname)) + 1
     if next_index > len(dirs):
@@ -497,6 +496,8 @@ def fs_dir(path):
             if filename.startswith('.'):
                 continue
             if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
+                logging.info('test: %s/%s%s' % (VIDEO_PATH, path, filename))
+                logging.info('path: /%s%s' % (path, filename))
                 list_folder.append({'filename': filename, 'type': 'folder',
                                     'path': '/%s%s' % (path, filename)})
             elif re.match('.*\.((?i)mp)4$', filename):
