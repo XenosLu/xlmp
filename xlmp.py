@@ -81,9 +81,6 @@ class DMRTracker(Thread):
                     sleep(0.1)
                     info = self.dmr.info()
                     self.state['CurrentTransportState'] = info['CurrentTransportState']
-                    # sleep(0.1)
-                    # media_info = self.dmr.media_info()
-                    # self.state['NextURI'] = media_info['NextURI']
                     sleep(0.1)
                     position_info = self.dmr.position_info()
                     for i in ('RelTime', 'TrackDuration'):
@@ -333,13 +330,6 @@ def dlna_next():
         dlna_load(next_file)
     else:
         return 'To the end'
-        # next_url = 'http://%s/video%s' % (request.urlparts.netloc, quote(next_file))
-    # if next_url:
-        # tracker.dmr.set_next(next_url)
-    # try:
-        # return result(tracker.dmr.next())
-    # except Exception as e:
-        # return 'Play next failed: %s' % e
 
 
 @route('/dlnapause')
