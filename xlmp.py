@@ -498,8 +498,8 @@ def fs_dir(path):
                 continue
             # if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
             if os.path.isdir(os.path.join(VIDEO_PATH, path, filename)):
-                logging.info('test1: %s/%s%s' % (VIDEO_PATH, path, filename))
-                logging.info('test2: %s' % os.path.join(VIDEO_PATH, path, filename))
+                # logging.info('test1: %s/%s%s' % (VIDEO_PATH, path, filename))
+                # logging.info('test2: %s' % os.path.join(VIDEO_PATH, path, filename))
                 # logging.info('path: /%s%s' % (path, filename))
                 list_folder.append({'filename': filename, 'type': 'folder',
                                     'path': '/%s%s' % (path, filename)})
@@ -514,8 +514,7 @@ def fs_dir(path):
                                   'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
         return json.dumps(up + list_folder + list_mp4 + list_video + list_other)
     except Exception as e:
-        logging.warning('dir exception: %s pwd: %s' % (e, os.getcwd()))
-        logging.warning(traceback.format_exc())
+        logging.warning('dir exception: %s' % e)
         abort(404, str(e))
 
 # Initialize DataBase
