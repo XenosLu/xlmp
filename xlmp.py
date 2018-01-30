@@ -13,7 +13,7 @@ import logging
 from threading import Thread, Event
 from urllib.parse import quote, unquote
 # \, urlparse
-# from urllib.request import url2pathname
+# from urllib.request import url2pathname, pathname2url
 from time import sleep, time
 
 from bottle import abort, post, redirect, request, route, run, static_file, template, default_app
@@ -263,14 +263,14 @@ def search_dmr():
 
     
 def get_next_file(src):
-    # fullname = '%s/%s' % (VIDEO_PATH, src)
-    fullname = os.path.join(VIDEO_PATH, src)
+    fullname = '%s/%s' % (VIDEO_PATH, src)
+    # fullname = os.path.join(VIDEO_PATH, url2pathname(src))
     # filename = os.path.basename(fullname)
     filepath = os.path.dirname(fullname)
     dirs = os.listdir(filepath)
     dirs = [i for i in dirs if os.path.isfile(os.path.join(filepath, i))]
     dirs.sort()
-    logging.info(dirs)
+    # logging.info(dirs)
     next_index = dirs.index(os.path.basename(fullname)) + 1
     if next_index > len(dirs):
         return None
