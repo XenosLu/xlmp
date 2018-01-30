@@ -22,7 +22,8 @@ from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/d
 
 app = default_app()
 
-VIDEO_PATH = './media'  # media file path
+# VIDEO_PATH = './media'  # media file path
+VIDEO_PATH = os.path.join('.', 'media')  # media file path
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
 
 # initialize logging
@@ -489,7 +490,9 @@ def fs_dir(path):
         up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
         if path:
             up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]
-        dir_list = os.listdir('%s/%s' % (VIDEO_PATH, path))
+        # dir_list = os.listdir('%s/%s' % (VIDEO_PATH, path))
+        dir_list = os.listdir(os.path.join(VIDEO_PATH, path.strip('/\\')))
+        logging.info('path old: %s/%s, path new: %s' % (VIDEO_PATH, path, os.path.join(VIDEO_PATH, path.strip('/\\'))))
         dir_list.sort()
         # for filename in os.listdir('%s/%s' % (VIDEO_PATH, path)):
         for filename in dir_list:
@@ -510,6 +513,7 @@ def fs_dir(path):
         return json.dumps(up + list_folder + list_mp4 + list_video + list_other)
     except Exception as e:
         logging.warning('dir exception: %s pwd: %s' % (e, os.getcwd()))
+        logging.warning(traceback.format_exc())
         abort(404, str(e))
 
 # Initialize DataBase
