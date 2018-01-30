@@ -495,7 +495,8 @@ def fs_dir(path):
         for filename in dir_list:
             if filename.startswith('.'):
                 continue
-            if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
+            # if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
+            if os.path.isdir(os.path.join(VIDEO_PATH, path, filename)):
                 logging.info('test: %s/%s%s' % (VIDEO_PATH, path, filename))
                 logging.info('test2: %s' % os.path.join(VIDEO_PATH, path, filename))
                 logging.info('path: /%s%s' % (path, filename))
