@@ -264,7 +264,8 @@ def search_dmr():
 
     
 def get_next_file(src):
-    fullname = '%s/%s' % (VIDEO_PATH, src)
+    # fullname = '%s/%s' % (VIDEO_PATH, src)
+    fullname = os.path.join(VIDEO_PATH, src)
     # filename = os.path.basename(fullname)
     filepath = os.path.dirname(fullname)
     dirs = os.listdir(filepath)
@@ -277,7 +278,7 @@ def get_next_file(src):
         t = '%s/%s' % (filepath, dirs[next_index])
         t = t.replace(VIDEO_PATH, '')
         return t.lstrip('/')
-        return ('%s/%s' % (filepath, dirs[next_index])).replace(VIDEO_PATH, '').lstrip('/')
+        # return ('%s/%s' % (filepath, dirs[next_index])).replace(VIDEO_PATH, '').lstrip('/')
         # return os.path.join(filepath, dirs[next_index])
 
 
