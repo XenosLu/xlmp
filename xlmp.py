@@ -12,6 +12,7 @@ import logging
 
 from threading import Thread, Event
 from urllib.parse import quote, unquote
+from urllib.request import url2pathname
 from time import sleep, time
 
 from bottle import abort, post, redirect, request, route, run, static_file, template, default_app
@@ -87,6 +88,8 @@ class DMRTracker(Thread):
                         self.state[i] = position_info[i]
                     if self.state['CurrentTransportState'] == 'PLAYING':
                         self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI']))
+                        logging.info('current trackuri: %s' % self.state['TrackURI'])
+                        logging.info('new trackuri:     %s' % url2pathname(position_info['TrackURI'))
                         save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']),
                                      time_to_second(self.state['TrackDuration']))
                     if self.__failure > 0:
