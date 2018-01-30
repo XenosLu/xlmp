@@ -263,16 +263,20 @@ def search_dmr():
 
     
 def get_next_file(src):
-    path = '%s/%s' % (VIDEO_PATH, src)
-    filename = os.path.basename(path)
-    filepath = os.path.dirname(path)
+    fullname = '%s/%s' % (VIDEO_PATH, src)
+    # filename = os.path.basename(fullname)
+    filepath = os.path.dirname(fullname)
     dirs = os.listdir(filepath)
+    dirs = [i for i in dirs if not os.path.isdir]
     dirs.sort()
-    next_index = dirs.index(filename) + 1
+    next_index = dirs.index(os.path.basename(fullname)) + 1
     if next_index > len(dirs):
         return None
     else:
-        return ('%s/%s' % (filepath, dirs[next_index])).replace(VIDEO_PATH, '')
+        t = '%s/%s' % (filepath, dirs[next_index])
+        t = t.replace(VIDEO_PATH, '')
+        return t.lstrip('/')
+        return ('%s/%s' % (filepath, dirs[next_index])).replace(VIDEO_PATH, '').lstrip('/')
         # return os.path.join(filepath, dirs[next_index])
 
 
@@ -280,15 +284,11 @@ def get_next_file(src):
 @check_dmr_exist
 def dlna_load(src):
     """request for load Video through DLNA"""
-    # return get_next_file(src)
-    # if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
-    
     if not os.path.exists(os.path.join(VIDEO_PATH, src)):
         logging.warning('File not found: %s' % src)
         return 'Error: File not found.'
     logging.info('start loading... tracker state:%s' % tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
-
     try_time = 1
     while try_time <= 3:
         if tracker.load(url):
@@ -298,7 +298,6 @@ def dlna_load(src):
             if position:
                 tracker.dmr.seek(second_to_time(position))
                 logging.info('Loaded position: %s' % second_to_time(position))
-
             return 'Load Successed.'
         logging.info('Load failed for %s time(s)' % try_time)
         try_time += 1
@@ -329,7 +328,7 @@ def dlna_next():
     next_file = get_next_file(tracker.state['TrackURI'])
     logging.info('set next file: %s' % next_file)
     if next_file:
-        dlna_load(next_file[1:])
+        dlna_load(next_file)
     else:
         return 'To the end'
         # next_url = 'http://%s/video%s' % (request.urlparts.netloc, quote(next_file))
