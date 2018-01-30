@@ -24,7 +24,8 @@ app = default_app()
 
 # VIDEO_PATH = './media'  # media file path
 VIDEO_PATH = os.path.join('.', 'media')  # media file path
-HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
+# HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
+HISTORY_DB_FILE = os.path.join(VIDEO_PATH, '.history.db')  # history db file
 
 # initialize logging
 logging.basicConfig(level=logging.INFO,
@@ -490,16 +491,16 @@ def fs_dir(path):
         if path:
             up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]
         dir_list = os.listdir(os.path.join(VIDEO_PATH, path.strip('/\\')))
-        logging.info('path old: %s/%s, path new: %s' % (VIDEO_PATH, path, os.path.join(VIDEO_PATH, path.strip('/\\'))))
+        # logging.info('path old: %s/%s, path new: %s' % (VIDEO_PATH, path, os.path.join(VIDEO_PATH, path.strip('/\\'))))
         dir_list.sort()
         for filename in dir_list:
             if filename.startswith('.'):
                 continue
             # if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
             if os.path.isdir(os.path.join(VIDEO_PATH, path, filename)):
-                logging.info('test: %s/%s%s' % (VIDEO_PATH, path, filename))
+                logging.info('test1: %s/%s%s' % (VIDEO_PATH, path, filename))
                 logging.info('test2: %s' % os.path.join(VIDEO_PATH, path, filename))
-                logging.info('path: /%s%s' % (path, filename))
+                # logging.info('path: /%s%s' % (path, filename))
                 list_folder.append({'filename': filename, 'type': 'folder',
                                     'path': '/%s%s' % (path, filename)})
             elif re.match('.*\.((?i)mp)4$', filename):
