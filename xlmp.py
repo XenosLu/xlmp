@@ -497,6 +497,7 @@ def fs_dir(path):
                 continue
             if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
                 logging.info('test: %s/%s%s' % (VIDEO_PATH, path, filename))
+                logging.info('test2: %s' % os.path.join(VIDEO_PATH, path, filename))
                 logging.info('path: /%s%s' % (path, filename))
                 list_folder.append({'filename': filename, 'type': 'folder',
                                     'path': '/%s%s' % (path, filename)})
