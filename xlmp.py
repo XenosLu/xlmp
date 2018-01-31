@@ -482,24 +482,19 @@ def static_video(src):
 @route('/fs/<path:re:.*>')
 def fs_dir(path):
     """Get static folder list in json"""
-    logging.info(path)
+    logging.info('fs path: %s' % path)
     try:
         up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
         if path:
-            up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]
-        dir_list = os.listdir(os.path.join(VIDEO_PATH, path.strip('/\\')))
-        # logging.info('path old: %s/%s, path new: %s' % (VIDEO_PATH, path, os.path.join(VIDEO_PATH, path.strip('/\\'))))
+            up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]  # path should be path/
+        dir_list = os.listdir('%s/%s' % (VIDEO_PATH, path))  # path could be either path or path/
         dir_list.sort()
         for filename in dir_list:
             if filename.startswith('.'):
                 continue
-            # if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
-            if os.path.isdir(os.path.join(VIDEO_PATH, path, filename)):
-                # logging.info('test1: %s/%s%s' % (VIDEO_PATH, path, filename))
-                # logging.info('test2: %s' % os.path.join(VIDEO_PATH, path, filename))
-                # logging.info('path: /%s%s' % (path, filename))
+            if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
                 list_folder.append({'filename': filename, 'type': 'folder',
-                                    'path': '/%s%s' % (path, filename)})
+                                    'path': '%s%s' % (path, filename)})
             elif re.match('.*\.((?i)mp)4$', filename):
                 list_mp4.append({'filename': filename, 'type': 'mp4',
                                 'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
