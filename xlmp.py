@@ -265,7 +265,6 @@ def search_dmr():
 def get_next_file(src):
     fullname = '%s/%s' % (VIDEO_PATH, src)
     # fullname = os.path.join(VIDEO_PATH, url2pathname(src))
-    # filename = os.path.basename(fullname)
     filepath = os.path.dirname(fullname)
     dirs = os.listdir(filepath)
     dirs = [i for i in dirs if os.path.isfile(os.path.join(filepath, i))]
