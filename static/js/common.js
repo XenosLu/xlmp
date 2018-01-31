@@ -25,9 +25,12 @@ $(".close").click(toggleDialog);
 //table buttons
 $("#tabFrame").on("click", ".folder", function () {
     sub_path = this.title;
-    if(sub_path=="/")
-        sub_path="";
-    filelist("/fs" + sub_path + "/");
+    // if(sub_path=="/")
+        // sub_path="";
+    if(sub_path == "")
+        filelist("/fs/");
+    else
+        filelist("/fs/" + sub_path + "/");
 }).on("click", ".move", function () {
     if (confirm("Move " + this.title + " to .old?")) {
         filelist("/move/" + this.title);
@@ -173,7 +176,7 @@ function history(str) {
                 if ((n["filename"]).lastIndexOf('.mp4') > 0)
                     mediaType = "mp4";
                 var td = new Array(4);
-                td[0] = '<td class="folder" title="/' + n["path"] + '">' + '<i class="glyphicon glyphicon-folder-close"></i></td>';
+                td[0] = '<td class="folder" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-folder-close"></i></td>';
                 td[1] = '<td><i class="glyphicon glyphicon-film"></i></td>';
                 td[2] = '<td class="filelist '+ mediaType + '" title="' + n["filename"] + '">' + n["filename"] + "<br><small>" + n["latest_date"] + " | " + secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small></td>";
                 td[3] = '<td class="remove" title="' + n["filename"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i>' + "</td>";

@@ -399,10 +399,11 @@ def move(src):
     """Move file to '.old' folder"""
     filename = '%s/%s' % (VIDEO_PATH, src)
     # filename = os.path.join(VIDEO_PATH, src)
-    print(filename)
+    # print(filename)
     dir_old = '%s/%s/.old' % (VIDEO_PATH, os.path.dirname(src))
+    logging.info('move dir:')
     # dir_old = os.path.join(VIDEO_PATH, os.path.dirname(src), '.old')
-    print(dir_old)
+    # print(dir_old)
     if not os.path.exists(dir_old):
         os.mkdir(dir_old)
     try:
@@ -410,7 +411,8 @@ def move(src):
     except Exception as e:
         logging.warning('move file failed: %s' % e)
         abort(404, str(e))
-    return fs_dir('%s/' % os.path.dirname(src))
+    return fs_dir(os.path.dirname(src))
+    # return fs_dir('%s/' % os.path.dirname(src))
 
 
 @post('/save/<src:path>')
@@ -486,7 +488,10 @@ def fs_dir(path):
     try:
         up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
         if path:
-            up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]  # path should be path/
+            # up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]  # path should be path/
+            up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
+            if not path.endswith('/'):
+                path = '%s/' % path
         dir_list = os.listdir('%s/%s' % (VIDEO_PATH, path))  # path could be either path or path/
         dir_list.sort()
         for filename in dir_list:
