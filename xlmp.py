@@ -25,9 +25,7 @@ from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/d
 app = default_app()
 
 VIDEO_PATH = './media'  # media file path
-# VIDEO_PATH = os.path.join('.', 'media')  # media file path
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
-# HISTORY_DB_FILE = os.path.join(VIDEO_PATH, '.history.db')  # history db file
 
 # initialize logging
 logging.basicConfig(level=logging.INFO,
@@ -127,10 +125,14 @@ class DMRTracker(Thread):
                 sleep(0.85)
             if self.dmr.set_current_media(url):
                 logging.info('Loaded %s' % url)
+            time0 = time()
             while self.get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
                 self.dmr.play()
                 logging.info('Waiting for DMR playing...')
                 sleep(0.3)
+                if (time() - time0) > 5:
+                    logging.info('waiting for DMR playing timeout')
+                    return False
             sleep(0.5)
             time0 = time()
             logging.info('checking duration to make sure loaded...')
@@ -138,7 +140,7 @@ class DMRTracker(Thread):
                 sleep(0.5)
                 logging.info('Waiting for duration correctly recognized')
                 if (time() - time0) > 10:
-                    logging.info('Load duration failed in %fs' % (time() - time0))
+                    logging.info('Load duration timeout')
                     return False
             logging.info(self.state)
         except Exception as e:
