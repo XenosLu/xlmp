@@ -482,6 +482,7 @@ def static_video(src):
 @route('/fs/<path:re:.*>')
 def fs_dir(path):
     """Get static folder list in json"""
+    logging.info(path)
     try:
         up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
         if path:
