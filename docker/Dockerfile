@@ -3,8 +3,10 @@ FROM xenocider/container:bottle-env
 LABEL maintainer="xenos <xenos.lu@gmail.com>"
 
 RUN apk add --no-cache git \
-    && apk add  --no-cache supervisor \
-    && apk add  --no-cache nginx \
+    && apk add --no-cache supervisor \
+    && apk add --no-cache nginx \
+    && apk add --no-cache rsyslog \
+    && echo "*.* @@nas:1514" >>/etc/rsyslog.conf \
     && mkdir /run/nginx \
     && rm -f /etc/nginx/conf.d/default.conf
 
