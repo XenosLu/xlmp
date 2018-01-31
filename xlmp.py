@@ -24,10 +24,10 @@ from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/d
 
 app = default_app()
 
-# VIDEO_PATH = './media'  # media file path
-VIDEO_PATH = os.path.join('.', 'media')  # media file path
-# HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
-HISTORY_DB_FILE = os.path.join(VIDEO_PATH, '.history.db')  # history db file
+VIDEO_PATH = './media'  # media file path
+# VIDEO_PATH = os.path.join('.', 'media')  # media file path
+HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
+# HISTORY_DB_FILE = os.path.join(VIDEO_PATH, '.history.db')  # history db file
 
 # initialize logging
 logging.basicConfig(level=logging.INFO,
@@ -267,7 +267,8 @@ def get_next_file(src):
     # fullname = os.path.join(VIDEO_PATH, url2pathname(src))
     filepath = os.path.dirname(fullname)
     dirs = os.listdir(filepath)
-    dirs = [i for i in dirs if os.path.isfile(os.path.join(filepath, i))]
+    dirs = [i for i in dirs if os.path.isfile('%s/%s' % (filepath, i))]
+    # dirs = [i for i in dirs if os.path.isfile(os.path.join(filepath, i))]
     dirs.sort()
     # logging.info(dirs)
     next_index = dirs.index(os.path.basename(fullname)) + 1
