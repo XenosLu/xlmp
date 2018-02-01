@@ -402,11 +402,8 @@ def move(src):
     """Move file to '.old' folder"""
     filename = '%s/%s' % (VIDEO_PATH, src)
     # filename = os.path.join(VIDEO_PATH, src)
-    # print(filename)
     dir_old = '%s/%s/.old' % (VIDEO_PATH, os.path.dirname(src))
-    logging.info('move dir:')
     # dir_old = os.path.join(VIDEO_PATH, os.path.dirname(src), '.old')
-    # print(dir_old)
     if not os.path.exists(dir_old):
         os.mkdir(dir_old)
     try:
