@@ -101,7 +101,8 @@ class DMRTracker(Thread):
                         self.state = {}
                         self.dmr = None
                 except Exception as e:
-                    logging.warning('DMR Tracker Exception: %s\n%s' % (e, traceback.format_exc()))
+                    logging.warning('DMR Tracker Exception: %s' % e)
+                    # logging.warning('DMR Tracker Exception: %s\n%s' % (e, traceback.format_exc()))
                 sleep(1)
             else:
                 self.discover_dmr()
