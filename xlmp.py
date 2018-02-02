@@ -378,7 +378,7 @@ def dlna_load(src):
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         logging.warning('File not found: %s' % src)
         return 'Error: File not found.'
-    logging.info('start loading... tracker state:%s' % tracker.state)
+    logging.info('start loading... tracker state:%s' % tracker.state['CurrentTransportState'])
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     return tracker.thread_load(url)
     
@@ -557,10 +557,10 @@ def static_video(src):
 @route('/fs/<path:re:.*>')
 def fs_dir(path):
     """Get static folder list in json"""
-    logging.info('fs path: %s' % path)
     try:
         up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
         if path:
+            logging.info('fs path: %s' % path)
             # up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]  # path should be path/
             up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
             if not path.endswith('/'):
