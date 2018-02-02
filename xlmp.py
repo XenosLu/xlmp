@@ -153,9 +153,11 @@ class DMRTracker(Thread):
         if self.__load:
             self.__load.stop()
         if not self.__loadable.isSet():
+            logging.warning('Busy loading...')
             return 'Busy loading...'
         self.__load = DLNALoad(url, self.__loadable)
         self.__load.start()
+        logging.info('Start Loading...')
         return 'Start Loading...'
 
 
