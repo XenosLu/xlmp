@@ -7,7 +7,6 @@ import re
 import shutil
 import sqlite3
 import sys
-import traceback
 import logging
 
 from threading import Thread, Event
@@ -94,7 +93,7 @@ class DMRTracker(Thread):
                         self.__failure = 0
                 except TypeError:
                     self.__failure += 1
-                    logging.info('Losing DMR count: %d' % self.__failure)
+                    logging.warning('Losing DMR count: %d' % self.__failure)
                     if self.__failure >= 3:
                         # self.__failure = 0
                         logging.info('No DMR currently.')
@@ -102,7 +101,6 @@ class DMRTracker(Thread):
                         self.dmr = None
                 except Exception as e:
                     logging.warning('DMR Tracker Exception: %s' % e)
-                    # logging.warning('DMR Tracker Exception: %s\n%s' % (e, traceback.format_exc()))
                 sleep(1)
             else:
                 self.discover_dmr()
@@ -145,7 +143,8 @@ class DMRTracker(Thread):
                     return False
             logging.info(self.state)
         except Exception as e:
-            logging.warning('DLNA load exception: %s\n%s' % (e, traceback.format_exc()))
+            # logging.warning('DLNA load exception: %s\n%s' % (e, traceback.format_exc()))
+            logging.warning('DLNA load exception: %s' % e, exc_info=True)
             return False
         return True
         
