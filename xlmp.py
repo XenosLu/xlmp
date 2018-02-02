@@ -11,8 +11,6 @@ import logging
 
 from threading import Thread, Event
 from urllib.parse import quote, unquote
-# \, urlparse
-# from urllib.request import url2pathname, pathname2url
 from time import sleep, time
 
 from bottle import abort, post, redirect, request, route, run, static_file, template, default_app
