@@ -35,14 +35,14 @@ class DMRTracker(Thread):
 
     def __init__(self, *args, **kwargs):
         super(DMRTracker, self).__init__(*args, **kwargs)
-        self.__flag = Event()
-        self.__flag.set()
-        self.__running = Event()
-        self.__running.set()
+        self._flag = Event()
+        self._flag.set()
+        self._running = Event()
+        self._running.set()
         self.state = {}  # DMR device state
         self.dmr = None  # DMR device object
         self.all_devices = []  # DMR device list
-        self.__failure = 0
+        self._failure = 0
         self._load = None
         logging.info('DMR Tracker initialized.')
 
@@ -70,8 +70,8 @@ class DMRTracker(Thread):
             return
 
     def run(self):
-        while self.__running.isSet():
-            self.__flag.wait()
+        while self._running.isSet():
+            self._flag.wait()
             if self.dmr:
                 try:
                     self.state['CurrentDMR'] = str(self.dmr)
@@ -87,14 +87,14 @@ class DMRTracker(Thread):
                         self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI']))
                         save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']),
                                      time_to_second(self.state['TrackDuration']))
-                    if self.__failure > 0:
-                        logging.info('reset failure count from %d to 0' % self.__failure)
-                        self.__failure = 0
+                    if self._failure > 0:
+                        logging.info('reset failure count from %d to 0' % self._failure)
+                        self._failure = 0
                 except TypeError:
-                    self.__failure += 1
-                    logging.warning('Losing DMR count: %d' % self.__failure)
-                    if self.__failure >= 3:
-                        # self.__failure = 0
+                    self._failure += 1
+                    logging.warning('Losing DMR count: %d' % self._failure)
+                    if self._failure >= 3:
+                        # self._failure = 0
                         logging.info('No DMR currently.')
                         self.state = {}
                         self.dmr = None
@@ -106,14 +106,14 @@ class DMRTracker(Thread):
                 sleep(2.5)
 
     def pause(self):
-        self.__flag.clear()
+        self._flag.clear()
 
     def resume(self):
-        self.__flag.set()
+        self._flag.set()
 
     def stop(self):
-        self.__flag.set()
-        self.__running.clear()
+        self._flag.set()
+        self._running.clear()
 
     def loadonce(self, url):
         try:
@@ -166,10 +166,10 @@ class DLNALoad(Thread):
 
     def __init__(self, url, *args, **kwargs):
         super(DLNALoad, self).__init__(*args, **kwargs)
-        self.__running = Event()
-        self.__running.set()
-        self.__failure = 0
-        self.__url = url
+        self._running = Event()
+        self._running.set()
+        self._failure = 0
+        self._url = url
         logging.info('DLNA URL load initialized.')
 
     def run(self):
@@ -178,19 +178,19 @@ class DLNALoad(Thread):
         logging.info('started: clear loadable')
         tracker.pause()
         logging.info('tracker pause')
-        # while self.__running.isSet() and self.__failure < 3:
-        while self.__failure < 3:
-            if not self.__running.isSet():
-                logging.info('end because of another request url: %s' % self.__url)
+        # while self._running.isSet() and self._failure < 3:
+        while self._failure < 3:
+            if not self._running.isSet():
+                logging.info('end because of another request url: %s' % self._url)
                 logging.info('set loadable')
                 loadable.set()
                 return
             # for i in range(5):
-                # print('%d %s' % (i, self.__url))
+                # print('%d %s' % (i, self._url))
                 # sleep(1)
-            if tracker.loadonce(self.__url):
-                logging.info('Loaded url: %s successed' % self.__url)
-                src = unquote(re.sub('http://.*/video/', '', self.__url))
+            if tracker.loadonce(self._url):
+                logging.info('Loaded url: %s successed' % self._url)
+                src = unquote(re.sub('http://.*/video/', '', self._url))
                 position = load_history(src)
                 if position:
                     tracker.dmr.seek(second_to_time(position))
@@ -203,19 +203,19 @@ class DLNALoad(Thread):
                 tracker.state['CurrentTransportState'] = 'Load Successed.'
                 return
                 # return 'Load Successed.'
-            self.__failure += 1
-            logging.info('Load failed for %s time(s)' % self.__failure)
+            self._failure += 1
+            logging.info('Load failed for %s time(s)' % self._failure)
             sleep(1)
         logging.info('set loadable')
         loadable.set()
-        logging.warning('Load aborted. url: %s' % self.__url)
+        logging.warning('Load aborted. url: %s' % self._url)
         tracker.resume()
         logging.info('tracker resume')
         tracker.state['CurrentTransportState'] = 'Error: Load aborted'
         return 'Error: Load aborted'
 
     def stop(self):
-        self.__running.clear()
+        self._running.clear()
         # logging.info('DLNA load STOP received, waiting for stop.')
 
 loadable = Event()
