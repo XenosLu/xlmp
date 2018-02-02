@@ -31,7 +31,7 @@ logging.basicConfig(level=logging.INFO,
 
 
 class DMRTracker(Thread):
-    """Digital Media Renderer"""
+    """DLNA Digital Media Renderer tracker thread"""
 
     def __init__(self, *args, **kwargs):
         super(DMRTracker, self).__init__(*args, **kwargs)
@@ -43,6 +43,7 @@ class DMRTracker(Thread):
         self.dmr = None  # DMR device object
         self.all_devices = []  # DMR device list
         self.__failure = 0
+        self.__load = None
         logging.info('DMR Tracker initialized.')
 
     def discover_dmr(self):
@@ -113,8 +114,8 @@ class DMRTracker(Thread):
     def stop(self):
         self.__flag.set()
         self.__running.clear()
-        
-    def load(self, url):
+
+    def loadonce(self, url):
         try:
             while self.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
                 self.dmr.stop()
@@ -145,7 +146,50 @@ class DMRTracker(Thread):
             logging.warning('DLNA load exception: %s' % e, exc_info=True)
             return False
         return True
-        
+
+    def thread_load(self, url):
+        if self.__load:
+            self.__load.stop()
+        self.__load = DLNALoad(url)
+        self.__load.start()
+
+
+class DLNALoad(Thread):
+    """Load url through DLNA thread"""
+    def __init__(self, url, *args, **kwargs):
+        super(DLNALoad, self).__init__(*args, **kwargs)
+        self.__running = Event()
+        self.__running.set()
+        self.__flag = Event()
+        self.__flag.set()
+        self.__failure = 0
+        self.__url = url
+        logging.info('DLNA URL load initialized.')
+
+    def run(self):
+        while self.__running.isSet() and self.__failure < 3:
+            # for i in range(5):
+                # print('%d %s' % (i, self.__url))
+                # sleep(1)
+            if tracker.loadonce(self.__url):
+                logging.info('Loaded url: %s successed' % self.__url)
+                # logging.info('Loaded url: %s success in %s time(s)' % (url, try_time))
+                position = load_history(src)
+                if position:
+                    tracker.dmr.seek(second_to_time(position))
+                    logging.info('Loaded position: %s' % second_to_time(position))
+                return 'Load Successed.'
+            self.__failure += 1
+            logging.info('Load failed for %s time(s)' % self.__failure)
+            sleep(1)
+        logging.warning('Load aborted. url: %s' % self.__url)
+        return 'Error: Load aborted'
+
+    def stop(self):
+        self.__running.clear()
+        logging.info('DLNA load STOP received.')
+
+
 tracker = DMRTracker()
 tracker.start()
 
@@ -264,13 +308,10 @@ def search_dmr():
     
 def get_next_file(src):
     fullname = '%s/%s' % (VIDEO_PATH, src)
-    # fullname = os.path.join(VIDEO_PATH, url2pathname(src))
     filepath = os.path.dirname(fullname)
     dirs = os.listdir(filepath)
     dirs = [i for i in dirs if os.path.isfile('%s/%s' % (filepath, i))]
-    # dirs = [i for i in dirs if os.path.isfile(os.path.join(filepath, i))]
     dirs.sort()
-    # logging.info(dirs)
     next_index = dirs.index(os.path.basename(fullname)) + 1
     if next_index > len(dirs):
         return None
@@ -280,30 +321,41 @@ def get_next_file(src):
         return t.lstrip('/')
 
 
+        
+# def dlna_load(url):
+    # """request for load Video through DLNA"""
+    # # if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
+        # # logging.warning('File not found: %s' % src)
+        # # return 'Error: File not found.'
+    # # logging.info('start loading... tracker state:%s' % tracker.state)
+    # # url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
+    # try_time = 1
+    # while try_time <= 3:
+        # if tracker.loadonce(url):
+            # logging.info('Loaded url: %s successed' % url)
+            # # logging.info('Loaded url: %s success in %s time(s)' % (url, try_time))
+            # position = load_history(src)
+            # if position:
+                # tracker.dmr.seek(second_to_time(position))
+                # logging.info('Loaded position: %s' % second_to_time(position))
+            # return 'Load Successed.'
+        # logging.info('Load failed for %s time(s)' % try_time)
+        # try_time += 1
+        # sleep(1)
+    # logging.warning('Load aborted because of attempts was exceeded')
+    # return 'Error: Load aborted because of attempts was exceeded'
+
+        
 @route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
 @check_dmr_exist
 def dlna_load(src):
-    """request for load Video through DLNA"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         logging.warning('File not found: %s' % src)
         return 'Error: File not found.'
     logging.info('start loading... tracker state:%s' % tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
-    try_time = 1
-    while try_time <= 3:
-        if tracker.load(url):
-            logging.info('Loaded url: %s successed' % url)
-            # logging.info('Loaded url: %s success in %s time(s)' % (url, try_time))
-            position = load_history(src)
-            if position:
-                tracker.dmr.seek(second_to_time(position))
-                logging.info('Loaded position: %s' % second_to_time(position))
-            return 'Load Successed.'
-        logging.info('Load failed for %s time(s)' % try_time)
-        try_time += 1
-        sleep(1)
-    logging.warning('Load aborted because of attempts was exceeded')
-    return 'Error: Load aborted because of attempts was exceeded'
+    tracker.thread_load(url)
+    return 'start Loading...'
 
 
 def result(r):
