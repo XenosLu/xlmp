@@ -147,7 +147,7 @@ class DMRTracker(Thread):
             return False
         return True
 
-    def thread_load(self, url):
+    def loader(self, url):
         if self._load:
             logging.info('stopping previous load, alive state: %s' % self._load.isAlive())
             self._load.stop()
@@ -243,7 +243,7 @@ def run_sql(sql, *args):
 
 def second_to_time(second):
     """ Turn time in seconds into "hh:mm:ss" format
-    
+
     second: int value
     """
     m, s = divmod(second, 60)
@@ -253,7 +253,7 @@ def second_to_time(second):
 
 def time_to_second(time_str):
     """ Turn time in "hh:mm:ss" format into seconds
-    
+
     time_str: string like "hh:mm:ss"
     """
     return sum([float(i)*60**n for n, i in enumerate(str(time_str).split(':')[::-1])])
@@ -330,7 +330,7 @@ def set_dlna_dmr(dmr):
 def search_dmr():
     tracker.discover_dmr()
 
-    
+
 def get_next_file(src):
     fullname = '%s/%s' % (VIDEO_PATH, src)
     filepath = os.path.dirname(fullname)
@@ -380,8 +380,7 @@ def dlna_load(src):
         return 'Error: File not found.'
     logging.info('start loading... tracker state:%s' % tracker.state['CurrentTransportState'])
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
-    return tracker.thread_load(url)
-    
+    return tracker.loader(url)
 
 
 def result(r):
