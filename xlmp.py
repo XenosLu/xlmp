@@ -176,7 +176,8 @@ class DLNALoad(Thread):
         self.__loadable.wait()
         self.__loadable.clear()
         print('started=====================')
-        tracker.pause()
+        # tracker.pause()
+        logging.info('tracker pause')
         while self.__running.isSet() and self.__failure < 3:
             # for i in range(5):
                 # print('%d %s' % (i, self.__url))
@@ -193,7 +194,8 @@ class DLNALoad(Thread):
             sleep(1)
         self.__loadable.set()
         logging.warning('Load aborted. url: %s' % self.__url)
-        tracker.resume()
+        # tracker.resume()
+        logging.info('tracker resume')
         return 'Error: Load aborted'
 
     def stop(self):
