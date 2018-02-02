@@ -195,6 +195,10 @@ class DLNALoad(Thread):
                 if position:
                     tracker.dmr.seek(second_to_time(position))
                     logging.info('Loaded position: %s' % second_to_time(position))
+                logging.info('set loadable')
+                loadable.set()
+                # tracker.resume()
+                logging.info('tracker resume')
                 logging.info('Load Successed.')
                 return 'Load Successed.'
             self.__failure += 1
