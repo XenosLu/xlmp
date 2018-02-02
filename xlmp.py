@@ -39,8 +39,6 @@ class DMRTracker(Thread):
         self.__flag.set()
         self.__running = Event()
         self.__running.set()
-        # self.__loadable = Event()
-        # self.__loadable.set()
         self.state = {}  # DMR device state
         self.dmr = None  # DMR device object
         self.all_devices = []  # DMR device list
@@ -151,13 +149,12 @@ class DMRTracker(Thread):
 
     def thread_load(self, url):
         if self.__load:
-            logging.info('stopping previous load, alive statie: %s' % self.__load.isAlive())
+            logging.info('stopping previous load, alive state: %s' % self.__load.isAlive())
             self.__load.stop()
-        # if not self.__loadable.isSet():
         if not loadable.isSet():
             logging.warning('Busy loading...')
             return 'Busy loading...'
-        # self.__load = DLNALoad(url, self.__loadable)
+
         self.__load = DLNALoad(url)
         self.__load.start()
         logging.info('Start Loading...')
@@ -166,23 +163,21 @@ class DMRTracker(Thread):
 
 class DLNALoad(Thread):
     """Load url through DLNA thread"""
-    # def __init__(self, url, flag, *args, **kwargs):
+
     def __init__(self, url, *args, **kwargs):
         super(DLNALoad, self).__init__(*args, **kwargs)
         self.__running = Event()
         self.__running.set()
-        # self.__loadable = flag
         self.__failure = 0
         self.__url = url
         logging.info('DLNA URL load initialized.')
 
     def run(self):
-        # self.__loadable.wait()
         loadable.wait()
         loadable.clear()
         logging.info('clear loadable')
         print('started=====================')
-        # tracker.pause()
+        tracker.pause()
         logging.info('tracker pause')
         while self.__running.isSet() and self.__failure < 3:
             # for i in range(5):
@@ -197,7 +192,7 @@ class DLNALoad(Thread):
                     logging.info('Loaded position: %s' % second_to_time(position))
                 logging.info('set loadable')
                 loadable.set()
-                # tracker.resume()
+                tracker.resume()
                 logging.info('tracker resume')
                 logging.info('Load Successed.')
                 return 'Load Successed.'
@@ -207,7 +202,7 @@ class DLNALoad(Thread):
         logging.info('set loadable')
         loadable.set()
         logging.warning('Load aborted. url: %s' % self.__url)
-        # tracker.resume()
+        tracker.resume()
         logging.info('tracker resume')
         return 'Error: Load aborted'
 
