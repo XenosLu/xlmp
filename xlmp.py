@@ -195,6 +195,7 @@ class DLNALoad(Thread):
                 logging.info('tracker resume')
                 logging.info('Load Successed.')
                 tracker.state['CurrentTransportState'] = 'Load Successed.'
+                return
                 # return 'Load Successed.'
             self.__failure += 1
             logging.info('Load failed for %s time(s)' % self.__failure)
