@@ -151,9 +151,9 @@ class DMRTracker(Thread):
         if self._load:
             logging.info('stopping previous load, alive state: %s' % self._load.isAlive())
             self._load.stop()
-        if not loadable.isSet():
-            logging.warning('Busy loading...')
-            return 'Busy loading...'
+        # if not loadable.isSet():
+            # logging.warning('Busy loading...')
+            # return 'Busy loading...'
 
         self._load = DLNALoad(url)
         self._load.start()
@@ -178,7 +178,13 @@ class DLNALoad(Thread):
         logging.info('started: clear loadable')
         tracker.pause()
         logging.info('tracker pause')
-        while self.__running.isSet() and self.__failure < 3:
+        # while self.__running.isSet() and self.__failure < 3:
+        while self.__failure < 3:
+            if not self.__running.isSet():
+                logging.info('end because of another request url: %s' % self.__url)
+                logging.info('set loadable')
+                loadable.set()
+                return
             # for i in range(5):
                 # print('%d %s' % (i, self.__url))
                 # sleep(1)
