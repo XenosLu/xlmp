@@ -175,8 +175,7 @@ class DLNALoad(Thread):
     def run(self):
         loadable.wait()
         loadable.clear()
-        logging.info('clear loadable')
-        print('started=====================')
+        logging.info('started: clear loadable')
         tracker.pause()
         logging.info('tracker pause')
         while self.__running.isSet() and self.__failure < 3:
