@@ -184,6 +184,7 @@ class DLNALoad(Thread):
                 # sleep(1)
             if tracker.loadonce(self.__url):
                 logging.info('Loaded url: %s successed' % self.__url)
+                src = unquote(re.sub('http://.*/video/', '', self.__url))
                 position = load_history(src)
                 if position:
                     tracker.dmr.seek(second_to_time(position))
