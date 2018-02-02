@@ -43,7 +43,7 @@ class DMRTracker(Thread):
         self.dmr = None  # DMR device object
         self.all_devices = []  # DMR device list
         self.__failure = 0
-        self.__load = None
+        self._load = None
         logging.info('DMR Tracker initialized.')
 
     def discover_dmr(self):
@@ -148,15 +148,15 @@ class DMRTracker(Thread):
         return True
 
     def thread_load(self, url):
-        if self.__load:
-            logging.info('stopping previous load, alive state: %s' % self.__load.isAlive())
-            self.__load.stop()
+        if self._load:
+            logging.info('stopping previous load, alive state: %s' % self._load.isAlive())
+            self._load.stop()
         if not loadable.isSet():
             logging.warning('Busy loading...')
             return 'Busy loading...'
 
-        self.__load = DLNALoad(url)
-        self.__load.start()
+        self._load = DLNALoad(url)
+        self._load.start()
         logging.info('Start Loading...')
         return 'Start Loading...'
 
@@ -194,7 +194,8 @@ class DLNALoad(Thread):
                 tracker.resume()
                 logging.info('tracker resume')
                 logging.info('Load Successed.')
-                return 'Load Successed.'
+                tracker.state['CurrentTransportState'] = 'Load Successed.'
+                # return 'Load Successed.'
             self.__failure += 1
             logging.info('Load failed for %s time(s)' % self.__failure)
             sleep(1)
@@ -203,6 +204,7 @@ class DLNALoad(Thread):
         logging.warning('Load aborted. url: %s' % self.__url)
         tracker.resume()
         logging.info('tracker resume')
+        tracker.state['CurrentTransportState'] = 'Error: Load aborted'
         return 'Error: Load aborted'
 
     def stop(self):
