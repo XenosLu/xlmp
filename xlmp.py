@@ -406,8 +406,8 @@ def move(src):
     except Exception as e:
         logging.warning('move file failed: %s' % e)
         abort(404, str(e))
-    return fs_dir(os.path.dirname(src))
-    # return fs_dir('%s/' % os.path.dirname(src))
+    # return fs_dir(os.path.dirname(src))
+    return fs_dir('%s/' % os.path.dirname(src))
 
 
 @post('/save/<src:path>')
