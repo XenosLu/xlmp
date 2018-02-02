@@ -151,6 +151,7 @@ class DMRTracker(Thread):
 
     def thread_load(self, url):
         if self.__load:
+            logging.info('stopping previous load, alive statie: %s' % self.__load.isAlive())
             self.__load.stop()
         if not self.__loadable.isSet():
             logging.warning('Busy loading...')
