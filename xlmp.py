@@ -157,6 +157,7 @@ class DMRTracker(Thread):
         self._load = DLNALoad(url)
         self._load.start()
         logging.info('Start Loading...')
+        logging.info(_load.name)
         return 'Start Loading...'
 
 
