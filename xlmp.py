@@ -148,13 +148,12 @@ class DMRTracker(Thread):
         return True
 
     def loader(self, url):
-        if self._load:
-            logging.info('stopping previous load, alive state: %s' % self._load.isAlive())
+        if self._load and self._load.isAlive():
+            logging.info('stopping previous load')
             self._load.stop()
         # if not loadable.isSet():
             # logging.warning('Busy loading...')
             # return 'Busy loading...'
-
         self._load = DLNALoad(url)
         self._load.start()
         logging.info('Start Loading...')
@@ -384,7 +383,8 @@ def dlna_load(src):
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         logging.warning('File not found: %s' % src)
         return 'Error: File not found.'
-    logging.info('start loading... tracker state:%s' % tracker.state['CurrentTransportState'])
+    # logging.info('start loading... tracker state:%s' % tracker.state['CurrentTransportState'])
+    logging.info('start loading... tracker state:%s' % tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     return tracker.loader(url)
 
