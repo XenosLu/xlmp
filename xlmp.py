@@ -156,9 +156,8 @@ class DMRTracker(Thread):
             # return 'Busy loading...'
         self._load = DLNALoad(url)
         self._load.start()
-        logging.info('Start Loading...')
-        logging.info(self._load.name)
-        return 'Start Loading...'
+        logging.info('Start new loader, thread name: %s' % self._load.name)
+        return 'Start a new loader'
 
 
 class DLNALoad(Thread):
