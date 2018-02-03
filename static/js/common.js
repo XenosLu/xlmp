@@ -27,9 +27,9 @@ $("#tabFrame").on("click", ".folder", function () {
     sub_path = this.title;
     // if(sub_path=="/")
         // sub_path="";
-    if(sub_path == "")
-        filelist("/fs/");
-    else
+    // if(sub_path == "")
+        // filelist("/fs/");
+    // else
         filelist("/fs/" + sub_path + "/");
 }).on("click", ".move", function () {
     if (confirm("Move " + this.title + " to .old?")) {

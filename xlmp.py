@@ -564,6 +564,9 @@ def fs_dir(path):
     """Get static folder list in json"""
     try:
         up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
+        if path == '/':
+            logging.info('path==/')
+            path = ''
         if path:
             logging.info('fs path: %s' % path)
             # up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]  # path should be path/
