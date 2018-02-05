@@ -64,7 +64,13 @@ class DMRTracker(Thread):
 
     def get_transport_state(self):
         try:
-            return self.dmr.info()['CurrentTransportState']
+            info = self.dmr.info()
+            if info:
+                self.state['CurrentTransportState'] = info['CurrentTransportState']
+                return info['CurrentTransportState']
+            else:
+                self._failure += 1
+                return
         except Exception as e:
             logging.info(e)
             return
@@ -73,13 +79,14 @@ class DMRTracker(Thread):
         while self._running.isSet():
             self._flag.wait()
             if self.dmr:
+                self.state['CurrentDMR'] = str(self.dmr)
+                self.state['DMRs'] = [str(i) for i in self.all_devices]
+                sleep(0.1)
+                self.get_transport_state()
+                sleep(0.1)
                 try:
-                    self.state['CurrentDMR'] = str(self.dmr)
-                    self.state['DMRs'] = [str(i) for i in self.all_devices]
-                    sleep(0.1)
-                    info = self.dmr.info()
-                    self.state['CurrentTransportState'] = info['CurrentTransportState']
-                    sleep(0.1)
+                    # info = self.dmr.info()
+                    # self.state['CurrentTransportState'] = info['CurrentTransportState']
                     position_info = self.dmr.position_info()
                     for i in ('RelTime', 'TrackDuration'):
                         self.state[i] = position_info[i]
@@ -103,7 +110,7 @@ class DMRTracker(Thread):
                 sleep(1)
             else:
                 self.discover_dmr()
-                sleep(2.5)
+                sleep(2.6)
 
     def pause(self):
         self._flag.clear()
