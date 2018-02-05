@@ -232,7 +232,7 @@ class DLNALoader(Thread):
         self._flag = Event()
         self._failure = 0
         self._url = ''
-        logging.info('DLNA URL load initialized.')
+        logging.info('DLNA URL loader initialized.')
 
     def run(self):
         while self._running.isSet():
