@@ -574,7 +574,6 @@ def fs_dir(path):
     try:
         up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
         if path:
-            logging.info('fs path: %s' % path)
             # up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]  # path should be path/
             up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
             if not path.endswith('/'):
