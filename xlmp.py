@@ -171,7 +171,7 @@ class DLNALoad(Thread):
         super(DLNALoad, self).__init__(*args, **kwargs)
         # self._running = Event()
         # self._running.set()
-        self._stop = Event()
+        self._to_stop = Event()
         self._failure = 0
         self._url = url
         logging.info('DLNA URL load initialized.')
@@ -184,7 +184,7 @@ class DLNALoad(Thread):
         # while self._running.isSet() and self._failure < 3:
         while self._failure < 3:
             # if not self._running.isSet():
-            if self._stop.isSet():
+            if self._to_stop.isSet():
                 logging.info('end because of another request. url: %s' % self._url)
                 logging.info('set loadable')
                 loadable.set()
@@ -218,14 +218,61 @@ class DLNALoad(Thread):
 
     def stop(self):
         # self._running.clear()
-        self._stop.set()
+        self._to_stop.set()
         # logging.info('DLNA load STOP received, waiting for stop.')
+
+        
+class DLNALoader(Thread):
+    """Load url through DLNA"""
+
+    def __init__(self, *args, **kwargs):
+        super(DLNALoader, self).__init__(*args, **kwargs)
+        self._running = Event()
+        self._running.set()
+        self._flag = Event()
+        self._failure = 0
+        self._url = ''
+        logging.info('DLNA URL load initialized.')
+
+    def run(self):
+        while self._running.isSet():
+            self._flag.wait()
+            tracker.pause()
+            url = self._url
+            if tracker.loadonce(url):
+                logging.info('Loaded url: %s successed' % url)
+                src = unquote(re.sub('http://.*/video/', '', url))
+                position = load_history(src)
+                if position:
+                    tracker.dmr.seek(second_to_time(position))
+                    logging.info('Loaded position: %s' % second_to_time(position))
+                logging.info('Load Successed.')
+                tracker.state['CurrentTransportState'] = 'Load Successed.'
+                if url == self._url:
+                    self._flag.clear()
+            else:
+                self._failure += 1
+                if self._failure >= 3:
+                    self._flag.clear()
+            tracker.resume()
+            logging.info('tracker resume')
+
+    def stop(self):
+        self._running.clear()
+
+    def load(self, url):
+        self._url = url
+        self._failure = 0
+        self._flag.set()
 
 loadable = Event()
 loadable.set()
 
 tracker = DMRTracker()
 tracker.start()
+
+loader = DLNALoader()
+loader.start()
 
 
 def check_dmr_exist(func):
@@ -390,7 +437,9 @@ def dlna_load(src):
     # logging.info('start loading... tracker state:%s' % tracker.state['CurrentTransportState'])
     logging.info('start loading... tracker state:%s' % tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
-    return tracker.loader(url)
+    loader.load(url)
+    return 'loading %s' % src
+    # return tracker.loader(url)
 
 
 def result(r):
