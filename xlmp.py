@@ -169,8 +169,9 @@ class DLNALoad(Thread):
 
     def __init__(self, url, *args, **kwargs):
         super(DLNALoad, self).__init__(*args, **kwargs)
-        self._running = Event()
-        self._running.set()
+        # self._running = Event()
+        # self._running.set()
+        self._stop = Event()
         self._failure = 0
         self._url = url
         logging.info('DLNA URL load initialized.')
@@ -182,7 +183,8 @@ class DLNALoad(Thread):
         tracker.pause()
         # while self._running.isSet() and self._failure < 3:
         while self._failure < 3:
-            if not self._running.isSet():
+            # if not self._running.isSet():
+            if self._stop.isSet():
                 logging.info('end because of another request. url: %s' % self._url)
                 logging.info('set loadable')
                 loadable.set()
@@ -215,7 +217,8 @@ class DLNALoad(Thread):
         return 'Error: Load aborted'
 
     def stop(self):
-        self._running.clear()
+        # self._running.clear()
+        self._stop.set()
         # logging.info('DLNA load STOP received, waiting for stop.')
 
 loadable = Event()
