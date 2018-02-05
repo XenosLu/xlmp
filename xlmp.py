@@ -158,13 +158,10 @@ class DMRTracker(Thread):
         if self._load and self._load.isAlive():
             logging.info('stopping previous load')
             self._load.stop()
-        # if not loadable.isSet():
-            # logging.warning('Busy loading...')
-            # return 'Busy loading...'
         self._load = DLNALoad(url)
-        self._load.start()
         logging.info('Start new loader, thread name: %s' % self._load.name)
-        return 'Start a new loader'
+        self._load.start()
+        return 'Start loading...'
 
 
 class DLNALoad(Thread):
@@ -183,17 +180,13 @@ class DLNALoad(Thread):
         loadable.clear()
         logging.info('started: clear loadable')
         tracker.pause()
-        logging.info('tracker pause')
         # while self._running.isSet() and self._failure < 3:
         while self._failure < 3:
             if not self._running.isSet():
-                logging.info('end because of another request url: %s' % self._url)
+                logging.info('end because of another request. url: %s' % self._url)
                 logging.info('set loadable')
                 loadable.set()
                 return
-            # for i in range(5):
-                # print('%d %s' % (i, self._url))
-                # sleep(1)
             if tracker.loadonce(self._url):
                 logging.info('Loaded url: %s successed' % self._url)
                 src = unquote(re.sub('http://.*/video/', '', self._url))
@@ -211,6 +204,7 @@ class DLNALoad(Thread):
                 # return 'Load Successed.'
             self._failure += 1
             logging.info('Load failed for %s time(s)' % self._failure)
+            tracker.state['CurrentTransportState'] = 'Load Failed %d.' % self._failure
             sleep(1)
         logging.info('set loadable')
         loadable.set()
