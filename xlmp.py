@@ -70,6 +70,7 @@ class DMRTracker(Thread):
                 return info['CurrentTransportState']
             else:
                 self._failure += 1
+                logging.warning('Losing DMR count when get transport state: %d' % self._failure)
                 return
         except Exception as e:
             logging.info(e)
