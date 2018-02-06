@@ -136,6 +136,9 @@ class DMRTracker(Thread):
                 sleep(0.85)
             if self.dmr.set_current_media(url):
                 logging.info('Loaded %s' % url)
+            else:
+                logging.warning('Load url failed: %s' % url)
+                return False
             time0 = time()
             while self.get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
                 self.dmr.play()
