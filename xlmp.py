@@ -63,16 +63,23 @@ class DMRTracker(Thread):
         return False
 
     def get_transport_state(self):
-        try:
-            info = self.dmr.info()
-            if info:
-                self.state['CurrentTransportState'] = info['CurrentTransportState']
-                return info['CurrentTransportState']
-            else:
-                self._failure += 1
-                logging.warning('Losing DMR count when get transport state: %d' % self._failure)
-        except Exception as e:
-            logging.info(e)
+        info = self.dmr.info()
+        if info:
+            self.state['CurrentTransportState'] = info['CurrentTransportState']
+            return info['CurrentTransportState']
+        else:
+            self._failure += 1
+            logging.warning('Losing DMR when get transport state. count: %d' % self._failure)
+        # try:
+            # info = self.dmr.info()
+            # if info:
+                # self.state['CurrentTransportState'] = info['CurrentTransportState']
+                # return info['CurrentTransportState']
+            # else:
+                # self._failure += 1
+                # logging.warning('Losing DMR count when get transport state: %d' % self._failure)
+        # except Exception as e:
+            # logging.info(e)
 
     def run(self):
         while self._running.isSet():
