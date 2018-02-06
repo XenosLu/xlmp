@@ -403,32 +403,6 @@ def get_next_file(src):
         return t.lstrip('/')
 
 
-# @route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
-# @check_dmr_exist
-# def dlna_load(url):
-    # """request for load Video through DLNA"""
-    # # if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
-        # # logging.warning('File not found: %s' % src)
-        # # return 'Error: File not found.'
-    # # logging.info('start loading... tracker state:%s' % tracker.state)
-    # # url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
-    # try_time = 1
-    # while try_time <= 3:
-        # if tracker.loadonce(url):
-            # logging.info('Loaded url: %s successed' % url)
-            # # logging.info('Loaded url: %s success in %s time(s)' % (url, try_time))
-            # position = load_history(src)
-            # if position:
-                # tracker.dmr.seek(second_to_time(position))
-                # logging.info('Loaded position: %s' % second_to_time(position))
-            # return 'Load Successed.'
-        # logging.info('Load failed for %s time(s)' % try_time)
-        # try_time += 1
-        # sleep(1)
-    # logging.warning('Load aborted because of attempts was exceeded')
-    # return 'Error: Load aborted because of attempts was exceeded'
-
-
 @route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
 @check_dmr_exist
 def dlna_load(src):
