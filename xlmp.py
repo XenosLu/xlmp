@@ -398,15 +398,18 @@ def search_dmr():
 
 def get_next_file(src):
     fullname = '%s/%s' % (VIDEO_PATH, src)
-    filepath = os.path.dirname(fullname)
-    dirs = os.listdir(filepath)
-    dirs = [i for i in dirs if os.path.isfile('%s/%s' % (filepath, i))]
+    src_path = os.path.dirname(fullname)
+    src_name = os.path.basename(fullname)
+    dirs = os.listdir(src_path)
+    dirs = [i for i in dirs if os.path.isfile('%s/%s' % (src_path, i))]  # should only include video files
+    if not src_name in dirs:
+        dirs.append(src_name)
     dirs.sort()
-    next_index = dirs.index(os.path.basename(fullname)) + 1
+    next_index = dirs.index(src_name) + 1  # file may deleted before
     if next_index > len(dirs):
-        return None
+        return
     else:
-        t = '%s/%s' % (filepath, dirs[next_index])
+        t = '%s/%s' % (src_path, dirs[next_index])
         t = t.replace(VIDEO_PATH, '')
         return t.lstrip('/')
 
