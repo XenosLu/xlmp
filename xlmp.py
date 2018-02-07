@@ -105,7 +105,7 @@ class DMRTracker(Thread):
                         self._failure = 0
                 except TypeError:
                     self._failure += 1
-                    logging.warning('Losing DMR count: %d' % self._failure)
+                    logging.warning('Losing DMR count: %d' % self._failure, exc_info=True)
                     if self._failure >= 3:
                         # self._failure = 0
                         logging.info('No DMR currently.')
@@ -398,18 +398,15 @@ def search_dmr():
 
 def get_next_file(src):
     fullname = '%s/%s' % (VIDEO_PATH, src)
-    src_path = os.path.dirname(fullname)
-    src_name = os.path.basename(fullname)
-    dirs = os.listdir(src_path)
-    dirs = [i for i in dirs if os.path.isfile('%s/%s' % (src_path, i))]  # should only include video files
-    if not src_name in dirs:
-        dirs.append(src_name)
+    filepath = os.path.dirname(fullname)
+    dirs = os.listdir(filepath)
+    dirs = [i for i in dirs if os.path.isfile('%s/%s' % (filepath, i))]
     dirs.sort()
-    next_index = dirs.index(src_name) + 1  # file may deleted before
+    next_index = dirs.index(os.path.basename(fullname)) + 1
     if next_index > len(dirs):
-        return
+        return None
     else:
-        t = '%s/%s' % (src_path, dirs[next_index])
+        t = '%s/%s' % (filepath, dirs[next_index])
         t = t.replace(VIDEO_PATH, '')
         return t.lstrip('/')
 
