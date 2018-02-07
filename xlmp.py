@@ -91,15 +91,17 @@ class DMRTracker(Thread):
                 self.get_transport_state()
                 sleep(0.1)
                 try:
-                    # info = self.dmr.info()
-                    # self.state['CurrentTransportState'] = info['CurrentTransportState']
                     position_info = self.dmr.position_info()
                     for i in ('RelTime', 'TrackDuration'):
                         self.state[i] = position_info[i]
-                    if self.state['CurrentTransportState'] == 'PLAYING' and position_info['TrackURI']:
-                        self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI']))
-                        save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']),
-                                     time_to_second(self.state['TrackDuration']))
+                    if self.state['CurrentTransportState'] == 'PLAYING':
+                        if position_info['TrackURI']:
+                        
+                            self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI']))
+                            save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']),
+                                         time_to_second(self.state['TrackDuration']))
+                        else:
+                            logging.info('no Track uri')
                     if self._failure > 0:
                         logging.info('reset failure count from %d to 0' % self._failure)
                         self._failure = 0
