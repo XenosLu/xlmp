@@ -98,12 +98,14 @@ class DMRTracker(Thread):
                         self.state[i] = position_info[i]
                     if self.state['CurrentTransportState'] == 'PLAYING':
                         self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI']))
+                        logging.info(position_info['TrackURI'])
                         save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']),
                                      time_to_second(self.state['TrackDuration']))
                     if self._failure > 0:
                         logging.info('reset failure count from %d to 0' % self._failure)
                         self._failure = 0
                 except TypeError:
+                    
                     self._failure += 1
                     logging.warning('Losing DMR count: %d' % self._failure, exc_info=True)
                     if self._failure >= 3:
