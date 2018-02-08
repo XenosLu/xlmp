@@ -33,7 +33,6 @@ logging.basicConfig(level=logging.INFO,
 
 class DMRTracker(Thread):
     """DLNA Digital Media Renderer tracker thread"""
-
     def __init__(self, *args, **kwargs):
         super(DMRTracker, self).__init__(*args, **kwargs)
         self._flag = Event()
@@ -71,16 +70,6 @@ class DMRTracker(Thread):
         else:
             self._failure += 1
             logging.warning('Losing DMR when get transport state. count: %d' % self._failure)
-        # try:
-            # info = self.dmr.info()
-            # if info:
-                # self.state['CurrentTransportState'] = info['CurrentTransportState']
-                # return info['CurrentTransportState']
-            # else:
-                # self._failure += 1
-                # logging.warning('Losing DMR count when get transport state: %d' % self._failure)
-        # except Exception as e:
-            # logging.info(e)
 
     def run(self):
         while self._running.isSet():
@@ -169,7 +158,6 @@ class DMRTracker(Thread):
         
 class DLNALoader(Thread):
     """Load url through DLNA"""
-
     def __init__(self, *args, **kwargs):
         super(DLNALoader, self).__init__(*args, **kwargs)
         self._running = Event()
@@ -210,9 +198,6 @@ class DLNALoader(Thread):
         self._url = url
         self._failure = 0
         self._flag.set()
-
-# loadable = Event()
-# loadable.set()
 
 tracker = DMRTracker()
 tracker.start()
