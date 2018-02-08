@@ -50,7 +50,8 @@ class DMRTracker(Thread):
         logging.debug('Starting DMR search...')
         if self.dmr:
             logging.info('Current DMR: %s' % self.dmr)
-        self.all_devices = discover(name='', ip='', timeout=3, st=URN_AVTransport_Fmt, ssdp_version=1)
+        self.all_devices = discover(name='', ip='', timeout=3,
+                                    st=URN_AVTransport_Fmt, ssdp_version=1)
         if len(self.all_devices) > 0:
             self.dmr = self.all_devices[0]
             logging.info('Found DMR device: %s' % self.dmr)
@@ -86,7 +87,6 @@ class DMRTracker(Thread):
                         self.state[i] = position_info[i]
                     if self.state['CurrentTransportState'] == 'PLAYING':
                         if position_info['TrackURI']:
-                        
                             self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI']))
                             save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']),
                                          time_to_second(self.state['TrackDuration']))
@@ -321,21 +321,15 @@ def search_dmr():
 
 
 def get_next_file(src):
-    # current_src = Path(VIDEO_PATH) / src
-    # dirs = [str(i) for i in current_src.parent.iterdir() if not i.name.startswith('.') and i.is_file()]
-    # dirs.sort()
-    # return str(dirs)
-
     fullname = '%s/%s' % (VIDEO_PATH, src)
     filepath = os.path.dirname(fullname)
-    dirs = os.listdir(filepath)
-    dirs = [i for i in dirs if not i.startswith('.') and os.path.isfile('%s/%s' % (filepath, i))]
-    dirs.sort()
+    dirs = sorted([i for i in os.listdir(filepath)
+                   if not i.startswith('.') and os.path.isfile('%s/%s' % (filepath, i))])
     next_index = dirs.index(os.path.basename(fullname)) + 1
-    if next_index >= len(dirs):
-        return None
-    else:
+    if next_index < len(dirs):
         return '%s/%s' % (os.path.dirname(src), dirs[next_index])
+    else:
+        return
         # return re.sub('((?:.*/)*)[^/]*$', '\\1%s' % dirs[next_index], src)  # replace filename from src to next file
         # t = '%s/%s' % (filepath, dirs[next_index])
         # t = t.replace(VIDEO_PATH, '')
@@ -533,7 +527,6 @@ def fs_dir(path):
     try:
         up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
         if path:
-            # up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]  # path should be path/
             up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
             if not path.endswith('/'):
                 path = '%s/' % path
