@@ -14,10 +14,13 @@ Updated in 2018.02.08
 ### It can do two things: 
 + Let you play mp4 files in your computer on your web browser(in my case it's a pad)
 + Let you play video files through TV by DLNA, you can control it through web browser(mostly it's your phone)
+## features
++ save your watch history, so you can easily start it from last. And because it based on web, which means you can share your play history across all your home device.
+
 
 ### It can achieve the DMC + DMS Roles in DLNA
 ## Now you can easily deploy it through docker
-## Suggestted install steps:
+## Suggested install steps:
 ### make sure you have a docker environment and your 80 port is not occupied, and type follow command:
     docker run -itd --net=host -v /home/user/media:/xlmp/media/ xenocider/xlmp
 ### /home/user/meida should be replace by your own media folder
@@ -26,7 +29,6 @@ First developed in PHP, rewrote in Python3.
 ## Filelist:
 + LICENSE         license file 	
 + README.md       readme
-+ adapter.wsgi    wsgi adapter
 + xlmp.py 	      main
 + views/          html templates
 + static/         web static files
