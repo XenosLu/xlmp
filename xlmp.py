@@ -335,10 +335,11 @@ def get_next_file(src):
     if next_index >= len(dirs):
         return None
     else:
-        return re.sub('((?:.*/)*)[^/]*$', '\\1%s' % dirs[next_index], src)  # replace filename from src to next file
-        t = '%s/%s' % (filepath, dirs[next_index])
-        t = t.replace(VIDEO_PATH, '')
-        return t.lstrip('/')
+        return '%s/%s' % (os.path.dirname(src), dirs[next_index])
+        # return re.sub('((?:.*/)*)[^/]*$', '\\1%s' % dirs[next_index], src)  # replace filename from src to next file
+        # t = '%s/%s' % (filepath, dirs[next_index])
+        # t = t.replace(VIDEO_PATH, '')
+        # return t.lstrip('/')
 
 
 @route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
@@ -536,8 +537,9 @@ def fs_dir(path):
             up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
             if not path.endswith('/'):
                 path = '%s/' % path
-        dir_list = os.listdir('%s/%s' % (VIDEO_PATH, path))  # path could be either path or path/
-        dir_list.sort()
+        # dir_list = os.listdir('%s/%s' % (VIDEO_PATH, path))  # path could be either path or path/
+        dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))  # path could be either path or path/
+        # dir_list.sort()
         for filename in dir_list:
             if filename.startswith('.'):
                 continue
