@@ -266,6 +266,7 @@ class DLNALoader(Thread):
                 self._failure += 1
                 if self._failure >= 3:
                     self._flag.clear()
+            sleep(0.3)
             tracker.resume()
             logging.info('tracker resume')
 
