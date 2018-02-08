@@ -250,6 +250,7 @@ class DLNALoader(Thread):
         while self._running.isSet():
             self._flag.wait()
             tracker.pause()
+            sleep(0.5)
             url = self._url
             if tracker.loadonce(url):
                 logging.info('Loaded url: %s successed' % url)
@@ -266,7 +267,6 @@ class DLNALoader(Thread):
                 self._failure += 1
                 if self._failure >= 3:
                     self._flag.clear()
-            sleep(0.3)
             tracker.resume()
             logging.info('tracker resume')
 
