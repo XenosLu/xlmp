@@ -155,7 +155,7 @@ class DMRTracker(Thread):
             return False
         return True
 
-        
+
 class DLNALoader(Thread):
     """Load url through DLNA"""
     def __init__(self, *args, **kwargs):
