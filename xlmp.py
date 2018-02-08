@@ -162,77 +162,9 @@ class DMRTracker(Thread):
                     return False
             logging.info(self.state)
         except Exception as e:
-            # logging.warning('DLNA load exception: %s\n%s' % (e, traceback.format_exc()))
             logging.warning('DLNA load exception: %s' % e, exc_info=True)
             return False
         return True
-
-    # def loader(self, url):
-        # if self._load and self._load.isAlive():
-            # logging.info('stopping previous load')
-            # self._load.stop()
-        # self._load = DLNALoad(url)
-        # logging.info('Start new loader, thread name: %s' % self._load.name)
-        # self._load.start()
-        # return 'Start loading...'
-
-
-# class DLNALoad(Thread):
-    # """Load url through DLNA thread"""
-
-    # def __init__(self, url, *args, **kwargs):
-        # super(DLNALoad, self).__init__(*args, **kwargs)
-        # # self._running = Event()
-        # # self._running.set()
-        # self._to_stop = Event()
-        # self._failure = 0
-        # self._url = url
-        # logging.info('DLNA URL load initialized.')
-
-    # def run(self):
-        # loadable.wait()
-        # loadable.clear()
-        # logging.info('started: clear loadable')
-        # tracker.pause()
-        # # while self._running.isSet() and self._failure < 3:
-        # while self._failure < 3:
-            # # if not self._running.isSet():
-            # if self._to_stop.isSet():
-                # logging.info('end because of another request. url: %s' % self._url)
-                # logging.info('set loadable')
-                # loadable.set()
-                # return
-            # if tracker.loadonce(self._url):
-                # logging.info('Loaded url: %s successed' % self._url)
-                # src = unquote(re.sub('http://.*/video/', '', self._url))
-                # position = load_history(src)
-                # if position:
-                    # tracker.dmr.seek(second_to_time(position))
-                    # logging.info('Loaded position: %s' % second_to_time(position))
-                # logging.info('set loadable')
-                # loadable.set()
-                # tracker.resume()
-                # logging.info('tracker resume')
-                # logging.info('Load Successed.')
-                # tracker.state['CurrentTransportState'] = 'Load Successed.'
-                # return
-                # # return 'Load Successed.'
-            # self._failure += 1
-            # logging.info('Load failed for %s time(s)' % self._failure)
-            # tracker.state['CurrentTransportState'] = 'Load Failed %d.' % self._failure
-            # sleep(1)
-        # logging.info('set loadable')
-        # loadable.set()
-        # logging.warning('Load aborted. url: %s' % self._url)
-        # tracker.resume()
-        # logging.info('tracker resume')
-        # tracker.state['CurrentTransportState'] = 'Error: Load aborted'
-        # return 'Error: Load aborted'
-
-    # def stop(self):
-        # # self._running.clear()
-        # self._to_stop.set()
-        # # logging.info('DLNA load STOP received, waiting for stop.')
 
         
 class DLNALoader(Thread):
@@ -418,7 +350,7 @@ def get_next_file(src):
     if next_index >= len(dirs):
         return None
     else:
-        return re.sub('((?:.*/)*)[^/]*$', '\\1%s' % dirs[next_index], src)
+        return re.sub('((?:.*/)*)[^/]*$', '\\1%s' % dirs[next_index], src)  # replace filename from src to next file
         t = '%s/%s' % (filepath, dirs[next_index])
         t = t.replace(VIDEO_PATH, '')
         return t.lstrip('/')
