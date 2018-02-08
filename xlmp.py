@@ -85,7 +85,8 @@ class DMRTracker(Thread):
                     position_info = self.dmr.position_info()
                     for i in ('RelTime', 'TrackDuration'):
                         self.state[i] = position_info[i]
-                    if self.state['CurrentTransportState'] == 'PLAYING':
+                    # if self.state['CurrentTransportState'] == 'PLAYING':
+                    if self.state.get('CurrentTransportState') == 'PLAYING':
                         if position_info['TrackURI']:
                             self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI']))
                             save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']),
@@ -96,7 +97,6 @@ class DMRTracker(Thread):
                         logging.info('reset failure count from %d to 0' % self._failure)
                         self._failure = 0
                 except TypeError:
-                    
                     self._failure += 1
                     logging.warning('Losing DMR count: %d' % self._failure, exc_info=True)
                     if self._failure >= 3:
@@ -143,7 +143,7 @@ class DMRTracker(Thread):
             sleep(0.5)
             time0 = time()
             logging.info('checking duration to make sure loaded...')
-            while self.dmr.position_info()['TrackDuration'] == '00:00:00':
+            while self.dmr.position_info().get('TrackDuration') == '00:00:00':
                 sleep(0.5)
                 logging.info('Waiting for duration correctly recognized, url=%s' % url)
                 if (time() - time0) > 9:
@@ -369,6 +369,8 @@ def dlna_play():
 @route('/dlnanext')
 @check_dmr_exist
 def dlna_next():
+    if not tracker.state.get('TrackURI'):
+        return 'No current url'
     next_file = get_next_file(tracker.state['TrackURI'])
     logging.info('set next file: %s' % next_file)
     if next_file:
