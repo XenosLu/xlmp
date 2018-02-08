@@ -24,6 +24,7 @@ app = default_app()
 VIDEO_PATH = './media'  # media file path
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
 
+
 # initialize logging
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
@@ -380,6 +381,8 @@ def dlna():
 
 
 @route('/play/<src:re:.*\.((?i)mp)4$>')
+# def test(src):
+    # return get_next_file(src)
 def play(src):
     """Video play page"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
@@ -401,15 +404,21 @@ def search_dmr():
 
 
 def get_next_file(src):
+    # current_src = Path(VIDEO_PATH) / src
+    # dirs = [str(i) for i in current_src.parent.iterdir() if not i.name.startswith('.') and i.is_file()]
+    # dirs.sort()
+    # return str(dirs)
+
     fullname = '%s/%s' % (VIDEO_PATH, src)
     filepath = os.path.dirname(fullname)
     dirs = os.listdir(filepath)
-    dirs = [i for i in dirs if os.path.isfile('%s/%s' % (filepath, i))]
+    dirs = [i for i in dirs if not i.startswith('.') and os.path.isfile('%s/%s' % (filepath, i))]
     dirs.sort()
     next_index = dirs.index(os.path.basename(fullname)) + 1
-    if next_index > len(dirs):
+    if next_index >= len(dirs):
         return None
     else:
+        return re.sub('((?:.*/)*)[^/]*$', '\\1%s' % dirs[next_index], src)
         t = '%s/%s' % (filepath, dirs[next_index])
         t = t.replace(VIDEO_PATH, '')
         return t.lstrip('/')
