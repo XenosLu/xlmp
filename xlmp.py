@@ -72,31 +72,35 @@ class DMRTracker(Thread):
             self._failure += 1
             logging.warning('Losing DMR when get transport state. count: %d' % self._failure)
 
+    def get_position_info(self):
+        position_info = self.dmr.position_info()
+        if not position_info:
+            return
+        for i in ('RelTime', 'TrackDuration'):
+            self.state[i] = position_info[i]
+        if self.state.get('CurrentTransportState') == 'PLAYING':
+        # if self.get_transport_state() == 'PLAYING':
+            if position_info['TrackURI']:
+                self.state['TrackURI'] = unquote(
+                    re.sub('http://.*/video/', '', position_info['TrackURI']))
+                save_history(self.state['TrackURI'],
+                             time_to_second(self.state['RelTime']),
+                             time_to_second(self.state['TrackDuration']))
+            else:
+                logging.info('no Track uri')
+        return position_info.get('TrackDuration')
+
     def run(self):
         while self._running.isSet():
             self._flag.wait()
             if self.dmr:
                 self.state['CurrentDMR'] = str(self.dmr)
                 self.state['DMRs'] = [str(i) for i in self.all_devices]
-                sleep(0.1)
-                self.get_transport_state()
-                sleep(0.1)
-                try:
-                    position_info = self.dmr.position_info()
-                    for i in ('RelTime', 'TrackDuration'):
-                        self.state[i] = position_info[i]
-                    # if self.state['CurrentTransportState'] == 'PLAYING':
-                    if self.state.get('CurrentTransportState') == 'PLAYING':
-                        if position_info['TrackURI']:
-                            self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI']))
-                            save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']),
-                                         time_to_second(self.state['TrackDuration']))
-                        else:
-                            logging.info('no Track uri')
+                if self.get_transport_state() and not sleep(0.1) and self.get_position_info():
                     if self._failure > 0:
                         logging.info('reset failure count from %d to 0' % self._failure)
                         self._failure = 0
-                except TypeError:
+                else:
                     self._failure += 1
                     logging.warning('Losing DMR count: %d' % self._failure, exc_info=True)
                     if self._failure >= 3:
@@ -104,12 +108,36 @@ class DMRTracker(Thread):
                         logging.info('No DMR currently.')
                         self.state = {}
                         self.dmr = None
-                except Exception as e:
-                    logging.warning('DMR Tracker Exception: %s' % e)
+
+                # try:
+                    # position_info = self.dmr.position_info()
+                    # for i in ('RelTime', 'TrackDuration'):
+                        # self.state[i] = position_info[i]
+                    # # if self.state['CurrentTransportState'] == 'PLAYING':
+                    # if self.state.get('CurrentTransportState') == 'PLAYING':
+                        # if position_info['TrackURI']:
+                            # self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI']))
+                            # save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']),
+                                         # time_to_second(self.state['TrackDuration']))
+                        # else:
+                            # logging.info('no Track uri')
+                    # if self._failure > 0:
+                        # logging.info('reset failure count from %d to 0' % self._failure)
+                        # self._failure = 0
+                # except TypeError:
+                    # self._failure += 1
+                    # logging.warning('Losing DMR count: %d' % self._failure, exc_info=True)
+                    # if self._failure >= 3:
+                        # # self._failure = 0
+                        # logging.info('No DMR currently.')
+                        # self.state = {}
+                        # self.dmr = None
+                # except Exception as e:
+                    # logging.warning('DMR Tracker Exception: %s' % e)
                 sleep(1)
             else:
                 self.discover_dmr()
-                sleep(2.6)
+                sleep(2.5)
 
     def pause(self):
         self._flag.clear()
