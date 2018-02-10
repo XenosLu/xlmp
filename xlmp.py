@@ -102,7 +102,8 @@ class DMRTracker(Thread):
                         self._failure = 0
                 else:
                     self._failure += 1
-                    logging.warning('Losing DMR count: %d' % self._failure, exc_info=True)
+                    # logging.warning('Losing DMR count: %d' % self._failure, exc_info=True)
+                    logging.warning('Losing DMR count: %d' % self._failure)
                     if self._failure >= 3:
                         # self._failure = 0
                         logging.info('No DMR currently.')
@@ -173,7 +174,7 @@ class DMRTracker(Thread):
             logging.info('checking duration to make sure loaded...')
             while self.dmr.position_info().get('TrackDuration') == '00:00:00':
                 sleep(0.5)
-                logging.info('Waiting for duration correctly recognized, url=%s' % url)
+                logging.info('Waiting for duration to be recognized correctly, url=%s' % url)
                 if (time() - time0) > 9:
                     logging.info('Load duration timeout')
                     return False
@@ -400,11 +401,11 @@ def dlna_next():
     if not tracker.state.get('TrackURI'):
         return 'No current url'
     next_file = get_next_file(tracker.state['TrackURI'])
-    logging.info('set next file: %s' % next_file)
+    logging.info('next file recognized: %s' % next_file)
     if next_file:
         dlna_load(next_file)
     else:
-        return 'To the end'
+        return "Can't get next file"
 
 
 @route('/dlnapause')
