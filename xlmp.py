@@ -437,7 +437,8 @@ def dlna_volume_control(control):
         vol += 1
     elif control == 'down':
         vol -= 1
-    if vol < 0 or vol > 100:
+    # if vol < 0 or vol > 100:
+    if not 100 >= vol >= 0:
         return 'volume range exceeded'
     elif tracker.dmr.volume(vol):
         return str(vol)
