@@ -65,9 +65,11 @@ class DMRTracker(Thread):
 
     def get_transport_state(self):
         info = self.dmr.info()
-        if info:
-            self.state['CurrentTransportState'] = info['CurrentTransportState']
-            return info['CurrentTransportState']
+        # if info:
+            # self.state['CurrentTransportState'] = info['CurrentTransportState']
+            # return info['CurrentTransportState']
+        self.state['CurrentTransportState'] = info.get('CurrentTransportState')
+        return info.get('CurrentTransportState')
         # else:
             # self._failure += 1
             # logging.warning('Losing DMR when get transport state. count: %d' % self._failure)
@@ -76,10 +78,9 @@ class DMRTracker(Thread):
         position_info = self.dmr.position_info()
         if not position_info:
             return
-        for i in ('RelTime', 'TrackDuration'):
-            self.state[i] = position_info[i]
+        for key in ('RelTime', 'TrackDuration'):
+            self.state[key] = position_info[key]
         if self.state.get('CurrentTransportState') == 'PLAYING':
-        # if self.get_transport_state() == 'PLAYING':
             if position_info['TrackURI']:
                 self.state['TrackURI'] = unquote(
                     re.sub('http://.*/video/', '', position_info['TrackURI']))
@@ -345,7 +346,6 @@ def dlna_load(src):
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     loader.load(url)
     return 'loading %s' % src
-    # return tracker.loader(url)
 
 
 def result(r):
@@ -531,9 +531,7 @@ def fs_dir(path):
             up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
             if not path.endswith('/'):
                 path = '%s/' % path
-        # dir_list = os.listdir('%s/%s' % (VIDEO_PATH, path))  # path could be either path or path/
         dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))  # path could be either path or path/
-        # dir_list.sort()
         for filename in dir_list:
             if filename.startswith('.'):
                 continue
