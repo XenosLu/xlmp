@@ -7,7 +7,9 @@
   </div>
   <div class="btn-group dropdown">
     <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
-      SYS<i class="glyphicon glyphicon-chevron-down"></i>
+      <!-- SYS<i class="glyphicon glyphicon-chevron-down"></i> -->
+      <i class="glyphicon glyphicon-cog"></i>
+      <i class="glyphicon glyphicon-chevron-down"></i>
     </button>
     <ul class="dropdown-menu">
       <li><a onclick="$.get('/deploy')"><i class="glyphicon glyphicon-cog"></i>deploy</a></li>
