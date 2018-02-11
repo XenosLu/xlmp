@@ -468,7 +468,7 @@ def test():
 @route('/update')
 def update():
     """self update through git"""
-    if not sys.platform == 'linux':
+    if sys.platform == 'linux':
         if os.system('git pull') == 0:
             # os._exit(1)
             t = Thread(target=test).start()
