@@ -102,39 +102,12 @@ class DMRTracker(Thread):
                         self._failure = 0
                 else:
                     self._failure += 1
-                    # logging.warning('Losing DMR count: %d' % self._failure, exc_info=True)
                     logging.warning('Losing DMR count: %d' % self._failure)
                     if self._failure >= 3:
                         # self._failure = 0
                         logging.info('No DMR currently.')
                         self.state = {}
                         self.dmr = None
-
-                # try:
-                    # position_info = self.dmr.position_info()
-                    # for i in ('RelTime', 'TrackDuration'):
-                        # self.state[i] = position_info[i]
-                    # # if self.state['CurrentTransportState'] == 'PLAYING':
-                    # if self.state.get('CurrentTransportState') == 'PLAYING':
-                        # if position_info['TrackURI']:
-                            # self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI']))
-                            # save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']),
-                                         # time_to_second(self.state['TrackDuration']))
-                        # else:
-                            # logging.info('no Track uri')
-                    # if self._failure > 0:
-                        # logging.info('reset failure count from %d to 0' % self._failure)
-                        # self._failure = 0
-                # except TypeError:
-                    # self._failure += 1
-                    # logging.warning('Losing DMR count: %d' % self._failure, exc_info=True)
-                    # if self._failure >= 3:
-                        # # self._failure = 0
-                        # logging.info('No DMR currently.')
-                        # self.state = {}
-                        # self.dmr = None
-                # except Exception as e:
-                    # logging.warning('DMR Tracker Exception: %s' % e)
                 sleep(1)
             else:
                 self.discover_dmr()
@@ -359,10 +332,6 @@ def get_next_file(src):
         return '%s/%s' % (os.path.dirname(src), dirs[next_index])
     else:
         return
-        # return re.sub('((?:.*/)*)[^/]*$', '\\1%s' % dirs[next_index], src)  # replace filename from src to next file
-        # t = '%s/%s' % (filepath, dirs[next_index])
-        # t = t.replace(VIDEO_PATH, '')
-        # return t.lstrip('/')
 
 
 @route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
