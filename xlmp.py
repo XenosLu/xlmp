@@ -462,7 +462,8 @@ def save(src):
     save_history(src, position, duration)
 
 def test():
-    sleep(2.5)
+    # sleep(2.5)
+    sleep(2)
     os._exit(1)
 
 @route('/update')
@@ -474,7 +475,7 @@ def update():
             t = Thread(target=test).start()
             return 'updated'
         else:
-            return 'excute git pull failed'
+            return 'execute git pull failed'
     else:
         return 'not supported'
 
