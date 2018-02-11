@@ -8,7 +8,7 @@ RUN apk add --no-cache git \
     && apk add --no-cache supervisor \
     && apk add --no-cache nginx \
     && if [ "$enable_logserver" ];then apk add --no-cache rsyslog;fi \
-    && if [ "$enable_logserver" ];then echo "*.* @@nas:1514" >>/etc/rsyslog.conf;fi\
+    && if [ "$enable_logserver" ];then echo "*.* @@nas:1514" >>/etc/rsyslog.conf;fi \
     && mkdir /run/nginx \
     && rm -f /etc/nginx/conf.d/default.conf
 
