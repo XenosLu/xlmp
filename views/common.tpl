@@ -3,7 +3,7 @@
     <button id="history" type="button" class="btn btn-default btn-lg">
       <i class="glyphicon glyphicon-th-list"></i>
     </button>
-    <a id="dlna_toggle" href="/dlna" type="button" class="btn btn-default btn-lg">DLNA</a>
+    <a id="dlna_toggle" href="/dlna" type="button" class="btn btn-default btn-lg" title="switch DLNA mode">DLNA</a>
   </div>
   <div class="btn-group dropdown">
     <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
@@ -62,12 +62,12 @@
     <div class="bg-info panel-title">
       <button type="button" class="close">&times;</button>
       <ul id="navtab" class="nav nav-tabs">
-        <li class="active">
+        <li class="active" title="Show play history">
           <a href="#tabFrame" data-toggle="tab" onclick="history('/list')">
             <i class="glyphicon glyphicon-list"></i>History
           </a>
         </li>
-        <li>
+        <li title="Browse video folder">
           <a href="#tabFrame" data-toggle="tab" onclick="filelist('/fs/')">
             <i class="glyphicon glyphicon-home"></i>Home dir
           </a>
