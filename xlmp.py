@@ -469,6 +469,16 @@ def deploy():
         return os.system('/usr/local/bin/deploy')
 
 
+@route('/update')
+def update():
+    """deploy"""
+    if sys.platform == 'linux':
+        if os.system('git pull') == 0:
+            exit(1)
+    else:
+        return 'not supported'
+
+
 # @post('/suspend')
 # def suspend():
     # """Suepend server"""
