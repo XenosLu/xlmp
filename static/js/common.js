@@ -30,7 +30,7 @@ $("#tabFrame").on("click", ".folder", function () {
         filelist("/move/" + this.title);
     }
 }).on("click", ".remove", function () {
-    if (confirm("Clear " + this.title + "?"))
+    if (confirm("Clear history of " + this.title + "?"))
         history("/remove/" + this.title.replace(/\?/g, "%3F"));
 }).on("click", ".mp4", function () {
     if (window.document.location.pathname == "/dlna")
