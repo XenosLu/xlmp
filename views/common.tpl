@@ -1,9 +1,9 @@
 <div id="sidebar" class="btn-toolbar">
   <div class="btn-group">
-    <button id="history" type="button" class="btn btn-default btn-lg">
+    <button title="browser" id="history" type="button" class="btn btn-default btn-lg">
       <i class="glyphicon glyphicon-th-list"></i>
     </button>
-    <a id="dlna_toggle" href="/dlna" type="button" class="btn btn-default btn-lg" title="switch DLNA mode">DLNA</a>
+    <a title="switch DLNA mode" id="dlna_toggle" href="/dlna" type="button" class="btn btn-default btn-lg">DLNA</a>
   </div>
   <div class="btn-group dropdown">
     <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
@@ -28,7 +28,7 @@
       <i class="glyphicon glyphicon-chevron-down"></i>
     </button>
     <ul class="dropdown-menu">
-      <li><a onclick="get('/dlnaseek/15')">00:15</a></li>
+      <li><a onclick="get('/dlnaseek/14')">00:15</a></li>
       <li><a onclick="get('/dlnaseek/30')">00:30</a></li>
       <li><a onclick="get('/dlnaseek/60')">01:00</a></li>
       <li><a onclick="get('/dlnaseek/90')">01:30</a></li>
