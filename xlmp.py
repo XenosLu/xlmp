@@ -474,7 +474,7 @@ def update():
     """deploy"""
     if sys.platform == 'linux':
         if os.system('git pull') == 0:
-            os._exit()
+            os._exit(1)
             return 'exit'
             # sys.exit(1)
     else:
