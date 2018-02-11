@@ -473,6 +473,8 @@ def update():
             # os._exit(1)
             t = Thread(target=test).start()
             return 'updated'
+        else:
+            return 'excute git pull failed'
     else:
         return 'not supported'
 
