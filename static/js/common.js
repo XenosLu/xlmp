@@ -15,9 +15,9 @@ $("#suspend").click(function() {
 $("#shutdown").click(function() {
     if(confirm("Shutdown ?"))$.post("/shutdown");
 });
-$("#restart").click(function() {
-    if(confirm("Restart ?"))$.post("/restart");
-});
+// $("#restart").click(function() {
+    // if(confirm("Restart ?"))$.post("/restart");
+// });
 // Dialog open/close toggle buttons
 $("#history").click(toggleDialog);
 $(".close").click(toggleDialog);
