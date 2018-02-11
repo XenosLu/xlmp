@@ -6,7 +6,7 @@
     <a title="switch DLNA mode" id="dlna_toggle" href="/dlna" type="button" class="btn btn-default btn-lg">DLNA</a>
   </div>
   <div class="btn-group dropdown">
-    <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
+    <button title="Maintenance" type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
       <!-- SYS<i class="glyphicon glyphicon-chevron-down"></i> -->
       <i class="glyphicon glyphicon-cog"></i>
       <i class="glyphicon glyphicon-chevron-down"></i>
@@ -29,7 +29,7 @@
     </button>
     <ul class="dropdown-menu">
       <li><a onclick="get('/dlnaseek/14')">00:15</a></li>
-      <li><a onclick="get('/dlnaseek/30')">00:30</a></li>
+      <li><a onclick="get('/dlnaseek/29')">00:30</a></li>
       <li><a onclick="get('/dlnaseek/60')">01:00</a></li>
       <li><a onclick="get('/dlnaseek/90')">01:30</a></li>
     </ul>
