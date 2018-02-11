@@ -24,12 +24,6 @@ $(".close").click(toggleDialog);
 
 //table buttons
 $("#tabFrame").on("click", ".folder", function () {
-    // var sub_path = this.title;
-    // if(sub_path=="/")
-        // sub_path="";
-    // if(sub_path == "")
-        // filelist("/fs/");
-    // else
     filelist("/fs/" + this.title + "/");
 }).on("click", ".move", function () {
     if (confirm("Move " + this.title + " to .old?")) {
