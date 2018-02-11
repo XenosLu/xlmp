@@ -472,7 +472,7 @@ def update():
     if sys.platform == 'linux':
         if os.system('git pull') == 0:
             Thread(target=delay_stop).start()
-            return 'git pull done, now exit'
+            return 'git pull done, exit for restart'
         else:
             return 'execute git pull failed'
     else:
