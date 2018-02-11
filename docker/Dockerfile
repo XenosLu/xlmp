@@ -2,7 +2,7 @@
 FROM xenocider/container:bottle-env
 LABEL maintainer="xenos <xenos.lu@gmail.com>"
 
-ENV enable_logserver '1'
+ENV enable_logserver ''
 
 RUN apk add --no-cache git \
     && apk add --no-cache supervisor \
