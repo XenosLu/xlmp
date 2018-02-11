@@ -463,7 +463,8 @@ def save(src):
 
 def test():
     # sleep(2.5)
-    sleep(2)
+    # sleep(2)
+    sleep(1)
     os._exit(1)
 
 @route('/update')
