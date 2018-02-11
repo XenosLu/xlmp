@@ -18,6 +18,9 @@
     <button class="btn btn-danger btn-lg" type="button" onclick="get('/dlnastop')">
       <i class="glyphicon glyphicon-stop"></i>
     </button>
+    <button class="btn btn-success btn-lg" type="button" onclick="get('/dlnanext')">
+      <i class="glyphicon glyphicon-step-forward"></i>
+    </button>
   </div>
     <h3 id="position"></h3>
     <input type="range" id="position-bar" min="0" max="0">

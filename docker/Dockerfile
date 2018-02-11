@@ -2,9 +2,13 @@
 FROM xenocider/container:bottle-env
 LABEL maintainer="xenos <xenos.lu@gmail.com>"
 
+ENV enable_logserver '1'
+
 RUN apk add --no-cache git \
-    && apk add  --no-cache supervisor \
-    && apk add  --no-cache nginx \
+    && apk add --no-cache supervisor \
+    && apk add --no-cache nginx \
+    && if [ "$enable_logserver" ];then apk add --no-cache rsyslog;fi \
+    && if [ "$enable_logserver" ];then echo "*.* @@nas:1514" >>/etc/rsyslog.conf;fi \
     && mkdir /run/nginx \
     && rm -f /etc/nginx/conf.d/default.conf
 
@@ -21,5 +25,5 @@ RUN git clone -b latest https://github.com/XenosLu/xlmp.git /xlmp
 
 EXPOSE 80
 
-# VOL /xlmp/media
+# media folder: /xlmp/media
 CMD ["/usr/bin/supervisord", "-c", "/xlmp/docker/supervisord.conf"]

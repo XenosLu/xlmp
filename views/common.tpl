@@ -1,19 +1,22 @@
 <div id="sidebar" class="btn-toolbar">
   <div class="btn-group">
-    <button id="history" type="button" class="btn btn-default btn-lg">
+    <button title="browser" id="history" type="button" class="btn btn-default btn-lg">
       <i class="glyphicon glyphicon-th-list"></i>
     </button>
-    <a id="dlna_toggle" href="/dlna" type="button" class="btn btn-default btn-lg">DLNA</a>
+    <a title="switch DLNA mode" id="dlna_toggle" href="/dlna" type="button" class="btn btn-default btn-lg">DLNA</a>
   </div>
   <div class="btn-group dropdown">
-    <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
-      SYS<i class="glyphicon glyphicon-chevron-down"></i>
+    <button title="Maintenance" type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
+      <!-- SYS<i class="glyphicon glyphicon-chevron-down"></i> -->
+      <i class="glyphicon glyphicon-cog"></i>
+      <i class="glyphicon glyphicon-chevron-down"></i>
     </button>
     <ul class="dropdown-menu">
-      <li><a onclick="$.get('/deploy')"><i class="glyphicon glyphicon-cog"></i>deploy</a></li>
+      <!-- <li><a onclick="$.get('/update')">update</a></li> -->
+      <li><a onclick="get('/update')">update</a></li>
       <li class="divider"></li>
-      <li><a onclick="get('/backup')"><i class="glyphicon glyphicon-cog"></i>backup</a></li>
-      <li><a onclick="get('/restore')"><i class="glyphicon glyphicon-cog"></i>restore</a></li>
+      <li><a onclick="get('/backup')">backup</a></li>
+      <li><a onclick="get('/restore')">restore</a></li>
       <!-- <li class="divider"></li> -->
       <!-- <li><a id="suspend"><i class="glyphicon glyphicon-off"></i>suspend</a></li> -->
       <!-- <li><a id="shutdown"><i class="glyphicon glyphicon-off"></i>shutdown</a></li> -->
@@ -25,8 +28,8 @@
       <i class="glyphicon glyphicon-chevron-down"></i>
     </button>
     <ul class="dropdown-menu">
-      <li><a onclick="get('/dlnaseek/15')">00:15</a></li>
-      <li><a onclick="get('/dlnaseek/30')">00:30</a></li>
+      <li><a onclick="get('/dlnaseek/14')">00:15</a></li>
+      <li><a onclick="get('/dlnaseek/29')">00:30</a></li>
       <li><a onclick="get('/dlnaseek/60')">01:00</a></li>
       <li><a onclick="get('/dlnaseek/90')">01:30</a></li>
     </ul>
@@ -59,12 +62,12 @@
     <div class="bg-info panel-title">
       <button type="button" class="close">&times;</button>
       <ul id="navtab" class="nav nav-tabs">
-        <li class="active">
+        <li class="active" title="Show play history">
           <a href="#tabFrame" data-toggle="tab" onclick="history('/list')">
             <i class="glyphicon glyphicon-list"></i>History
           </a>
         </li>
-        <li>
+        <li title="Browse video folder">
           <a href="#tabFrame" data-toggle="tab" onclick="filelist('/fs/')">
             <i class="glyphicon glyphicon-home"></i>Home dir
           </a>

@@ -7,7 +7,6 @@ import re
 import shutil
 import sqlite3
 import sys
-import traceback
 import logging
 
 from threading import Thread, Event
@@ -25,6 +24,7 @@ app = default_app()
 VIDEO_PATH = './media'  # media file path
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
 
+
 # initialize logging
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
@@ -32,26 +32,26 @@ logging.basicConfig(level=logging.INFO,
 
 
 class DMRTracker(Thread):
-    """Digital Media Renderer"""
-
-
+    """DLNA Digital Media Renderer tracker thread"""
     def __init__(self, *args, **kwargs):
         super(DMRTracker, self).__init__(*args, **kwargs)
-        self.__flag = Event()
-        self.__flag.set()
-        self.__running = Event()
-        self.__running.set()
+        self._flag = Event()
+        self._flag.set()
+        self._running = Event()
+        self._running.set()
         self.state = {}  # DMR device state
         self.dmr = None  # DMR device object
         self.all_devices = []  # DMR device list
-        self.__failure = 0
+        self._failure = 0
+        self._load = None
         logging.info('DMR Tracker initialized.')
 
     def discover_dmr(self):
         logging.debug('Starting DMR search...')
         if self.dmr:
             logging.info('Current DMR: %s' % self.dmr)
-        self.all_devices = discover(name='', ip='', timeout=3, st=URN_AVTransport_Fmt, ssdp_version=1)
+        self.all_devices = discover(name='', ip='', timeout=3,
+                                    st=URN_AVTransport_Fmt, ssdp_version=1)
         if len(self.all_devices) > 0:
             self.dmr = self.all_devices[0]
             logging.info('Found DMR device: %s' % self.dmr)
@@ -64,59 +64,67 @@ class DMRTracker(Thread):
         return False
 
     def get_transport_state(self):
-        try:
-            return self.dmr.info()['CurrentTransportState']
-        except Exception as e:
-            logging.info(e)
+        info = self.dmr.info()
+        # if info:
+            # self.state['CurrentTransportState'] = info['CurrentTransportState']
+            # return info['CurrentTransportState']
+        self.state['CurrentTransportState'] = info.get('CurrentTransportState')
+        return info.get('CurrentTransportState')
+        # else:
+            # self._failure += 1
+            # logging.warning('Losing DMR when get transport state. count: %d' % self._failure)
+
+    def get_position_info(self):
+        position_info = self.dmr.position_info()
+        if not position_info:
             return
+        for key in ('RelTime', 'TrackDuration'):
+            self.state[key] = position_info[key]
+        if self.state.get('CurrentTransportState') == 'PLAYING':
+            if position_info['TrackURI']:
+                self.state['TrackURI'] = unquote(
+                    re.sub('http://.*/video/', '', position_info['TrackURI']))
+                save_history(self.state['TrackURI'],
+                             time_to_second(self.state['RelTime']),
+                             time_to_second(self.state['TrackDuration']))
+            else:
+                logging.info('no Track uri')
+        return position_info.get('TrackDuration')
 
     def run(self):
-        while self.__running.isSet():
-            self.__flag.wait()
+        while self._running.isSet():
+            self._flag.wait()
             if self.dmr:
-                try:
-                    self.state['CurrentDMR'] = str(self.dmr)
-                    self.state['DMRs'] = [str(i) for i in self.all_devices]
-                    sleep(0.1)
-                    info = self.dmr.info()
-                    self.state['CurrentTransportState'] = info['CurrentTransportState']
-                    sleep(0.1)
-                    position_info = self.dmr.position_info()
-                    for i in ('RelTime', 'TrackDuration'):
-                        self.state[i] = position_info[i]
-                    if self.state['CurrentTransportState'] == 'PLAYING':
-                        self.state['TrackURI'] = unquote(re.sub('http://.*/video/', '', position_info['TrackURI']))
-                        save_history(self.state['TrackURI'], time_to_second(self.state['RelTime']),
-                                     time_to_second(self.state['TrackDuration']))
-                    if self.__failure > 0:
-                        logging.info('reset failure count from %d to 0' % self.__failure)
-                        self.__failure = 0
-                except TypeError:
-                    self.__failure += 1
-                    logging.info('Losing DMR count: %d' % self.__failure)
-                    if self.__failure >= 3:
-                        # self.__failure = 0
+                self.state['CurrentDMR'] = str(self.dmr)
+                self.state['DMRs'] = [str(i) for i in self.all_devices]
+                if self.get_transport_state() and not sleep(0.1) and self.get_position_info():
+                    if self._failure > 0:
+                        logging.info('reset failure count from %d to 0' % self._failure)
+                        self._failure = 0
+                else:
+                    self._failure += 1
+                    logging.warning('Losing DMR count: %d' % self._failure)
+                    if self._failure >= 3:
+                        # self._failure = 0
                         logging.info('No DMR currently.')
                         self.state = {}
                         self.dmr = None
-                except Exception as e:
-                    logging.warning('DMR Tracker Exception: %s\n%s' % (e, traceback.format_exc()))
                 sleep(1)
             else:
                 self.discover_dmr()
                 sleep(2.5)
 
     def pause(self):
-        self.__flag.clear()
+        self._flag.clear()
 
     def resume(self):
-        self.__flag.set()
+        self._flag.set()
 
     def stop(self):
-        self.__flag.set()
-        self.__running.clear()
-        
-    def load(self, url):
+        self._flag.set()
+        self._running.clear()
+
+    def loadonce(self, url):
         try:
             while self.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
                 self.dmr.stop()
@@ -124,27 +132,81 @@ class DMRTracker(Thread):
                 sleep(0.85)
             if self.dmr.set_current_media(url):
                 logging.info('Loaded %s' % url)
+            else:
+                logging.warning('Load url failed: %s' % url)
+                return False
+            time0 = time()
             while self.get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
                 self.dmr.play()
                 logging.info('Waiting for DMR playing...')
                 sleep(0.3)
+                if (time() - time0) > 5:
+                    logging.info('waiting for DMR playing timeout')
+                    return False
             sleep(0.5)
             time0 = time()
             logging.info('checking duration to make sure loaded...')
-            while self.dmr.position_info()['TrackDuration'] == '00:00:00':
+            while self.dmr.position_info().get('TrackDuration') == '00:00:00':
                 sleep(0.5)
-                logging.info('Waiting for duration correctly recognized')
-                if (time() - time0) > 10:
-                    logging.info('Load duration failed in %fs' % (time() - time0))
+                logging.info('Waiting for duration to be recognized correctly, url=%s' % url)
+                if (time() - time0) > 9:
+                    logging.info('Load duration timeout')
                     return False
             logging.info(self.state)
         except Exception as e:
-            logging.warning('DLNA load exception: %s\n%s' % (e, traceback.format_exc()))
+            logging.warning('DLNA load exception: %s' % e, exc_info=True)
             return False
         return True
-        
+
+
+class DLNALoader(Thread):
+    """Load url through DLNA"""
+    def __init__(self, *args, **kwargs):
+        super(DLNALoader, self).__init__(*args, **kwargs)
+        self._running = Event()
+        self._running.set()
+        self._flag = Event()
+        self._failure = 0
+        self._url = ''
+        logging.info('DLNA URL loader initialized.')
+
+    def run(self):
+        while self._running.isSet():
+            self._flag.wait()
+            tracker.pause()
+            sleep(0.5)
+            url = self._url
+            if tracker.loadonce(url):
+                logging.info('Loaded url: %s successed' % url)
+                src = unquote(re.sub('http://.*/video/', '', url))
+                position = load_history(src)
+                if position:
+                    tracker.dmr.seek(second_to_time(position))
+                    logging.info('Loaded position: %s' % second_to_time(position))
+                logging.info('Load Successed.')
+                tracker.state['CurrentTransportState'] = 'Load Successed.'
+                if url == self._url:
+                    self._flag.clear()
+            else:
+                self._failure += 1
+                if self._failure >= 3:
+                    self._flag.clear()
+            tracker.resume()
+            logging.info('tracker resume')
+
+    def stop(self):
+        self._running.clear()
+
+    def load(self, url):
+        self._url = url
+        self._failure = 0
+        self._flag.set()
+
 tracker = DMRTracker()
 tracker.start()
+
+loader = DLNALoader()
+loader.start()
 
 
 def check_dmr_exist(func):
@@ -171,7 +233,7 @@ def run_sql(sql, *args):
 
 def second_to_time(second):
     """ Turn time in seconds into "hh:mm:ss" format
-    
+
     second: int value
     """
     m, s = divmod(second, 60)
@@ -181,7 +243,7 @@ def second_to_time(second):
 
 def time_to_second(time_str):
     """ Turn time in "hh:mm:ss" format into seconds
-    
+
     time_str: string like "hh:mm:ss"
     """
     return sum([float(i)*60**n for n, i in enumerate(str(time_str).split(':')[::-1])])
@@ -239,6 +301,8 @@ def dlna():
 
 
 @route('/play/<src:re:.*\.((?i)mp)4$>')
+# def test(src):
+    # return get_next_file(src)
 def play(src):
     """Video play page"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
@@ -259,29 +323,29 @@ def search_dmr():
     tracker.discover_dmr()
 
 
+def get_next_file(src):
+    fullname = '%s/%s' % (VIDEO_PATH, src)
+    filepath = os.path.dirname(fullname)
+    dirs = sorted([i for i in os.listdir(filepath)
+                   if not i.startswith('.') and os.path.isfile('%s/%s' % (filepath, i))])
+    next_index = dirs.index(os.path.basename(fullname)) + 1
+    if next_index < len(dirs):
+        return '%s/%s' % (os.path.dirname(src), dirs[next_index])
+    else:
+        return
+
+
 @route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
 @check_dmr_exist
 def dlna_load(src):
-    """request for load Video through DLNA"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
+        logging.warning('File not found: %s' % src)
         return 'Error: File not found.'
+    # logging.info('start loading... tracker state:%s' % tracker.state['CurrentTransportState'])
     logging.info('start loading... tracker state:%s' % tracker.state)
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
-    try_time = 1
-    while try_time <= 3:
-        if tracker.load(url):
-            logging.info('Loaded url: %s successed' % url)
-            # logging.info('Loaded url: %s success in %s time(s)' % (url, try_time))
-            position = load_history(src)
-            if position:
-                tracker.dmr.seek(second_to_time(position))
-                logging.info('Loaded position: %s' % second_to_time(position))
-            return 'Load Successed.'
-        logging.info('Load failed for %s time(s)' % try_time)
-        try_time += 1
-        sleep(1)
-    logging.warning('Load aborted because of attempts was exceeded')
-    return 'Error: Load aborted because of attempts was exceeded'
+    loader.load(url)
+    return 'loading %s' % src
 
 
 def result(r):
@@ -298,6 +362,19 @@ def dlna_play():
         return result(tracker.dmr.play())
     except Exception as e:
         return 'Play failed: %s' % e
+
+
+@route('/dlnanext')
+@check_dmr_exist
+def dlna_next():
+    if not tracker.state.get('TrackURI'):
+        return 'No current url'
+    next_file = get_next_file(tracker.state['TrackURI'])
+    logging.info('next file recognized: %s' % next_file)
+    if next_file:
+        dlna_load(next_file)
+    else:
+        return "Can't get next file"
 
 
 @route('/dlnapause')
@@ -329,7 +406,8 @@ def dlna_volume_control(control):
         vol += 1
     elif control == 'down':
         vol -= 1
-    if vol < 0 or vol > 100:
+    # if vol < 0 or vol > 100:
+    if not 100 >= vol >= 0:
         return 'volume range exceeded'
     elif tracker.dmr.volume(vol):
         return str(vol)
@@ -371,7 +449,7 @@ def move(src):
     try:
         shutil.move(filename, dir_old)  # gonna do something when file is occupied
     except Exception as e:
-        logging.warning(str(e))
+        logging.warning('move file failed: %s' % e)
         abort(404, str(e))
     return fs_dir('%s/' % os.path.dirname(src))
 
@@ -384,11 +462,21 @@ def save(src):
     save_history(src, position, duration)
 
 
-@route('/deploy')
-def deploy():
-    """deploy"""
+@route('/update')
+def update():
+    """self update through git"""
+    def delay_stop():
+        sleep(1)
+        os._exit(1)
+
     if sys.platform == 'linux':
-        return os.system('/usr/local/bin/deploy')
+        if os.system('git pull') == 0:
+            Thread(target=delay_stop).start()
+            return 'git pull done, exit for restart'
+        else:
+            return 'execute git pull failed'
+    else:
+        return 'not supported'
 
 
 # @post('/suspend')
@@ -445,19 +533,21 @@ def static_video(src):
 @route('/fs/<path:re:.*>')
 def fs_dir(path):
     """Get static folder list in json"""
+    if path == '/':
+        path = ''
     try:
         up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
         if path:
-            up = [{'filename': '..', 'type': 'folder', 'path': '/%s..' % path}]
-        dir_list = os.listdir('%s/%s' % (VIDEO_PATH, path))
-        dir_list.sort()
-        # for filename in os.listdir('%s/%s' % (VIDEO_PATH, path)):
+            up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
+            if not path.endswith('/'):
+                path = '%s/' % path
+        dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))  # path could be either path or path/
         for filename in dir_list:
             if filename.startswith('.'):
                 continue
             if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
                 list_folder.append({'filename': filename, 'type': 'folder',
-                                    'path': '/%s%s' % (path, filename)})
+                                    'path': '%s%s' % (path, filename)})
             elif re.match('.*\.((?i)mp)4$', filename):
                 list_mp4.append({'filename': filename, 'type': 'mp4',
                                 'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
@@ -469,7 +559,7 @@ def fs_dir(path):
                                   'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
         return json.dumps(up + list_folder + list_mp4 + list_video + list_other)
     except Exception as e:
-        logging.warning('dir exception: %s pwd: %s' % (e, os.getcwd()))
+        logging.warning('dir exception: %s' % e)
         abort(404, str(e))
 
 # Initialize DataBase
@@ -485,6 +575,6 @@ if __name__ == '__main__':  # for debug
         os.system('start http://127.0.0.1:8081/')  # open the page automatic for debug
     try:
         find_module('meinheld')
-        run(host='127.0.0.1', port=8081, debug=True, server='meinheld')  # run demo server use meinheld
+        run(host='0.0.0.0', port=8081, debug=True, server='meinheld')  # run demo server use meinheld
     except Exception:
         run(host='0.0.0.0', port=8081, debug=True)  # run demo server
