@@ -461,19 +461,17 @@ def save(src):
     duration = request.forms.get('duration')
     save_history(src, position, duration)
 
-def test():
-    # sleep(2.5)
-    # sleep(2)
-    sleep(1)
-    os._exit(1)
 
 @route('/update')
 def update():
     """self update through git"""
+    def delay_stop():
+        sleep(1)
+        os._exit(1)
+
     if sys.platform == 'linux':
         if os.system('git pull') == 0:
-            # os._exit(1)
-            t = Thread(target=test).start()
+            Thread(target=delay_stop).start()
             return 'updated'
         else:
             return 'execute git pull failed'
