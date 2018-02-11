@@ -13,7 +13,8 @@
     </button>
     <ul class="dropdown-menu">
       <!-- <li><a onclick="$.get('/deploy')"><i class="glyphicon glyphicon-cog"></i>update</a></li> -->
-      <li><a onclick="$.get('/deploy')">update</a></li>
+      <li><a onclick="$.get('/deploy')">deploy</a></li>
+      <li><a onclick="$.get('/update')">update</a></li>
       <li class="divider"></li>
       <li><a onclick="get('/backup')">backup</a></li>
       <li><a onclick="get('/restore')">restore</a></li>
