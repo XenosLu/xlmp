@@ -461,21 +461,18 @@ def save(src):
     duration = request.forms.get('duration')
     save_history(src, position, duration)
 
-
-@route('/deploy')
-def deploy():
-    """deploy"""
-    if sys.platform == 'linux':
-        return os.system('/usr/local/bin/deploy')
-
+def test():
+    sleep(2.5)
+    os._exit(1)
 
 @route('/update')
 def update():
     """self update through git"""
-    if sys.platform == 'linux':
+    if not sys.platform == 'linux':
         if os.system('git pull') == 0:
-            os._exit(1)
-            return 'exit'
+            # os._exit(1)
+            t = Thread(target=test).start()
+            return 'updated'
     else:
         return 'not supported'
 
