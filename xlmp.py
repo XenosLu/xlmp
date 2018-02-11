@@ -474,7 +474,7 @@ def update():
     """deploy"""
     if sys.platform == 'linux':
         if os.system('git pull') == 0:
-            exit(1)
+            sys.exit(1)
     else:
         return 'not supported'
 
