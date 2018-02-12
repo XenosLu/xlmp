@@ -339,8 +339,8 @@ def dlna_load(src):
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         logging.warning('File not found: %s' % src)
         return 'Error: File not found.'
-    # logging.info('start loading... tracker state:%s' % tracker.state['CurrentTransportState'])
-    logging.info('start loading... tracker state:%s' % tracker.state)
+    # logging.info('start loading... tracker state:%s' % tracker.state)
+    logging.info('start loading... tracker state:%s' % tracker.state.get('CurrentTransportState'))
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     loader.load(url)
     return 'loading %s' % src
