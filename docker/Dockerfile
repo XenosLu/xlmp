@@ -4,9 +4,10 @@ LABEL maintainer="xenos <xenos.lu@gmail.com>"
 
 ENV enable_logserver '1'
 
-RUN apk add --no-cache git \
-                       nginx \
-    && apk add --no-cache supervisor \
+RUN apk add --no-cache \
+            git \
+            nginx \
+            supervisor \
     && if [ "$enable_logserver" ];then apk add --no-cache rsyslog;fi \
     && if [ "$enable_logserver" ];then echo "*.* @@nas:1514" >>/etc/rsyslog.conf;fi \
     && mkdir /run/nginx \
