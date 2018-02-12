@@ -68,8 +68,6 @@ class DMRTracker(Thread):
         if info:
             self.state['CurrentTransportState'] = info.get('CurrentTransportState')
             return info.get('CurrentTransportState')
-        # self.state['CurrentTransportState'] = info.get('CurrentTransportState')
-        # return info.get('CurrentTransportState')
         # else:
             # self._failure += 1
             # logging.warning('Losing DMR when get transport state. count: %d' % self._failure)
