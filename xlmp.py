@@ -193,6 +193,7 @@ class DLNALoader(Thread):
             logging.info('tracker resume')
 
     def stop(self):
+        self._flag.set()
         self._running.clear()
 
     def load(self, url):
@@ -282,14 +283,15 @@ def list_history():
 
 
 @route('/')
-def index():
+def index_entrypoint():
     if tracker.dmr:
         redirect('/dlna')
-    return template('index.tpl')
+    return index()
+    # return template('index.tpl')
 
 
 @route('/index')
-def index_o():
+def index():
     return template('index.tpl')
 
 
@@ -299,8 +301,6 @@ def dlna():
 
 
 @route('/play/<src:re:.*\.((?i)mp)4$>')
-# def test(src):
-    # return get_next_file(src)
 def play(src):
     """Video play page"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
