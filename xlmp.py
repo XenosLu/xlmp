@@ -335,7 +335,7 @@ def get_next_file(src):
         return '%s/%s' % (os.path.dirname(src), dirs[next_index])
 
 
-@route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
+@route('/dlna/load/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
 @check_dmr_exist
 def dlna_load(src):
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
