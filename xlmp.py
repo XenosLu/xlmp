@@ -193,6 +193,7 @@ class DLNALoader(Thread):
             logging.info('tracker resume')
 
     def stop(self):
+        self._flag.set()
         self._running.clear()
 
     def load(self, url):
@@ -282,14 +283,15 @@ def list_history():
 
 
 @route('/')
-def index():
+def index_entrypoint():
     if tracker.dmr:
         redirect('/dlna')
-    return template('index.tpl')
+    return index()
+    # return template('index.tpl')
 
 
 @route('/index')
-def index_o():
+def index():
     return template('index.tpl')
 
 
@@ -299,8 +301,6 @@ def dlna():
 
 
 @route('/play/<src:re:.*\.((?i)mp)4$>')
-# def test(src):
-    # return get_next_file(src)
 def play(src):
     """Video play page"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
@@ -308,12 +308,16 @@ def play(src):
     return template('player.tpl', src=src, title=src, position=load_history(src))
 
 
+def result(r):
+    if r:
+        return 'Done.'
+    else:
+        return 'Error: Failed!'
+
+
 @route('/setdmr/<dmr>')
 def set_dlna_dmr(dmr):
-    if tracker.set_dmr(dmr):
-        return 'Success'
-    else:
-        return 'Failed'
+    result(tracker.set_dmr(dmr))
 
 
 @route('/searchdmr')
@@ -329,40 +333,22 @@ def get_next_file(src):
     next_index = dirs.index(os.path.basename(fullname)) + 1
     if next_index < len(dirs):
         return '%s/%s' % (os.path.dirname(src), dirs[next_index])
-    else:
-        return
 
 
-@route('/dlnaload/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
+@route('/dlna/load/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
 @check_dmr_exist
 def dlna_load(src):
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         logging.warning('File not found: %s' % src)
         return 'Error: File not found.'
-    # logging.info('start loading... tracker state:%s' % tracker.state['CurrentTransportState'])
-    logging.info('start loading... tracker state:%s' % tracker.state)
+    # logging.info('start loading... tracker state:%s' % tracker.state)
+    logging.info('start loading... tracker state:%s' % tracker.state.get('CurrentTransportState'))
     url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
     loader.load(url)
     return 'loading %s' % src
 
 
-def result(r):
-    if r:
-        return 'Done.'
-    else:
-        return 'Error: Failed!'
-
-
-@route('/dlnaplay')
-@check_dmr_exist
-def dlna_play():
-    try:
-        return result(tracker.dmr.play())
-    except Exception as e:
-        return 'Play failed: %s' % e
-
-
-@route('/dlnanext')
+@route('/dlna/next')
 @check_dmr_exist
 def dlna_next():
     if not tracker.state.get('TrackURI'):
@@ -373,6 +359,12 @@ def dlna_next():
         dlna_load(next_file)
     else:
         return "Can't get next file"
+
+
+@route('/dlnaplay')
+@check_dmr_exist
+def dlna_play():
+    return result(tracker.dmr.play())
 
 
 @route('/dlnapause')

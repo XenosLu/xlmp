@@ -18,7 +18,7 @@
     <button class="btn btn-danger btn-lg" type="button" onclick="get('/dlnastop')">
       <i class="glyphicon glyphicon-stop"></i>
     </button>
-    <button class="btn btn-success btn-lg" type="button" onclick="get('/dlnanext')">
+    <button class="btn btn-success btn-lg" type="button" onclick="get('/dlna/next')">
       <i class="glyphicon glyphicon-step-forward"></i>
     </button>
   </div>

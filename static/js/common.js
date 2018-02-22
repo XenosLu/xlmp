@@ -34,12 +34,12 @@ $("#tabFrame").on("click", ".folder", function () {
         history("/remove/" + this.title.replace(/\?/g, "%3F"));
 }).on("click", ".mp4", function () {
     if (window.document.location.pathname == "/dlna")
-        get("/dlnaload/" + this.title);
+        get("/dlna/load/" + this.title);
     else
         window.location.href = "/play/" + this.title;
 }).on("click", ".video", function () {
     if (window.document.location.pathname == "/dlna")
-        get("/dlnaload/" + this.title);
+        get("/dlna/load/" + this.title);
 });
 
 /**

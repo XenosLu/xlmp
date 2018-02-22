@@ -2,11 +2,12 @@
 FROM xenocider/container:bottle-env
 LABEL maintainer="xenos <xenos.lu@gmail.com>"
 
-ENV enable_logserver ''
+ARG enable_logserver=
 
-RUN apk add --no-cache git \
-    && apk add --no-cache supervisor \
-    && apk add --no-cache nginx \
+RUN apk add --no-cache \
+            git \
+            nginx \
+            supervisor \
     && if [ "$enable_logserver" ];then apk add --no-cache rsyslog;fi \
     && if [ "$enable_logserver" ];then echo "*.* @@nas:1514" >>/etc/rsyslog.conf;fi \
     && mkdir /run/nginx \
