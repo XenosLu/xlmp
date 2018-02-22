@@ -348,7 +348,7 @@ def dlna_load(src):
     return 'loading %s' % src
 
 
-@route('/dlnanext')
+@route('/dlna/next')
 @check_dmr_exist
 def dlna_next():
     if not tracker.state.get('TrackURI'):
