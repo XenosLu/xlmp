@@ -13,13 +13,31 @@ from threading import Thread, Event
 from urllib.parse import quote, unquote
 from time import sleep, time
 
-from bottle import abort, post, redirect, request, route, run, static_file, template, default_app
+# from bottle import abort, post, redirect, request, route, run, static_file, template, default_app
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 sys.path = ['lib'] + sys.path  # added libpath
 from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
 
-app = default_app()
+
+import tornado.web
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write("Hello, world")
+
+Handlers=[
+    (r"/", MainHandler),
+]
+
+application = tornado.web.Application(Handlers)
+
+if __name__ == "__main__":
+    if sys.platform == 'win32':
+        os.system('start http://127.0.0.1:8081/')
+    application.listen(8081)
+    tornado.ioloop.IOLoop.instance().start()
+
+# app = default_app()
 
 VIDEO_PATH = './media'  # media file path
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
@@ -560,6 +578,8 @@ run_sql('''create table if not exists history
                 DURATION float, LATEST_DATE datetime not null);''')
 
 
+                
+                
 if __name__ == '__main__':  # for debug
     from imp import find_module
     if sys.platform == 'win32':
