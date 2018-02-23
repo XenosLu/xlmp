@@ -20,8 +20,20 @@ sys.path = ['lib'] + sys.path  # added libpath
 from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
 
 
-from flask import Flask, render_template
+from flask import Flask, render_template, abort, send_from_directory
 app = Flask(__name__)
+
+from werkzeug.routing import BaseConverter
+
+class RegexConverter(BaseConverter):
+    def __init__(self, url_map, *items):
+        super(RegexConverter, self).__init__(url_map)
+        self.regex = items[0]
+
+
+app.url_map.converters['regex'] = RegexConverter
+
+# @app.route('/<regex("[abcABC0-9]{4,6}"):uid>-<slug>/')
 
 
 
@@ -392,7 +404,7 @@ def dlna_stop():
 @app.route('/dlnainfo')
 def dlna_info():
     """Get play info through DLNA"""
-    return tracker.state
+    return json.dumps(tracker.state)
 
 
 # @app.route('/dlnavol/<control:re:(up|down)>')
@@ -527,13 +539,15 @@ def static_video(src):
        To support large file(>2GB), you should use web server to deal with static files.
        For example, you can use 'AliasMatch' or 'Alias' in Apache
     """
+    return send_from_directory(VIDEO_PATH, src, as_attachment=True)
     return static_file(src, root=VIDEO_PATH)
 
 
 # @app.route('/fs/<path:re:.*>')
-@app.route('/fs/<path>')
+@app.route('/fs/<regex(".*"):path>')
 def fs_dir(path):
     """Get static folder list in json"""
+    # path = src
     if path == '/':
         path = ''
     try:
