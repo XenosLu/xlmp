@@ -570,12 +570,13 @@ run_sql('''create table if not exists history
                 DURATION float, LATEST_DATE datetime not null);''')
 
 if __name__ == '__main__':
+    if sys.platform == 'win32':
+        os.system('start http://127.0.0.1:5000/')  # open the page automatic for debug
     app.run()
 
 # if __name__ == '__main__':  # for debug
     # from imp import find_module
-    # if sys.platform == 'win32':
-        # os.system('start http://127.0.0.1:8081/')  # open the page automatic for debug
+
     # try:
         # find_module('meinheld')
         # run(host='0.0.0.0', port=8081, debug=True, server='meinheld')  # run demo server use meinheld
