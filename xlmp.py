@@ -106,7 +106,7 @@ class DMRTracker(Thread):
             if position_info['TrackURI']:
                 self.state['TrackURI'] = unquote(
                     re.sub('http://.*/video/', '', position_info['TrackURI']))
-                hist_save(self.state['TrackURI'],
+                save_history(self.state['TrackURI'],
                              time_to_second(self.state['RelTime']),
                              time_to_second(self.state['TrackDuration']))
             else:
@@ -291,7 +291,7 @@ def hist_load(name):
     return position[0][0]
 
 
-def hist_save(src, position, duration):
+def save_history(src, position, duration):
     if float(position) < 10:
         return
     run_sql('''replace into history (FILENAME, POSITION, DURATION, LATEST_DATE)
@@ -328,7 +328,7 @@ def hist_save(src):
     """Save play position"""
     position = request.forms.get('position')
     duration = request.forms.get('duration')
-    hist_save(src, position, duration)
+    save_history(src, position, duration)
 
 
 @route('/')
