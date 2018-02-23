@@ -86,9 +86,6 @@ class DMRTracker(Thread):
         if info:
             self.state['CurrentTransportState'] = info.get('CurrentTransportState')
             return info.get('CurrentTransportState')
-        # else:
-            # self._failure += 1
-            # logging.warning('Losing DMR when get transport state. count: %d' % self._failure)
 
     def get_position_info(self):
         position_info = self.dmr.position_info()
@@ -295,7 +292,7 @@ def save_history(src, position, duration):
 @app.route('/list')
 def list_history():
     """Return play history list"""
-    return json.dumps([{'filename': s[0], 'position': s[1], 'duration': s[2],
+    return jsonify([{'filename': s[0], 'position': s[1], 'duration': s[2],
                         'latest_date': s[3], 'path': os.path.dirname(s[0])}
                        for s in run_sql('select * from history order by LATEST_DATE desc')])
 
@@ -572,7 +569,7 @@ def fs_dir(path):
             else:
                 list_other.append({'filename': filename, 'type': 'other',
                                   'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-        return json.dumps(up + list_folder + list_mp4 + list_video + list_other)
+        return jsonify(up + list_folder + list_mp4 + list_video + list_other)
     except Exception as e:
         logging.warning('dir exception: %s' % e)
         abort(404, str(e))
