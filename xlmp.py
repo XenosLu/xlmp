@@ -297,7 +297,7 @@ def hist_remove(src):
 
 
 @route('/')
-def index_entrypoint():
+def index_entry():
     if tracker.dmr:
         redirect('/dlna')
     return index()
@@ -430,7 +430,7 @@ def dlna_seek(position):
 
 
 @route('/move/<src:path>')
-def move(src):
+def fs_move(src):
     """Move file to '.old' folder"""
     filename = '%s/%s' % (VIDEO_PATH, src)
     dir_old = '%s/%s/.old' % (VIDEO_PATH, os.path.dirname(src))
