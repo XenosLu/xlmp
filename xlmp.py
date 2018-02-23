@@ -296,6 +296,14 @@ def hist_remove(src):
     return hist_list()
 
 
+@post('/hist/save/<src:path>')
+def hist_save(src):
+    """Save play position"""
+    position = request.forms.get('position')
+    duration = request.forms.get('duration')
+    hist_save(src, position, duration)
+
+
 @route('/')
 def index_entry():
     if tracker.dmr:
@@ -442,14 +450,6 @@ def fs_move(src):
         logging.warning('move file failed: %s' % e)
         abort(404, str(e))
     return fs_dir('%s/' % os.path.dirname(src))
-
-
-@post('/hist/save/<src:path>')
-def hist_save(src):
-    """Save play position"""
-    position = request.forms.get('position')
-    duration = request.forms.get('duration')
-    hist_save(src, position, duration)
 
 
 @route('/update')
