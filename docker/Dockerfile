@@ -1,4 +1,4 @@
-## xlmp
+## xlmp flask
 FROM xenocider/container:bottle-env
 LABEL maintainer="xenos <xenos.lu@gmail.com>"
 
@@ -8,6 +8,7 @@ RUN apk add --no-cache \
             git \
             nginx \
             supervisor \
+    && pip3 install flask \
     && if [ "$enable_logserver" ];then apk add --no-cache rsyslog;fi \
     && if [ "$enable_logserver" ];then echo "*.* @@nas:1514" >>/etc/rsyslog.conf;fi \
     && mkdir /run/nginx \
