@@ -21,15 +21,24 @@ from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/d
 
 
 import tornado.web
+
+settings = {
+    "static_path" : os.path.join(os.path.dirname(__file__), "static"),
+    "template_path" : os.path.join(os.path.dirname(__file__), "views"),
+    "gzip" : True,
+    "debug" : True,
+}
+
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write("Hello, world")
+        # self.write("Hello, world")
+        self.render("index.tpl")
 
 Handlers=[
     (r"/", MainHandler),
 ]
 
-application = tornado.web.Application(Handlers)
+application = tornado.web.Application(Handlers, **settings)
 
 if __name__ == "__main__":
     if sys.platform == 'win32':
