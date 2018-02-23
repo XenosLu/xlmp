@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=0, minimal-ui">
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/common.css?v=1" rel="stylesheet">
-    <title>{{title}}</title>
+    <title>{% block title %}Light Media Player{% end %}</title>
   </head>
-  {{!base}}
+  {% block body %}
+  {% end %}
 </html>

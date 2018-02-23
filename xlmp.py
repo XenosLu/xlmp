@@ -29,13 +29,13 @@ settings = {
     "debug" : True,
 }
 
-class MainHandler(tornado.web.RequestHandler):
+class IndexHandler(tornado.web.RequestHandler):
     def get(self):
         # self.write("Hello, world")
         self.render("index.tpl")
 
 Handlers=[
-    (r"/", MainHandler),
+    (r"/", IndexHandler),
 ]
 
 application = tornado.web.Application(Handlers, **settings)
