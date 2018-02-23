@@ -289,7 +289,7 @@ def hist_clear():
     return hist_list()
 
 
-@route('/hist/remove/<src:path>')
+@route('/hist/rm/<src:path>')
 def hist_remove(src):
     """Remove from play history list"""
     run_sql('delete from history where FILENAME=?', unquote(src))
