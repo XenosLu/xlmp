@@ -20,7 +20,7 @@ sys.path = ['lib'] + sys.path  # added libpath
 from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
 
 
-from flask import Flask, render_template, abort, send_from_directory
+from flask import Flask, render_template, abort, send_from_directory, jsonify
 app = Flask(__name__)
 
 from werkzeug.routing import BaseConverter
@@ -404,7 +404,7 @@ def dlna_stop():
 @app.route('/dlnainfo')
 def dlna_info():
     """Get play info through DLNA"""
-    return json.dumps(tracker.state)
+    return jsonify(tracker.state)
 
 
 # @app.route('/dlnavol/<control:re:(up|down)>')
