@@ -514,10 +514,10 @@ def restore():
     return shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE)
 
 
-@app.route('/static/<path:filename>')
-def staticx(filename):
-    """Static file access"""
-    return static_file(filename, root='./static')
+# @app.route('/static/<path:filename>')
+# def staticx(filename):
+    # """Static file access"""
+    # return static_file(filename, root='./static')
 
 
 # @app.route('/video/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
