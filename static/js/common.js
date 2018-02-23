@@ -7,7 +7,7 @@ window.onresize = adapt;
 //buttons
 $("#clear").click(function () {
     if (confirm("Clear all history?"))
-        history("/clear");
+        history("/hist/clear");
 });
 $("#suspend").click(function() {
     if(confirm("Suspend ?"))$.post("/suspend");
@@ -28,7 +28,7 @@ $("#tabFrame").on("click", ".folder", function () {
     }
 }).on("click", ".remove", function () {
     if (confirm("Clear history of " + this.title + "?"))
-        history("/remove/" + this.title.replace(/\?/g, "%3F"));
+        history("/hist/remove/" + this.title.replace(/\?/g, "%3F"));
 }).on("click", ".mp4", function () {
     if (window.document.location.pathname == "/dlna")
         get("/dlna/load/" + this.title);

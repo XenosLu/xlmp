@@ -79,7 +79,7 @@ class DMRTracker(Thread):
             if position_info['TrackURI']:
                 self.state['TrackURI'] = unquote(
                     re.sub('http://.*/video/', '', position_info['TrackURI']))
-                save_history(self.state['TrackURI'],
+                hist_save(self.state['TrackURI'],
                              time_to_second(self.state['RelTime']),
                              time_to_second(self.state['TrackDuration']))
             else:
@@ -174,7 +174,7 @@ class DLNALoader(Thread):
             if tracker.loadonce(url):
                 logging.info('Loaded url: %s successed' % url)
                 src = unquote(re.sub('http://.*/video/', '', url))
-                position = load_history(src)
+                position = hist_load(src)
                 if position:
                     tracker.dmr.seek(second_to_time(position))
                     logging.info('Loaded position: %s' % second_to_time(position))
@@ -257,14 +257,14 @@ def get_size(*filename):
         return '%.1f%sB' % (size/1024.0**l, unit[l])
 
 
-def load_history(name):
+def hist_load(name):
     position = run_sql('select POSITION from history where FILENAME=?', name)
     if len(position) == 0:
         return 0
     return position[0][0]
 
 
-def save_history(src, position, duration):
+def hist_save(src, position, duration):
     if float(position) < 10:
         return
     run_sql('''replace into history (FILENAME, POSITION, DURATION, LATEST_DATE)
@@ -272,7 +272,7 @@ def save_history(src, position, duration):
 
 
 @route('/hist/list')
-def list_history():
+def hist_list():
     """Return play history list"""
     return {'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
                         'latest_date': s[3], 'path': os.path.dirname(s[0])}
@@ -280,6 +280,20 @@ def list_history():
     # return json.dumps([{'filename': s[0], 'position': s[1], 'duration': s[2],
                         # 'latest_date': s[3], 'path': os.path.dirname(s[0])}
                        # for s in run_sql('select * from history order by LATEST_DATE desc')])
+
+      
+@route('/hist/clear')
+def hist_clear():
+    """Clear play history list"""
+    run_sql('delete from history')
+    return hist_list()
+
+
+@route('/hist/remove/<src:path>')
+def hist_remove(src):
+    """Remove from play history list"""
+    run_sql('delete from history where FILENAME=?', unquote(src))
+    return hist_list()
 
 
 @route('/')
@@ -305,7 +319,7 @@ def play(src):
     """Video play page"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         redirect('/')
-    return template('player.tpl', src=src, title=src, position=load_history(src))
+    return template('player.tpl', src=src, title=src, position=hist_load(src))
 
 
 def result(r):
@@ -415,20 +429,6 @@ def dlna_seek(position):
         return result(tracker.dmr.seek(second_to_time(float(position))))
 
 
-@route('/clear')
-def clear():
-    """Clear play history list"""
-    run_sql('delete from history')
-    return list_history()
-
-
-@route('/remove/<src:path>')
-def remove(src):
-    """Remove from play history list"""
-    run_sql('delete from history where FILENAME=?', unquote(src))
-    return list_history()
-
-
 @route('/move/<src:path>')
 def move(src):
     """Move file to '.old' folder"""
@@ -449,7 +449,7 @@ def save(src):
     """Save play position"""
     position = request.forms.get('position')
     duration = request.forms.get('duration')
-    save_history(src, position, duration)
+    hist_save(src, position, duration)
 
 
 @route('/update')
