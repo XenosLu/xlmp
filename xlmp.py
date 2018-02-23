@@ -13,13 +13,19 @@ from threading import Thread, Event
 from urllib.parse import quote, unquote
 from time import sleep, time
 
-from bottle import abort, post, redirect, request, route, run, static_file, template, default_app
+# from bottle import abort, post, redirect, request, route, run, static_file, , default_app
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 sys.path = ['lib'] + sys.path  # added libpath
 from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
 
-app = default_app()
+
+from flask import Flask, render_template
+app = Flask(__name__)
+
+
+
+# app = default_app()
 
 VIDEO_PATH = './media'  # media file path
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
@@ -274,7 +280,7 @@ def save_history(src, position, duration):
                values(? , ?, ?, DateTime('now', 'localtime'));''', src, position, duration)
 
 
-@route('/list')
+@app.route('/list')
 def list_history():
     """Return play history list"""
     return json.dumps([{'filename': s[0], 'position': s[1], 'duration': s[2],
@@ -282,30 +288,31 @@ def list_history():
                        for s in run_sql('select * from history order by LATEST_DATE desc')])
 
 
-@route('/')
+@app.route('/')
 def index_entrypoint():
     if tracker.dmr:
         redirect('/dlna')
     return index()
-    # return template('index.tpl')
+    # return render_template('index.tpl')
 
 
-@route('/index')
+@app.route('/index')
 def index():
-    return template('index.tpl')
+    return render_template('index.tpl')
 
 
-@route('/dlna')
+@app.route('/dlna')
 def dlna():
-    return template('dlna_player.tpl')
+    return render_template('dlna_player.tpl')
 
 
-@route('/play/<src:re:.*\.((?i)mp)4$>')
+# @app.route('/play/<src:re:.*\.((?i)mp)4$>')
+@app.route('/play/<src>')
 def play(src):
     """Video play page"""
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         redirect('/')
-    return template('player.tpl', src=src, title=src, position=load_history(src))
+    return render_template('player.tpl', src=src, title=src, position=load_history(src))
 
 
 def result(r):
@@ -315,12 +322,12 @@ def result(r):
         return 'Error: Failed!'
 
 
-@route('/setdmr/<dmr>')
+@app.route('/setdmr/<dmr>')
 def set_dlna_dmr(dmr):
     result(tracker.set_dmr(dmr))
 
 
-@route('/searchdmr')
+@app.route('/searchdmr')
 def search_dmr():
     tracker.discover_dmr()
 
@@ -335,7 +342,8 @@ def get_next_file(src):
         return '%s/%s' % (os.path.dirname(src), dirs[next_index])
 
 
-@route('/dlna/load/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
+# @app.route('/dlna/load/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
+@app.route('/dlna/load/<src>')
 @check_dmr_exist
 def dlna_load(src):
     if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
@@ -348,8 +356,8 @@ def dlna_load(src):
     return 'loading %s' % src
 
 
-@route('/dlna/next')
-@check_dmr_exist
+@app.route('/dlna/next')
+# @check_dmr_exist
 def dlna_next():
     if not tracker.state.get('TrackURI'):
         return 'No current url'
@@ -361,34 +369,35 @@ def dlna_next():
         return "Can't get next file"
 
 
-@route('/dlnaplay')
-@check_dmr_exist
+@app.route('/dlnaplay')
+# @check_dmr_exist
 def dlna_play():
     return result(tracker.dmr.play())
 
 
-@route('/dlnapause')
-@check_dmr_exist
+@app.route('/dlnapause')
+# @check_dmr_exist
 def dlna_pause():
     """Pause video through DLNA"""
     return result(tracker.dmr.pause())
 
 
-@route('/dlnastop')
-@check_dmr_exist
+@app.route('/dlnastop')
+# @check_dmr_exist
 def dlna_stop():
     """Stop video through DLNA"""
     return result(tracker.dmr.stop())
 
 
-@route('/dlnainfo')
+@app.route('/dlnainfo')
 def dlna_info():
     """Get play info through DLNA"""
     return tracker.state
 
 
-@route('/dlnavol/<control:re:(up|down)>')
-@check_dmr_exist
+# @app.route('/dlnavol/<control:re:(up|down)>')
+@app.route('/dlnavol/<control>')
+# @check_dmr_exist
 def dlna_volume_control(control):
     """Tune volume through DLNA"""
     vol = int(tracker.dmr.get_volume())
@@ -405,8 +414,8 @@ def dlna_volume_control(control):
         return 'failed'
 
 
-@route('/dlnaseek/<position>')
-@check_dmr_exist
+@app.route('/dlnaseek/<position>')
+# @check_dmr_exist
 def dlna_seek(position):
     """Seek video through DLNA"""
     if ':' in position:
@@ -415,21 +424,21 @@ def dlna_seek(position):
         return result(tracker.dmr.seek(second_to_time(float(position))))
 
 
-@route('/clear')
+@app.route('/clear')
 def clear():
     """Clear play history list"""
     run_sql('delete from history')
     return list_history()
 
 
-@route('/remove/<src:path>')
+@app.route('/remove/<path:src>')
 def remove(src):
     """Remove from play history list"""
     run_sql('delete from history where FILENAME=?', unquote(src))
     return list_history()
 
 
-@route('/move/<src:path>')
+@app.route('/move/<path:src>')
 def move(src):
     """Move file to '.old' folder"""
     filename = '%s/%s' % (VIDEO_PATH, src)
@@ -444,7 +453,7 @@ def move(src):
     return fs_dir('%s/' % os.path.dirname(src))
 
 
-@post('/save/<src:path>')
+@app.route('/save/<path:src>', methods=['POST'])
 def save(src):
     """Save play position"""
     position = request.forms.get('position')
@@ -452,7 +461,7 @@ def save(src):
     save_history(src, position, duration)
 
 
-@route('/update')
+@app.route('/update')
 def update():
     """self update through git"""
     def delay_stop():
@@ -493,25 +502,26 @@ def update():
     # return 'shutting down...'
 
 
-@route('/backup')
+@app.route('/backup')
 def backup():
     """backup history"""
     return shutil.copyfile(HISTORY_DB_FILE, '%s.bak' % HISTORY_DB_FILE)
 
 
-@route('/restore')
+@app.route('/restore')
 def restore():
     """restore history"""
     return shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE)
 
 
-@route('/static/<filename:path>')
-def static(filename):
+@app.route('/static/<path:filename>')
+def staticx(filename):
     """Static file access"""
     return static_file(filename, root='./static')
 
 
-@route('/video/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
+# @app.route('/video/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
+@app.route('/video/<src>')
 def static_video(src):
     """video file access
        To support large file(>2GB), you should use web server to deal with static files.
@@ -520,7 +530,8 @@ def static_video(src):
     return static_file(src, root=VIDEO_PATH)
 
 
-@route('/fs/<path:re:.*>')
+# @app.route('/fs/<path:re:.*>')
+@app.route('/fs/<path>')
 def fs_dir(path):
     """Get static folder list in json"""
     if path == '/':
@@ -558,13 +569,15 @@ run_sql('''create table if not exists history
                 POSITION float not null,
                 DURATION float, LATEST_DATE datetime not null);''')
 
+if __name__ == '__main__':
+    app.run()
 
-if __name__ == '__main__':  # for debug
-    from imp import find_module
-    if sys.platform == 'win32':
-        os.system('start http://127.0.0.1:8081/')  # open the page automatic for debug
-    try:
-        find_module('meinheld')
-        run(host='0.0.0.0', port=8081, debug=True, server='meinheld')  # run demo server use meinheld
-    except Exception:
-        run(host='0.0.0.0', port=8081, debug=True)  # run demo server
+# if __name__ == '__main__':  # for debug
+    # from imp import find_module
+    # if sys.platform == 'win32':
+        # os.system('start http://127.0.0.1:8081/')  # open the page automatic for debug
+    # try:
+        # find_module('meinheld')
+        # run(host='0.0.0.0', port=8081, debug=True, server='meinheld')  # run demo server use meinheld
+    # except Exception:
+        # run(host='0.0.0.0', port=8081, debug=True)  # run demo server
