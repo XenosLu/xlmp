@@ -59,7 +59,7 @@ function get(url) {
  */
 function showDialog() {
     if ($("#navtab li:eq(0)").attr("class") == "active")
-        history("/hist/list");
+        history("/hist/ls");
     $("#history").addClass("active");
     $("#dialog").show(250);
 }
@@ -75,7 +75,7 @@ function toggleDialog() {
         $("#dialog").hide(250);
     } else {
         if ($("#navtab li:eq(0)").attr("class") == "active")
-            history("/hist/list");
+            history("/hist/ls");
         $("#history").addClass("active");
         $("#dialog").show(250);
     }

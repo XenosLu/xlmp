@@ -22,7 +22,7 @@ $("video").on("error", function () {
     lastplaytime = new Date().getTime();  //to detect if video is playing
     if (this.readyState == 4 && Math.floor(Math.random() * 99) > 80) {  //randomly save play position
         $.ajax({
-            url: "/save/{{src}}",
+            url: "/hist/save/{{src}}",
             data: {
                 position: this.currentTime,
                 duration: this.duration

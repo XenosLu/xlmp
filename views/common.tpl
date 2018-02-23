@@ -63,7 +63,7 @@
       <button type="button" class="close">&times;</button>
       <ul id="navtab" class="nav nav-tabs">
         <li class="active" title="Show play history">
-          <a href="#tabFrame" data-toggle="tab" onclick="history('/hist/list')">
+          <a href="#tabFrame" data-toggle="tab" onclick="history('/hist/ls')">
             <i class="glyphicon glyphicon-list"></i>History
           </a>
         </li>

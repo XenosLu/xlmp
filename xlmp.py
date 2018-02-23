@@ -271,7 +271,7 @@ def hist_save(src, position, duration):
                values(? , ?, ?, DateTime('now', 'localtime'));''', src, position, duration)
 
 
-@route('/hist/list')
+@route('/hist/ls')
 def hist_list():
     """Return play history list"""
     return {'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
@@ -444,8 +444,8 @@ def move(src):
     return fs_dir('%s/' % os.path.dirname(src))
 
 
-@post('/save/<src:path>')
-def save(src):
+@post('/hist/save/<src:path>')
+def hist_save(src):
     """Save play position"""
     position = request.forms.get('position')
     duration = request.forms.get('duration')
@@ -453,7 +453,7 @@ def save(src):
 
 
 @route('/update')
-def update():
+def sys_update():
     """self update through git"""
     def delay_stop():
         sleep(1)
@@ -494,13 +494,13 @@ def update():
 
 
 @route('/backup')
-def backup():
+def sys_backup():
     """backup history"""
     return shutil.copyfile(HISTORY_DB_FILE, '%s.bak' % HISTORY_DB_FILE)
 
 
 @route('/restore')
-def restore():
+def sys_restore():
     """restore history"""
     return shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE)
 
