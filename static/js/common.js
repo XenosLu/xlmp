@@ -15,9 +15,6 @@ $("#suspend").click(function() {
 $("#shutdown").click(function() {
     if(confirm("Shutdown ?"))$.post("/shutdown");
 });
-// $("#restart").click(function() {
-    // if(confirm("Restart ?"))$.post("/restart");
-// });
 // Dialog open/close toggle buttons
 $("#history").click(toggleDialog);
 $(".close").click(toggleDialog);
@@ -62,7 +59,7 @@ function get(url) {
  */
 function showDialog() {
     if ($("#navtab li:eq(0)").attr("class") == "active")
-        history("/list");
+        history("/hist/list");
     $("#history").addClass("active");
     $("#dialog").show(250);
 }
@@ -78,7 +75,7 @@ function toggleDialog() {
         $("#dialog").hide(250);
     } else {
         if ($("#navtab li:eq(0)").attr("class") == "active")
-            history("/list");
+            history("/hist/list");
         $("#history").addClass("active");
         $("#dialog").show(250);
     }
@@ -130,7 +127,7 @@ function filelist(str) {
                 "video": "film",
                 "other": "file"
             };
-            $.each(data, function (i, n) {
+            $.each(data["filesystem"], function (i, n) {
                 var size = "";
                 if (n["size"])
                     size = "<br><small>" + n["size"] + "</small>";              
@@ -165,7 +162,7 @@ function history(str) {
                 $("#navtab li:eq(0) a").tab("show");
             $("#clear").show();
             var html = "";
-            $.each(data, function (i, n) {
+            $.each(data["history"], function (i, n) {
                 var mediaType = "video";
                 if ((n["filename"]).lastIndexOf('.mp4') > 0)
                     mediaType = "mp4";
