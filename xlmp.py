@@ -216,10 +216,12 @@ def check_dmr_exist(func):
     return no_dmr
                     
 settings = {
-    'static_path' : os.path.join(os.path.dirname(__file__), 'static'),
-    'template_path' : os.path.join(os.path.dirname(__file__), 'views'),
-    'gzip' : True,
-    # "debug" : True,
+    # 'static_path': os.path.join(os.path.dirname(__file__), 'static'),
+    'static_path': 'static',
+    # 'template_path': os.path.join(os.path.dirname(__file__), 'views'),
+    'template_path': 'views',
+    'gzip': True,
+    # "debug": True,
 }
 
 class IndexHandler(tornado.web.RequestHandler):
@@ -381,7 +383,7 @@ class DlnaVolumeControlHandler(tornado.web.RequestHandler):
             self.finish('failed')
 
 
-class SysHandler(tornado.web.RequestHandler):
+class SystemHandler(tornado.web.RequestHandler):
     def get(self, opt=None):
         if sys.platform == 'linux':
             if os.system('git pull') == 0:
@@ -405,8 +407,8 @@ Handlers=[
     (r'/fs/(?P<path>.*)', FileSystemListHandler),
     (r'/move/(?P<src>.*)', FileSystemMoveHandler),
     (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
-    (r'/test', TestHandler),
-    (r'/sys/update', SysHandler),
+    (r'/test/', TestHandler),
+    (r'/sys/update', SystemHandler),
     (r'/dlnavol/(?P<opt>\w*)', DlnaVolumeControlHandler),
     (r'/dlnainfo', DlnaInfoHandler),
     (r'/dlna/next', DlnaNextHandler),
