@@ -474,7 +474,7 @@ class TestHandler(tornado.web.RequestHandler):
 
 Handlers=[
     (r'/', IndexHandler),
-    (r'/index', IndexHandler),
+    # (r'/index', IndexHandler),
     (r'/dlna', DlnaPlayerHandler),
     (r'/fs/(?P<path>.*)', FileSystemListHandler),
     (r'/move/(?P<src>.*)', FileSystemMoveHandler),
