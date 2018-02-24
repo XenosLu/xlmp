@@ -45,59 +45,99 @@ class IndexHandler(tornado.web.RequestHandler):
         self.render("index.tpl")
 
 
+class HistoryHandler(tornado.web.RequestHandler):
+    """Return play history list"""
+    def get(self, opt='ls', src=None):
+        if opt=='clear':
+            run_sql('delete from history')
+        elif opt=='rm':
+            run_sql('delete from history where FILENAME=?', unquote(src))
+        else:
+            raise tornado.web.HTTPError(404)
+        
+        self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
+                        'latest_date': s[3], 'path': os.path.dirname(s[0])}
+                       for s in run_sql('select * from history order by LATEST_DATE desc')]})
+                       
 class HistListHandler(tornado.web.RequestHandler):
+    """Return play history list"""
     def get(self):
         self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
                         'latest_date': s[3], 'path': os.path.dirname(s[0])}
                        for s in run_sql('select * from history order by LATEST_DATE desc')]})
 
+class HistClearHandler(tornado.web.RequestHandler):
+    """Clear play history list"""
+    def get(self):
+        run_sql('delete from history')
+        self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
+                        'latest_date': s[3], 'path': os.path.dirname(s[0])}
+                       for s in run_sql('select * from history order by LATEST_DATE desc')]})
+
+class TestHandler(tornado.web.RequestHandler):
+    """Clear play history list"""
+    def get(self, opt=None, path=None):
+        self.write(opt+','+path)
+        
 
 class FileSystemListHandler(tornado.web.RequestHandler):
+    """Get static folder list in json"""
     def get(self, path):
-        self.write(path)
+        # self.write(path)
 
+        if path == '/':
+            path = ''
+        try:
+            up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
+            if path:
+                up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
+                if not path.endswith('/'):
+                    path = '%s/' % path
+            dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))  # path could be either path or path/
+            for filename in dir_list:
+                if filename.startswith('.'):
+                    continue
+                if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
+                    list_folder.append({'filename': filename, 'type': 'folder',
+                                        'path': '%s%s' % (path, filename)})
+                elif re.match('.*\.((?i)mp)4$', filename):
+                    list_mp4.append({'filename': filename, 'type': 'mp4',
+                                    'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+                elif re.match('.*\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
+                    list_video.append({'filename': filename, 'type': 'video',
+                                       'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+                else:
+                    list_other.append({'filename': filename, 'type': 'other',
+                                      'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+            self.finish({'filesystem': (up + list_folder + list_mp4 + list_video + list_other)})
+        except Exception as e:
+            logging.warning('dir exception: %s' % e)
+            # raise tornado.web.HTTPError(404, reason=str(e))
+            raise tornado.web.HTTPError(404)
 
 Handlers=[
     (r"/", IndexHandler),
-    (r"/hist/ls", HistListHandler),
+    # (r"/hist/ls", HistListHandler),
+    # (r"/hist/clear", HistClearHandler),
     (r"/fs/(?P<path>.*)", FileSystemListHandler),
+    (r"/test/(?P<opt>\w*)/?(?P<path>.*)", TestHandler),
+    (r"/hist/(?P<opt>\w*)/?(?P<src>.*)", HistoryHandler),
+    
 ]
 
-
-# @route('/fs/<path:re:.*>')
-# def fs_dir(path):
-    # """Get static folder list in json"""
-    # if path == '/':
-        # path = ''
-    # try:
-        # up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
-        # if path:
-            # up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
-            # if not path.endswith('/'):
-                # path = '%s/' % path
-        # dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))  # path could be either path or path/
-        # for filename in dir_list:
-            # if filename.startswith('.'):
-                # continue
-            # if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
-                # list_folder.append({'filename': filename, 'type': 'folder',
-                                    # 'path': '%s%s' % (path, filename)})
-            # elif re.match('.*\.((?i)mp)4$', filename):
-                # list_mp4.append({'filename': filename, 'type': 'mp4',
-                                # 'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-            # elif re.match('.*\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
-                # list_video.append({'filename': filename, 'type': 'video',
-                                   # 'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-            # else:
-                # list_other.append({'filename': filename, 'type': 'other',
-                                  # 'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-        # return {'filesystem': (up + list_folder + list_mp4 + list_video + list_other)}
-        # # return json.dumps(up + list_folder + list_mp4 + list_video + list_other)
-    # except Exception as e:
-        # logging.warning('dir exception: %s' % e)
-        # abort(404, str(e))
+# @route('/hist/rm/<src:path>')
+# def hist_remove(src):
+    # """Remove from play history list"""
+    # run_sql('delete from history where FILENAME=?', unquote(src))
+    # return hist_list()
 
 
+# @post('/hist/save/<src:path>')
+# def hist_save(src):
+    # """Save play position"""
+    # position = request.forms.get('position')
+    # duration = request.forms.get('duration')
+    # save_history(src, position, duration)
 
 application = tornado.web.Application(Handlers, **settings)
 
@@ -356,31 +396,14 @@ if __name__ == "__main__":
         os.system('start http://127.0.0.1:8081/')
     application.listen(8081)
     tornado.ioloop.IOLoop.instance().start()
-    
 
 
 
       
-@route('/hist/clear')
-def hist_clear():
-    """Clear play history list"""
-    run_sql('delete from history')
-    return hist_list()
 
 
-@route('/hist/rm/<src:path>')
-def hist_remove(src):
-    """Remove from play history list"""
-    run_sql('delete from history where FILENAME=?', unquote(src))
-    return hist_list()
 
 
-@post('/hist/save/<src:path>')
-def hist_save(src):
-    """Save play position"""
-    position = request.forms.get('position')
-    duration = request.forms.get('duration')
-    save_history(src, position, duration)
 
 
 @route('/')
@@ -600,11 +623,6 @@ def static_video(src):
 
 
 
-
-
-
-                
-                
 if __name__ == '__main__':  # for debug
     from imp import find_module
     if sys.platform == 'win32':
