@@ -8,5 +8,15 @@
     <title>{% block title %}Light Media Player{% end %}</title>
   </head>
   {% block body %}
+  <body>
+    {% block main %}
+      {% include common.tpl %}
+    {% end %}
+    <footer class="text-center"><small>&copy;2016-2018 Xenos' Light Media Player</small></footer>
+  </body>
+{% include common_script.tpl %}
+    {% block script %}
+    {% end %}
   {% end %}
+  
 </html>

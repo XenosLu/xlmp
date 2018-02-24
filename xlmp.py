@@ -45,6 +45,11 @@ class IndexHandler(tornado.web.RequestHandler):
         self.render("index.tpl")
 
 
+class DlnaPlayerHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("dlna_player.tpl")
+
+
 class HistoryHandler(tornado.web.RequestHandler):
     """Return play history list"""
     def get(self, opt='ls', src=None):
@@ -56,21 +61,6 @@ class HistoryHandler(tornado.web.RequestHandler):
             run_sql('delete from history where FILENAME=?', unquote(src))
         else:
             raise tornado.web.HTTPError(404)
-        self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
-                        'latest_date': s[3], 'path': os.path.dirname(s[0])}
-                       for s in run_sql('select * from history order by LATEST_DATE desc')]})
-                       
-class HistListHandler(tornado.web.RequestHandler):
-    """Return play history list"""
-    def get(self):
-        self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
-                        'latest_date': s[3], 'path': os.path.dirname(s[0])}
-                       for s in run_sql('select * from history order by LATEST_DATE desc')]})
-
-class HistClearHandler(tornado.web.RequestHandler):
-    """Clear play history list"""
-    def get(self):
-        run_sql('delete from history')
         self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
                         'latest_date': s[3], 'path': os.path.dirname(s[0])}
                        for s in run_sql('select * from history order by LATEST_DATE desc')]})
@@ -114,20 +104,37 @@ class FileSystemListHandler(tornado.web.RequestHandler):
 
 class TestHandler(tornado.web.RequestHandler):
     """Clear play history list"""
-    def get(self, opt=None, path=None):
-        self.write(opt+','+path)
-        self.write('')
-            
+    def post(self, opt=None, path=None):
+        position = self.get_argument('position', '')
+        duration = self.get_argument('duration', '')
+        self.write('position: %s, duration: %s' % (position, duration))
+
 Handlers=[
     (r"/", IndexHandler),
+    (r"/index", IndexHandler),
+    (r"/dlna", DlnaPlayerHandler),
     # (r"/hist/ls", HistListHandler),
     # (r"/hist/clear", HistClearHandler),
     (r"/fs/(?P<path>.*)", FileSystemListHandler),
     (r"/hist/(?P<opt>\w*)/?(?P<src>.*)", HistoryHandler),
-    (r"/test/(?P<opt>\w*)/?(?P<path>.*)", TestHandler),
-    # (r"/test", TestHandler),
+    # (r"/test/(?P<opt>\w*)/?(?P<path>.*)", TestHandler),
+    (r"/test", TestHandler),
 ]
+# @route('/')
+# def index_entry():
+    # if tracker.dmr:
+        # redirect('/dlna')
+    # return index()
+    # # return template('index.tpl')
 
+# @route('/index')
+# def index():
+    # return template('index.tpl')
+
+
+# @route('/dlna')
+# def dlna():
+    # return template('dlna_player.tpl')
 
 # @post('/hist/save/<src:path>')
 # def hist_save(src):
@@ -396,29 +403,7 @@ if __name__ == "__main__":
 
 
 
-      
 
-
-
-
-
-
-@route('/')
-def index_entry():
-    if tracker.dmr:
-        redirect('/dlna')
-    return index()
-    # return template('index.tpl')
-
-
-@route('/index')
-def index():
-    return template('index.tpl')
-
-
-@route('/dlna')
-def dlna():
-    return template('dlna_player.tpl')
 
 
 @route('/play/<src:re:.*\.((?i)mp)4$>')

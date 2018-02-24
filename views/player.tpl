@@ -1,9 +1,11 @@
-% rebase('base.tpl')
-<body>
-  % include('common.tpl')
-  <video src="/video/{{src}}" poster controls preload="meta">No video support!</video>
-</body>
-% include('common_script.tpl')
+{% extends base.tpl %}
+
+    {% block main %}
+      {% include common.tpl %}
+      <video src="/video/{{src}}" poster controls preload="meta">No video support!</video>
+    {% end %}
+
+{% block script %}
 <script>
 var lastplaytime = 0;  //in seconds
 var text = "";  //temp output text
@@ -104,3 +106,4 @@ function rate(x) {
     $("video").get(0).playbackRate = x;
 }
 </script>
+{% end %}

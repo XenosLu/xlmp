@@ -1,9 +1,12 @@
-% rebase('base.tpl', title='DMC - Light Media Player')
-<body>
-  % include('common.tpl')
-  % include('dlna.tpl')
-</body>
-% include('common_script.tpl')
+{% extends base.tpl %}
+{% block title %}DMC - Light Media Player{% end %}
+
+    {% block main %}
+      {% include common.tpl %}
+      {% include dlna.tpl %}
+    {% end %}
+
+{% block script %}
 <script>
 var reltime = 0;
 var update = true;
@@ -77,3 +80,4 @@ function offset_value(current, value, max) {
     return Math.round(current + Math.abs(Math.pow(s, 3)) * (value - current));
 }
 </script>
+{% end %}
