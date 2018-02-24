@@ -391,6 +391,7 @@ class SysHandler(tornado.web.RequestHandler):
         if sys.platform == 'linux':
             if os.system('git pull') == 0:
                 self.finish('git pull done, waiting for restart')
+                os._exit(1)
             else:
                 self.finish('execute git pull failed')
         else:
