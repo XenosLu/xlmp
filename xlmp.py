@@ -53,7 +53,6 @@ class WebPlayerHandler(tornado.web.RequestHandler):
     """Video play page"""
     def get(self, src):
         self.render('player.tpl', src=src, position=hist_load(src))
-
     # if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
         # redirect('/')
     # return template('player.tpl', src=src, title=src, position=hist_load(src))
@@ -139,6 +138,13 @@ Handlers=[
 # def index():
     # return template('index.tpl')
 
+# @route('/video/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
+# def static_video(src):
+    # """video file access
+       # To support large file(>2GB), you should use web server to deal with static files.
+       # For example, you can use 'AliasMatch' or 'Alias' in Apache
+    # """
+    # return static_file(src, root=VIDEO_PATH)
 
 # @route('/play/<src:re:.*\.((?i)mp)4$>')
 # def play(src):
@@ -601,13 +607,7 @@ def sys_restore():
     # return static_file(filename, root='./static')
 
 
-@route('/video/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
-def static_video(src):
-    """video file access
-       To support large file(>2GB), you should use web server to deal with static files.
-       For example, you can use 'AliasMatch' or 'Alias' in Apache
-    """
-    return static_file(src, root=VIDEO_PATH)
+
 
 
 
