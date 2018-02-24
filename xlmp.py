@@ -256,34 +256,7 @@ class HistoryHandler(tornado.web.RequestHandler):
                         'latest_date': s[3], 'path': os.path.dirname(s[0])}
                        for s in run_sql('select * from history order by LATEST_DATE desc')]})
 
-def ls_dir(path):
-    if path == '/':
-        path = ''
-    try:
-        up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
-        if path:
-            up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
-            if not path.endswith('/'):
-                path = '%s/' % path
-        dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))  # path could be either path or path/
-        for filename in dir_list:
-            if filename.startswith('.'):
-                continue
-            if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
-                list_folder.append({'filename': filename, 'type': 'folder',
-                                    'path': '%s%s' % (path, filename)})
-            elif re.match('.*\.((?i)mp)4$', filename):
-                list_mp4.append({'filename': filename, 'type': 'mp4',
-                                'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-            elif re.match('.*\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
-                list_video.append({'filename': filename, 'type': 'video',
-                                   'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-            else:
-                list_other.append({'filename': filename, 'type': 'other',
-                                  'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-        return ({'filesystem': (up + list_folder + list_mp4 + list_video + list_other)})
-    except Exception as e:
-        logging.warning('dir exception: %s' % e)
+
 
 def get_next_file(src):
     fullname = '%s/%s' % (VIDEO_PATH, src)
@@ -439,9 +412,38 @@ Handlers=[
         # redirect('/dlna')
     # return index()
     # # return template('index.tpl')
+
+def ls_dir(path):
+    if path == '/':
+        path = ''
+    try:
+        up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
+        if path:
+            up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
+            if not path.endswith('/'):
+                path = '%s/' % path
+        dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))  # path could be either path or path/
+        for filename in dir_list:
+            if filename.startswith('.'):
+                continue
+            if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
+                list_folder.append({'filename': filename, 'type': 'folder',
+                                    'path': '%s%s' % (path, filename)})
+            elif re.match('.*\.((?i)mp)4$', filename):
+                list_mp4.append({'filename': filename, 'type': 'mp4',
+                                'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+            elif re.match('.*\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
+                list_video.append({'filename': filename, 'type': 'video',
+                                   'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+            else:
+                list_other.append({'filename': filename, 'type': 'other',
+                                  'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+        return ({'filesystem': (up + list_folder + list_mp4 + list_video + list_other)})
+    except Exception as e:
+        logging.warning('dir exception: %s' % e)
+
     
 application = tornado.web.Application(Handlers, **settings)
-
 
 
 def run_sql(sql, *args):
@@ -456,6 +458,8 @@ def run_sql(sql, *args):
             logging.warning(str(e))
             ret = ()
     return ret
+
+
 
 
 # Initialize DataBase
@@ -514,8 +518,6 @@ if __name__ == "__main__":
         os.system('start http://127.0.0.1:8081/')
     application.listen(8081)
     tornado.ioloop.IOLoop.instance().start()
-
-
 
 
 # @post('/suspend')
