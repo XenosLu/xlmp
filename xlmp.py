@@ -22,32 +22,6 @@ from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/d
 
 import tornado.web
 
-settings = {
-    "static_path" : os.path.join(os.path.dirname(__file__), "static"),
-    "template_path" : os.path.join(os.path.dirname(__file__), "views"),
-    "gzip" : True,
-    "debug" : True,
-}
-
-class IndexHandler(tornado.web.RequestHandler):
-    def get(self):
-        # self.write("Hello, world")
-        self.render("index.tpl")
-
-Handlers=[
-    (r"/", IndexHandler),
-]
-
-application = tornado.web.Application(Handlers, **settings)
-
-if __name__ == "__main__":
-    if sys.platform == 'win32':
-        os.system('start http://127.0.0.1:8081/')
-    application.listen(8081)
-    tornado.ioloop.IOLoop.instance().start()
-
-# app = default_app()
-
 VIDEO_PATH = './media'  # media file path
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
 
@@ -56,6 +30,30 @@ HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
+
+settings = {
+    "static_path" : os.path.join(os.path.dirname(__file__), "static"),
+    "template_path" : os.path.join(os.path.dirname(__file__), "views"),
+    "gzip" : True,
+    # "debug" : True,
+}
+
+class IndexHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("index.tpl")
+
+class HistListHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
+                        'latest_date': s[3], 'path': os.path.dirname(s[0])}
+                       for s in run_sql('select * from history order by LATEST_DATE desc')]})
+
+Handlers=[
+    (r"/", IndexHandler),
+    (r"/hist/ls", HistListHandler),
+]
+
+application = tornado.web.Application(Handlers, **settings)
 
 
 class DMRTracker(Thread):
@@ -297,16 +295,17 @@ def save_history(src, position, duration):
     run_sql('''replace into history (FILENAME, POSITION, DURATION, LATEST_DATE)
                values(? , ?, ?, DateTime('now', 'localtime'));''', src, position, duration)
 
+               
+               
+               
+if __name__ == "__main__":
+    if sys.platform == 'win32':
+        os.system('start http://127.0.0.1:8081/')
+    application.listen(8081)
+    tornado.ioloop.IOLoop.instance().start()
+    
 
-@route('/hist/ls')
-def hist_list():
-    """Return play history list"""
-    return {'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
-                        'latest_date': s[3], 'path': os.path.dirname(s[0])}
-                       for s in run_sql('select * from history order by LATEST_DATE desc')]}
-    # return json.dumps([{'filename': s[0], 'position': s[1], 'duration': s[2],
-                        # 'latest_date': s[3], 'path': os.path.dirname(s[0])}
-                       # for s in run_sql('select * from history order by LATEST_DATE desc')])
+
 
       
 @route('/hist/clear')
