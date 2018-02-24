@@ -381,13 +381,8 @@ class DlnaVolumeControlHandler(tornado.web.RequestHandler):
             self.finish('failed')
 
 
-class TestHandler(tornado.web.RequestHandler):
-    def get(self, src=None):
-        self.finish('finish1')
-        self.finish('finish2')
-        
 class SysHandler(tornado.web.RequestHandler):
-    def get(self):
+    def get(self, opt=None):
         if sys.platform == 'linux':
             if os.system('git pull') == 0:
                 self.finish('git pull done, waiting for restart')
@@ -396,7 +391,12 @@ class SysHandler(tornado.web.RequestHandler):
                 self.finish('execute git pull failed')
         else:
             self.finish('not supported')
-        
+
+class TestHandler(tornado.web.RequestHandler):
+    def get(self, src=None):
+        self.finish('finish1')
+        self.finish('finish2')
+
 
 Handlers=[
     (r'/', IndexHandler),
