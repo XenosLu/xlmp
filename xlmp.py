@@ -396,9 +396,20 @@ class SystemHandler(tornado.web.RequestHandler):
             self.finish('not supported')
 
 class TestHandler(tornado.web.RequestHandler):
-    def get(self, src=None):
+    def get(self):
         self.finish('finish1')
         self.finish('finish2')
+
+class SetDmrHandler(tornado.web.RequestHandler):
+    def get(self, dmr):
+        if tracker.set_dmr(dmr):
+            self.finish('Done.')
+        else:
+            self.finish('Error: Failed!')
+
+class SearchDmrHandler(tornado.web.RequestHandler):
+    def get(self):
+        tracker.discover_dmr()
 
 
 Handlers=[
@@ -409,6 +420,8 @@ Handlers=[
     (r'/move/(?P<src>.*)', FileSystemMoveHandler),
     (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
     (r'/test/', TestHandler),
+    (r'/setdmr/(?P<dmr>.*)', SetDmrHandler),
+    (r'/searchdmr', SearchDmrHandler),
     (r'/sys/update', SystemHandler),
     (r'/dlnavol/(?P<opt>\w*)', DlnaVolumeControlHandler),
     (r'/dlnainfo', DlnaInfoHandler),
@@ -419,6 +432,7 @@ Handlers=[
     (r'/play/(?P<src>.*)', WebPlayerHandler),
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': os.path.join(os.path.dirname(__file__), VIDEO_PATH)})
 ]
+
 # @route('/')
 # def index_entry():
     # if tracker.dmr:
@@ -501,17 +515,7 @@ if __name__ == "__main__":
     application.listen(8081)
     tornado.ioloop.IOLoop.instance().start()
 
-@route('/setdmr/<dmr>')
-def set_dlna_dmr(dmr):
-    if tracker.set_dmr(dmr):
-        return 'Done.'
-    else:
-        return 'Error: Failed!'
 
-
-@route('/searchdmr')
-def search_dmr():
-    tracker.discover_dmr()
 
 
 # @post('/suspend')
