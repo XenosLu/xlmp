@@ -22,7 +22,7 @@ from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/d
 
 import tornado.web
 
-VIDEO_PATH = './media'  # media file path
+VIDEO_PATH = 'media'  # media file path
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
 
 
@@ -34,9 +34,9 @@ logging.basicConfig(level=logging.INFO,
 
                     
 settings = {
-    "static_path" : os.path.join(os.path.dirname(__file__), "static"),
-    "template_path" : os.path.join(os.path.dirname(__file__), "views"),
-    "gzip" : True,
+    'static_path' : os.path.join(os.path.dirname(__file__), 'static'),
+    'template_path' : os.path.join(os.path.dirname(__file__), 'views'),
+    'gzip' : True,
     # "debug" : True,
 }
 
@@ -121,11 +121,13 @@ Handlers=[
     (r'/', IndexHandler),
     (r'/index', IndexHandler),
     (r'/dlna', DlnaPlayerHandler),
-    (r'/play/(?P<src>.*\.mp4$)', WebPlayerHandler),
     (r'/fs/(?P<path>.*)', FileSystemListHandler),
     (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
-    # (r"/test/(?P<opt>\w*)/?(?P<path>.*)", TestHandler),
     (r'/test', TestHandler),
+    (r'/play/(?P<src>.*\.mp4$)', WebPlayerHandler),
+    # @route('/play/<src:re:.*\.((?i)mp)4$>')
+    (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': os.path.join(os.path.dirname(__file__), VIDEO_PATH)})
+    # @route('/video/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
 ]
 # @route('/')
 # def index_entry():
@@ -138,20 +140,6 @@ Handlers=[
 # def index():
     # return template('index.tpl')
 
-# @route('/video/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
-# def static_video(src):
-    # """video file access
-       # To support large file(>2GB), you should use web server to deal with static files.
-       # For example, you can use 'AliasMatch' or 'Alias' in Apache
-    # """
-    # return static_file(src, root=VIDEO_PATH)
-
-# @route('/play/<src:re:.*\.((?i)mp)4$>')
-# def play(src):
-    # """Video play page"""
-    # if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
-        # redirect('/')
-    # return template('player.tpl', src=src, title=src, position=hist_load(src))
     
 # @post('/hist/save/<src:path>')
 # def hist_save(src):
@@ -599,17 +587,6 @@ def sys_backup():
 def sys_restore():
     """restore history"""
     return shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE)
-
-
-# @route('/static/<filename:path>')
-# def static(filename):
-    # """Static file access"""
-    # return static_file(filename, root='./static')
-
-
-
-
-
 
 if __name__ == '__main__':  # for debug
     from imp import find_module
