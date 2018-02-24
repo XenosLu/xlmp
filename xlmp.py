@@ -409,12 +409,17 @@ class DlnaNextHandler(tornado.web.RequestHandler):
 class DlnaHandler(tornado.web.RequestHandler):
     @check_dmr_exist
     def get(self, opt, *args, **kw):
-        if not opt in ('play', 'pause', 'stop', 'seek'):
-            return
         self.write('opt: %s' % opt)
         method = getattr(tracker.dmr, opt)
-        # if method(*kw.values()):
-        if method():
+        if opt in ('play', 'pause', 'stop'):
+            res = method()
+        elif opt == 'seek':
+            res = method(*kw.values())
+        else:
+            return
+        # self.write(str(method))
+        if res:
+        # if method():
             self.finish('Done.')
         else:
             self.finish('Error: Failed!')

@@ -27,10 +27,10 @@
       <i class="glyphicon glyphicon-chevron-down"></i>
     </button>
     <ul class="dropdown-menu">
-      <li><a onclick="get('/dlna/seek/00:15')">00:15</a></li>
-      <li><a onclick="get('/dlna/seek/00:29')">00:30</a></li>
-      <li><a onclick="get('/dlna/seek/01:00')">01:00</a></li>
-      <li><a onclick="get('/dlna/seek/01:30')">01:30</a></li>
+      <li><a onclick="get('/dlna/seek/00:00:15')">00:15</a></li>
+      <li><a onclick="get('/dlna/seek/00:00:29')">00:30</a></li>
+      <li><a onclick="get('/dlna/seek/00:01:00')">01:00</a></li>
+      <li><a onclick="get('/dlna/seek/00:01:30')">01:30</a></li>
     </ul>
   </div>
   <!-- player menu -->
