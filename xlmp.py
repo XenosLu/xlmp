@@ -413,7 +413,8 @@ class DlnaHandler(tornado.web.RequestHandler):
             return
         self.write('opt: %s' % opt)
         method = getattr(tracker.dmr, opt)
-        if method(*kw.values()):
+        # if method(*kw.values()):
+        if method():
             self.finish('Done.')
         else:
             self.finish('Error: Failed!')
