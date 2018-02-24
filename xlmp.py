@@ -42,12 +42,21 @@ settings = {
 
 class IndexHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("index.tpl")
+        self.render('index.tpl')
 
 
 class DlnaPlayerHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("dlna_player.tpl")
+        self.render('dlna_player.tpl')
+
+class WebPlayerHandler(tornado.web.RequestHandler):
+    """Video play page"""
+    def get(self, src):
+        self.render('player.tpl', src=src, position=hist_load(src))
+
+    # if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
+        # redirect('/')
+    # return template('player.tpl', src=src, title=src, position=hist_load(src))
 
 
 class HistoryHandler(tornado.web.RequestHandler):
@@ -110,15 +119,14 @@ class TestHandler(tornado.web.RequestHandler):
         self.write('position: %s, duration: %s' % (position, duration))
 
 Handlers=[
-    (r"/", IndexHandler),
-    (r"/index", IndexHandler),
-    (r"/dlna", DlnaPlayerHandler),
-    # (r"/hist/ls", HistListHandler),
-    # (r"/hist/clear", HistClearHandler),
-    (r"/fs/(?P<path>.*)", FileSystemListHandler),
-    (r"/hist/(?P<opt>\w*)/?(?P<src>.*)", HistoryHandler),
+    (r'/', IndexHandler),
+    (r'/index', IndexHandler),
+    (r'/dlna', DlnaPlayerHandler),
+    (r'/play/(?P<src>.*\.mp4$)', WebPlayerHandler),
+    (r'/fs/(?P<path>.*)', FileSystemListHandler),
+    (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
     # (r"/test/(?P<opt>\w*)/?(?P<path>.*)", TestHandler),
-    (r"/test", TestHandler),
+    (r'/test', TestHandler),
 ]
 # @route('/')
 # def index_entry():
@@ -132,10 +140,13 @@ Handlers=[
     # return template('index.tpl')
 
 
-# @route('/dlna')
-# def dlna():
-    # return template('dlna_player.tpl')
-
+# @route('/play/<src:re:.*\.((?i)mp)4$>')
+# def play(src):
+    # """Video play page"""
+    # if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
+        # redirect('/')
+    # return template('player.tpl', src=src, title=src, position=hist_load(src))
+    
 # @post('/hist/save/<src:path>')
 # def hist_save(src):
     # """Save play position"""
@@ -406,12 +417,7 @@ if __name__ == "__main__":
 
 
 
-@route('/play/<src:re:.*\.((?i)mp)4$>')
-def play(src):
-    """Video play page"""
-    if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
-        redirect('/')
-    return template('player.tpl', src=src, title=src, position=hist_load(src))
+
 
 
 def result(r):
