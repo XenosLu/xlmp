@@ -13,7 +13,7 @@ var update = true;
 var wait = 0;
 
 $("#dlna_toggle").addClass("active");
-$("#dlna_toggle").attr("href", "/index");
+$("#dlna_toggle").attr("href", "/");
 
 get_dmr_state();
 $(".dlna-show").show();

@@ -297,12 +297,20 @@ def check_dmr_exist(func):
 
 class IndexHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render('index.tpl')
+        if tracker.dmr:
+            dlna_style = 'btn-success'
+        else:
+            dlna_style = ''
+        self.render('index.tpl', dlna_style=dlna_style, checksum=checksum)
 
 
 class DlnaPlayerHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render('dlna_player.tpl')
+        if tracker.dmr:
+            dlna_style = 'btn-success'
+        else:
+            dlna_style = ''
+        self.render('dlna_player.tpl', dlna_style=dlna_style, checksum=checksum)
 
 
 class WebPlayerHandler(tornado.web.RequestHandler):
@@ -310,7 +318,7 @@ class WebPlayerHandler(tornado.web.RequestHandler):
     def get(self, src):
         if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
             self.redirect('/')
-        self.render('player.tpl', src=src, position=hist_load(src))
+        self.render('player.tpl', dlna_style='', src=src, position=hist_load(src), checksum=checksum)
 
 
 class HistoryHandler(tornado.web.RequestHandler):
@@ -491,7 +499,11 @@ Handlers=[
         # redirect('/dlna')
     # return index()
     # # return template('index.tpl')
-
+from binascii import crc32
+checksum = []
+for n, i in enumerate(('static/css/common.css', 'static/js/common.js')):
+    with open(i, 'rb') as f:
+        checksum.append('%08X' % crc32(f.read()))
 settings = {
     'static_path': 'static',
     'template_path': 'views',
@@ -509,6 +521,7 @@ tracker = DMRTracker()
 tracker.start()
 loader = DLNALoader()
 loader.start()
+
 
 
 if __name__ == "__main__":

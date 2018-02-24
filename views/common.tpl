@@ -3,7 +3,7 @@
     <button title="browser" id="history" type="button" class="btn btn-default btn-lg">
       <i class="glyphicon glyphicon-th-list"></i>
     </button>
-    <a title="switch DLNA mode" id="dlna_toggle" href="/dlna" type="button" class="btn btn-default btn-lg">DLNA</a>
+    <a title="switch DLNA mode" id="dlna_toggle" href="/dlna" type="button" class="btn btn-default {{dlna_style}} btn-lg">DLNA</a>
   </div>
   <div class="btn-group dropdown">
     <button title="Maintenance" type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
