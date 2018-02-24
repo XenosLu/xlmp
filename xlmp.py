@@ -334,9 +334,22 @@ class DlnaLoadHandler(tornado.web.RequestHandler):
         loader.load(url)
         self.finish('loading %s' % src)
 
+class DlnaNextHandler(tornado.web.RequestHandler):
+    @check_dmr_exist
+    def get(self):
+        if not tracker.state.get('TrackURI'):
+            return 'No current url'
+        next_file = get_next_file(tracker.state['TrackURI'])
+        logging.info('next file recognized: %s' % next_file)
+        if next_file:
+            url = 'http://%s/video/%s' % (self.request.headers['Host'], quote(next_file))
+            loader.load(url)
+            # dlna_load(next_file)
+        else:
+            return "Can't get next file"
         
 class DlnaHandler(tornado.web.RequestHandler):
-    # @check_dmr_exist
+    @check_dmr_exist
     def get(self, opt, *args, **kw):
         if not opt in ('play', 'pause', 'stop', 'seek'):
             return
@@ -350,6 +363,23 @@ class DlnaHandler(tornado.web.RequestHandler):
 class DlnaInfoHandler(tornado.web.RequestHandler):
     def get(self):
         self.finish(tracker.state)
+
+class DlnaVolumeControlHandler(tornado.web.RequestHandler):
+    """Tune volume through DLNA"""
+    @check_dmr_exist
+    def get(self, opt):
+        vol = int(tracker.dmr.get_volume())
+        if opt == 'up':
+            vol += 1
+        elif opt == 'down':
+            vol -= 1
+        if not 0 <= vol <= 100:
+            self.finish('volume range exceeded')
+        elif tracker.dmr.volume(vol):
+            self.finish(str(vol))
+        else:
+            self.finish('failed')
+
 
 
 class TestHandler(tornado.web.RequestHandler):
@@ -366,7 +396,9 @@ Handlers=[
     (r'/move/(?P<src>.*)', FileSystemMoveHandler),
     (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
     (r'/test', TestHandler),
+    (r'/dlnavol/(?P<opt>\w*)', DlnaVolumeControlHandler),
     (r'/dlnainfo', DlnaInfoHandler),
+    (r'/dlna/next', DlnaNextHandler),
     (r'/dlna/load/(?P<src>.*)', DlnaLoadHandler),
     (r'/dlna/(?P<opt>\w*)/?(?P<args>.*)', DlnaHandler),
     (r'/save/(?P<src>.*)', SaveHandler),
@@ -380,18 +412,7 @@ Handlers=[
     # return index()
     # # return template('index.tpl')
 
-# @route('/dlna/next')
-# @check_dmr_exist
-# def dlna_next():
-    # if not tracker.state.get('TrackURI'):
-        # return 'No current url'
-    # next_file = get_next_file(tracker.state['TrackURI'])
-    # logging.info('next file recognized: %s' % next_file)
-    # if next_file:
-        # dlna_load(next_file)
-    # else:
-        # return "Can't get next file"
-    
+
     
 application = tornado.web.Application(Handlers, **settings)
 
@@ -487,21 +508,7 @@ def search_dmr():
 
 
 
-@route('/dlnavol/<control:re:(up|down)>')
-@check_dmr_exist
-def dlna_volume_control(control):
-    """Tune volume through DLNA"""
-    vol = int(tracker.dmr.get_volume())
-    if control == 'up':
-        vol += 1
-    elif control == 'down':
-        vol -= 1
-    if not 100 >= vol >= 0:
-        return 'volume range exceeded'
-    elif tracker.dmr.volume(vol):
-        return str(vol)
-    else:
-        return 'failed'
+
 
 
 
