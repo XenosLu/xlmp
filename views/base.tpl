@@ -7,7 +7,6 @@
     <link href="{{ static_url('css/common.css') }}" rel="stylesheet">
     <title>{% block title %}Light Media Player{% end %}</title>
   </head>
-{% block body %}
   <body>
     {% block main %}
       {% include common.tpl %}
@@ -21,6 +20,4 @@
   <script src="{{ static_url('js/common.js') }}"></script>
     {% block script %}
     {% end %}
-{% end %}
-  
 </html>
