@@ -32,125 +32,6 @@ logging.basicConfig(level=logging.INFO,
                     datefmt='%Y-%m-%d %H:%M:%S')
 
 
-                    
-settings = {
-    'static_path' : os.path.join(os.path.dirname(__file__), 'static'),
-    'template_path' : os.path.join(os.path.dirname(__file__), 'views'),
-    'gzip' : True,
-    # "debug" : True,
-}
-
-class IndexHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.render('index.tpl')
-
-
-class DlnaPlayerHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.render('dlna_player.tpl')
-
-class WebPlayerHandler(tornado.web.RequestHandler):
-    """Video play page"""
-    def get(self, src):
-        self.render('player.tpl', src=src, position=hist_load(src))
-    # if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
-        # redirect('/')
-    # return template('player.tpl', src=src, title=src, position=hist_load(src))
-
-
-class HistoryHandler(tornado.web.RequestHandler):
-    """Return play history list"""
-    def get(self, opt='ls', src=None):
-        if opt == 'ls':
-            pass
-        elif opt == 'clear':
-            run_sql('delete from history')
-        elif opt == 'rm':
-            run_sql('delete from history where FILENAME=?', unquote(src))
-        else:
-            raise tornado.web.HTTPError(404)
-        self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
-                        'latest_date': s[3], 'path': os.path.dirname(s[0])}
-                       for s in run_sql('select * from history order by LATEST_DATE desc')]})
-
-
-class FileSystemListHandler(tornado.web.RequestHandler):
-    """Get static folder list in json"""
-    def get(self, path):
-        # self.write(path)
-
-        if path == '/':
-            path = ''
-        try:
-            up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
-            if path:
-                up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
-                if not path.endswith('/'):
-                    path = '%s/' % path
-            dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))  # path could be either path or path/
-            for filename in dir_list:
-                if filename.startswith('.'):
-                    continue
-                if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
-                    list_folder.append({'filename': filename, 'type': 'folder',
-                                        'path': '%s%s' % (path, filename)})
-                elif re.match('.*\.((?i)mp)4$', filename):
-                    list_mp4.append({'filename': filename, 'type': 'mp4',
-                                    'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-                elif re.match('.*\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
-                    list_video.append({'filename': filename, 'type': 'video',
-                                       'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-                else:
-                    list_other.append({'filename': filename, 'type': 'other',
-                                      'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-            self.finish({'filesystem': (up + list_folder + list_mp4 + list_video + list_other)})
-        except Exception as e:
-            logging.warning('dir exception: %s' % e)
-            # raise tornado.web.HTTPError(404, reason=str(e))
-            raise tornado.web.HTTPError(404)
-
-
-class TestHandler(tornado.web.RequestHandler):
-    """Clear play history list"""
-    def post(self, opt=None, path=None):
-        position = self.get_argument('position', '')
-        duration = self.get_argument('duration', '')
-        self.write('position: %s, duration: %s' % (position, duration))
-
-Handlers=[
-    (r'/', IndexHandler),
-    (r'/index', IndexHandler),
-    (r'/dlna', DlnaPlayerHandler),
-    (r'/fs/(?P<path>.*)', FileSystemListHandler),
-    (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
-    (r'/test', TestHandler),
-    (r'/play/(?P<src>.*\.mp4$)', WebPlayerHandler),
-    # @route('/play/<src:re:.*\.((?i)mp)4$>')
-    (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': os.path.join(os.path.dirname(__file__), VIDEO_PATH)})
-    # @route('/video/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
-]
-# @route('/')
-# def index_entry():
-    # if tracker.dmr:
-        # redirect('/dlna')
-    # return index()
-    # # return template('index.tpl')
-
-# @route('/index')
-# def index():
-    # return template('index.tpl')
-
-    
-# @post('/hist/save/<src:path>')
-# def hist_save(src):
-    # """Save play position"""
-    # position = request.forms.get('position')
-    # duration = request.forms.get('duration')
-    # save_history(src, position, duration)
-
-application = tornado.web.Application(Handlers, **settings)
-
-
 class DMRTracker(Thread):
     """DLNA Digital Media Renderer tracker thread"""
     def __init__(self, *args, **kwargs):
@@ -318,19 +199,156 @@ class DLNALoader(Thread):
         self._failure = 0
         self._flag.set()
 
+
 tracker = DMRTracker()
 tracker.start()
-
 loader = DLNALoader()
 loader.start()
 
 
 def check_dmr_exist(func):
-    def no_dmr(*args, **kwargs):
+    def no_dmr(self, *args, **kwargs):
         if not tracker.dmr:
-            return 'Error: No DMR.'
-        return func(*args, **kwargs)
+            # return 'Error: No DMR.'
+            self.write('Error: No DMR.')
+            return
+        return func(self, *args, **kwargs)
     return no_dmr
+                    
+settings = {
+    'static_path' : os.path.join(os.path.dirname(__file__), 'static'),
+    'template_path' : os.path.join(os.path.dirname(__file__), 'views'),
+    'gzip' : True,
+    # "debug" : True,
+}
+
+class IndexHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render('index.tpl')
+
+
+class DlnaPlayerHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render('dlna_player.tpl')
+
+class WebPlayerHandler(tornado.web.RequestHandler):
+    """Video play page"""
+    def get(self, src):
+        if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
+            self.redirect('/')
+        self.render('player.tpl', src=src, position=hist_load(src))
+
+
+class HistoryHandler(tornado.web.RequestHandler):
+    """Return play history list"""
+    def get(self, opt='ls', src=None):
+        if opt == 'ls':
+            pass
+        elif opt == 'clear':
+            run_sql('delete from history')
+        elif opt == 'rm':
+            run_sql('delete from history where FILENAME=?', unquote(src))
+        else:
+            raise tornado.web.HTTPError(404)
+        self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
+                        'latest_date': s[3], 'path': os.path.dirname(s[0])}
+                       for s in run_sql('select * from history order by LATEST_DATE desc')]})
+
+
+class FileSystemListHandler(tornado.web.RequestHandler):
+    """Get static folder list in json"""
+    def get(self, path):
+        # self.write(path)
+
+        if path == '/':
+            path = ''
+        try:
+            up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
+            if path:
+                up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
+                if not path.endswith('/'):
+                    path = '%s/' % path
+            dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))  # path could be either path or path/
+            for filename in dir_list:
+                if filename.startswith('.'):
+                    continue
+                if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
+                    list_folder.append({'filename': filename, 'type': 'folder',
+                                        'path': '%s%s' % (path, filename)})
+                elif re.match('.*\.((?i)mp)4$', filename):
+                    list_mp4.append({'filename': filename, 'type': 'mp4',
+                                    'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+                elif re.match('.*\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
+                    list_video.append({'filename': filename, 'type': 'video',
+                                       'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+                else:
+                    list_other.append({'filename': filename, 'type': 'other',
+                                      'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+            self.finish({'filesystem': (up + list_folder + list_mp4 + list_video + list_other)})
+        except Exception as e:
+            logging.warning('dir exception: %s' % e)
+            # raise tornado.web.HTTPError(404, reason=str(e))
+            raise tornado.web.HTTPError(404)
+
+
+class SaveHandler(tornado.web.RequestHandler):
+    """Save play history"""
+    def post(self, src):
+        position = self.get_argument('position', '')
+        duration = self.get_argument('duration', '')
+        save_history(src, position, duration)
+
+
+class DlnaLoadHandler(tornado.web.RequestHandler):
+    @check_dmr_exist
+    def get(self, src):
+        if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
+            logging.warning('File not found: %s' % src)
+            self.write('Error: File not found.')
+            return
+        logging.info('start loading... tracker state:%s' % tracker.state.get('CurrentTransportState'))
+        url = 'http://%s/video/%s' % (self.request.headers['Host'], quote(src))
+        loader.load(url)
+        self.write('loading %s' % src)
+        # return 'loading %s' % src
+        
+class TestHandler(tornado.web.RequestHandler):
+    @check_dmr_exist
+    def get(self, src):
+        self.write('loading %s' % src)
+        
+        
+
+Handlers=[
+    (r'/', IndexHandler),
+    (r'/index', IndexHandler),
+    (r'/dlna', DlnaPlayerHandler),
+    (r'/fs/(?P<path>.*)', FileSystemListHandler),
+    (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
+    (r'/test', TestHandler),
+    (r'/dlna/load/(?P<src>.*)', DlnaLoadHandler),
+    # @route('/dlna/load/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
+    (r'/save/(?P<src>.*)', SaveHandler),
+    (r'/play/(?P<src>.*\.mp4$)', WebPlayerHandler),
+    # @route('/play/<src:re:.*\.((?i)mp)4$>')
+    (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': os.path.join(os.path.dirname(__file__), VIDEO_PATH)})
+    # @route('/video/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
+]
+# @route('/')
+# def index_entry():
+    # if tracker.dmr:
+        # redirect('/dlna')
+    # return index()
+    # # return template('index.tpl')
+
+
+
+
+
+
+application = tornado.web.Application(Handlers, **settings)
+
+
 
 
 def run_sql(sql, *args):
@@ -409,11 +427,6 @@ if __name__ == "__main__":
 
 
 
-
-
-
-
-
 def result(r):
     if r:
         return 'Done.'
@@ -441,17 +454,7 @@ def get_next_file(src):
         return '%s/%s' % (os.path.dirname(src), dirs[next_index])
 
 
-@route('/dlna/load/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
-@check_dmr_exist
-def dlna_load(src):
-    if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
-        logging.warning('File not found: %s' % src)
-        return 'Error: File not found.'
-    # logging.info('start loading... tracker state:%s' % tracker.state)
-    logging.info('start loading... tracker state:%s' % tracker.state.get('CurrentTransportState'))
-    url = 'http://%s/video/%s' % (request.urlparts.netloc, quote(src))
-    loader.load(url)
-    return 'loading %s' % src
+
 
 
 @route('/dlna/next')
@@ -502,7 +505,6 @@ def dlna_volume_control(control):
         vol += 1
     elif control == 'down':
         vol -= 1
-    # if vol < 0 or vol > 100:
     if not 100 >= vol >= 0:
         return 'volume range exceeded'
     elif tracker.dmr.volume(vol):
