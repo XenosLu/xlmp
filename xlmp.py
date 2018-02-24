@@ -48,13 +48,14 @@ class IndexHandler(tornado.web.RequestHandler):
 class HistoryHandler(tornado.web.RequestHandler):
     """Return play history list"""
     def get(self, opt='ls', src=None):
-        if opt=='clear':
+        if opt == 'ls':
+            pass
+        elif opt == 'clear':
             run_sql('delete from history')
-        elif opt=='rm':
+        elif opt == 'rm':
             run_sql('delete from history where FILENAME=?', unquote(src))
         else:
             raise tornado.web.HTTPError(404)
-        
         self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
                         'latest_date': s[3], 'path': os.path.dirname(s[0])}
                        for s in run_sql('select * from history order by LATEST_DATE desc')]})
@@ -74,11 +75,6 @@ class HistClearHandler(tornado.web.RequestHandler):
                         'latest_date': s[3], 'path': os.path.dirname(s[0])}
                        for s in run_sql('select * from history order by LATEST_DATE desc')]})
 
-class TestHandler(tornado.web.RequestHandler):
-    """Clear play history list"""
-    def get(self, opt=None, path=None):
-        self.write(opt+','+path)
-        
 
 class FileSystemListHandler(tornado.web.RequestHandler):
     """Get static folder list in json"""
@@ -115,21 +111,22 @@ class FileSystemListHandler(tornado.web.RequestHandler):
             # raise tornado.web.HTTPError(404, reason=str(e))
             raise tornado.web.HTTPError(404)
 
+
+class TestHandler(tornado.web.RequestHandler):
+    """Clear play history list"""
+    def get(self, opt=None, path=None):
+        self.write(opt+','+path)
+        self.write('')
+            
 Handlers=[
     (r"/", IndexHandler),
     # (r"/hist/ls", HistListHandler),
     # (r"/hist/clear", HistClearHandler),
     (r"/fs/(?P<path>.*)", FileSystemListHandler),
-    (r"/test/(?P<opt>\w*)/?(?P<path>.*)", TestHandler),
     (r"/hist/(?P<opt>\w*)/?(?P<src>.*)", HistoryHandler),
-    
+    (r"/test/(?P<opt>\w*)/?(?P<path>.*)", TestHandler),
+    # (r"/test", TestHandler),
 ]
-
-# @route('/hist/rm/<src:path>')
-# def hist_remove(src):
-    # """Remove from play history list"""
-    # run_sql('delete from history where FILENAME=?', unquote(src))
-    # return hist_list()
 
 
 # @post('/hist/save/<src:path>')
