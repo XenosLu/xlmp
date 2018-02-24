@@ -31,6 +31,8 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
 
+
+                    
 settings = {
     "static_path" : os.path.join(os.path.dirname(__file__), "static"),
     "template_path" : os.path.join(os.path.dirname(__file__), "views"),
@@ -42,16 +44,60 @@ class IndexHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("index.tpl")
 
+
 class HistListHandler(tornado.web.RequestHandler):
     def get(self):
         self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
                         'latest_date': s[3], 'path': os.path.dirname(s[0])}
                        for s in run_sql('select * from history order by LATEST_DATE desc')]})
 
+
+class FileSystemListHandler(tornado.web.RequestHandler):
+    def get(self, path):
+        self.write(path)
+
+
 Handlers=[
     (r"/", IndexHandler),
     (r"/hist/ls", HistListHandler),
+    (r"/fs/(?P<path>.*)", FileSystemListHandler),
 ]
+
+
+# @route('/fs/<path:re:.*>')
+# def fs_dir(path):
+    # """Get static folder list in json"""
+    # if path == '/':
+        # path = ''
+    # try:
+        # up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
+        # if path:
+            # up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
+            # if not path.endswith('/'):
+                # path = '%s/' % path
+        # dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))  # path could be either path or path/
+        # for filename in dir_list:
+            # if filename.startswith('.'):
+                # continue
+            # if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
+                # list_folder.append({'filename': filename, 'type': 'folder',
+                                    # 'path': '%s%s' % (path, filename)})
+            # elif re.match('.*\.((?i)mp)4$', filename):
+                # list_mp4.append({'filename': filename, 'type': 'mp4',
+                                # 'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+            # elif re.match('.*\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
+                # list_video.append({'filename': filename, 'type': 'video',
+                                   # 'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+            # else:
+                # list_other.append({'filename': filename, 'type': 'other',
+                                  # 'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+        # return {'filesystem': (up + list_folder + list_mp4 + list_video + list_other)}
+        # # return json.dumps(up + list_folder + list_mp4 + list_video + list_other)
+    # except Exception as e:
+        # logging.warning('dir exception: %s' % e)
+        # abort(404, str(e))
+
+
 
 application = tornado.web.Application(Handlers, **settings)
 
@@ -251,6 +297,13 @@ def run_sql(sql, *args):
             ret = ()
     return ret
 
+
+# Initialize DataBase
+run_sql('''create table if not exists history
+                (FILENAME text PRIMARY KEY not null,
+                POSITION float not null,
+                DURATION float, LATEST_DATE datetime not null);''')
+    
 
 def second_to_time(second):
     """ Turn time in seconds into "hh:mm:ss" format
@@ -531,10 +584,10 @@ def sys_restore():
     return shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE)
 
 
-@route('/static/<filename:path>')
-def static(filename):
-    """Static file access"""
-    return static_file(filename, root='./static')
+# @route('/static/<filename:path>')
+# def static(filename):
+    # """Static file access"""
+    # return static_file(filename, root='./static')
 
 
 @route('/video/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
@@ -546,44 +599,8 @@ def static_video(src):
     return static_file(src, root=VIDEO_PATH)
 
 
-@route('/fs/<path:re:.*>')
-def fs_dir(path):
-    """Get static folder list in json"""
-    if path == '/':
-        path = ''
-    try:
-        up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
-        if path:
-            up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
-            if not path.endswith('/'):
-                path = '%s/' % path
-        dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))  # path could be either path or path/
-        for filename in dir_list:
-            if filename.startswith('.'):
-                continue
-            if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
-                list_folder.append({'filename': filename, 'type': 'folder',
-                                    'path': '%s%s' % (path, filename)})
-            elif re.match('.*\.((?i)mp)4$', filename):
-                list_mp4.append({'filename': filename, 'type': 'mp4',
-                                'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-            elif re.match('.*\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
-                list_video.append({'filename': filename, 'type': 'video',
-                                   'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-            else:
-                list_other.append({'filename': filename, 'type': 'other',
-                                  'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-        return {'filesystem': (up + list_folder + list_mp4 + list_video + list_other)}
-        # return json.dumps(up + list_folder + list_mp4 + list_video + list_other)
-    except Exception as e:
-        logging.warning('dir exception: %s' % e)
-        abort(404, str(e))
 
-# Initialize DataBase
-run_sql('''create table if not exists history
-                (FILENAME text PRIMARY KEY not null,
-                POSITION float not null,
-                DURATION float, LATEST_DATE datetime not null);''')
+
 
 
                 
