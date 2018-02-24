@@ -210,7 +210,7 @@ def check_dmr_exist(func):
     def no_dmr(self, *args, **kwargs):
         if not tracker.dmr:
             # return 'Error: No DMR.'
-            self.write('Error: No DMR.')
+            self.finish('Error: No DMR.')
             return
         return func(self, *args, **kwargs)
     return no_dmr
@@ -254,48 +254,71 @@ class HistoryHandler(tornado.web.RequestHandler):
                         'latest_date': s[3], 'path': os.path.dirname(s[0])}
                        for s in run_sql('select * from history order by LATEST_DATE desc')]})
 
+def ls_dir(path):
+    if path == '/':
+        path = ''
+    try:
+        up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
+        if path:
+            up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
+            if not path.endswith('/'):
+                path = '%s/' % path
+        dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))  # path could be either path or path/
+        for filename in dir_list:
+            if filename.startswith('.'):
+                continue
+            if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
+                list_folder.append({'filename': filename, 'type': 'folder',
+                                    'path': '%s%s' % (path, filename)})
+            elif re.match('.*\.((?i)mp)4$', filename):
+                list_mp4.append({'filename': filename, 'type': 'mp4',
+                                'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+            elif re.match('.*\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
+                list_video.append({'filename': filename, 'type': 'video',
+                                   'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+            else:
+                list_other.append({'filename': filename, 'type': 'other',
+                                  'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+        return ({'filesystem': (up + list_folder + list_mp4 + list_video + list_other)})
+    except Exception as e:
+        logging.warning('dir exception: %s' % e)
+
+def get_next_file(src):
+    fullname = '%s/%s' % (VIDEO_PATH, src)
+    filepath = os.path.dirname(fullname)
+    dirs = sorted([i for i in os.listdir(filepath)
+                   if not i.startswith('.') and os.path.isfile('%s/%s' % (filepath, i))])
+    next_index = dirs.index(os.path.basename(fullname)) + 1
+    if next_index < len(dirs):
+        return '%s/%s' % (os.path.dirname(src), dirs[next_index])
 
 class FileSystemListHandler(tornado.web.RequestHandler):
     """Get static folder list in json"""
     def get(self, path):
-        # self.write(path)
+        self.finish(ls_dir(path))
 
-        if path == '/':
-            path = ''
+
+class FileSystemMoveHandler(tornado.web.RequestHandler):
+    """Move file to '.old' folder"""
+    def get(self, src):
+        filename = '%s/%s' % (VIDEO_PATH, src)
+        dir_old = '%s/%s/.old' % (VIDEO_PATH, os.path.dirname(src))
+        if not os.path.exists(dir_old):
+            os.mkdir(dir_old)
         try:
-            up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
-            if path:
-                up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
-                if not path.endswith('/'):
-                    path = '%s/' % path
-            dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))  # path could be either path or path/
-            for filename in dir_list:
-                if filename.startswith('.'):
-                    continue
-                if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
-                    list_folder.append({'filename': filename, 'type': 'folder',
-                                        'path': '%s%s' % (path, filename)})
-                elif re.match('.*\.((?i)mp)4$', filename):
-                    list_mp4.append({'filename': filename, 'type': 'mp4',
-                                    'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-                elif re.match('.*\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
-                    list_video.append({'filename': filename, 'type': 'video',
-                                       'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-                else:
-                    list_other.append({'filename': filename, 'type': 'other',
-                                      'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-            self.finish({'filesystem': (up + list_folder + list_mp4 + list_video + list_other)})
+            shutil.move(filename, dir_old)  # gonna do something when file is occupied
         except Exception as e:
-            logging.warning('dir exception: %s' % e)
-            # raise tornado.web.HTTPError(404, reason=str(e))
-            raise tornado.web.HTTPError(404)
+            logging.warning('move file failed: %s' % e)
+            raise tornado.web.HTTPError(404, reason=str(e))
+            # raise tornado.web.HTTPError(404)
+        self.finish(ls_dir('%s/' % os.path.dirname(src)))
 
 
 class SaveHandler(tornado.web.RequestHandler):
     """Save play history"""
     def post(self, src):
-        position = self.get_argument('position', '')
-        duration = self.get_argument('duration', '')
+        position = self.get_argument('position', 0)
+        duration = self.get_argument('duration', 0)
         save_history(src, position, duration)
 
 
@@ -304,19 +327,35 @@ class DlnaLoadHandler(tornado.web.RequestHandler):
     def get(self, src):
         if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
             logging.warning('File not found: %s' % src)
-            self.write('Error: File not found.')
+            self.finish('Error: File not found.')
             return
         logging.info('start loading... tracker state:%s' % tracker.state.get('CurrentTransportState'))
         url = 'http://%s/video/%s' % (self.request.headers['Host'], quote(src))
         loader.load(url)
-        self.write('loading %s' % src)
-        # return 'loading %s' % src
+        self.finish('loading %s' % src)
+
         
+class DlnaHandler(tornado.web.RequestHandler):
+    # @check_dmr_exist
+    def get(self, opt, *args, **kw):
+        if not opt in ('play', 'pause', 'stop', 'seek'):
+            return
+        self.write('opt: %s' % opt)
+        method = getattr(tracker.dmr, opt)
+        if method(*kw.values()):
+            self.finish('Done.')
+        else:
+            self.finish('Error: Failed!')
+
+class DlnaInfoHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.finish(tracker.state)
+
+
 class TestHandler(tornado.web.RequestHandler):
-    @check_dmr_exist
-    def get(self, src):
-        self.write('loading %s' % src)
-        
+    def get(self, src=None):
+        self.finish('finish1')
+        self.finish('finish2')
         
 
 Handlers=[
@@ -324,15 +363,15 @@ Handlers=[
     (r'/index', IndexHandler),
     (r'/dlna', DlnaPlayerHandler),
     (r'/fs/(?P<path>.*)', FileSystemListHandler),
+    (r'/move/(?P<src>.*)', FileSystemMoveHandler),
     (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
     (r'/test', TestHandler),
+    (r'/dlnainfo', DlnaInfoHandler),
     (r'/dlna/load/(?P<src>.*)', DlnaLoadHandler),
-    # @route('/dlna/load/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
+    (r'/dlna/(?P<opt>\w*)/?(?P<args>.*)', DlnaHandler),
     (r'/save/(?P<src>.*)', SaveHandler),
-    (r'/play/(?P<src>.*\.mp4$)', WebPlayerHandler),
-    # @route('/play/<src:re:.*\.((?i)mp)4$>')
+    (r'/play/(?P<src>.*)', WebPlayerHandler),
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': os.path.join(os.path.dirname(__file__), VIDEO_PATH)})
-    # @route('/video/<src:re:.*\.((?i)(mp4|mkv|avi|flv|rmvb|wmv))$>')
 ]
 # @route('/')
 # def index_entry():
@@ -341,13 +380,20 @@ Handlers=[
     # return index()
     # # return template('index.tpl')
 
-
-
-
-
-
+# @route('/dlna/next')
+# @check_dmr_exist
+# def dlna_next():
+    # if not tracker.state.get('TrackURI'):
+        # return 'No current url'
+    # next_file = get_next_file(tracker.state['TrackURI'])
+    # logging.info('next file recognized: %s' % next_file)
+    # if next_file:
+        # dlna_load(next_file)
+    # else:
+        # return "Can't get next file"
+    
+    
 application = tornado.web.Application(Handlers, **settings)
-
 
 
 
@@ -415,28 +461,19 @@ def save_history(src, position, duration):
     run_sql('''replace into history (FILENAME, POSITION, DURATION, LATEST_DATE)
                values(? , ?, ?, DateTime('now', 'localtime'));''', src, position, duration)
 
-               
-               
-               
+
 if __name__ == "__main__":
     if sys.platform == 'win32':
         os.system('start http://127.0.0.1:8081/')
     application.listen(8081)
     tornado.ioloop.IOLoop.instance().start()
 
-
-
-
-def result(r):
-    if r:
+@route('/setdmr/<dmr>')
+def set_dlna_dmr(dmr):
+    if tracker.set_dmr(dmr):
         return 'Done.'
     else:
         return 'Error: Failed!'
-
-
-@route('/setdmr/<dmr>')
-def set_dlna_dmr(dmr):
-    result(tracker.set_dmr(dmr))
 
 
 @route('/searchdmr')
@@ -444,56 +481,10 @@ def search_dmr():
     tracker.discover_dmr()
 
 
-def get_next_file(src):
-    fullname = '%s/%s' % (VIDEO_PATH, src)
-    filepath = os.path.dirname(fullname)
-    dirs = sorted([i for i in os.listdir(filepath)
-                   if not i.startswith('.') and os.path.isfile('%s/%s' % (filepath, i))])
-    next_index = dirs.index(os.path.basename(fullname)) + 1
-    if next_index < len(dirs):
-        return '%s/%s' % (os.path.dirname(src), dirs[next_index])
 
 
 
 
-
-@route('/dlna/next')
-@check_dmr_exist
-def dlna_next():
-    if not tracker.state.get('TrackURI'):
-        return 'No current url'
-    next_file = get_next_file(tracker.state['TrackURI'])
-    logging.info('next file recognized: %s' % next_file)
-    if next_file:
-        dlna_load(next_file)
-    else:
-        return "Can't get next file"
-
-
-@route('/dlnaplay')
-@check_dmr_exist
-def dlna_play():
-    return result(tracker.dmr.play())
-
-
-@route('/dlnapause')
-@check_dmr_exist
-def dlna_pause():
-    """Pause video through DLNA"""
-    return result(tracker.dmr.pause())
-
-
-@route('/dlnastop')
-@check_dmr_exist
-def dlna_stop():
-    """Stop video through DLNA"""
-    return result(tracker.dmr.stop())
-
-
-@route('/dlnainfo')
-def dlna_info():
-    """Get play info through DLNA"""
-    return tracker.state
 
 
 @route('/dlnavol/<control:re:(up|down)>')
@@ -513,29 +504,8 @@ def dlna_volume_control(control):
         return 'failed'
 
 
-@route('/dlnaseek/<position>')
-@check_dmr_exist
-def dlna_seek(position):
-    """Seek video through DLNA"""
-    if ':' in position:
-        return result(tracker.dmr.seek(position))
-    else:
-        return result(tracker.dmr.seek(second_to_time(float(position))))
 
 
-@route('/move/<src:path>')
-def fs_move(src):
-    """Move file to '.old' folder"""
-    filename = '%s/%s' % (VIDEO_PATH, src)
-    dir_old = '%s/%s/.old' % (VIDEO_PATH, os.path.dirname(src))
-    if not os.path.exists(dir_old):
-        os.mkdir(dir_old)
-    try:
-        shutil.move(filename, dir_old)  # gonna do something when file is occupied
-    except Exception as e:
-        logging.warning('move file failed: %s' % e)
-        abort(404, str(e))
-    return fs_dir('%s/' % os.path.dirname(src))
 
 
 @route('/update')

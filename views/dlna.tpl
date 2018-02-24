@@ -9,13 +9,13 @@
   <h3 id="src"></h3>
   <div><span id="state">No State</span></div>
   <div class="btn-group">
-    <button class="btn btn-success btn-lg" type="button" onclick="get('/dlnaplay')">
+    <button class="btn btn-success btn-lg" type="button" onclick="get('/dlna/play')">
       <i class="glyphicon glyphicon-play"></i>
     </button>
-    <button class="btn btn-danger btn-lg" type="button" onclick="get('/dlnapause')">
+    <button class="btn btn-danger btn-lg" type="button" onclick="get('/dlna/pause')">
       <i class="glyphicon glyphicon-pause"></i>
     </button>
-    <button class="btn btn-danger btn-lg" type="button" onclick="get('/dlnastop')">
+    <button class="btn btn-danger btn-lg" type="button" onclick="get('/dlna/stop')">
       <i class="glyphicon glyphicon-stop"></i>
     </button>
     <button class="btn btn-success btn-lg" type="button" onclick="get('/dlna/next')">

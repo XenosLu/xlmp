@@ -19,7 +19,7 @@ get_dmr_state();
 $(".dlna-show").show();
 var inter = setInterval("get_dmr_state()", 1100);
 $("#position-bar").on("change", function() {
-    $.get("/dlnaseek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
+    $.get("/dlna/seek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
     update = true;
 }).on("input", function() {
     out(secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
