@@ -340,7 +340,8 @@ class DlnaNextHandler(tornado.web.RequestHandler):
     @check_dmr_exist
     def get(self):
         if not tracker.state.get('TrackURI'):
-            return 'No current url'
+            self.finish('No current url')
+            return
         next_file = get_next_file(tracker.state['TrackURI'])
         logging.info('next file recognized: %s' % next_file)
         if next_file:
@@ -348,7 +349,7 @@ class DlnaNextHandler(tornado.web.RequestHandler):
             loader.load(url)
             # dlna_load(next_file)
         else:
-            return "Can't get next file"
+            self.finish("Can't get next file")
 
 class DlnaHandler(tornado.web.RequestHandler):
     @check_dmr_exist
