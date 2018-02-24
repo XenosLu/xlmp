@@ -4,7 +4,8 @@
       {% include common.tpl %}
       <video src="/video/{{src}}" poster controls preload="meta">No video support!</video>
     {% end %}
-
+    {% block footer %}
+    {% end %}
 {% block script %}
 <script>
 var lastplaytime = 0;  //in seconds

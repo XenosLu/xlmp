@@ -12,7 +12,9 @@
     {% block main %}
       {% include common.tpl %}
     {% end %}
+    {% block footer %}
     <footer class="text-center"><small>&copy;2016-2018 Xenos' Light Media Player</small></footer>
+    {% end %}
   </body>
 {% include common_script.tpl %}
     {% block script %}

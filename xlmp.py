@@ -386,6 +386,16 @@ class TestHandler(tornado.web.RequestHandler):
         self.finish('finish1')
         self.finish('finish2')
         
+class SysHandler(tornado.web.RequestHandler):
+    def get(self):
+        if sys.platform == 'linux':
+            if os.system('git pull') == 0:
+                self.finish('git pull done, waiting for restart')
+            else:
+                self.finish('execute git pull failed')
+        else:
+            self.finish('not supported')
+        
 
 Handlers=[
     (r'/', IndexHandler),
@@ -395,6 +405,7 @@ Handlers=[
     (r'/move/(?P<src>.*)', FileSystemMoveHandler),
     (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
     (r'/test', TestHandler),
+    (r'/sys/update', SysHandler),
     (r'/dlnavol/(?P<opt>\w*)', DlnaVolumeControlHandler),
     (r'/dlnainfo', DlnaInfoHandler),
     (r'/dlna/next', DlnaNextHandler),
@@ -411,7 +422,21 @@ Handlers=[
     # return index()
     # # return template('index.tpl')
 
+# @route('/update')
+# def sys_update():
+    # """self update through git"""
+    # def delay_stop():
+        # sleep(1)
+        # os._exit(1)
 
+    # if sys.platform == 'linux':
+        # if os.system('git pull') == 0:
+            # Thread(target=delay_stop).start()
+            # return 'git pull done, exit for restart'
+        # else:
+            # return 'execute git pull failed'
+    # else:
+        # return 'not supported'
     
 application = tornado.web.Application(Handlers, **settings)
 
@@ -500,21 +525,7 @@ def set_dlna_dmr(dmr):
 def search_dmr():
     tracker.discover_dmr()
 
-@route('/update')
-def sys_update():
-    """self update through git"""
-    def delay_stop():
-        sleep(1)
-        os._exit(1)
 
-    if sys.platform == 'linux':
-        if os.system('git pull') == 0:
-            Thread(target=delay_stop).start()
-            return 'git pull done, exit for restart'
-        else:
-            return 'execute git pull failed'
-    else:
-        return 'not supported'
 
 
 # @post('/suspend')
