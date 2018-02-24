@@ -347,7 +347,7 @@ class DlnaNextHandler(tornado.web.RequestHandler):
             # dlna_load(next_file)
         else:
             return "Can't get next file"
-        
+
 class DlnaHandler(tornado.web.RequestHandler):
     @check_dmr_exist
     def get(self, opt, *args, **kw):
@@ -422,22 +422,6 @@ Handlers=[
         # redirect('/dlna')
     # return index()
     # # return template('index.tpl')
-
-# @route('/update')
-# def sys_update():
-    # """self update through git"""
-    # def delay_stop():
-        # sleep(1)
-        # os._exit(1)
-
-    # if sys.platform == 'linux':
-        # if os.system('git pull') == 0:
-            # Thread(target=delay_stop).start()
-            # return 'git pull done, exit for restart'
-        # else:
-            # return 'execute git pull failed'
-    # else:
-        # return 'not supported'
     
 application = tornado.web.Application(Handlers, **settings)
 
@@ -527,8 +511,6 @@ def search_dmr():
     tracker.discover_dmr()
 
 
-
-
 # @post('/suspend')
 # def suspend():
     # """Suepend server"""
@@ -563,13 +545,3 @@ def sys_backup():
 def sys_restore():
     """restore history"""
     return shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE)
-
-if __name__ == '__main__':  # for debug
-    from imp import find_module
-    if sys.platform == 'win32':
-        os.system('start http://127.0.0.1:8081/')  # open the page automatic for debug
-    try:
-        find_module('meinheld')
-        run(host='0.0.0.0', port=8081, debug=True, server='meinheld')  # run demo server use meinheld
-    except Exception:
-        run(host='0.0.0.0', port=8081, debug=True)  # run demo server
