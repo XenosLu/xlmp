@@ -381,7 +381,6 @@ class DlnaVolumeControlHandler(tornado.web.RequestHandler):
             self.finish('failed')
 
 
-
 class TestHandler(tornado.web.RequestHandler):
     def get(self, src=None):
         self.finish('finish1')
@@ -500,20 +499,6 @@ def set_dlna_dmr(dmr):
 @route('/searchdmr')
 def search_dmr():
     tracker.discover_dmr()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @route('/update')
 def sys_update():
