@@ -528,7 +528,7 @@ loader.start()
 if __name__ == "__main__":
     if sys.platform == 'win32':
         os.system('start http://127.0.0.1:8081/')
-    application.listen(8081)
+    application.listen(8888)
     tornado.ioloop.IOLoop.instance().start()
 
 
