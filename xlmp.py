@@ -11,6 +11,7 @@ import logging
 from threading import Thread, Event
 from urllib.parse import quote, unquote
 from time import sleep, time
+from concurrent.futures import ThreadPoolExecutor
 
 import tornado.web
 
@@ -371,10 +372,17 @@ class FileSystemMoveHandler(tornado.web.RequestHandler):
 
 class SaveHandler(tornado.web.RequestHandler):
     """Save play history"""
-    from concurrent.futures import ThreadPoolExecutor
     executor = ThreadPoolExecutor(10)
+    @tornado.gen.coroutine
     @tornado.concurrent.run_on_executor
     def post(self, src):
+        position = self.get_argument('position', 0)
+        duration = self.get_argument('duration', 0)
+        save_history(src, position, duration)
+
+    @tornado.gen.coroutine        
+    @tornado.concurrent.run_on_executor
+    def get(self, src):
         position = self.get_argument('position', 0)
         duration = self.get_argument('duration', 0)
         save_history(src, position, duration)
