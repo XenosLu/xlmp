@@ -52,9 +52,6 @@ ws.onmessage = function(e) {
 
         $("#state").text(data["CurrentTransportState"]);
     }
-
-
-
 }
 
 function get_dmr_state(){

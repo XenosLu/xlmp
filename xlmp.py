@@ -492,7 +492,10 @@ class TestHandler(tornado.websocket.WebSocketHandler):
     def open(self):
         # self.users.add(self)  # 建立连接后添加用户到容器中
         while 1:
-            self.write_message(tracker.state)
+            try:
+                self.write_message(tracker.state)
+            except:
+                pass
             sleep(1)
 
     def on_message(self, message):
@@ -507,8 +510,13 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     @tornado.gen.coroutine
     @tornado.concurrent.run_on_executor
     def open(self):
-        while 1:
-            self.write_message(tracker.state)
+        while True:
+            try:
+                self.write_message(tracker.state)
+            except Exception as e:
+                logging.warning('ws write warning: %s' % e)
+                return
+            # self.write_message({"RelTime":"00:22:%d" % n})
             sleep(1)
 
     def on_close(self):
