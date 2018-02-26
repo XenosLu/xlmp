@@ -519,8 +519,6 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
             # logging.info(self.executor._work_queue.unfinished_tasks)
             # logging.info('last: %s' % last_message)
             # logging.info('current: %s' % tracker.state)
-            # logging.info(last_message == tracker.state)
-            # self.write_message(tracker.state)
             if last_message != tracker.state:
                 self.write_message(tracker.state)
                 logging.info(tracker.state.get('RelTime'))

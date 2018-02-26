@@ -28,7 +28,6 @@ setInterval("CheckLink()", 3000);
 function dlnalink(){
     var ws = new WebSocket("ws://" + window.location.host + "/dlnalink");
     ws.onmessage = function(e) {
-        // console.log(e.data);
         data = $.parseJSON(e.data);
         console.log(data);
         ws.send('got');
