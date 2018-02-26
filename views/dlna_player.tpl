@@ -26,8 +26,8 @@ $("#position-bar").on("change", function() {
     update = false;
 });
 var ws;
-//ws = new WebSocket("ws://" + window.location.host + "/dlnalink");
-ws = $.websocket("ws://" + window.location.host + "/dlnalink");
+ws = new WebSocket("ws://" + window.location.host + "/dlnalink");
+
 function test(){
     ws = new WebSocket("ws://" + window.location.host + "/dlnalink");
     console.log('test');
