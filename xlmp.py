@@ -105,7 +105,7 @@ class DMRTracker(Thread):
                         logging.info('No DMR currently.')
                         self.state = {}
                         self.dmr = None
-                sleep(1)
+                sleep(0.8)
             else:
                 self.discover_dmr()
                 sleep(2.5)
@@ -517,11 +517,16 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
         while self._running:
             # n += 1  # test
             # logging.info(self.executor._work_queue.unfinished_tasks)
+            # logging.info('last: %s' % last_message)
+            # logging.info('current: %s' % tracker.state)
+            # logging.info(last_message == tracker.state)
+            # self.write_message(tracker.state)
             if last_message != tracker.state:
                 self.write_message(tracker.state)
-            last_message = tracker.state
+                logging.info(tracker.state.get('RelTime'))
+                last_message = tracker.state.copy()
             # self.write_message({"RelTime":"00:22:%d" % n})  # test
-            sleep(0.3)
+            sleep(0.2)
 
     def on_message(self, message):
         logging.info('receive: %s' % message)
