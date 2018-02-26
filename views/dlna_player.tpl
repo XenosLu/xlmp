@@ -53,7 +53,12 @@ ws.onmessage = function(e) {
         $("#state").text(data["CurrentTransportState"]);
     }
 }
-
+ws.onclose = function () { 
+    reconnect(); 
+};
+ws.onerror = function () { 
+    reconnect(); 
+}; 
 function get_dmr_state(){
     if (wait > 0) {
         wait -= 1;
