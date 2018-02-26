@@ -516,15 +516,15 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
         # n = 0  # test
         while self._running:
             # n += 1  # test
-            logging.info(self.executor._work_queue.unfinished_tasks)
+            # logging.info(self.executor._work_queue.unfinished_tasks)
             if last_message != tracker.state:
                 self.write_message(tracker.state)
             last_message = tracker.state
             # self.write_message({"RelTime":"00:22:%d" % n})  # test
-            sleep(1)
+            sleep(0.3)
 
     def on_message(self, message):
-        logging.info(message)
+        logging.info('receive: %s' % message)
 
     def on_close(self):
         logging.info('ws close: %s' % self.request.remote_ip)
