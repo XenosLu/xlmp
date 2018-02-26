@@ -371,6 +371,9 @@ class FileSystemMoveHandler(tornado.web.RequestHandler):
 
 class SaveHandler(tornado.web.RequestHandler):
     """Save play history"""
+    from concurrent.futures import ThreadPoolExecutor
+    executor = ThreadPoolExecutor(10)
+    @run_on_executor
     def post(self, src):
         position = self.get_argument('position', 0)
         duration = self.get_argument('duration', 0)
@@ -499,12 +502,6 @@ Handlers=[
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH})
 ]
 
-# @route('/')
-# def index_entry():
-    # if tracker.dmr:
-        # redirect('/dlna')
-    # return index()
-    # # return template('index.tpl')
 settings = {
     'static_path': 'static',
     'template_path': 'views',
@@ -517,7 +514,7 @@ run_sql('''create table if not exists history
                 (FILENAME text PRIMARY KEY not null,
                 POSITION float not null,
                 DURATION float, LATEST_DATE datetime not null);''')
-# initialize dlna threads
+# initialize dlna threader
 tracker = DMRTracker()
 tracker.start()
 loader = DLNALoader()
@@ -527,7 +524,7 @@ loader.start()
 
 if __name__ == "__main__":
     if sys.platform == 'win32':
-        os.system('start http://127.0.0.1:8081/')
+        os.system('start http://127.0.0.1:8888/')
     application.listen(8888)
     tornado.ioloop.IOLoop.instance().start()
 
