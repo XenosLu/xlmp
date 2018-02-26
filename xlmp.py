@@ -527,7 +527,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
         logging.info(message)
 
     def on_close(self):
-        logging.info('ws close')
+        logging.info('ws close: %s' % self.request.remote_ip)
         self._running = False
 
 Handlers=[
@@ -568,7 +568,6 @@ tracker = DMRTracker()
 tracker.start()
 loader = DLNALoader()
 loader.start()
-
 
 
 if __name__ == "__main__":
