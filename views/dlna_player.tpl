@@ -8,5 +8,4 @@
 
 {% block script %}
 <script src="{{ static_url('js/dlna.js') }}"></script>
-
 {% end %}
