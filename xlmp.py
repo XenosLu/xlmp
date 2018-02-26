@@ -373,7 +373,7 @@ class SaveHandler(tornado.web.RequestHandler):
     """Save play history"""
     from concurrent.futures import ThreadPoolExecutor
     executor = ThreadPoolExecutor(10)
-    @run_on_executor
+    # @run_on_executor
     def post(self, src):
         position = self.get_argument('position', 0)
         duration = self.get_argument('duration', 0)
