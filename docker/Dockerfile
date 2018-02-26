@@ -8,7 +8,7 @@ RUN apk add --no-cache \
             git \
             nginx \
             supervisor \
-    && pip3 install tornado \
+    && pip3 install tornado==4.5.3 \
     && if [ "$enable_logserver" ];then apk add --no-cache rsyslog;fi \
     && if [ "$enable_logserver" ];then echo "*.* @@nas:1514" >>/etc/rsyslog.conf;fi \
     && mkdir /run/nginx \
