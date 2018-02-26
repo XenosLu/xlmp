@@ -507,20 +507,23 @@ class TestHandler(tornado.websocket.WebSocketHandler):
 
 class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     executor = ThreadPoolExecutor(9)
+    _running = False
     @tornado.gen.coroutine
     @tornado.concurrent.run_on_executor
     def open(self):
-        while True:
-            try:
+        self._running = True
+        last_message = ''
+        while self._running:
+            logging.info(self.executor._work_queue.unfinished_tasks)
+            if last_message != tracker.state:
                 self.write_message(tracker.state)
-            except Exception as e:
-                logging.warning('ws write warning: %s' % e)
-                return
+            last_message = tracker.state
             # self.write_message({"RelTime":"00:22:%d" % n})
             sleep(1)
 
     def on_close(self):
-        pass
+        logging.info('ws close')
+        self._running = False
 
 Handlers=[
     (r'/', IndexHandler),
