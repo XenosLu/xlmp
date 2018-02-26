@@ -1,5 +1,5 @@
 ## xlmp
-FROM xenocider/container:bottle-env
+FROM xenocider/container:python3.5.2
 LABEL maintainer="xenos <xenos.lu@gmail.com>"
 
 ARG enable_logserver=1
