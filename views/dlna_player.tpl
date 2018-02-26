@@ -26,46 +26,51 @@ $("#position-bar").on("change", function() {
     update = false;
 });
 var ws;
-ws = new WebSocket("ws://" + window.location.host + "/dlnalink");
+ws = dlnalink();
 
-function test(){
-    ws = new WebSocket("ws://" + window.location.host + "/dlnalink");
-    console.log('test');
-    ws.send('test');
+function CheckLink(){
+    if(ws.readyState == 3)
+        ws = dlnalink();
+    console.log(ws);
+    //ws.send('test');
 }
-//setInterval("test()", 1000);
-ws.onmessage = function(e) {
-    console.log(e.data);
-    data = $.parseJSON(e.data);
-    console.log(data);
-    ws.send('got');
-    if ($.isEmptyObject(data)) {
-        $("#state").text('No DMR');
-        // console.log('set wait to 3 for empty');
-        // wait = 3;
-    } else {
-        reltime = timeToSecond(data["RelTime"]);
-        if (update)
-            $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
+setInterval("CheckLink()", 3000);
+function dlnalink(){
+    var ws = new WebSocket("ws://" + window.location.host + "/dlnalink");;
+    ws.onmessage = function(e) {
+        console.log(e.data);
+        data = $.parseJSON(e.data);
+        console.log(data);
+        ws.send('got');
+        if ($.isEmptyObject(data)) {
+            $("#state").text('No DMR');
+            // console.log('set wait to 3 for empty');
+            // wait = 3;
+        } else {
+            reltime = timeToSecond(data["RelTime"]);
+            if (update)
+                $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
 
-        $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
-        $('#src').text(decodeURI(data["TrackURI"]));
+            $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
+            $('#src').text(decodeURI(data["TrackURI"]));
 
-        $("#dmr button").text(data["CurrentDMR"]);
-        $("#dmr ul").empty().append('<li><a onclick="$.get(\'/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
-        for (x in data["DMRs"]) {
-            $("#dmr ul").append('<li><a onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
+            $("#dmr button").text(data["CurrentDMR"]);
+            $("#dmr ul").empty().append('<li><a onclick="$.get(\'/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
+            for (x in data["DMRs"]) {
+                $("#dmr ul").append('<li><a onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
+            }
+
+            $("#state").text(data["CurrentTransportState"]);
         }
-
-        $("#state").text(data["CurrentTransportState"]);
     }
+    ws.onclose = function () {
+        $("#state").text('disconnected');
+    };
+    ws.onerror = function () { 
+        console.log('error');
+    }; 
+        return ws;
 }
-ws.onclose = function () {
-    $("#state").text('disconnected');
-};
-ws.onerror = function () { 
-    console.log('error');
-}; 
 function get_dmr_state(){
     if (wait > 0) {
         wait -= 1;
