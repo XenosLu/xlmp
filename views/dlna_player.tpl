@@ -36,7 +36,7 @@ function CheckLink(){
 }
 setInterval("CheckLink()", 3000);
 function dlnalink(){
-    var ws = new WebSocket("ws://" + window.location.host + "/dlnalink");;
+    var ws = new WebSocket("ws://" + window.location.host + "/dlnalink");
     ws.onmessage = function(e) {
         console.log(e.data);
         data = $.parseJSON(e.data);
@@ -44,8 +44,6 @@ function dlnalink(){
         ws.send('got');
         if ($.isEmptyObject(data)) {
             $("#state").text('No DMR');
-            // console.log('set wait to 3 for empty');
-            // wait = 3;
         } else {
             reltime = timeToSecond(data["RelTime"]);
             if (update)
@@ -69,7 +67,7 @@ function dlnalink(){
     ws.onerror = function () { 
         console.log('error');
     }; 
-        return ws;
+    return ws;
 }
 function get_dmr_state(){
     if (wait > 0) {
