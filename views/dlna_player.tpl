@@ -25,13 +25,20 @@ $("#position-bar").on("change", function() {
     out(secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
     update = false;
 });
-
-var ws = new WebSocket("ws://" + window.location.host + "/dlnalink");
+var ws;
+//ws = new WebSocket("ws://" + window.location.host + "/dlnalink");
+ws = $.websocket("ws://" + window.location.host + "/dlnalink");
+function test(){
+    ws = new WebSocket("ws://" + window.location.host + "/dlnalink");
+    console.log('test');
+    ws.send('test');
+}
+//setInterval("test()", 1000);
 ws.onmessage = function(e) {
     console.log(e.data);
     data = $.parseJSON(e.data);
     console.log(data);
-
+    ws.send('got');
     if ($.isEmptyObject(data)) {
         $("#state").text('No DMR');
         // console.log('set wait to 3 for empty');
@@ -53,11 +60,11 @@ ws.onmessage = function(e) {
         $("#state").text(data["CurrentTransportState"]);
     }
 }
-ws.onclose = function () { 
-    reconnect(); 
+ws.onclose = function () {
+    $("#state").text('disconnected');
 };
 ws.onerror = function () { 
-    reconnect(); 
+    console.log('error');
 }; 
 function get_dmr_state(){
     if (wait > 0) {
