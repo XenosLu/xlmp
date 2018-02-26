@@ -15,9 +15,9 @@ var wait = 0;
 $("#dlna_toggle").addClass("active");
 $("#dlna_toggle").attr("href", "/");
 
-get_dmr_state();
+// get_dmr_state();
 $(".dlna-show").show();
-var inter = setInterval("get_dmr_state()", 1100);
+// var inter = setInterval("get_dmr_state()", 1100);
 $("#position-bar").on("change", function() {
     $.get("/dlna/seek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
     update = true;
@@ -25,6 +25,37 @@ $("#position-bar").on("change", function() {
     out(secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
     update = false;
 });
+
+var ws = new WebSocket("ws://" + window.location.host + "/dlnalink");
+ws.onmessage = function(e) {
+    console.log(e.data);
+    data = $.parseJSON(e.data);
+    console.log(data);
+
+    if ($.isEmptyObject(data)) {
+        $("#state").text('No DMR');
+        // console.log('set wait to 3 for empty');
+        // wait = 3;
+    } else {
+        reltime = timeToSecond(data["RelTime"]);
+        if (update)
+            $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
+
+        $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
+        $('#src').text(decodeURI(data["TrackURI"]));
+
+        $("#dmr button").text(data["CurrentDMR"]);
+        $("#dmr ul").empty().append('<li><a onclick="$.get(\'/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
+        for (x in data["DMRs"]) {
+            $("#dmr ul").append('<li><a onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
+        }
+
+        $("#state").text(data["CurrentTransportState"]);
+    }
+
+
+
+}
 
 function get_dmr_state(){
     if (wait > 0) {

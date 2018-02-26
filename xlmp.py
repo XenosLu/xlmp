@@ -14,6 +14,8 @@ from time import sleep, time
 from concurrent.futures import ThreadPoolExecutor
 
 import tornado.web
+import tornado.websocket
+import datetime  # test only
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 sys.path = ['lib'] + sys.path  # added libpath
@@ -372,7 +374,7 @@ class FileSystemMoveHandler(tornado.web.RequestHandler):
 
 class SaveHandler(tornado.web.RequestHandler):
     """Save play history"""
-    executor = ThreadPoolExecutor(10)
+    executor = ThreadPoolExecutor(9)
     @tornado.gen.coroutine
     @tornado.concurrent.run_on_executor
     def post(self, src):
@@ -483,20 +485,43 @@ class SearchDmrHandler(tornado.web.RequestHandler):
         tracker.discover_dmr()
 
 
-class TestHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.finish('finish1')
-        self.finish('finish2')
+class TestHandler(tornado.websocket.WebSocketHandler):
+    executor = ThreadPoolExecutor(9)
+    @tornado.gen.coroutine
+    @tornado.concurrent.run_on_executor
+    def open(self):
+        # self.users.add(self)  # 建立连接后添加用户到容器中
+        while 1:
+            self.write_message(tracker.state)
+            sleep(1)
 
+    def on_message(self, message):
+        pass
+
+    def on_close(self):
+        pass
+        # self.users.remove(self) # 用户关闭连接后从容器中移除用户
+
+class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
+    executor = ThreadPoolExecutor(9)
+    @tornado.gen.coroutine
+    @tornado.concurrent.run_on_executor
+    def open(self):
+        while 1:
+            self.write_message(tracker.state)
+            sleep(1)
+
+    def on_close(self):
+        pass
 
 Handlers=[
     (r'/', IndexHandler),
-    # (r'/index', IndexHandler),
     (r'/dlna', DlnaPlayerHandler),
     (r'/fs/(?P<path>.*)', FileSystemListHandler),
     (r'/move/(?P<src>.*)', FileSystemMoveHandler),
     (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
     (r'/test/', TestHandler),
+    (r'/dlnalink', DlnaWebSocketHandler),
     (r'/setdmr/(?P<dmr>.*)', SetDmrHandler),
     (r'/searchdmr', SearchDmrHandler),
     (r'/sys/update', SystemHandler),
