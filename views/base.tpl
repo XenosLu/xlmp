@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=0, minimal-ui">
-    <link rel="shortcut icon" href=" /favicon.ico" />
+    <link rel="shortcut icon" href="/static/favicon.ico" />
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ static_url('css/common.css') }}" rel="stylesheet">
     <title>{% block title %}Light Media Player{% end %}</title>
