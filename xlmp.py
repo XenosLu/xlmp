@@ -319,7 +319,7 @@ class DlnaPlayerHandler(tornado.web.RequestHandler):
             dlna_style = 'btn-success'
         else:
             dlna_style = ''
-        self.render('dlna_player.tpl', dlna_style=dlna_style)
+        self.render('dlna.tpl', dlna_style=dlna_style)
 
 
 class WebPlayerHandler(tornado.web.RequestHandler):
