@@ -452,7 +452,7 @@ class DlnaVolumeControlHandler(tornado.web.RequestHandler):
 
 class SystemCommandHandler(tornado.web.RequestHandler):
     def get(self, opt=None):
-        if opt=='update':
+        if opt == 'update':
             if sys.platform == 'linux':
                 if os.system('git pull') == 0:
                     self.finish('git pull done, waiting for restart')
@@ -490,6 +490,7 @@ class TestHandler(tornado.web.RequestHandler):
 class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     executor = ThreadPoolExecutor(9)
     _running = False
+
     @tornado.gen.coroutine
     @tornado.concurrent.run_on_executor
     def open(self):
