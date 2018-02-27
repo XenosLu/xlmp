@@ -489,12 +489,11 @@ class TestHandler(tornado.web.RequestHandler):
 
 class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     executor = ThreadPoolExecutor(9)
-    _running = False
+    _running = True
 
     @tornado.gen.coroutine
     @tornado.concurrent.run_on_executor
     def open(self):
-        self._running = True
         last_message = ''
         # n = 0  # test
         while self._running:
@@ -533,7 +532,7 @@ Handlers = [
     (r'/save/(?P<src>.*)', SaveHandler),
     (r'/play/(?P<src>.*)', WebPlayerHandler),
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
-    (r'/(apple-touch-icon\.png)', tornado.web.StaticFileHandler, {'path': 'static'}),
+    # (r'/(apple-touch-icon\.png)', tornado.web.StaticFileHandler, {'path': 'static'}),
     # (r'/(favicon\.ico)', tornado.web.StaticFileHandler, {'path': 'static'})
 ]
 
