@@ -342,8 +342,8 @@ class HistoryHandler(tornado.web.RequestHandler):
         else:
             raise tornado.web.HTTPError(404)
         self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
-                        'latest_date': s[3], 'path': os.path.dirname(s[0])}
-                       for s in run_sql('select * from history order by LATEST_DATE desc')]})
+                                  'latest_date': s[3], 'path': os.path.dirname(s[0])}
+                                 for s in run_sql('select * from history order by LATEST_DATE desc')]})
 
 
 class FileSystemListHandler(tornado.web.RequestHandler):
@@ -513,7 +513,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
         logging.info('ws close: %s' % self.request.remote_ip)
         self._running = False
 
-Handlers=[
+Handlers = [
     (r'/', IndexHandler),
     (r'/dlna', DlnaPlayerHandler),
     (r'/fs/(?P<path>.*)', FileSystemListHandler),
