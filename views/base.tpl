@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=0, minimal-ui">
     <link rel="shortcut icon" href="/static/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png" />
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ static_url('css/common.css') }}" rel="stylesheet">
     <title>{% block title %}Light Media Player{% end %}</title>
