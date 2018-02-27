@@ -413,18 +413,16 @@ class DlnaNextHandler(tornado.web.RequestHandler):
 
 class DlnaHandler(tornado.web.RequestHandler):
     @check_dmr_exist
-    def get(self, opt, *args, **kw):
-        self.write('opt: %s' % opt)
-        method = getattr(tracker.dmr, opt)
+    def get(self, opt, args):
+        # self.write('opt: %s' % opt)
         if opt in ('play', 'pause', 'stop'):
+            method = getattr(tracker.dmr, opt)
             ret = method()
         elif opt == 'seek':
-            ret = method(*kw.values())
+            ret = tracker.dmr.seek(args)
         else:
             return
-        # self.write(str(method))
         if ret:
-        # if method():
             self.finish('Done.')
         else:
             self.finish('Error: Failed!')
@@ -452,7 +450,7 @@ class DlnaVolumeControlHandler(tornado.web.RequestHandler):
             self.finish('failed')
 
 
-class SystemHandler(tornado.web.RequestHandler):
+class SystemCommandHandler(tornado.web.RequestHandler):
     def get(self, opt=None):
         if opt=='update':
             if sys.platform == 'linux':
@@ -521,13 +519,13 @@ Handlers=[
     (r'/fs/(?P<path>.*)', FileSystemListHandler),
     (r'/move/(?P<src>.*)', FileSystemMoveHandler),
     (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
+    (r'/sys/(?P<opt>\w*)', SystemCommandHandler),
     (r'/test/?', TestHandler),
     (r'/dlnalink', DlnaWebSocketHandler),
+    (r'/dlnainfo', DlnaInfoHandler),
     (r'/setdmr/(?P<dmr>.*)', SetDmrHandler),
     (r'/searchdmr', SearchDmrHandler),
-    (r'/sys/(?P<opt>\w*)', SystemHandler),
     (r'/dlnavol/(?P<opt>\w*)', DlnaVolumeControlHandler),
-    (r'/dlnainfo', DlnaInfoHandler),
     (r'/dlna/next', DlnaNextHandler),
     (r'/dlna/load/(?P<src>.*)', DlnaLoadHandler),
     (r'/dlna/(?P<opt>\w*)/?(?P<args>\w*)', DlnaHandler),
