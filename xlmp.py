@@ -31,7 +31,9 @@ import logging.handlers
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
-console= logging.handlers.SocketHandler('nas', 1514)
+# console= logging.handlers.SocketHandler('nas', 1514)
+console= logging.handlers.SysLogHandler()
+# console= logging.handlers.NTEventLogHandler('xlmp')
 console.setLevel(logging.INFO)
 formatter= logging.Formatter('%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s')
 console.setFormatter(formatter)
