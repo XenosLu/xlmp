@@ -1,4 +1,5 @@
 #!/usr/bin/dumb-init /bin/sh
 /usr/bin/python3 /xlmp/xlmp.py &  # launch a process in the background
-command=/usr/sbin/nginx  -g 'daemon off;' &  # launch another process in the foreground
-/usr/sbin/rsyslogd
+command=/usr/sbin/nginx  -g 'daemon off;'
+  # launch another process in the foreground
+# /usr/sbin/rsyslogd
