@@ -8,7 +8,7 @@ RUN apk add --no-cache \
             git \
             nginx \
             dumb-init \
-            # supervisor \
+            supervisor \
     && pip3 install tornado==4.5.3 \
     && if [ "$enable_logserver" ];then apk add --no-cache rsyslog;fi \
     && if [ "$enable_logserver" ];then echo "*.* @@nas:1514" >>/etc/rsyslog.conf;fi \
@@ -30,7 +30,7 @@ RUN chmod +x /xlmp/docker/init
 EXPOSE 80
 
 # media folder: /xlmp/media
-# CMD ["/usr/bin/supervisord", "-c", "/xlmp/docker/supervisord.conf"]
+CMD ["/usr/bin/supervisord", "-c", "/xlmp/docker/supervisord.conf"]
 # CMD ["/usr/bin/dumb-init", "/usr/bin/python3", "/xlmp/xlmp.py"]
-CMD ["/xlmp/docker/init", "-v"]
+# CMD ["/xlmp/docker/init", "-v"]
 
