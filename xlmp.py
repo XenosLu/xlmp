@@ -585,5 +585,3 @@ if __name__ == "__main__":
         # os.system("sudo /sbin/shutdown -h now")
     # return 'shutting down...'
 
-
-
