@@ -101,7 +101,6 @@ class DMRTracker(Thread):
                     self._failure += 1
                     logging.warning('Losing DMR count: %d' % self._failure)
                     if self._failure >= 3:
-                        # self._failure = 0
                         logging.info('No DMR currently.')
                         self.state = {}
                         self.dmr = None
@@ -298,6 +297,16 @@ def check_dmr_exist(func):
     return no_dmr
 
 
+def get_next_file(src):
+    fullname = '%s/%s' % (VIDEO_PATH, src)
+    filepath = os.path.dirname(fullname)
+    dirs = sorted([i for i in os.listdir(filepath)
+                   if not i.startswith('.') and os.path.isfile('%s/%s' % (filepath, i))])
+    next_index = dirs.index(os.path.basename(fullname)) + 1
+    if next_index < len(dirs):
+        return '%s/%s' % (os.path.dirname(src), dirs[next_index])
+
+
 class IndexHandler(tornado.web.RequestHandler):
     def get(self):
         if tracker.dmr:
@@ -340,16 +349,6 @@ class HistoryHandler(tornado.web.RequestHandler):
                        for s in run_sql('select * from history order by LATEST_DATE desc')]})
 
 
-def get_next_file(src):
-    fullname = '%s/%s' % (VIDEO_PATH, src)
-    filepath = os.path.dirname(fullname)
-    dirs = sorted([i for i in os.listdir(filepath)
-                   if not i.startswith('.') and os.path.isfile('%s/%s' % (filepath, i))])
-    next_index = dirs.index(os.path.basename(fullname)) + 1
-    if next_index < len(dirs):
-        return '%s/%s' % (os.path.dirname(src), dirs[next_index])
-
-
 class FileSystemListHandler(tornado.web.RequestHandler):
     """Get static folder list in json"""
     def get(self, path):
@@ -378,13 +377,6 @@ class SaveHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     @tornado.concurrent.run_on_executor
     def post(self, src):
-        position = self.get_argument('position', 0)
-        duration = self.get_argument('duration', 0)
-        save_history(src, position, duration)
-
-    @tornado.gen.coroutine        
-    @tornado.concurrent.run_on_executor
-    def get(self, src):
         position = self.get_argument('position', 0)
         duration = self.get_argument('duration', 0)
         save_history(src, position, duration)
