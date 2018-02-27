@@ -532,7 +532,8 @@ Handlers=[
     (r'/save/(?P<src>.*)', SaveHandler),
     (r'/play/(?P<src>.*)', WebPlayerHandler),
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
-    (r'/(apple-touch-icon\.png)', tornado.web.StaticFileHandler, {'path': 'static'})
+    (r'/(apple-touch-icon\.png)', tornado.web.StaticFileHandler, {'path': 'static'}),
+    (r'/(favicon\.ico)', tornado.web.StaticFileHandler, {'path': 'static'})
 ]
 
 settings = {
