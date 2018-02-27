@@ -7,15 +7,14 @@
   </div>
   <div class="btn-group dropdown">
     <button title="Maintenance" type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
-      <!-- SYS<i class="glyphicon glyphicon-chevron-down"></i> -->
       <i class="glyphicon glyphicon-cog"></i>
       <i class="glyphicon glyphicon-chevron-down"></i>
     </button>
     <ul class="dropdown-menu">
       <li><a onclick="get('/sys/update')">update</a></li>
       <li class="divider"></li>
-      <li><a onclick="get('/backup')">backup</a></li>
-      <li><a onclick="get('/restore')">restore</a></li>
+      <li><a onclick="get('/sys/backup')">backup</a></li>
+      <li><a onclick="get('/sys/restore')">restore</a></li>
       <!-- <li class="divider"></li> -->
       <!-- <li><a id="suspend"><i class="glyphicon glyphicon-off"></i>suspend</a></li> -->
       <!-- <li><a id="shutdown"><i class="glyphicon glyphicon-off"></i>shutdown</a></li> -->

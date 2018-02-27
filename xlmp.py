@@ -454,14 +454,21 @@ class DlnaVolumeControlHandler(tornado.web.RequestHandler):
 
 class SystemHandler(tornado.web.RequestHandler):
     def get(self, opt=None):
-        if sys.platform == 'linux':
-            if os.system('git pull') == 0:
-                self.finish('git pull done, waiting for restart')
-                os._exit(1)
+        if opt=='update':
+            if sys.platform == 'linux':
+                if os.system('git pull') == 0:
+                    self.finish('git pull done, waiting for restart')
+                    os._exit(1)
+                else:
+                    self.finish('execute git pull failed')
             else:
-                self.finish('execute git pull failed')
+                self.finish('not supported')
+        elif opt == 'backup':  # backup history
+            self.finish(shutil.copyfile(HISTORY_DB_FILE, '%s.bak' % HISTORY_DB_FILE))
+        elif opt == 'restore':  # restore history
+            self.finish(shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE))
         else:
-            self.finish('not supported')
+            self.finish('no such operation')
 
 
 class SetDmrHandler(tornado.web.RequestHandler):
@@ -518,7 +525,7 @@ Handlers=[
     (r'/dlnalink', DlnaWebSocketHandler),
     (r'/setdmr/(?P<dmr>.*)', SetDmrHandler),
     (r'/searchdmr', SearchDmrHandler),
-    (r'/sys/update', SystemHandler),
+    (r'/sys/(?P<opt>\w*)', SystemHandler),
     (r'/dlnavol/(?P<opt>\w*)', DlnaVolumeControlHandler),
     (r'/dlnainfo', DlnaInfoHandler),
     (r'/dlna/next', DlnaNextHandler),
@@ -579,13 +586,4 @@ if __name__ == "__main__":
     # return 'shutting down...'
 
 
-@route('/backup')
-def sys_backup():
-    """backup history"""
-    return shutil.copyfile(HISTORY_DB_FILE, '%s.bak' % HISTORY_DB_FILE)
 
-
-@route('/restore')
-def sys_restore():
-    """restore history"""
-    return shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE)
