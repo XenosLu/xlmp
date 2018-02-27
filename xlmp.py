@@ -216,31 +216,28 @@ def run_sql(sql, *args):
 def ls_dir(path):
     if path == '/':
         path = ''
-    try:
-        up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
-        if path:
-            up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
-            if not path.endswith('/'):
-                path = '%s/' % path
-        dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))  # path could be either path or path/
-        for filename in dir_list:
-            if filename.startswith('.'):
-                continue
-            if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
-                list_folder.append({'filename': filename, 'type': 'folder',
-                                    'path': '%s%s' % (path, filename)})
-            elif re.match('.*\.((?i)mp)4$', filename):
-                list_mp4.append({'filename': filename, 'type': 'mp4',
-                                'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-            elif re.match('.*\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
-                list_video.append({'filename': filename, 'type': 'video',
-                                   'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-            else:
-                list_other.append({'filename': filename, 'type': 'other',
-                                  'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-        return ({'filesystem': (up + list_folder + list_mp4 + list_video + list_other)})
-    except Exception as e:
-        logging.warning('dir exception: %s' % e)
+    up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
+    if path:
+        up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
+        if not path.endswith('/'):
+            path = '%s/' % path
+    dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))  # path could be either path or path/
+    for filename in dir_list:
+        if filename.startswith('.'):
+            continue
+        if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
+            list_folder.append({'filename': filename, 'type': 'folder',
+                                'path': '%s%s' % (path, filename)})
+        elif re.match('.*\.((?i)mp)4$', filename):
+            list_mp4.append({'filename': filename, 'type': 'mp4',
+                            'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+        elif re.match('.*\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
+            list_video.append({'filename': filename, 'type': 'video',
+                               'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+        else:
+            list_other.append({'filename': filename, 'type': 'other',
+                              'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+    return ({'filesystem': (up + list_folder + list_mp4 + list_video + list_other)})
 
 
 def second_to_time(second):
@@ -352,7 +349,10 @@ class HistoryHandler(tornado.web.RequestHandler):
 class FileSystemListHandler(tornado.web.RequestHandler):
     """Get static folder list in json"""
     def get(self, path):
-        self.finish(ls_dir(path))
+        try:
+            self.finish(ls_dir(path))
+        except Exception as e:
+            raise tornado.web.HTTPError(404, reason=str(e))
 
 
 class FileSystemMoveHandler(tornado.web.RequestHandler):
@@ -417,13 +417,13 @@ class DlnaHandler(tornado.web.RequestHandler):
         self.write('opt: %s' % opt)
         method = getattr(tracker.dmr, opt)
         if opt in ('play', 'pause', 'stop'):
-            res = method()
+            ret = method()
         elif opt == 'seek':
-            res = method(*kw.values())
+            ret = method(*kw.values())
         else:
             return
         # self.write(str(method))
-        if res:
+        if ret:
         # if method():
             self.finish('Done.')
         else:
@@ -477,25 +477,10 @@ class SearchDmrHandler(tornado.web.RequestHandler):
         tracker.discover_dmr()
 
 
-class TestHandler(tornado.websocket.WebSocketHandler):
-    executor = ThreadPoolExecutor(9)
-    @tornado.gen.coroutine
-    @tornado.concurrent.run_on_executor
-    def open(self):
-        # self.users.add(self)  # 建立连接后添加用户到容器中
-        while 1:
-            try:
-                self.write_message(tracker.state)
-            except:
-                pass
-            sleep(1)
+class TestHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.finish('1')
 
-    def on_message(self, message):
-        pass
-
-    def on_close(self):
-        pass
-        # self.users.remove(self) # 用户关闭连接后从容器中移除用户
 
 class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     executor = ThreadPoolExecutor(9)
@@ -509,8 +494,6 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
         while self._running:
             # n += 1  # test
             # logging.info(self.executor._work_queue.unfinished_tasks)
-            # logging.info('last: %s' % last_message)
-            # logging.info('current: %s' % tracker.state)
             if last_message != tracker.state:
                 self.write_message(tracker.state)
                 logging.info(tracker.state.get('RelTime'))
@@ -531,7 +514,7 @@ Handlers=[
     (r'/fs/(?P<path>.*)', FileSystemListHandler),
     (r'/move/(?P<src>.*)', FileSystemMoveHandler),
     (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
-    (r'/test/', TestHandler),
+    (r'/test/?', TestHandler),
     (r'/dlnalink', DlnaWebSocketHandler),
     (r'/setdmr/(?P<dmr>.*)', SetDmrHandler),
     (r'/searchdmr', SearchDmrHandler),
@@ -540,7 +523,7 @@ Handlers=[
     (r'/dlnainfo', DlnaInfoHandler),
     (r'/dlna/next', DlnaNextHandler),
     (r'/dlna/load/(?P<src>.*)', DlnaLoadHandler),
-    (r'/dlna/(?P<opt>\w*)/?(?P<args>.*)', DlnaHandler),
+    (r'/dlna/(?P<opt>\w*)/?(?P<args>\w*)', DlnaHandler),
     (r'/save/(?P<src>.*)', SaveHandler),
     (r'/play/(?P<src>.*)', WebPlayerHandler),
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH})

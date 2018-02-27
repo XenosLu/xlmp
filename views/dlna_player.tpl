@@ -2,7 +2,6 @@
 {% block title %}DMC - Light Media Player{% end %}
 
     {% block main %}
-      {% include common.tpl %}
       {% include dlna.tpl %}
     {% end %}
 
