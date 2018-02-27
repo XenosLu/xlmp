@@ -25,12 +25,17 @@ from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/d
 VIDEO_PATH = 'media'  # media file path
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
 
+import logging.handlers
 
 # initialize logging
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
-
+console= logging.handlers.SocketHandler('nas', 1514)
+console.setLevel(logging.INFO)
+formatter= logging.Formatter('%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s')
+console.setFormatter(formatter)
+logging.getLogger('').addHandler(console)
 
 class DMRTracker(Thread):
     """DLNA Digital Media Renderer tracker thread"""
