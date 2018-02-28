@@ -27,7 +27,7 @@ HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
 
 import logging.handlers
 
-# import socket
+import socket
 # sk = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # sk.settimeout(1)
 # try:
@@ -42,7 +42,7 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
 # console= logging.handlers.SocketHandler('nas', 1514)
-console = logging.handlers.SysLogHandler(('nas', 1514), logging.handlers.SysLogHandler.LOG_AUTH)
+console = logging.handlers.SysLogHandler(('nas', 1514), logging.handlers.SysLogHandler.LOG_AUTH, socket.SOCK_STREAM)
 # console= logging.handlers.NTEventLogHandler('xlmp')
 console.setLevel(logging.INFO)
 formatter= logging.Formatter('%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s')
