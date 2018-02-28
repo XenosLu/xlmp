@@ -501,6 +501,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     @tornado.gen.coroutine
     @tornado.concurrent.run_on_executor
     def open(self):
+        logging.info('ws connected: %s' % self.request.remote_ip)
         last_message = ''
         # n = 0  # test
         while self._running:
