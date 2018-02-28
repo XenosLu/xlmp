@@ -421,7 +421,8 @@ class DlnaNextHandler(tornado.web.RequestHandler):
 class DlnaHandler(tornado.web.RequestHandler):
     @check_dmr_exist
     def get(self, opt, args):
-        # self.write('opt: %s' % opt)
+        print(args)
+        self.write('opt: %s' % opt)
         if opt in ('play', 'pause', 'stop'):
             method = getattr(tracker.dmr, opt)
             ret = method()
@@ -508,13 +509,14 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
             # logging.info(self.executor._work_queue.unfinished_tasks)
             if last_message != tracker.state:
                 self.write_message(tracker.state)
-                logging.info(tracker.state.get('RelTime'))
+                # logging.info(tracker.state.get('RelTime'))
                 last_message = tracker.state.copy()
             # self.write_message({"RelTime":"00:22:%d" % n})  # test
             sleep(0.2)
 
     def on_message(self, message):
-        logging.info('receive: %s' % message)
+        pass
+        # logging.info('receive: %s' % message)
 
     def on_close(self):
         logging.info('ws close: %s' % self.request.remote_ip)
@@ -535,7 +537,7 @@ Handlers = [
     (r'/dlnavol/(?P<opt>\w*)', DlnaVolumeControlHandler),
     (r'/dlna/next', DlnaNextHandler),
     (r'/dlna/load/(?P<src>.*)', DlnaLoadHandler),
-    (r'/dlna/(?P<opt>\w*)/?(?P<args>\w*)', DlnaHandler),
+    (r'/dlna/(?P<opt>\w*)/?(?P<args>.*)', DlnaHandler),
     (r'/save/(?P<src>.*)', SaveHandler),
     (r'/play/(?P<src>.*)', WebPlayerHandler),
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
