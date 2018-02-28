@@ -37,15 +37,17 @@ logging.basicConfig(level=logging.INFO,
 
 sk = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sk.settimeout(1)
+LOG_SERVER = 'nas'
+LOG_SERVER_PORT = 1514
 try:
-    sk.connect(('nas', 1514))
-    console = logging.handlers.SysLogHandler(('nas', 1514), 'daemon', socket.SOCK_STREAM)
-    console.setLevel(logging.INFO)
+    sk.connect((LOG_SERVER, LOG_SERVER_PORT))
+    syslog = logging.handlers.SysLogHandler((LOG_SERVER, LOG_SERVER_PORT), 'daemon', socket.SOCK_STREAM)
+    syslog.setLevel(logging.INFO)
     formatter= logging.Formatter('%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s\n')
-    console.ident = 'host: %s app: xlmp ' % socket.gethostname()
-    console.append_nul = False
-    console.setFormatter(formatter)
-    logging.getLogger('').addHandler(console)
+    syslog.ident = 'host: %s app: xlmp ' % socket.gethostname()
+    syslog.append_nul = False
+    syslog.setFormatter(formatter)
+    logging.getLogger('').addHandler(syslog)
 except Exception:
     logging.warning('log server connect failed.')
 sk.close()
