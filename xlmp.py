@@ -42,10 +42,11 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
 # console= logging.handlers.SocketHandler('nas', 1514)
-console = logging.handlers.SysLogHandler(('nas', 1514), logging.handlers.SysLogHandler.LOG_AUTH, socket.SOCK_STREAM)
+# console = logging.handlers.SysLogHandler(('192.168.2.150', 1514), logging.handlers.SysLogHandler.LOG_AUTH, socket.SOCK_STREAM)
+console = logging.handlers.SysLogHandler(('192.168.2.150', 1514), 'daemon', socket.SOCK_STREAM)
 # console= logging.handlers.NTEventLogHandler('xlmp')
 console.setLevel(logging.INFO)
-formatter= logging.Formatter('%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s')
+formatter= logging.Formatter('%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s\n')
 console.setFormatter(formatter)
 logging.getLogger('').addHandler(console)
 
