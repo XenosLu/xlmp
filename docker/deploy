@@ -2,3 +2,5 @@
 cd /xlmp
 git pull
 kill -9 $(ps -ef |grep xlmp.py | grep -v grep | awk '{print $1}') && echo Stopped.
+echo restarting...
+/usr/bin/python3 /xlmp/xlmp.py
