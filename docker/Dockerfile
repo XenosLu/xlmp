@@ -17,6 +17,7 @@ RUN apk add --no-cache \
 
 # copy nginx config file
 COPY xlmp.conf /etc/nginx/conf.d/
+COPY .. /test
 
 # deploy script
 COPY deploy /usr/local/bin
@@ -32,4 +33,3 @@ EXPOSE 80
 # media folder: /xlmp/media
 # CMD ["/usr/bin/supervisord", "-c", "/xlmp/docker/supervisord.conf"]
 CMD ["/xlmp/docker/init", "-v"]
-
