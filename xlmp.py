@@ -27,6 +27,16 @@ HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
 
 import logging.handlers
 
+# import socket
+# sk = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# sk.settimeout(1)
+# try:
+  # sk.connect(('nas',1514))
+  # print ('Server port  OK!')
+# except Exception:
+  # print ('Server port  not connect!')
+# sk.close()
+
 # initialize logging
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
@@ -34,6 +44,7 @@ logging.basicConfig(level=logging.INFO,
 # console= logging.handlers.SocketHandler('nas', 1514)
 console= logging.handlers.SysLogHandler()
 # console= logging.handlers.NTEventLogHandler('xlmp')
+logging.handlers.SysLogHandler(('nas', 1514), logging.handlers.SysLogHandler.LOG_AUTH)
 console.setLevel(logging.INFO)
 formatter= logging.Formatter('%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s')
 console.setFormatter(formatter)
