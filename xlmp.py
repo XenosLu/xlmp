@@ -6,7 +6,9 @@ import re
 import shutil
 import sqlite3
 import sys
+import socket
 import logging
+import logging.handlers
 
 from threading import Thread, Event
 from urllib.parse import quote, unquote
@@ -25,31 +27,29 @@ from dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/d
 VIDEO_PATH = 'media'  # media file path
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
 
-import logging.handlers
 
-import socket
-# sk = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# sk.settimeout(1)
-# try:
-  # sk.connect(('nas',1514))
-  # print ('Server port  OK!')
-# except Exception:
-  # print ('Server port  not connect!')
-# sk.close()
+
 
 # initialize logging
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
-# console= logging.handlers.SocketHandler('nas', 1514)
-# console = logging.handlers.SysLogHandler(('192.168.2.150', 1514), logging.handlers.SysLogHandler.LOG_AUTH, socket.SOCK_STREAM)
-console = logging.handlers.SysLogHandler(('192.168.2.150', 1514), 'daemon', socket.SOCK_STREAM)
-console.setLevel(logging.INFO)
-formatter= logging.Formatter('%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s\n')
-console.ident = 'host: %s app: xlmp ' % socket.gethostname()
-console.append_nul = False
-console.setFormatter(formatter)
-logging.getLogger('').addHandler(console)
+
+sk = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sk.settimeout(1)
+try:
+    sk.connect(('nas', 1514))
+    console = logging.handlers.SysLogHandler(('nas', 1514), 'daemon', socket.SOCK_STREAM)
+    console.setLevel(logging.INFO)
+    formatter= logging.Formatter('%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s\n')
+    console.ident = 'host: %s app: xlmp ' % socket.gethostname()
+    console.append_nul = False
+    console.setFormatter(formatter)
+    logging.getLogger('').addHandler(console)
+except Exception:
+    logging.warning('log server connect failed.')
+sk.close()
+
 
 class DMRTracker(Thread):
     """DLNA Digital Media Renderer tracker thread"""
