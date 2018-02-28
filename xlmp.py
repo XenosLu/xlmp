@@ -462,7 +462,7 @@ class SystemCommandHandler(tornado.web.RequestHandler):
                 if os.system('git pull') == 0:
                     self.finish('git pull done, waiting for restart')
                     python = sys.executable
-                    os.execl(python, python, * sys.argv)
+                    os.execl(python, python, *sys.argv)
                     # os._exit(1)
                 else:
                     self.finish('execute git pull failed')
