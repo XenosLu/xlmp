@@ -35,22 +35,22 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
 
-sk = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sk.settimeout(1)
-LOG_SERVER = 'nas'
-LOG_SERVER_PORT = 1514
-try:
-    sk.connect((LOG_SERVER, LOG_SERVER_PORT))
-    syslog = logging.handlers.SysLogHandler((LOG_SERVER, LOG_SERVER_PORT), 'daemon', socket.SOCK_STREAM)
-    syslog.setLevel(logging.INFO)
-    formatter= logging.Formatter('%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s\n')
-    syslog.ident = 'host: %s app: xlmp ' % socket.gethostname()
-    syslog.append_nul = False
-    syslog.setFormatter(formatter)
-    logging.getLogger('').addHandler(syslog)
-except Exception:
-    logging.warning('log server connect failed.')
-sk.close()
+# sk = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# sk.settimeout(1)
+# LOG_SERVER = 'nas'
+# LOG_SERVER_PORT = 1514
+# try:
+    # sk.connect((LOG_SERVER, LOG_SERVER_PORT))
+    # syslog = logging.handlers.SysLogHandler((LOG_SERVER, LOG_SERVER_PORT), 'daemon', socket.SOCK_STREAM)
+    # syslog.setLevel(logging.INFO)
+    # formatter= logging.Formatter('%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s\n')
+    # syslog.ident = 'host: %s app: xlmp ' % socket.gethostname()
+    # syslog.append_nul = False
+    # syslog.setFormatter(formatter)
+    # logging.getLogger('').addHandler(syslog)
+# except Exception:
+    # logging.warning('log server connect failed.')
+# sk.close()
 
 
 class DMRTracker(Thread):
