@@ -17,7 +17,6 @@ RUN apk add --no-cache \
 
 # copy nginx config file
 COPY xlmp.conf /etc/nginx/conf.d/
-# COPY .. /test
 
 # deploy script
 COPY deploy /usr/local/bin
