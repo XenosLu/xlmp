@@ -2,16 +2,12 @@
 FROM xenocider/container:python3.5.2
 LABEL maintainer="xenos <xenos.lu@gmail.com>"
 
-# ARG enable_logserver=1
-
 RUN apk add --no-cache \
             git \
             nginx \
             dumb-init \
             # supervisor \
     && pip3 install tornado==4.5.3 \
-    # && if [ "$enable_logserver" ];then apk add --no-cache rsyslog;fi \
-    # && if [ "$enable_logserver" ];then echo "*.* @@nas:1514" >>/etc/rsyslog.conf;fi \
     && mkdir /run/nginx \
     && rm -f /etc/nginx/conf.d/default.conf
 
