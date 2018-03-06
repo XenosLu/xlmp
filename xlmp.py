@@ -28,8 +28,6 @@ VIDEO_PATH = 'media'  # media file path
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
 
 
-
-
 # initialize logging
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
@@ -593,4 +591,3 @@ if __name__ == "__main__":
     # else:
         # os.system("sudo /sbin/shutdown -h now")
     # return 'shutting down...'
-
