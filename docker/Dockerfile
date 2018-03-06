@@ -30,4 +30,4 @@ COPY docker-entrypoint.sh /
 ENTRYPOINT ["/bin/sh", "/docker-entrypoint.sh"]
 # ENTRYPOINT ["/docker-entrypoint.sh"]
 # CMD ["/usr/bin/supervisord", "-c", "/xlmp/docker/supervisord.conf"]
-CMD ["/usr/bin/dumb-init", "/bin/sh", "/xlmp/docker/init"]
+# CMD ["/usr/bin/dumb-init", "/bin/sh", "/xlmp/docker/init"]
