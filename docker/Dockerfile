@@ -27,4 +27,5 @@ EXPOSE 80
 
 # media folder: /xlmp/media
 # CMD ["/usr/bin/supervisord", "-c", "/xlmp/docker/supervisord.conf"]
-CMD ["/xlmp/docker/init", "-v"]
+# CMD ["/xlmp/docker/init", "-v"]
+CMD ["/usr/bin/dumb-init", "/bin/sh", "/xlmp/docker/init"]
