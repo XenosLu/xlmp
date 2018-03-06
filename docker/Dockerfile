@@ -21,7 +21,7 @@ RUN chmod +x /usr/local/bin/deploy
 # git clone
 RUN git clone https://github.com/XenosLu/xlmp.git /xlmp
 
-RUN chmod +x /xlmp/docker/init
+# RUN chmod +x /xlmp/docker/init
 
 EXPOSE 80
 
