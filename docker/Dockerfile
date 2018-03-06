@@ -23,6 +23,8 @@ RUN git clone https://github.com/XenosLu/xlmp.git /xlmp
 
 EXPOSE 80
 
-# media folder: /xlmp/media
+# media folder:
+# VOLUME /xlmp/media
+
 # CMD ["/usr/bin/supervisord", "-c", "/xlmp/docker/supervisord.conf"]
 CMD ["/usr/bin/dumb-init", "/bin/sh", "/xlmp/docker/init"]
