@@ -1,0 +1,3 @@
+#!/usr/bin/dumb-init /bin/sh
+/usr/bin/python3 /xlmp/xlmp.py &
+/usr/sbin/nginx -g 'daemon off;'

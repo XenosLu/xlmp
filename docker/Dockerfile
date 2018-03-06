@@ -1,15 +1,13 @@
 ## xlmp
-FROM xenocider/container:bottle-env
+FROM xenocider/container:python3.5.2
 LABEL maintainer="xenos <xenos.lu@gmail.com>"
-
-ARG enable_logserver=
 
 RUN apk add --no-cache \
             git \
             nginx \
-            supervisor \
-    && if [ "$enable_logserver" ];then apk add --no-cache rsyslog;fi \
-    && if [ "$enable_logserver" ];then echo "*.* @@nas:1514" >>/etc/rsyslog.conf;fi \
+            dumb-init \
+            # supervisor \
+    && pip3 install tornado==4.5.3 \
     && mkdir /run/nginx \
     && rm -f /etc/nginx/conf.d/default.conf
 
@@ -22,9 +20,11 @@ RUN chmod +x /usr/local/bin/deploy
 
 # git clone
 RUN git clone -b latest https://github.com/XenosLu/xlmp.git /xlmp
-# RUN git clone https://github.com/XenosLu/dlnap.git /tmp/dlnap
 
 EXPOSE 80
 
-# media folder: /xlmp/media
-CMD ["/usr/bin/supervisord", "-c", "/xlmp/docker/supervisord.conf"]
+# media folder:
+# VOLUME /xlmp/media
+
+# CMD ["/usr/bin/supervisord", "-c", "/xlmp/docker/supervisord.conf"]
+CMD ["/usr/bin/dumb-init", "/bin/sh", "/xlmp/docker/init"]

@@ -1,28 +1,63 @@
-% rebase('base.tpl', title='DMC - Light Media Player')
-<body>
-  % include('common.tpl')
-  % include('dlna.tpl')
-</body>
-% include('common_script.tpl')
-<script>
 var reltime = 0;
 var update = true;
 var wait = 0;
 
 $("#dlna_toggle").addClass("active");
-$("#dlna_toggle").attr("href", "/index");
+$("#dlna_toggle").attr("href", "/");
 
-get_dmr_state();
+// get_dmr_state();
 $(".dlna-show").show();
-var inter = setInterval("get_dmr_state()", 1100);
+// var inter = setInterval("get_dmr_state()", 1100);
 $("#position-bar").on("change", function() {
-    $.get("/dlnaseek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
+    $.get("/dlna/seek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
     update = true;
 }).on("input", function() {
     out(secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
     update = false;
 });
+var ws;
+ws = dlnalink();
 
+function CheckLink(){
+    if(ws.readyState == 3)
+        ws = dlnalink();
+    console.log(ws);
+    //ws.send('test');
+}
+setInterval("CheckLink()", 2500);
+function dlnalink(){
+    var ws = new WebSocket("ws://" + window.location.host + "/dlnalink");
+    ws.onmessage = function(e) {
+        data = $.parseJSON(e.data);
+        console.log(data);
+        ws.send('got');
+        if ($.isEmptyObject(data)) {
+            $("#state").text('No DMR');
+        } else {
+            reltime = timeToSecond(data["RelTime"]);
+            if (update)
+                $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
+
+            $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
+            $('#src').text(decodeURI(data["TrackURI"]));
+
+            $("#dmr button").text(data["CurrentDMR"]);
+            $("#dmr ul").empty().append('<li><a onclick="$.get(\'/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
+            for (x in data["DMRs"]) {
+                $("#dmr ul").append('<li><a onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
+            }
+
+            $("#state").text(data["CurrentTransportState"]);
+        }
+    }
+    ws.onclose = function () {
+        $("#state").text('disconnected');
+    };
+    ws.onerror = function () { 
+        console.log('error');
+    }; 
+    return ws;
+}
 function get_dmr_state(){
     if (wait > 0) {
         wait -= 1;
@@ -76,4 +111,3 @@ function offset_value(current, value, max) {
     var s = Math.sin((value - current) / relduration * 1.5707963267948966192313216916);
     return Math.round(current + Math.abs(Math.pow(s, 3)) * (value - current));
 }
-</script>

@@ -3,20 +3,18 @@
     <button title="browser" id="history" type="button" class="btn btn-default btn-lg">
       <i class="glyphicon glyphicon-th-list"></i>
     </button>
-    <a title="switch DLNA mode" id="dlna_toggle" href="/dlna" type="button" class="btn btn-default btn-lg">DLNA</a>
+    <a title="switch DLNA mode" id="dlna_toggle" href="/dlna" type="button" class="btn btn-default {{dlna_style}} btn-lg">DLNA</a>
   </div>
   <div class="btn-group dropdown">
     <button title="Maintenance" type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
-      <!-- SYS<i class="glyphicon glyphicon-chevron-down"></i> -->
       <i class="glyphicon glyphicon-cog"></i>
       <i class="glyphicon glyphicon-chevron-down"></i>
     </button>
     <ul class="dropdown-menu">
-      <!-- <li><a onclick="$.get('/update')">update</a></li> -->
-      <li><a onclick="get('/update')">update</a></li>
+      <li><a onclick="get('/sys/update')">update</a></li>
       <li class="divider"></li>
-      <li><a onclick="get('/backup')">backup</a></li>
-      <li><a onclick="get('/restore')">restore</a></li>
+      <li><a onclick="get('/sys/backup')">backup</a></li>
+      <li><a onclick="get('/sys/restore')">restore</a></li>
       <!-- <li class="divider"></li> -->
       <!-- <li><a id="suspend"><i class="glyphicon glyphicon-off"></i>suspend</a></li> -->
       <!-- <li><a id="shutdown"><i class="glyphicon glyphicon-off"></i>shutdown</a></li> -->
@@ -28,10 +26,10 @@
       <i class="glyphicon glyphicon-chevron-down"></i>
     </button>
     <ul class="dropdown-menu">
-      <li><a onclick="get('/dlnaseek/14')">00:15</a></li>
-      <li><a onclick="get('/dlnaseek/29')">00:30</a></li>
-      <li><a onclick="get('/dlnaseek/60')">01:00</a></li>
-      <li><a onclick="get('/dlnaseek/90')">01:30</a></li>
+      <li><a onclick="get('/dlna/seek/00:00:15')">00:15</a></li>
+      <li><a onclick="get('/dlna/seek/00:00:29')">00:30</a></li>
+      <li><a onclick="get('/dlna/seek/00:01:00')">01:00</a></li>
+      <li><a onclick="get('/dlna/seek/00:01:30')">01:30</a></li>
     </ul>
   </div>
   <!-- player menu -->
@@ -63,7 +61,7 @@
       <button type="button" class="close">&times;</button>
       <ul id="navtab" class="nav nav-tabs">
         <li class="active" title="Show play history">
-          <a href="#tabFrame" data-toggle="tab" onclick="history('/list')">
+          <a href="#tabFrame" data-toggle="tab" onclick="history('/hist/ls')">
             <i class="glyphicon glyphicon-list"></i>History
           </a>
         </li>
