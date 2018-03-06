@@ -2,6 +2,6 @@
 
 set -e
 
-# exec * 
+# exec something
 
 exec "$@"
