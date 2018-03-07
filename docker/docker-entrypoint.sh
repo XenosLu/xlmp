@@ -9,5 +9,6 @@ exec /usr/bin/python3 /xlmp/xlmp.py
 exec "$@"
 
 while true
-    do sleep 1
+    do echo waiting...
+    sleep 1
 done
