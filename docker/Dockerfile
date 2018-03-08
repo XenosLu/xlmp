@@ -7,6 +7,7 @@ RUN apk add --no-cache \
             nginx \
             dumb-init \
             runit \
+            s6 \
             # supervisor \
     && pip3 install tornado==4.5.3 \
     && mkdir /run/nginx \
