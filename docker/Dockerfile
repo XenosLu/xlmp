@@ -29,6 +29,8 @@ EXPOSE 80
 # VOLUME /xlmp/media
 
 COPY docker-entrypoint.sh /
+
+RUN chmod -R +x /xlmp/docker/s6
 # ENTRYPOINT ["/bin/sh", "/docker-entrypoint.sh"]
 # ENTRYPOINT ["/bin/sh", "/xlmp/docker/docker-entrypoint.sh"]
 # CMD ["/usr/bin/supervisord", "-c", "/xlmp/docker/supervisord.conf"]
