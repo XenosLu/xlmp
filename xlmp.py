@@ -238,7 +238,8 @@ def ls_dir(path):
                                'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
         else:
             list_other.append({'filename': filename, 'type': 'other',
-                              'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+                              'path': '%s%s' % (path, filename)})
+                              # 'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
     return ({'filesystem': (up + list_folder + list_mp4 + list_video + list_other)})
 
 
