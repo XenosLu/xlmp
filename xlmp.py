@@ -146,7 +146,7 @@ class DMRTracker(Thread):
             while self.dmr.position_info().get('TrackDuration') == '00:00:00':
                 sleep(0.5)
                 logging.info('Waiting for duration to be recognized correctly, url=%s' % url)
-                if (time() - time0) > 9:
+                if (time() - time0) > 15:
                     logging.info('Load duration timeout')
                     return False
             logging.info(self.state)
