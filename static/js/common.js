@@ -171,7 +171,7 @@ function history(str) {
                 td[1] = '<td><i class="glyphicon glyphicon-film"></i></td>';
                 td[2] = '<td class="filelist '+ mediaType + '" title="' + n["filename"] + '">' + n["filename"] + "<br><small>" + n["latest_date"] + " | " + secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small></td>";
                 td[3] = '<td class="remove" title="' + n["filename"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i>' + "</td>";
-                html += "<tr>" + td.join("") + "</tr>";
+                html += "<tr" + '" title="' + n["filename"] + '">' +  + td.join("") + "</tr>";
             });
             $('#list').empty().append(html);
         },
