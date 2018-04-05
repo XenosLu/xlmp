@@ -302,7 +302,10 @@ def get_next_file(src):
     filepath = os.path.dirname(fullname)
     dirs = sorted([i for i in os.listdir(filepath)
                    if not i.startswith('.') and os.path.isfile('%s/%s' % (filepath, i))])
-    next_index = dirs.index(os.path.basename(fullname)) + 1
+    if os.path.basename(fullname) in dirs:
+        next_index = dirs.index(os.path.basename(fullname)) + 1
+    else:
+        next_index = 0
     if next_index < len(dirs):
         return '%s/%s' % (os.path.dirname(src), dirs[next_index])
 
