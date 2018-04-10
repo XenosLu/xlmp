@@ -493,7 +493,10 @@ class SearchDmrHandler(tornado.web.RequestHandler):
 
 class TestHandler(tornado.web.RequestHandler):
     def get(self):
-        self.finish('1')
+        self.set_header('Access-Control-Allow-Origin', '*')
+        self.set_header('Content-Type', 'text/event-stream')
+        self.set_header('Cache-Control', 'no-cache')
+        self.write(str(time()))
 
 
 class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
@@ -531,7 +534,7 @@ Handlers = [
     (r'/move/(?P<src>.*)', FileSystemMoveHandler),
     (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
     (r'/sys/(?P<opt>\w*)', SystemCommandHandler),
-    (r'/test/?', TestHandler),
+    (r'/test', TestHandler),
     (r'/dlnalink', DlnaWebSocketHandler),
     (r'/dlnainfo', DlnaInfoHandler),
     (r'/setdmr/(?P<dmr>.*)', SetDmrHandler),
