@@ -5,9 +5,10 @@
 {% block script %}
   <script>
   toggleDialog();
+  /*
   var source = new EventSource("/test");
 source.onmessage = function(event) {
     document.getElementById("result").innerHTML += event.data + "<br />";
-};
+};*/
   </script>
 {% end %}
