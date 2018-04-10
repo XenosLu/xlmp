@@ -492,11 +492,13 @@ class SearchDmrHandler(tornado.web.RequestHandler):
 
 
 class TestHandler(tornado.web.RequestHandler):
+    # @tornado.gen.coroutine
     def get(self):
         self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Content-Type', 'text/event-stream')
         self.set_header('Cache-Control', 'no-cache')
-        self.write(str(time()))
+        self.write('data: xxx %s\n\n' % time())
+        # yield self.flush()
 
 
 class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
