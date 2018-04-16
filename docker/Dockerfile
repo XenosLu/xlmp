@@ -2,16 +2,16 @@
 FROM xenocider/container:python3.5.2
 LABEL maintainer="xenos <xenos.lu@gmail.com>"
 
+            # dumb-init \
+            # runit \
+            # supervisor \
 RUN apk add --no-cache \
             git \
             nginx \
-            dumb-init \
-            runit \
-            s6 \
-            # supervisor \
-    && pip3 install tornado==4.5.3 \
-    && mkdir /run/nginx \
-    && rm -f /etc/nginx/conf.d/default.conf
+            s6 &&\
+    pip3 install tornado==4.5.3 &&\
+    mkdir /run/nginx &&\
+    rm -f /etc/nginx/conf.d/default.conf
 
 # copy nginx config file
 COPY xlmp.conf /etc/nginx/conf.d/
