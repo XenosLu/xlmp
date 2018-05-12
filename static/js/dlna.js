@@ -33,7 +33,9 @@ function dlnalink(){
         ws.send('got');
         if ($.isEmptyObject(data)) {
             $("#state").text('No DMR');
+            $("#dlna_toggle").removeClass("btn-success");
         } else {
+            $("#dlna_toggle").addClass("btn-success");
             reltime = timeToSecond(data["RelTime"]);
             if (update)
                 $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
