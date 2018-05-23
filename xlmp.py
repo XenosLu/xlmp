@@ -8,7 +8,6 @@ import sqlite3
 import sys
 import socket
 import logging
-import logging.handlers
 
 from threading import Thread, Event
 from urllib.parse import quote, unquote
@@ -17,7 +16,6 @@ from concurrent.futures import ThreadPoolExecutor
 
 import tornado.web
 import tornado.websocket
-import datetime  # test only
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 # sys.path = ['lib'] + sys.path  # added libpath
