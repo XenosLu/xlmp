@@ -528,7 +528,12 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     def on_close(self):
         logging.info('ws close: %s' % self.request.remote_ip)
         self._running = False
-
+# context arrangement (to-do)
+# /sys/
+# /fs/
+# /dlna/
+# /wp/ # web player
+# 
 Handlers = [
     (r'/', IndexHandler),
     (r'/dlna', DlnaPlayerHandler),
@@ -536,7 +541,7 @@ Handlers = [
     (r'/move/(?P<src>.*)', FileSystemMoveHandler),
     (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
     (r'/sys/(?P<opt>\w*)', SystemCommandHandler),
-    (r'/test', TestHandler),
+    (r'/test', TestHandler),  # test
     (r'/dlnalink', DlnaWebSocketHandler),
     (r'/dlnainfo', DlnaInfoHandler),
     (r'/setdmr/(?P<dmr>.*)', SetDmrHandler),

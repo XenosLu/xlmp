@@ -24,7 +24,7 @@ function CheckLink(){
     console.log(ws);
     //ws.send('test');
 }
-setInterval("CheckLink()", 2000);
+setInterval("CheckLink()", 1800);
 function dlnalink(){
     var ws = new WebSocket("ws://" + window.location.host + "/dlnalink");
     ws.onmessage = function(e) {
