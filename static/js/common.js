@@ -1,8 +1,15 @@
 var RANGE = 12;  //minimum touch move range in px
+var hide_sidebar = 0;
 
 window.onload = adapt;
 window.onresize = adapt;
-// $(document).mousemove(showSidebar);
+$(document).mousemove(showSidebar);
+
+function showSidebar(){
+    $("#sidebar").show();
+    clearTimeout(hide_sidebar);
+    hide_sidebar = setTimeout('$("#sidebar").hide()', 3000);
+}
 
 //buttons
 $("#clear").click(function () {
