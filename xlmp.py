@@ -21,10 +21,8 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 # sys.path = ['lib'] + sys.path  # added libpath
 from lib.dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
 
-
 VIDEO_PATH = 'media'  # media file path
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
-
 
 # initialize logging
 logging.basicConfig(level=logging.INFO,
