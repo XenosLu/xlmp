@@ -3,7 +3,7 @@ var hide_sidebar = 0;
 
 window.onload = adapt;
 window.onresize = adapt;
-$(document).mousemove(showSidebar);
+//$(document).mousemove(showSidebar);
 
 function showSidebar(){
     $("#sidebar").show();
