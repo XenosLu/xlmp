@@ -74,6 +74,7 @@ class DMRTracker(Thread):
         return None
 
     def get_position_info(self):
+        """get DLNA play position info"""
         position_info = self.dmr.position_info()
         if not position_info:
             return None
@@ -113,12 +114,15 @@ class DMRTracker(Thread):
                 sleep(2.5)
 
     def pause(self):
+        """pause tracker thread"""
         self._flag.clear()
 
     def resume(self):
+        """resume paused tracker thread"""
         self._flag.set()
 
     def stop(self):
+        """stop tracker thread"""
         self._flag.set()
         self._running.clear()
 
