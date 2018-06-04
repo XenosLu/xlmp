@@ -214,6 +214,7 @@ def run_sql(sql, *args):
 
 
 def ls_dir(path):
+    """list dir files in dict/json"""
     if path == '/':
         path = ''
     up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
@@ -264,10 +265,9 @@ def get_size(*filename):
         return 'Out of Range'
     elif size < 1024:
         return '%dB' % size
-    else:
-        unit = ' KMGTPEZYB'
-        l = min(int(math.floor(math.log(size, 1024))), 9)
-        return '%.1f%sB' % (size/1024.0**l, unit[l])
+    unit = ' KMGTPEZYB'
+    l = min(int(math.floor(math.log(size, 1024))), 9)
+    return '%.1f%sB' % (size/1024.0**l, unit[l])
 
 
 def hist_load(name):
