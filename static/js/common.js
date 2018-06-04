@@ -3,7 +3,7 @@ var hide_sidebar = 0;
 
 window.onload = adapt;
 window.onresize = adapt;
-var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
 if(!isiOS)
     $(document).mousemove(showSidebar);
 
