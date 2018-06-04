@@ -127,6 +127,7 @@ class DMRTracker(Thread):
         self._running.clear()
 
     def loadonce(self, url):
+        """load video through DLNA from url for once"""
         try:
             while self.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
                 self.dmr.stop()
@@ -269,6 +270,7 @@ def time_to_second(time_str):
 
 
 def get_size(*filename):
+    """get file size in human read format from file"""
     size = os.path.getsize('%s/%s' % (VIDEO_PATH, ''.join(filename)))
     if size < 0:
         return 'Out of Range'
@@ -280,6 +282,7 @@ def get_size(*filename):
 
 
 def hist_load(name):
+    """load history from database"""
     position = run_sql('select POSITION from history where FILENAME=?', name)
     # if len(position) == 0:
     if not position:
@@ -288,6 +291,7 @@ def hist_load(name):
 
 
 def save_history(src, position, duration):
+    """save play history to database"""
     if float(position) < 10:
         return
     run_sql('''replace into history (FILENAME, POSITION, DURATION, LATEST_DATE)
@@ -295,11 +299,11 @@ def save_history(src, position, duration):
 
 
 def check_dmr_exist(func):
+    """Decorator: check DMR is available before do something relate to DLNA"""
     def no_dmr(self, *args, **kwargs):
         if not TRACKER.dmr:
-            # return 'Error: No DMR.'
             self.finish('Error: No DMR.')
-            return
+            return None
         return func(self, *args, **kwargs)
     return no_dmr
 
