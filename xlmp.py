@@ -272,7 +272,8 @@ def get_size(*filename):
 
 def hist_load(name):
     position = run_sql('select POSITION from history where FILENAME=?', name)
-    if len(position) == 0:
+    # if len(position) == 0:
+    if not position:
         return 0
     return position[0][0]
 
