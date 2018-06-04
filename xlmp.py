@@ -171,25 +171,25 @@ class DLNALoader(Thread):
     def run(self):
         while self._running.isSet():
             self._flag.wait()
-            tracker.pause()
+            TRACKER.pause()
             sleep(0.5)
             url = self._url
-            if tracker.loadonce(url):
+            if TRACKER.loadonce(url):
                 logging.info('Loaded url: %s successed', url)
                 src = unquote(re.sub('http://.*/video/', '', url))
                 position = hist_load(src)
                 if position:
-                    tracker.dmr.seek(second_to_time(position))
+                    TRACKER.dmr.seek(second_to_time(position))
                     logging.info('Loaded position: %s', second_to_time(position))
                 logging.info('Load Successed.')
-                tracker.state['CurrentTransportState'] = 'Load Successed.'
+                TRACKER.state['CurrentTransportState'] = 'Load Successed.'
                 if url == self._url:
                     self._flag.clear()
             else:
                 self._failure += 1
                 if self._failure >= 3:
                     self._flag.clear()
-            tracker.resume()
+            TRACKER.resume()
             logging.info('tracker resume')
 
     def stop(self):
@@ -290,7 +290,7 @@ def save_history(src, position, duration):
 
 def check_dmr_exist(func):
     def no_dmr(self, *args, **kwargs):
-        if not tracker.dmr:
+        if not TRACKER.dmr:
             # return 'Error: No DMR.'
             self.finish('Error: No DMR.')
             return
@@ -313,7 +313,7 @@ def get_next_file(src):
 
 class IndexHandler(tornado.web.RequestHandler):
     def get(self):
-        if tracker.dmr:
+        if TRACKER.dmr:
             dlna_style = 'btn-success'
         else:
             dlna_style = ''
@@ -323,7 +323,7 @@ class IndexHandler(tornado.web.RequestHandler):
 class DlnaPlayerHandler(tornado.web.RequestHandler):
     """DLNA player page"""
     def get(self):
-        if tracker.dmr:
+        if TRACKER.dmr:
             dlna_style = 'btn-success'
         else:
             dlna_style = ''
@@ -397,7 +397,7 @@ class DlnaLoadHandler(tornado.web.RequestHandler):
             logging.warning('File not found: %s', src)
             self.finish('Error: File not found.')
             return
-        logging.info('start loading... tracker state:%s', tracker.state.get('CurrentTransportState'))
+        logging.info('start loading... tracker state:%s', TRACKER.state.get('CurrentTransportState'))
         url = 'http://%s/video/%s' % (self.request.headers['Host'], quote(src))
         LOADER.load(url)
         self.finish('loading %s' % src)
@@ -406,10 +406,10 @@ class DlnaLoadHandler(tornado.web.RequestHandler):
 class DlnaNextHandler(tornado.web.RequestHandler):
     @check_dmr_exist
     def get(self):
-        if not tracker.state.get('TrackURI'):
+        if not TRACKER.state.get('TrackURI'):
             self.finish('No current url')
             return
-        next_file = get_next_file(tracker.state['TrackURI'])
+        next_file = get_next_file(TRACKER.state['TrackURI'])
         logging.info('next file recognized: %s', next_file)
         if next_file:
             url = 'http://%s/video/%s' % (self.request.headers['Host'], quote(next_file))
@@ -425,10 +425,10 @@ class DlnaHandler(tornado.web.RequestHandler):
         print(args)
         self.write('opt: %s' % opt)
         if opt in ('play', 'pause', 'stop'):
-            method = getattr(tracker.dmr, opt)
+            method = getattr(TRACKER.dmr, opt)
             ret = method()
         elif opt == 'seek':
-            ret = tracker.dmr.seek(args)
+            ret = TRACKER.dmr.seek(args)
         else:
             return
         if ret:
@@ -439,21 +439,21 @@ class DlnaHandler(tornado.web.RequestHandler):
 
 class DlnaInfoHandler(tornado.web.RequestHandler):
     def get(self):
-        self.finish(tracker.state)
+        self.finish(TRACKER.state)
 
 
 class DlnaVolumeControlHandler(tornado.web.RequestHandler):
     """Tune volume through DLNA"""
     @check_dmr_exist
     def get(self, opt):
-        vol = int(tracker.dmr.get_volume())
+        vol = int(TRACKER.dmr.get_volume())
         if opt == 'up':
             vol += 1
         elif opt == 'down':
             vol -= 1
         if not 0 <= vol <= 100:
             self.finish('volume range exceeded')
-        elif tracker.dmr.volume(vol):
+        elif TRACKER.dmr.volume(vol):
             self.finish(str(vol))
         else:
             self.finish('failed')
@@ -482,7 +482,7 @@ class SystemCommandHandler(tornado.web.RequestHandler):
 
 class SetDmrHandler(tornado.web.RequestHandler):
     def get(self, dmr):
-        if tracker.set_dmr(dmr):
+        if TRACKER.set_dmr(dmr):
             self.finish('Done.')
         else:
             self.finish('Error: Failed!')
@@ -490,7 +490,7 @@ class SetDmrHandler(tornado.web.RequestHandler):
 
 class SearchDmrHandler(tornado.web.RequestHandler):
     def get(self):
-        tracker.discover_dmr()
+        TRACKER.discover_dmr()
 
 
 class TestHandler(tornado.web.RequestHandler):
@@ -514,10 +514,10 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
         last_message = ''
         while self._running:
             # logging.info(self.executor._work_queue.unfinished_tasks)
-            if last_message != tracker.state:
-                self.write_message(tracker.state)
-                # logging.info(tracker.state.get('RelTime'))
-                last_message = tracker.state.copy()
+            if last_message != TRACKER.state:
+                self.write_message(TRACKER.state)
+                # logging.info(TRACKER.state.get('RelTime'))
+                last_message = TRACKER.state.copy()
             sleep(0.2)
 
     def on_message(self, message):
@@ -567,8 +567,8 @@ run_sql('''create table if not exists history
                 POSITION float not null,
                 DURATION float, LATEST_DATE datetime not null);''')
 # initialize dlna threader
-tracker = DMRTracker()
-tracker.start()
+TRACKER = DMRTracker()
+TRACKER.start()
 LOADER = DLNALoader()
 LOADER.start()
 
