@@ -520,7 +520,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
 
     @tornado.gen.coroutine
     @tornado.concurrent.run_on_executor
-    def open(self):
+    def open(self, *args, **kwargs):
         logging.info('ws connected: %s', self.request.remote_ip)
         last_message = ''
         while self._running:
