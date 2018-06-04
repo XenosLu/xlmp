@@ -404,7 +404,7 @@ class DlnaLoadHandler(tornado.web.RequestHandler):
             logging.warning('File not found: %s', src)
             self.finish('Error: File not found.')
             return
-        logging.info('start loading... tracker state:%s', TRACKER.state.get('CurrentTransportState'))
+        logging.info('start loading...tracker state:%s', TRACKER.state.get('CurrentTransportState'))
         url = 'http://%s/video/%s' % (self.request.headers['Host'], quote(src))
         LOADER.load(url)
         self.finish('loading %s' % src)
