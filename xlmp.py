@@ -46,6 +46,7 @@ class DMRTracker(Thread):
         logging.info('DMR Tracker initialized.')
 
     def discover_dmr(self):
+        """Discover DMRs from local network"""
         logging.debug('Starting DMR search...')
         if self.dmr:
             logging.info('Current DMR: %s', self.dmr)
@@ -316,6 +317,7 @@ class IndexHandler(tornado.web.RequestHandler):
 
 
 class DlnaPlayerHandler(tornado.web.RequestHandler):
+    """DLNA player page"""
     def get(self):
         if tracker.dmr:
             dlna_style = 'btn-success'
@@ -506,15 +508,12 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     def open(self):
         logging.info('ws connected: %s', self.request.remote_ip)
         last_message = ''
-        # n = 0  # test
         while self._running:
-            # n += 1  # test
             # logging.info(self.executor._work_queue.unfinished_tasks)
             if last_message != tracker.state:
                 self.write_message(tracker.state)
                 # logging.info(tracker.state.get('RelTime'))
                 last_message = tracker.state.copy()
-            # self.write_message({"RelTime":"00:22:%d" % n})  # test
             sleep(0.2)
 
     def on_message(self, message):
@@ -522,7 +521,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
         # logging.info('receive: %s' % message)
 
     def on_close(self):
-        logging.info('ws close: %s' % self.request.remote_ip)
+        logging.info('ws close: %s', self.request.remote_ip)
         self._running = False
 # context arrangement (to-do)
 # /sys/
