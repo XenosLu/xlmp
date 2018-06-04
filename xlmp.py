@@ -66,6 +66,7 @@ class DMRTracker(Thread):
         return False
 
     def get_transport_state(self):
+        """get transport state through DLNA"""
         info = self.dmr.info()
         if info:
             self.state['CurrentTransportState'] = info.get('CurrentTransportState')
@@ -75,7 +76,7 @@ class DMRTracker(Thread):
     def get_position_info(self):
         position_info = self.dmr.position_info()
         if not position_info:
-            return
+            return None
         for key in ('RelTime', 'TrackDuration'):
             self.state[key] = position_info[key]
         if self.state.get('CurrentTransportState') == 'PLAYING':
