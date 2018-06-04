@@ -449,7 +449,7 @@ class DlnaHandler(tornado.web.RequestHandler):
 
 
 class DlnaInfoHandler(tornado.web.RequestHandler):
-    def get(self):
+    def get(self, *args, **kwargs):
         self.finish(TRACKER.state)
 
 
@@ -471,7 +471,13 @@ class DlnaVolumeControlHandler(tornado.web.RequestHandler):
 
 
 class SystemCommandHandler(tornado.web.RequestHandler):
-    def get(self, opt=None):
+    def get(self, *args, **kwargs):
+        # logging.info(args)
+        # logging.info(kwargs)
+        # logging.info()
+        opt = kwargs.get('opt')
+        # return
+    # def get(self, opt=None):
         if opt == 'update':
             if sys.platform == 'linux':
                 if os.system('git pull') == 0:
@@ -500,13 +506,13 @@ class SetDmrHandler(tornado.web.RequestHandler):
 
 
 class SearchDmrHandler(tornado.web.RequestHandler):
-    def get(self):
+    def get(self, *args, **kwargs):
         TRACKER.discover_dmr()
 
 
 class TestHandler(tornado.web.RequestHandler):
     # @tornado.gen.coroutine
-    def get(self):
+    def get(self, *args, **kwargs):
         self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Content-Type', 'text/event-stream')
         self.set_header('Cache-Control', 'no-cache')
