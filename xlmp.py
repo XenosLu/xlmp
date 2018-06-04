@@ -227,15 +227,15 @@ def ls_dir(path):
         if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
             list_folder.append({'filename': filename, 'type': 'folder',
                                 'path': '%s%s' % (path, filename)})
-        elif re.match('.*\.((?i)mp)4$', filename):
+        elif re.match('.*\\.((?i)mp)4$', filename):
             list_mp4.append({'filename': filename, 'type': 'mp4',
                              'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-        elif re.match('.*\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
+        elif re.match('.*\\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
             list_video.append({'filename': filename, 'type': 'video',
                                'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
         else:
             list_other.append({'filename': filename, 'type': 'other',
-                              'path': '%s%s' % (path, filename)})
+                               'path': '%s%s' % (path, filename)})
     return {'filesystem': (up + list_folder + list_mp4 + list_video + list_other)}
 
 
