@@ -395,7 +395,7 @@ class DlnaLoadHandler(tornado.web.RequestHandler):
             return
         logging.info('start loading... tracker state:%s', tracker.state.get('CurrentTransportState'))
         url = 'http://%s/video/%s' % (self.request.headers['Host'], quote(src))
-        loader.load(url)
+        LOADER.load(url)
         self.finish('loading %s' % src)
 
 
@@ -409,7 +409,7 @@ class DlnaNextHandler(tornado.web.RequestHandler):
         logging.info('next file recognized: %s', next_file)
         if next_file:
             url = 'http://%s/video/%s' % (self.request.headers['Host'], quote(next_file))
-            loader.load(url)
+            LOADER.load(url)
             # dlna_load(next_file)
         else:
             self.finish("Can't get next file")
@@ -565,8 +565,8 @@ run_sql('''create table if not exists history
 # initialize dlna threader
 tracker = DMRTracker()
 tracker.start()
-loader = DLNALoader()
-loader.start()
+LOADER = DLNALoader()
+LOADER.start()
 
 
 if __name__ == "__main__":
