@@ -210,6 +210,7 @@ class DLNALoader(Thread):
 
 
 def run_sql(sql, *args):
+    """run sql through sqlite3"""
     with sqlite3.connect(HISTORY_DB_FILE) as conn:
         try:
             cursor = conn.execute(sql, args)
@@ -308,7 +309,8 @@ def check_dmr_exist(func):
     return no_dmr
 
 
-def get_next_file(src):
+def get_next_file(src):  # not strict enough
+    """get next related video file"""
     fullname = '%s/%s' % (VIDEO_PATH, src)
     filepath = os.path.dirname(fullname)
     dirs = sorted([i for i in os.listdir(filepath)
