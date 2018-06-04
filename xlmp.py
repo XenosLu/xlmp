@@ -322,7 +322,8 @@ def get_next_file(src):
 
 
 class IndexHandler(tornado.web.RequestHandler):
-    def get(self):
+    """index web page"""
+    def get(self, *args, **kwargs):
         if TRACKER.dmr:
             dlna_style = 'btn-success'
         else:
@@ -332,7 +333,7 @@ class IndexHandler(tornado.web.RequestHandler):
 
 class DlnaPlayerHandler(tornado.web.RequestHandler):
     """DLNA player page"""
-    def get(self):
+    def get(self, *args, **kwargs):
         if TRACKER.dmr:
             dlna_style = 'btn-success'
         else:
@@ -416,7 +417,7 @@ class DlnaLoadHandler(tornado.web.RequestHandler):
 
 class DlnaNextHandler(tornado.web.RequestHandler):
     @check_dmr_exist
-    def get(self):
+    def get(self, *args, **kwargs):
         if not TRACKER.state.get('TrackURI'):
             self.finish('No current url')
             return
@@ -432,14 +433,18 @@ class DlnaNextHandler(tornado.web.RequestHandler):
 
 class DlnaHandler(tornado.web.RequestHandler):
     @check_dmr_exist
-    def get(self, opt, args):
-        print(args)
+    def get(self, *args, **kwargs):
+        opt = kwargs.get('opt')
+        # progress = kwargs.get('progress')
+    # def get(self, opt, progress):
+        # print(progress)
         self.write('opt: %s' % opt)
         if opt in ('play', 'pause', 'stop'):
             method = getattr(TRACKER.dmr, opt)
             ret = method()
         elif opt == 'seek':
-            ret = TRACKER.dmr.seek(args)
+            # ret = TRACKER.dmr.seek(progress)
+            ret = TRACKER.dmr.seek(kwargs.get('progress'))
         else:
             return
         if ret:
@@ -454,9 +459,11 @@ class DlnaInfoHandler(tornado.web.RequestHandler):
 
 
 class DlnaVolumeControlHandler(tornado.web.RequestHandler):
-    """Tune volume through DLNA"""
+    """Tune volume through DLNA web interface"""
     @check_dmr_exist
-    def get(self, opt):
+    def get(self, *args, **kwargs):
+        opt = kwargs.get('opt')
+    # def get(self, opt):
         vol = int(TRACKER.dmr.get_volume())
         if opt == 'up':
             vol += 1
@@ -568,7 +575,7 @@ Handlers = [
     (r'/dlnavol/(?P<opt>\w*)', DlnaVolumeControlHandler),
     (r'/dlna/next', DlnaNextHandler),
     (r'/dlna/load/(?P<src>.*)', DlnaLoadHandler),
-    (r'/dlna/(?P<opt>\w*)/?(?P<args>.*)', DlnaHandler),
+    (r'/dlna/(?P<opt>\w*)/?(?P<progress>.*)', DlnaHandler),
     (r'/save/(?P<src>.*)', SaveHandler),
     (r'/play/(?P<src>.*)', WebPlayerHandler),
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
