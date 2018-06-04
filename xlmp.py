@@ -52,7 +52,8 @@ class DMRTracker(Thread):
             logging.info('Current DMR: %s', self.dmr)
         self.all_devices = discover(name='', ip='', timeout=3,
                                     st=URN_AVTransport_Fmt, ssdp_version=1)
-        if len(self.all_devices) > 0:
+        # if len(self.all_devices) > 0:
+        if self.all_devices:
             self.dmr = self.all_devices[0]
             logging.info('Found DMR device: %s', self.dmr)
 
