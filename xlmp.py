@@ -6,7 +6,7 @@ import re
 import shutil
 import sqlite3
 import sys
-import socket
+# import socket
 import logging
 
 from threading import Thread, Event
@@ -56,6 +56,7 @@ class DMRTracker(Thread):
             logging.info('Found DMR device: %s' % self.dmr)
 
     def set_dmr(self, str_dmr):
+        """set one of the DMRs as current DMR"""
         for i in self.all_devices:
             if str(i) == str_dmr:
                 self.dmr = i
@@ -228,15 +229,14 @@ def ls_dir(path):
                                 'path': '%s%s' % (path, filename)})
         elif re.match('.*\.((?i)mp)4$', filename):
             list_mp4.append({'filename': filename, 'type': 'mp4',
-                            'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+                             'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
         elif re.match('.*\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
             list_video.append({'filename': filename, 'type': 'video',
                                'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
         else:
             list_other.append({'filename': filename, 'type': 'other',
                               'path': '%s%s' % (path, filename)})
-                              # 'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-    return ({'filesystem': (up + list_folder + list_mp4 + list_video + list_other)})
+    return {'filesystem': (up + list_folder + list_mp4 + list_video + list_other)}
 
 
 def second_to_time(second):
@@ -529,7 +529,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
 # /fs/
 # /dlna/
 # /wp/ # web player
-# 
+
 Handlers = [
     (r'/', IndexHandler),
     (r'/dlna', DlnaPlayerHandler),
