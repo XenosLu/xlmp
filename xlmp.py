@@ -197,10 +197,12 @@ class DLNALoader(Thread):
             logging.info('tracker resume')
 
     def stop(self):
+        """stop loader thread"""
         self._flag.set()
         self._running.clear()
 
     def load(self, url):
+        """Load video through DLNA from URL """
         self._url = url
         self._failure = 0
         self._flag.set()
@@ -356,7 +358,7 @@ class HistoryHandler(tornado.web.RequestHandler):
         self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
                                   'latest_date': s[3], 'path': os.path.dirname(s[0])}
                                  for s in run_sql('select * from history order by LATEST_DATE desc'
-                                 )]})
+                 )]})
 
 
 class FileSystemListHandler(tornado.web.RequestHandler):
