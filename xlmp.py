@@ -471,6 +471,7 @@ class DlnaVolumeControlHandler(tornado.web.RequestHandler):
 
 
 class SystemCommandHandler(tornado.web.RequestHandler):
+    """some system maintainence command web interface"""
     def get(self, *args, **kwargs):
         # logging.info(args)
         # logging.info(kwargs)
@@ -498,8 +499,10 @@ class SystemCommandHandler(tornado.web.RequestHandler):
 
 
 class SetDmrHandler(tornado.web.RequestHandler):
-    def get(self, dmr):
-        if TRACKER.set_dmr(dmr):
+    """set dmr web interface"""
+    def get(self, *args, **kwargs):
+    # def get(self, dmr):
+        if TRACKER.set_dmr(kwargs.get('dmr')):
             self.finish('Done.')
         else:
             self.finish('Error: Failed!')
