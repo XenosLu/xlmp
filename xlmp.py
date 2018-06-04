@@ -48,12 +48,12 @@ class DMRTracker(Thread):
     def discover_dmr(self):
         logging.debug('Starting DMR search...')
         if self.dmr:
-            logging.info('Current DMR: %s' % self.dmr)
+            logging.info('Current DMR: %s', self.dmr)
         self.all_devices = discover(name='', ip='', timeout=3,
                                     st=URN_AVTransport_Fmt, ssdp_version=1)
         if len(self.all_devices) > 0:
             self.dmr = self.all_devices[0]
-            logging.info('Found DMR device: %s' % self.dmr)
+            logging.info('Found DMR device: %s', self.dmr)
 
     def set_dmr(self, str_dmr):
         """set one of the DMRs as current DMR"""
@@ -94,11 +94,11 @@ class DMRTracker(Thread):
                 self.state['DMRs'] = [str(i) for i in self.all_devices]
                 if self.get_transport_state() and not sleep(0.1) and self.get_position_info():
                     if self._failure > 0:
-                        logging.info('reset failure count from %d to 0' % self._failure)
+                        logging.info('reset failure count from %d to 0', self._failure)
                         self._failure = 0
                 else:
                     self._failure += 1
-                    logging.warning('Losing DMR count: %d' % self._failure)
+                    logging.warning('Losing DMR count: %d', self._failure)
                     if self._failure >= 3:
                         logging.info('No DMR currently.')
                         self.state = {}
@@ -125,9 +125,9 @@ class DMRTracker(Thread):
                 logging.info('Waiting for DMR stopped...')
                 sleep(0.85)
             if self.dmr.set_current_media(url):
-                logging.info('Loaded %s' % url)
+                logging.info('Loaded %s', url)
             else:
-                logging.warning('Load url failed: %s' % url)
+                logging.warning('Load url failed: %s', url)
                 return False
             time0 = time()
             while self.get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
@@ -142,7 +142,7 @@ class DMRTracker(Thread):
             logging.info('checking duration to make sure loaded...')
             while self.dmr.position_info().get('TrackDuration') == '00:00:00':
                 sleep(0.5)
-                logging.info('Waiting for duration to be recognized correctly, url=%s' % url)
+                logging.info('Waiting for duration to be recognized correctly, url=%s', url)
                 if (time() - time0) > 15:
                     logging.info('Load duration timeout')
                     return False
@@ -171,12 +171,12 @@ class DLNALoader(Thread):
             sleep(0.5)
             url = self._url
             if tracker.loadonce(url):
-                logging.info('Loaded url: %s successed' % url)
+                logging.info('Loaded url: %s successed', url)
                 src = unquote(re.sub('http://.*/video/', '', url))
                 position = hist_load(src)
                 if position:
                     tracker.dmr.seek(second_to_time(position))
-                    logging.info('Loaded position: %s' % second_to_time(position))
+                    logging.info('Loaded position: %s', second_to_time(position))
                 logging.info('Load Successed.')
                 tracker.state['CurrentTransportState'] = 'Load Successed.'
                 if url == self._url:
@@ -220,7 +220,7 @@ def ls_dir(path):
         up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
         if not path.endswith('/'):
             path = '%s/' % path
-    dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))  # path could be either path or path/
+    dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))
     for filename in dir_list:
         if filename.startswith('.'):
             continue
@@ -367,7 +367,7 @@ class FileSystemMoveHandler(tornado.web.RequestHandler):
         try:
             shutil.move(filename, dir_old)  # gonna do something when file is occupied
         except Exception as e:
-            logging.warning('move file failed: %s' % e)
+            logging.warning('move file failed: %s', e)
             raise tornado.web.HTTPError(404, reason=str(e))
             # raise tornado.web.HTTPError(404)
         self.finish(ls_dir('%s/' % os.path.dirname(src)))
@@ -388,10 +388,10 @@ class DlnaLoadHandler(tornado.web.RequestHandler):
     @check_dmr_exist
     def get(self, src):
         if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
-            logging.warning('File not found: %s' % src)
+            logging.warning('File not found: %s', src)
             self.finish('Error: File not found.')
             return
-        logging.info('start loading... tracker state:%s' % tracker.state.get('CurrentTransportState'))
+        logging.info('start loading... tracker state:%s', tracker.state.get('CurrentTransportState'))
         url = 'http://%s/video/%s' % (self.request.headers['Host'], quote(src))
         loader.load(url)
         self.finish('loading %s' % src)
@@ -404,7 +404,7 @@ class DlnaNextHandler(tornado.web.RequestHandler):
             self.finish('No current url')
             return
         next_file = get_next_file(tracker.state['TrackURI'])
-        logging.info('next file recognized: %s' % next_file)
+        logging.info('next file recognized: %s', next_file)
         if next_file:
             url = 'http://%s/video/%s' % (self.request.headers['Host'], quote(next_file))
             loader.load(url)
@@ -504,7 +504,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     @tornado.gen.coroutine
     @tornado.concurrent.run_on_executor
     def open(self):
-        logging.info('ws connected: %s' % self.request.remote_ip)
+        logging.info('ws connected: %s', self.request.remote_ip)
         last_message = ''
         # n = 0  # test
         while self._running:
