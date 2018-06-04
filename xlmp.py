@@ -70,7 +70,7 @@ class DMRTracker(Thread):
         if info:
             self.state['CurrentTransportState'] = info.get('CurrentTransportState')
             return info.get('CurrentTransportState')
-        return
+        return None
 
     def get_position_info(self):
         position_info = self.dmr.position_info()
