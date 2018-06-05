@@ -534,13 +534,14 @@ class TestHandler(tornado.web.RequestHandler):
     """test only"""
     # @tornado.gen.coroutine
     def get(self, *args, **kwargs):
-        self.set_header('Access-Control-Allow-Origin', '*')
-        self.set_header('Content-Type', 'text/event-stream')
-        self.set_header('Cache-Control', 'no-cache')
+        # self.set_header('Access-Control-Allow-Origin', '*')
+        # self.set_header('Content-Type', 'text/event-stream')
+        # self.set_header('Cache-Control', 'no-cache')
         logging.info(self.request.headers)
         logging.info(self.request.remote_ip)
-        self.write('data: xxx %s\n\n' % time())
+        # self.write('data: xxx %s\n\n' % time())
         # yield self.flush()
+        self.write('test')
 
 
 class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
@@ -594,13 +595,14 @@ Handlers = [
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
 ]
 
-settings = {
+SETTINGS = {
     'static_path': 'static',
     'template_path': 'views',
     'gzip': True,
+    'xheaders': True
     # "debug": True,
 }
-application = tornado.web.Application(Handlers, **settings)
+application = tornado.web.Application(Handlers, **SETTINGS)
 # initialize DataBase
 run_sql('''create table if not exists history
                 (FILENAME text PRIMARY KEY not null,
