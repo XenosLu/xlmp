@@ -415,6 +415,7 @@ class SaveHandler(tornado.web.RequestHandler):
 
 
 class DlnaLoadHandler(tornado.web.RequestHandler):
+    """DLNA load file web interface"""
     @check_dmr_exist
     def get(self, *args, **kwargs):
         src = kwargs.get('src')
@@ -430,6 +431,7 @@ class DlnaLoadHandler(tornado.web.RequestHandler):
 
 
 class DlnaNextHandler(tornado.web.RequestHandler):
+    """DLNA jump to next video file web interface"""
     @check_dmr_exist
     def get(self, *args, **kwargs):
         if not TRACKER.state.get('TrackURI'):
@@ -446,6 +448,7 @@ class DlnaNextHandler(tornado.web.RequestHandler):
 
 
 class DlnaHandler(tornado.web.RequestHandler):
+    """DLNA operation web interface"""
     @check_dmr_exist
     def get(self, *args, **kwargs):
         opt = kwargs.get('opt')
@@ -468,6 +471,7 @@ class DlnaHandler(tornado.web.RequestHandler):
 
 
 class DlnaInfoHandler(tornado.web.RequestHandler):
+    """old version of DLNA info retrieve web interface replaced by web socket"""
     def get(self, *args, **kwargs):
         self.finish(TRACKER.state)
 
@@ -530,11 +534,13 @@ class SetDmrHandler(tornado.web.RequestHandler):
 
 
 class SearchDmrHandler(tornado.web.RequestHandler):
+    """Mannually search DMR web interface"""
     def get(self, *args, **kwargs):
         TRACKER.discover_dmr()
 
 
 class TestHandler(tornado.web.RequestHandler):
+    """test only"""
     # @tornado.gen.coroutine
     def get(self, *args, **kwargs):
         self.set_header('Access-Control-Allow-Origin', '*')
@@ -545,6 +551,7 @@ class TestHandler(tornado.web.RequestHandler):
 
 
 class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
+    """DLNA info retriever use web socket"""
     executor = ThreadPoolExecutor(9)
     _running = True
 
