@@ -319,6 +319,7 @@ def get_next_file(src):  # not strict enough
         next_index = 0
     if next_index < len(dirs):
         return '%s/%s' % (os.path.dirname(src), dirs[next_index])
+    return None
 
 
 class IndexHandler(tornado.web.RequestHandler):
@@ -364,7 +365,7 @@ class HistoryHandler(tornado.web.RequestHandler):
         elif opt == 'rm':
             run_sql('delete from history where FILENAME=?', unquote(kwargs.get('src')))
         else:
-            raise tornado.web.HTTPError(404)
+            raise tornado.web.HTTPError(404, reason='illegal operation')
         self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
                                   'latest_date': s[3], 'path': os.path.dirname(s[0])}
                                  for s in run_sql('select * from history order by LATEST_DATE desc'
@@ -374,10 +375,7 @@ class HistoryHandler(tornado.web.RequestHandler):
 class FileSystemListHandler(tornado.web.RequestHandler):
     """Get static folder list in json"""
     def get(self, *args, **kwargs):
-        # path = kwargs.get('path')
-    # def get(self, path):
         try:
-            # self.finish(ls_dir(path))
             self.finish(ls_dir(kwargs.get('path')))
         except Exception as e:
             raise tornado.web.HTTPError(404, reason=str(e))
@@ -387,7 +385,6 @@ class FileSystemMoveHandler(tornado.web.RequestHandler):
     """Move file to '.old' folder"""
     def get(self, *args, **kwargs):
         src = kwargs.get('src')
-    # def get(self, src):
         filename = '%s/%s' % (VIDEO_PATH, src)
         dir_old = '%s/%s/.old' % (VIDEO_PATH, os.path.dirname(src))
         if not os.path.exists(dir_old):
@@ -397,7 +394,6 @@ class FileSystemMoveHandler(tornado.web.RequestHandler):
         except Exception as e:
             logging.warning('move file failed: %s', e)
             raise tornado.web.HTTPError(404, reason=str(e))
-            # raise tornado.web.HTTPError(404)
         self.finish(ls_dir('%s/' % os.path.dirname(src)))
 
 
@@ -442,7 +438,6 @@ class DlnaNextHandler(tornado.web.RequestHandler):
         if next_file:
             url = 'http://%s/video/%s' % (self.request.headers['Host'], quote(next_file))
             LOADER.load(url)
-            # dlna_load(next_file)
         else:
             self.finish("Can't get next file")
 
@@ -481,7 +476,6 @@ class DlnaVolumeControlHandler(tornado.web.RequestHandler):
     @check_dmr_exist
     def get(self, *args, **kwargs):
         opt = kwargs.get('opt')
-    # def get(self, opt):
         vol = int(TRACKER.dmr.get_volume())
         if opt == 'up':
             vol += 1
@@ -498,12 +492,7 @@ class DlnaVolumeControlHandler(tornado.web.RequestHandler):
 class SystemCommandHandler(tornado.web.RequestHandler):
     """some system maintainence command web interface"""
     def get(self, *args, **kwargs):
-        # logging.info(args)
-        # logging.info(kwargs)
-        # logging.info()
         opt = kwargs.get('opt')
-        # return
-    # def get(self, opt=None):
         if opt == 'update':
             if sys.platform == 'linux':
                 if os.system('git pull') == 0:
@@ -554,7 +543,6 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     """DLNA info retriever use web socket"""
     executor = ThreadPoolExecutor(9)
     _running = True
-
     @tornado.gen.coroutine
     @tornado.concurrent.run_on_executor
     def open(self, *args, **kwargs):
