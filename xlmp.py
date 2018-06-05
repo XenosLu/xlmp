@@ -300,6 +300,7 @@ def save_history(src, position, duration):
 def check_dmr_exist(func):
     """Decorator: check DMR is available before do something relate to DLNA"""
     def no_dmr(self, *args, **kwargs):
+        """check if DMR exist"""
         if not TRACKER.dmr:
             self.finish('Error: No DMR.')
             return None
