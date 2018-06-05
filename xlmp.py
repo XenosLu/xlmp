@@ -406,10 +406,12 @@ class SaveHandler(tornado.web.RequestHandler):
     executor = ThreadPoolExecutor(9)
     @tornado.gen.coroutine
     @tornado.concurrent.run_on_executor
-    def post(self, src):
+    def post(self, *args, **kwargs):
+        # src = kwargs.get('src')
+    # def post(self, src):
         position = self.get_argument('position', 0)
         duration = self.get_argument('duration', 0)
-        save_history(src, position, duration)
+        save_history(kwargs.get('src'), position, duration)
 
 
 class DlnaLoadHandler(tornado.web.RequestHandler):
