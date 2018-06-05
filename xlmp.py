@@ -600,7 +600,6 @@ SETTINGS = {
     'static_path': 'static',
     'template_path': 'views',
     'gzip': True,
-    'xheaders': True
     # "debug": True,
 }
 application = tornado.web.Application(Handlers, **SETTINGS)
@@ -619,8 +618,7 @@ LOADER.start()
 if __name__ == "__main__":
     if sys.platform == 'win32':
         os.system('start http://127.0.0.1:8888/')
-    # application.listen(8888, xheaders=True)
-    application.listen(8888)
+    application.listen(8888, xheaders=True)
     tornado.ioloop.IOLoop.instance().start()
 
 
