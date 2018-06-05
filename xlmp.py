@@ -537,6 +537,8 @@ class TestHandler(tornado.web.RequestHandler):
         self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Content-Type', 'text/event-stream')
         self.set_header('Cache-Control', 'no-cache')
+        logging.info(self.request.headers)
+        logging.info(self.request.remote_ip)
         self.write('data: xxx %s\n\n' % time())
         # yield self.flush()
 
