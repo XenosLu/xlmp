@@ -6,7 +6,6 @@ import re
 import shutil
 import sqlite3
 import sys
-# import socket
 import logging
 
 from threading import Thread, Event
@@ -52,7 +51,6 @@ class DMRTracker(Thread):
             logging.info('Current DMR: %s', self.dmr)
         self.all_devices = discover(name='', ip='', timeout=3,
                                     st=URN_AVTransport_Fmt, ssdp_version=1)
-        # if len(self.all_devices) > 0:
         if self.all_devices:
             self.dmr = self.all_devices[0]
             logging.info('Found DMR device: %s', self.dmr)
@@ -345,7 +343,9 @@ class DlnaPlayerHandler(tornado.web.RequestHandler):
 
 class WebPlayerHandler(tornado.web.RequestHandler):
     """Video play page"""
-    def get(self, src):
+    def get(self, *args, **kwargs):
+        src = kwargs.get('src')
+    # def get(self, src):
         if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
             self.redirect('/')
         self.render('player.tpl', dlna_style='', src=src, position=hist_load(src))
@@ -353,13 +353,16 @@ class WebPlayerHandler(tornado.web.RequestHandler):
 
 class HistoryHandler(tornado.web.RequestHandler):
     """Return play history list"""
-    def get(self, opt='ls', src=None):
+    def get(self, *args, **kwargs):
+        opt = kwargs.get('opt')
+        # src = kwargs.get('src')
+    # def get(self, opt='ls', src=None):
         if opt == 'ls':
             pass
         elif opt == 'clear':
             run_sql('delete from history')
         elif opt == 'rm':
-            run_sql('delete from history where FILENAME=?', unquote(src))
+            run_sql('delete from history where FILENAME=?', unquote(kwargs.get('src')))
         else:
             raise tornado.web.HTTPError(404)
         self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
@@ -370,16 +373,21 @@ class HistoryHandler(tornado.web.RequestHandler):
 
 class FileSystemListHandler(tornado.web.RequestHandler):
     """Get static folder list in json"""
-    def get(self, path):
+    def get(self, *args, **kwargs):
+        # path = kwargs.get('path')
+    # def get(self, path):
         try:
-            self.finish(ls_dir(path))
+            # self.finish(ls_dir(path))
+            self.finish(ls_dir(kwargs.get('path')))
         except Exception as e:
             raise tornado.web.HTTPError(404, reason=str(e))
 
 
 class FileSystemMoveHandler(tornado.web.RequestHandler):
     """Move file to '.old' folder"""
-    def get(self, src):
+    def get(self, *args, **kwargs):
+        src = kwargs.get('src')
+    # def get(self, src):
         filename = '%s/%s' % (VIDEO_PATH, src)
         dir_old = '%s/%s/.old' % (VIDEO_PATH, os.path.dirname(src))
         if not os.path.exists(dir_old):
@@ -406,7 +414,9 @@ class SaveHandler(tornado.web.RequestHandler):
 
 class DlnaLoadHandler(tornado.web.RequestHandler):
     @check_dmr_exist
-    def get(self, src):
+    def get(self, *args, **kwargs):
+        src = kwargs.get('src')
+    # def get(self, src):
         if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
             logging.warning('File not found: %s', src)
             self.finish('Error: File not found.')
