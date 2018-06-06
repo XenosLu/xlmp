@@ -259,9 +259,9 @@ def second_to_time(second):
 
     second: int value
     """
-    m, s = divmod(second, 60)
-    h, m = divmod(second/60, 60)
-    return '%02d:%02d:%06.3f' % (h, m, s)
+    min, sec = divmod(second, 60)
+    hour, min = divmod(second/60, 60)
+    return '%02d:%02d:%06.3f' % (hour, min, sec)
 
 
 def time_to_second(time_str):
