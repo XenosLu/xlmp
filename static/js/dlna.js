@@ -4,7 +4,7 @@ var wait = 0;
 
 $("#dlna_toggle").addClass("active");
 // $("#dlna_toggle").attr("href", "/");
-$("#dlna_toggle").attr("onclick", 'window.location.href = "/dlna";');
+$("#dlna_toggle").attr("onclick", 'window.location.href = "/";');
 
 // get_dmr_state();
 $(".dlna-show").show();
