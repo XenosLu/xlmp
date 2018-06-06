@@ -329,6 +329,9 @@ def get_next_file(src):  # not strict enough
 
 class IndexHandler(tornado.web.RequestHandler):
     """index web page"""
+    def data_received(self, chunk):
+        return
+
     def get(self, *args, **kwargs):
         if TRACKER.dmr:
             dlna_style = 'btn-success'
