@@ -232,8 +232,9 @@ def ls_dir(path):
     up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
     if path:
         up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
-        if not path.endswith('/'):
-            path = '%s/' % path
+        # if not path.endswith('/'):
+            # path = '%s/' % path
+        path = re.sub('([^/])$', '\\1/', path)  # make sure path end with '/'
     dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))
     for filename in dir_list:
         if filename.startswith('.'):
