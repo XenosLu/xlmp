@@ -215,10 +215,10 @@ def run_sql(sql, *args):
     with sqlite3.connect(HISTORY_DB_FILE) as conn:
         try:
             cursor = conn.execute(sql, args)
+            ret = cursor.fetchall()
         except Exception as exp:
             logging.warning(str(exp))
             return ()
-        ret = cursor.fetchall()
         cursor.close()
         if cursor.rowcount > 0:
             conn.commit()
