@@ -280,8 +280,8 @@ def get_size(*filename):
     elif size < 1024:
         return '%dB' % size
     unit = ' KMGTPEZYB'
-    l = min(int(math.floor(math.log(size, 1024))), 9)
-    return '%.1f%sB' % (size/1024.0**l, unit[l])
+    n = min(int(math.floor(math.log(size, 1024))), 9)
+    return '%.1f%sB' % (size/1024.0**n, unit[n])
 
 
 def hist_load(name):
