@@ -157,7 +157,8 @@ class DMRTracker(Thread):
                     return False
             logging.info(self.state)
         except Exception as e:
-            logging.warning('DLNA load exception: %s' % e, exc_info=True)
+            # logging.warning('DLNA load exception: %s' % e, exc_info=True)
+            logging.warning('DLNA load exception: %s', e, exc_info=True)
             return False
         return True
 
