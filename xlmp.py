@@ -156,9 +156,9 @@ class DMRTracker(Thread):
                     logging.info('Load duration timeout')
                     return False
             logging.info(self.state)
-        except Exception as e:
-            # logging.warning('DLNA load exception: %s' % e, exc_info=True)
-            logging.warning('DLNA load exception: %s', e, exc_info=True)
+        except Exception as exp:
+            # logging.warning('DLNA load exception: %s' % exp, exc_info=True)
+            logging.warning('DLNA load exception: %s', exp, exc_info=True)
             return False
         return True
 
@@ -219,8 +219,8 @@ def run_sql(sql, *args):
             cursor.close()
             if cursor.rowcount > 0:
                 conn.commit()
-        except Exception as e:
-            logging.warning(str(e))
+        except Exception as exp:
+            logging.warning(str(exp))
             ret = ()
     return ret
 
@@ -360,8 +360,6 @@ class HistoryHandler(tornado.web.RequestHandler):
     """Return play history list"""
     def get(self, *args, **kwargs):
         opt = kwargs.get('opt')
-        # src = kwargs.get('src')
-    # def get(self, opt='ls', src=None):
         if opt == 'ls':
             pass
         elif opt == 'clear':
@@ -381,8 +379,8 @@ class FileSystemListHandler(tornado.web.RequestHandler):
     def get(self, *args, **kwargs):
         try:
             self.finish(ls_dir(kwargs.get('path')))
-        except Exception as e:
-            raise tornado.web.HTTPError(404, reason=str(e))
+        except Exception as exp:
+            raise tornado.web.HTTPError(404, reason=str(exp))
 
 
 class FileSystemMoveHandler(tornado.web.RequestHandler):
@@ -395,9 +393,9 @@ class FileSystemMoveHandler(tornado.web.RequestHandler):
             os.mkdir(dir_old)
         try:
             shutil.move(filename, dir_old)  # gonna do something when file is occupied
-        except Exception as e:
-            logging.warning('move file failed: %s', e)
-            raise tornado.web.HTTPError(404, reason=str(e))
+        except Exception as exp:
+            logging.warning('move file failed: %s', exp)
+            raise tornado.web.HTTPError(404, reason=str(exp))
         self.finish(ls_dir('%s/' % os.path.dirname(src)))
 
 
@@ -407,8 +405,6 @@ class SaveHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     @tornado.concurrent.run_on_executor
     def post(self, *args, **kwargs):
-        # src = kwargs.get('src')
-    # def post(self, src):
         position = self.get_argument('position', 0)
         duration = self.get_argument('duration', 0)
         save_history(kwargs.get('src'), position, duration)
