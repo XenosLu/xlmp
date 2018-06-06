@@ -24,7 +24,7 @@ function CheckLink(){
     console.log(ws);
     //ws.send('test');
 }
-setInterval("CheckLink()", 2500);
+setInterval("CheckLink()", 1800);
 function dlnalink(){
     var ws = new WebSocket("ws://" + window.location.host + "/dlnalink");
     ws.onmessage = function(e) {
@@ -33,7 +33,9 @@ function dlnalink(){
         ws.send('got');
         if ($.isEmptyObject(data)) {
             $("#state").text('No DMR');
+            $("#dlna_toggle").removeClass("btn-success");
         } else {
+            $("#dlna_toggle").addClass("btn-success");
             reltime = timeToSecond(data["RelTime"]);
             if (update)
                 $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);

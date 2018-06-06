@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Cleanup SOCAT services and s6 event folder
+s6=/xlmp/docker/s6/
+
+rm -rf $(find $s6 -name 'event')
+rm -rf "$s6"SOCAT_*

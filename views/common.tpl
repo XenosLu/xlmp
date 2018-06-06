@@ -44,7 +44,9 @@
       <li><a href="#" onclick="rate(1)">1X</a></li>
       <li class="divider"></li>
       <li><a href="#" onclick="rate(1.5)">1.5X</a></li>
+      <li><a href="#" onclick="rate(1.75)">1.75X</a></li>
       <li><a href="#" onclick="rate(2)">2X</a></li>
+      <li><a href="#" onclick="rate(2.5)">2.5X</a></li>
       <li class="divider"></li>
       <li><a id="videosize">orign</a></li>
     </ul>

@@ -1,8 +1,17 @@
 var RANGE = 12;  //minimum touch move range in px
+var hide_sidebar = 0;
 
 window.onload = adapt;
 window.onresize = adapt;
-// $(document).mousemove(showSidebar);
+var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+if(!isiOS)
+    $(document).mousemove(showSidebar);
+
+function showSidebar(){
+    $("#sidebar").show();
+    clearTimeout(hide_sidebar);
+    hide_sidebar = setTimeout('$("#sidebar").hide()', 3000);
+}
 
 //buttons
 $("#clear").click(function () {
@@ -166,11 +175,13 @@ function history(str) {
                 var mediaType = "video";
                 if ((n["filename"]).lastIndexOf('.mp4') > 0)
                     mediaType = "mp4";
-                var td = new Array(4);
+                var td = new Array();
+                //var td = new Array(5);
                 td[0] = '<td class="folder" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-folder-close"></i></td>';
                 td[1] = '<td><i class="glyphicon glyphicon-film"></i></td>';
                 td[2] = '<td class="filelist '+ mediaType + '" title="' + n["filename"] + '">' + n["filename"] + "<br><small>" + n["latest_date"] + " | " + secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small></td>";
                 td[3] = '<td class="remove" title="' + n["filename"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i>' + "</td>";
+                //td[4] = '<td class="next" title="' + n["filename"] + '"><i class="glyphicon glyphicon-step-forward"></i></td>';
                 html += "<tr>" + td.join("") + "</tr>";
             });
             $('#list').empty().append(html);
