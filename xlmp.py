@@ -487,9 +487,8 @@ class DlnaVolumeControlHandler(tornado.web.RequestHandler):
 
 class SystemCommandHandler(tornado.web.RequestHandler):
     """some system maintainence command web interface"""
-    # def get(self, *args, **kwargs):
-    def get(self, *args, opt, **kwargs):
-        # opt = kwargs.get('opt')
+    def get(self, *args, **kwargs):
+        opt = kwargs.get('opt')
         if opt == 'update':
             if sys.platform == 'linux':
                 if os.system('git pull') == 0:
@@ -591,7 +590,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
 # /dlna/
 # /wp/ # web player
 
-Handlers = [
+HANDLERS = [
     (r'/', IndexHandler),
     (r'/dlna', DlnaPlayerHandler),
     (r'/fs/(?P<path>.*)', FileSystemListHandler),
@@ -618,7 +617,7 @@ SETTINGS = {
     'gzip': True,
     # "debug": True,
 }
-application = tornado.web.Application(Handlers, **SETTINGS)
+APP = tornado.web.Application(HANDLERS, **SETTINGS)
 # initialize DataBase
 run_sql('''create table if not exists history
                 (FILENAME text PRIMARY KEY not null,
@@ -634,5 +633,5 @@ LOADER.start()
 if __name__ == "__main__":
     if sys.platform == 'win32':
         os.system('start http://127.0.0.1:8888/')
-    application.listen(8888, xheaders=True)
+    APP.listen(8888, xheaders=True)
     tornado.ioloop.IOLoop.instance().start()
