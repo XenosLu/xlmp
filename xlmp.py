@@ -216,12 +216,12 @@ def run_sql(sql, *args):
         try:
             cursor = conn.execute(sql, args)
             ret = cursor.fetchall()
-            cursor.close()
-            if cursor.rowcount > 0:
-                conn.commit()
         except Exception as exp:
             logging.warning(str(exp))
-            ret = ()
+            return ()
+        cursor.close()
+        if cursor.rowcount > 0:
+            conn.commit()
     return ret
 
 
