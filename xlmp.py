@@ -231,10 +231,10 @@ def ls_dir(path):
         path = ''
     parent, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
     if path:
-        path = re.sub('([^/])$', '\\1/', path)  # make sure path end with '/'
-        parent = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
         # if not path.endswith('/'):
             # path = '%s/' % path
+        path = re.sub('([^/])$', '\\1/', path)  # make sure path end with '/'
+        parent = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]
     dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))
     for filename in dir_list:
         if filename.startswith('.'):
@@ -416,7 +416,6 @@ class DlnaLoadHandler(tornado.web.RequestHandler):
     @check_dmr_exist
     def get(self, *args, **kwargs):
         src = kwargs.get('src')
-    # def get(self, src):
         if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
             logging.warning('File not found: %s', src)
             self.finish('Error: File not found.')
@@ -448,15 +447,11 @@ class DlnaHandler(tornado.web.RequestHandler):
     @check_dmr_exist
     def get(self, *args, **kwargs):
         opt = kwargs.get('opt')
-        # progress = kwargs.get('progress')
-    # def get(self, opt, progress):
-        # print(progress)
         self.write('opt: %s' % opt)
         if opt in ('play', 'pause', 'stop'):
             method = getattr(TRACKER.dmr, opt)
             ret = method()
         elif opt == 'seek':
-            # ret = TRACKER.dmr.seek(progress)
             ret = TRACKER.dmr.seek(kwargs.get('progress'))
         else:
             return
@@ -492,8 +487,9 @@ class DlnaVolumeControlHandler(tornado.web.RequestHandler):
 
 class SystemCommandHandler(tornado.web.RequestHandler):
     """some system maintainence command web interface"""
-    def get(self, *args, **kwargs):
-        opt = kwargs.get('opt')
+    # def get(self, *args, **kwargs):
+    def get(self, *args, opt, **kwargs):
+        # opt = kwargs.get('opt')
         if opt == 'update':
             if sys.platform == 'linux':
                 if os.system('git pull') == 0:
@@ -510,7 +506,7 @@ class SystemCommandHandler(tornado.web.RequestHandler):
         elif opt == 'restore':  # restore history
             self.finish(shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE))
         else:
-            self.finish('no such operation')
+            raise tornado.web.HTTPError(403, reason='no such operation')
 # @post('/suspend')
 # def suspend():
     # """Suepend server"""
