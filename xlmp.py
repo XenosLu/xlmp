@@ -128,11 +128,11 @@ class DMRTracker(Thread):
 
     def loadonce(self, url):
         """load video through DLNA from url for once"""
+        while self.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
+            self.dmr.stop()
+            logging.info('Waiting for DMR stopped...')
+            sleep(0.85)
         try:
-            while self.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
-                self.dmr.stop()
-                logging.info('Waiting for DMR stopped...')
-                sleep(0.85)
             if self.dmr.set_current_media(url):
                 logging.info('Loaded %s', url)
             else:
