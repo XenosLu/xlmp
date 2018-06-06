@@ -229,12 +229,12 @@ def ls_dir(path):
     """list dir files in dict/json"""
     if path == '/':
         path = ''
-    up, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
+    parent, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
     if path:
-        up = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
+        path = re.sub('([^/])$', '\\1/', path)  # make sure path end with '/'
+        parent = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]  # path should be path/
         # if not path.endswith('/'):
             # path = '%s/' % path
-        path = re.sub('([^/])$', '\\1/', path)  # make sure path end with '/'
     dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))
     for filename in dir_list:
         if filename.startswith('.'):
@@ -251,7 +251,7 @@ def ls_dir(path):
         else:
             list_other.append({'filename': filename, 'type': 'other',
                                'path': '%s%s' % (path, filename)})
-    return {'filesystem': (up + list_folder + list_mp4 + list_video + list_other)}
+    return {'filesystem': (parent + list_folder + list_mp4 + list_video + list_other)}
 
 
 def second_to_time(second):
