@@ -18,6 +18,7 @@ import tornado.web
 import tornado.websocket
 
 from lib.dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
+
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 # sys.path = ['lib'] + sys.path  # added libpath
 # from lib.dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
@@ -287,7 +288,6 @@ def get_size(*filename):
 def hist_load(name):
     """load history from database"""
     position = run_sql('select POSITION from history where FILENAME=?', name)
-    # if len(position) == 0:
     if not position:
         return 0
     return position[0][0]
@@ -576,7 +576,6 @@ class SetDmrHandler(tornado.web.RequestHandler):
         return
 
     def get(self, *args, **kwargs):
-    # def get(self, dmr):
         if TRACKER.set_dmr(kwargs.get('dmr')):
             self.finish('Done.')
         else:
