@@ -631,12 +631,13 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
             sleep(0.2)
 
     def on_message(self, message):
-        return
         # logging.info('receive: %s' % message)
+        return
 
     def on_close(self):
         logging.info('ws close: %s', self.request.remote_ip)
         self._running = False
+
 # context arrangement (to-do)
 # /sys/
 # /fs/
