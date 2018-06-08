@@ -626,6 +626,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
             if last_message != TRACKER.state:
                 self.write_message(TRACKER.state)
                 # logging.info(TRACKER.state.get('RelTime'))
+                logging.info(TRACKER.state)
                 last_message = TRACKER.state.copy()
             sleep(0.2)
 
