@@ -25,6 +25,8 @@ Updated in 2018.02.08
     docker run -itd --net=host -v /home/user/media:/xlmp/media/ xenocider/xlmp
 ### /home/user/meida should be replace by your own media folder
 
+##known issue websocket function not works in tornado==5.0.2
+
 First developed in PHP, rewrote in Python3.
 ## Filelist:
 + LICENSE         license file 	
