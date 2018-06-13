@@ -613,8 +613,8 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     executor = ThreadPoolExecutor(20)
     _running = True
 
-    # def data_received(self, chunk):
-        # return
+    def data_received(self, chunk):
+        return
 
     @tornado.gen.coroutine
     @tornado.concurrent.run_on_executor
