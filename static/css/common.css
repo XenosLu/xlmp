@@ -77,6 +77,9 @@ input[type=range]::-moz-range-thumb {
     color: grey;
     min-width: 14em;
 }
+.filelist.folder {
+    color: black;
+}
 .filelist.mp4 {
     color: #337AB7;
 }
