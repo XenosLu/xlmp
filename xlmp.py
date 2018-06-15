@@ -382,7 +382,8 @@ class HistoryHandler(tornado.web.RequestHandler):
         else:
             raise tornado.web.HTTPError(404, reason='illegal operation')
         self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
-                                  'latest_date': s[3], 'path': os.path.dirname(s[0])}
+                                  'latest_date': s[3], 'path': os.path.dirname(s[0]), 
+                                  'exist': os.path.exists('%s/%s' % (VIDEO_PATH, s[0]))}
                                  for s in run_sql('select * from history order by LATEST_DATE desc'
                                                  )]})
 
