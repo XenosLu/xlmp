@@ -76,7 +76,7 @@
       </ul>
     </div>
     <div id="tabFrame" class="tab-pane fade in">
-      <table class="table table-striped table-responsive table-condensed">
+      <table class="table-striped table-responsive table-condensed">
         <tbody id="list">
         </tbody>
       </table>
