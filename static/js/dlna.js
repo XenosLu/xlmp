@@ -20,12 +20,13 @@ var ws;
 ws = dlnalink();
 
 function CheckLink(){
+    console.log(ws.readyState);
     if(ws.readyState == 3)
         ws = dlnalink();
-    //console.log(ws);
+    console.log(ws);
     //ws.send('test');
 }
-setInterval("CheckLink()", 1500);
+setInterval("CheckLink()", 1200);
 function dlnalink(){
     var ws = new WebSocket("ws://" + window.location.host + "/dlnalink");
     ws.onmessage = function(e) {
