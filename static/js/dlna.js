@@ -16,13 +16,13 @@ $("#position-bar").on("change", function() {
     out(secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
     update = false;
 });
-var ws;
-ws = dlnalink();
+var ws_link;
+ws_link = dlnalink();
 
 function CheckLink(){
     // console.log(ws.readyState);
-    if(ws.readyState == 3)
-        ws = dlnalink();
+    if(ws_link.readyState == 3)
+        ws_link = dlnalink();
     // console.log(ws);
     //ws.send('test');
 }
@@ -104,9 +104,11 @@ function get_dmr_state(){
         });
     }
 }
+
 function set_dmr(dmr) {
     $.get("/setdmr/" + dmr);
 }
+
 function offset_value(current, value, max) {
     if (value < current)
         relduration = current;
