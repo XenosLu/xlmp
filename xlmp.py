@@ -614,7 +614,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     # executor = ThreadPoolExecutor(9)
     # _running = True
     users = set()
-    last_message = ''
+    last_message = 'DLNA web socket reporter initialized'
 
     def data_received(self, chunk):
         return
