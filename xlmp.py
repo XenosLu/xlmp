@@ -611,7 +611,7 @@ class TestHandler(tornado.web.RequestHandler):
 
 class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     """DLNA info retriever use web socket"""
-    executor = ThreadPoolExecutor(9)
+    # executor = ThreadPoolExecutor(9)
     # _running = True
     users = set()
     last_message = ''
