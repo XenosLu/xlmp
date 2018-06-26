@@ -625,7 +625,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
         logging.info('ws connected: %s', self.request.remote_ip)
         self.users.add(self)
         # if len(self.users) == 1:
-            
+
         # last_message = ''
         # while self._running:
             # # logging.info(self.executor._work_queue.unfinished_tasks)
