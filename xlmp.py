@@ -612,23 +612,28 @@ class TestHandler(tornado.web.RequestHandler):
 class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     """DLNA info retriever use web socket"""
     executor = ThreadPoolExecutor(9)
-    _running = True
+    # _running = True
+    users = set()
+    last_message = ''
 
     def data_received(self, chunk):
         return
 
     @tornado.gen.coroutine
-    @tornado.concurrent.run_on_executor
+    # @tornado.concurrent.run_on_executor
     def open(self, *args, **kwargs):
         logging.info('ws connected: %s', self.request.remote_ip)
-        last_message = ''
-        while self._running:
-            # logging.info(self.executor._work_queue.unfinished_tasks)
-            if last_message != TRACKER.state:
-                self.write_message(TRACKER.state)
-                # logging.info(TRACKER.state)
-                last_message = TRACKER.state.copy()
-            sleep(0.2)
+        self.users.add(self)
+        # if len(self.users) == 1:
+            
+        # last_message = ''
+        # while self._running:
+            # # logging.info(self.executor._work_queue.unfinished_tasks)
+            # if last_message != TRACKER.state:
+                # self.write_message(TRACKER.state)
+                # # logging.info(TRACKER.state)
+                # last_message = TRACKER.state.copy()
+            # sleep(0.2)
 
     def on_message(self, message):
         # logging.info('receive: %s' % message)
@@ -636,7 +641,19 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def on_close(self):
         logging.info('ws close: %s', self.request.remote_ip)
-        self._running = False
+        self.users.remove(self)
+        # self._running = False
+
+
+def report_dlna_state():
+    if DlnaWebSocketHandler.last_message != TRACKER.state:
+    # if 1:
+        logging.info(DlnaWebSocketHandler.last_message)
+        for ws_user in DlnaWebSocketHandler.users:
+            logging.info(ws_user)
+            ws_user.write_message(TRACKER.state)
+        DlnaWebSocketHandler.last_message = TRACKER.state.copy()
+
 
 # context arrangement (to-do)
 # /sys/
@@ -683,6 +700,7 @@ TRACKER.start()
 LOADER = DLNALoader()
 LOADER.start()
 
+tornado.ioloop.PeriodicCallback(report_dlna_state, 200).start()
 
 if __name__ == "__main__":
     if sys.platform == 'win32':
