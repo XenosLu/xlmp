@@ -62,6 +62,10 @@ function dlnalink(){
     }; 
     return ws;
 }
+
+/**
+ * receive dlnainfo through ajax, not used
+ */
 function get_dmr_state(){
     if (wait > 0) {
         wait -= 1;
