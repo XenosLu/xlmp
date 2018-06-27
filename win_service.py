@@ -53,6 +53,7 @@ class PythonService(win32serviceutil.ServiceFramework):
         # logging.info('test')
         self.logger.info('service is starting...')
         self.auto_ins_module('tornado')
+        self.auto_ins_module('xmltodict')
         import tornado
         self.logger.info('tornado imported.')
         from xlmp import APP
