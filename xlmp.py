@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-"""xlmp"""
+"""xlmp main program"""
 import math
 import os
 import re
