@@ -437,12 +437,16 @@ class DlnaLoadHandler(tornado.web.RequestHandler):
     @check_dmr_exist
     def get(self, *args, **kwargs):
         src = kwargs.get('src')
+        srv_host = self.request.headers['Host']
+        if srv_host.startswith('127.0.0.1'):
+            self.finish('should not use 127.0.0.1 as host to load throuh DLNA')
+        logging.info(self.request.headers)
         if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
             logging.warning('File not found: %s', src)
             self.finish('Error: File not found.')
             return
         logging.info('start loading...tracker state:%s', TRACKER.state.get('CurrentTransportState'))
-        url = 'http://%s/video/%s' % (self.request.headers['Host'], quote(src))
+        url = 'http://%s/video/%s' % (srv_host, quote(src))
         LOADER.load(url)
         self.finish('loading %s' % src)
 
