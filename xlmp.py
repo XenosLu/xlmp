@@ -40,7 +40,7 @@ class DMRTracker(Thread):
         self.all_devices = []  # DMR device list
         self._failure = 0
         self._load = None
-        logging.info('DMR Tracker initialized.')
+        logging.info('DMR Tracker thread initialized.')
 
     def discover_dmr(self):
         """Discover DMRs from local network"""
@@ -168,7 +168,7 @@ class DLNALoader(Thread):
         self._flag = Event()
         self._failure = 0
         self._url = ''
-        logging.info('DLNA URL loader initialized.')
+        logging.info('DLNA URL loader thread initialized.')
 
     def run(self):
         while self._running.isSet():
@@ -609,7 +609,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     # executor = ThreadPoolExecutor(9)
     # _running = True
     users = set()
-    last_message = 'DLNA web socket reporter initialized'
+    last_message = 'DLNA web socket reporter coroutine initialized'
 
     def data_received(self, chunk):
         return
@@ -637,6 +637,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     def on_close(self):
         logging.info('ws close: %s', self.request.remote_ip)
         self.users.remove(self)
+        self.last_message = 'User closed.'
         # self._running = False
 
 
@@ -690,11 +691,13 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
 APP = tornado.web.Application(HANDLERS, **SETTINGS)
+
 # initialize DataBase
 run_sql('''create table if not exists history
                 (FILENAME text PRIMARY KEY not null,
                 POSITION float not null,
                 DURATION float, LATEST_DATE datetime not null);''')
+
 # initialize dlna threader
 TRACKER = DMRTracker()
 TRACKER.start()
