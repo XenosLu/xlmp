@@ -26,11 +26,6 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 VIDEO_PATH = 'media'  # media file path
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
 
-# initialize logging
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S')
-
 
 class DMRTracker(Thread):
     """DLNA Digital Media Renderer tracker thread"""
@@ -689,6 +684,11 @@ SETTINGS = {
     'gzip': True,
     # "debug": True,
 }
+
+# initialize logging
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
 APP = tornado.web.Application(HANDLERS, **SETTINGS)
 # initialize DataBase
 run_sql('''create table if not exists history
@@ -704,7 +704,7 @@ LOADER.start()
 tornado.ioloop.PeriodicCallback(report_dlna_state, 200).start()
 
 if __name__ == "__main__":
-    if sys.platform == 'win32':
-        os.system('start http://127.0.0.1:8888/')
+    # if sys.platform == 'win32':
+        # os.system('start http://127.0.0.1:8888/')
     APP.listen(8888, xheaders=True)
     tornado.ioloop.IOLoop.instance().start()
