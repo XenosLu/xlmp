@@ -440,6 +440,7 @@ class DlnaLoadHandler(tornado.web.RequestHandler):
         srv_host = self.request.headers['Host']
         if srv_host.startswith('127.0.0.1'):
             self.finish('should not use 127.0.0.1 as host to load throuh DLNA')
+            return
         logging.info(self.request.headers)
         if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
             logging.warning('File not found: %s', src)
