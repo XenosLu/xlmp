@@ -86,3 +86,4 @@ if __name__ == '__main__':
                 win32serviceutil.usage()
     else:
         win32serviceutil.HandleCommandLine(PythonService)
+    print(win32serviceutil.LocatePythonServiceExe())
