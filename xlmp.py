@@ -152,9 +152,9 @@ class DMRTracker(Thread):
                     logging.info('Load duration timeout')
                     return False
             logging.info(self.state)
-        except Exception as exp:
-            # logging.warning('DLNA load exception: %s' % exp, exc_info=True)
-            logging.warning('DLNA load exception: %s', exp, exc_info=True)
+        except Exception as exc:
+            # logging.warning('DLNA load exception: %s' % exc, exc_info=True)
+            logging.warning('DLNA load exception: %s', exc, exc_info=True)
             return False
         return True
 
@@ -215,8 +215,8 @@ def run_sql(sql, *args):
             cursor.close()
             if cursor.rowcount > 0:
                 conn.commit()
-        except Exception as exp:
-            logging.warning(str(exp))
+        except Exception as exc:
+            logging.warning(str(exc))
             ret = ()
     return ret
 
@@ -391,8 +391,8 @@ class FileSystemListHandler(tornado.web.RequestHandler):
     def get(self, *args, **kwargs):
         try:
             self.finish(ls_dir(kwargs.get('path')))
-        except Exception as exp:
-            raise tornado.web.HTTPError(404, reason=str(exp))
+        except Exception as exc:
+            raise tornado.web.HTTPError(404, reason=str(exc))
 
 
 class FileSystemMoveHandler(tornado.web.RequestHandler):
@@ -408,9 +408,9 @@ class FileSystemMoveHandler(tornado.web.RequestHandler):
             os.mkdir(dir_old)
         try:
             shutil.move(filename, dir_old)  # gonna do something when file is occupied
-        except Exception as exp:
-            logging.warning('move file failed: %s', exp)
-            raise tornado.web.HTTPError(404, reason=str(exp))
+        except Exception as exc:
+            logging.warning('move file failed: %s', exc)
+            raise tornado.web.HTTPError(404, reason=str(exc))
         self.finish(ls_dir('%s/' % os.path.dirname(src)))
 
 
