@@ -479,7 +479,7 @@ class DlnaHandler(tornado.web.RequestHandler):
     @check_dmr_exist
     def get(self, *args, **kwargs):
         opt = kwargs.get('opt')
-        self.write('opt: %s' % opt)
+        self.write('opt: %s ' % opt)
         if opt in ('play', 'pause', 'stop'):
             method = getattr(TRACKER.dmr, opt)
             ret = method()
