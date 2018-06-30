@@ -650,7 +650,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
 def report_dlna_state():
     if DlnaWebSocketHandler.last_message != TRACKER.state:
     # if 1:
-        # logging.info(DlnaWebSocketHandler.last_message)
+        logging.info(DlnaWebSocketHandler.last_message)
         for ws_user in DlnaWebSocketHandler.users:
             # logging.info(ws_user)
             ws_user.write_message(TRACKER.state)
