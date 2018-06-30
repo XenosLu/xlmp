@@ -619,7 +619,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     def data_received(self, chunk):
         return
 
-    @tornado.gen.coroutine
+    # @tornado.gen.coroutine
     # @tornado.concurrent.run_on_executor
     def open(self, *args, **kwargs):
         logging.info('ws connected: %s', self.request.remote_ip)
