@@ -624,8 +624,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     def open(self, *args, **kwargs):
         logging.info('ws connected: %s', self.request.remote_ip)
         self.users.add(self)
-        DlnaWebSocketHandler.last_message = 'User connected.'
-        self.last_message = 'User connected.'
+        DlnaWebSocketHandler.last_message = 'Websocket user connected.'
         # if len(self.users) == 1:
 
         # last_message = ''
@@ -644,7 +643,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     def on_close(self):
         logging.info('ws close: %s', self.request.remote_ip)
         self.users.remove(self)
-        self.last_message = 'User closed.'
+        DlnaWebSocketHandler.last_message = 'Websocket user disconnected.'
         # self._running = False
 
 
