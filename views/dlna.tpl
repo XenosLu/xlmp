@@ -2,7 +2,7 @@
 {% block title %}DMC - Light Media Player{% end %}
 
     {% block main %}
-    <div class="dlna-show col-xs-12 col-sm-6 col-md-5">
+    <div class="dlna-show col-xs-12 col-sm-6 col-md-4">
       <div id="dmr" class="btn-group dropdown">
         <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>
         </button>
@@ -10,7 +10,8 @@
           <li><a onclick="get('/searchdmr');">Search DMR</a></li>
         </ul>
       </div>
-      <h3 id="src"></h3>
+      <!-- <h3 id="src"></h3> -->
+      <div><span id="src" style="font-size:1.5em"></span></div>
       <div><span id="state">No State</span></div>
       <div class="btn-group">
         <button class="btn btn-success btn-lg" type="button" onclick="get('/dlna/play')">

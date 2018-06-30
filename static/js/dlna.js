@@ -6,8 +6,8 @@ $("#dlna_toggle").addClass("active");
 // $("#dlna_toggle").attr("href", "/");
 $("#dlna_toggle").attr("onclick", 'window.location.href = "/";');
 
-// get_dmr_state();
 $(".dlna-show").show();
+// get_dmr_state();
 // var inter = setInterval("get_dmr_state()", 1100);
 $("#position-bar").on("change", function() {
     $.get("/dlna/seek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
@@ -20,7 +20,6 @@ var ws_link;
 ws_link = dlnalink();
 
 function CheckLink(){
-    // console.log(ws.readyState);
     if(ws_link.readyState == 3)
         ws_link = dlnalink();
     // console.log(ws);
