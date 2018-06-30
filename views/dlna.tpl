@@ -10,9 +10,7 @@
           <li><a onclick="get('/searchdmr');">Search DMR</a></li>
         </ul>
       </div>
-      <!-- <h3 id="src"></h3> -->
-      <div><span id="src" style="font-size:0.7vw"></span></div>
-      <!-- test -->
+     <h3 id="src"></h3>
       <div><span id="state">No State</span></div>
       <div class="btn-group">
         <button class="btn btn-success btn-lg" type="button" onclick="get('/dlna/play')">
