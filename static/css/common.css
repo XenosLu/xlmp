@@ -45,7 +45,7 @@ table {
     width: 100%;
 }
 td {
-    word-break:break-all; 
+    word-break:break-all;
 }
 td:hover {
     background-color: #FBF3E9;
@@ -152,6 +152,7 @@ footer, .remove, .filelist.other, .filelist small {
     width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
+    word-break:break-all;
 }
 #position {
     margin-top: 3em;
