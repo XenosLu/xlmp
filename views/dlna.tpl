@@ -11,9 +11,10 @@
         </ul>
       </div>
       <!-- <h3 id="src"></h3> -->
-      <div><span id="src" style="font-size:1.5em"></span></div>
       <div><span id="src" style="font-size:1vw"></span></div>
+      <div><span id="src" style="font-size:1.5em"></span></div>
       <div><span id="src" style="font-size:1.5vw"></span></div>
+      <!-- test -->
       <div><span id="state">No State</span></div>
       <div class="btn-group">
         <button class="btn btn-success btn-lg" type="button" onclick="get('/dlna/play')">
