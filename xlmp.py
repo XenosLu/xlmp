@@ -624,6 +624,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     def open(self, *args, **kwargs):
         logging.info('ws connected: %s', self.request.remote_ip)
         self.users.add(self)
+        self.last_message = 'User connected.'
         # if len(self.users) == 1:
 
         # last_message = ''
