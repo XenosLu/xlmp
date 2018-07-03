@@ -245,8 +245,7 @@ function check_dlna_state() {
         success: function (data) {
             if ($.isEmptyObject(data)) {
                 $("#dlna_toggle").removeClass("btn-success");
-            } else {}
-            else {
+            } else {
                 $("#dlna_toggle").addClass("btn-success");
             },
             error: function (xhr, err) {
