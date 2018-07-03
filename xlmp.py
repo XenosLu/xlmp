@@ -283,9 +283,9 @@ def get_size(*filename):
 def hist_load(name):
     """load history from database"""
     position = run_sql('select POSITION from history where FILENAME=?', name)
-    if not position:
-        return 0
-    return position[0][0]
+    if position:
+        return position[0][0]
+    return 0
 
 
 def save_history(src, position, duration):
