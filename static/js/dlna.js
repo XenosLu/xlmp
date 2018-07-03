@@ -27,7 +27,7 @@ function CheckLink(){
 }
 setInterval("CheckLink()", 1200);
 function dlnalink(){
-    var ws = new WebSocket("ws://" + window.location.host + "/dlnalink");
+    var ws = new WebSocket("ws://" + window.location.host + "/dlna/link");
     ws.onmessage = function(e) {
         data = $.parseJSON(e.data);
         console.log(data);
@@ -70,7 +70,7 @@ function get_dmr_state(){
         wait -= 1;
     } else {
         $.ajax({
-            url: "/dlnainfo",
+            url: "/dlna/info",
             dataType: "json",
             timeout: 999,
             type: "GET",
