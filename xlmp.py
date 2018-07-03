@@ -330,6 +330,7 @@ class IndexHandler(tornado.web.RequestHandler):
     def get(self, *args, **kwargs):
         if TRACKER.dmr:
             dlna_style = 'btn-success'
+            dlna_style = ''  # test
         else:
             dlna_style = ''
         self.render('index.tpl', dlna_style=dlna_style)
@@ -343,6 +344,7 @@ class DlnaPlayerHandler(tornado.web.RequestHandler):
     def get(self, *args, **kwargs):
         if TRACKER.dmr:
             dlna_style = 'btn-success'
+            dlna_style = ''  # test
         else:
             dlna_style = ''
         self.render('dlna.tpl', dlna_style=dlna_style)

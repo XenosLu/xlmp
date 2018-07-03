@@ -7,6 +7,8 @@ var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
 if(!isiOS)
     $(document).mousemove(showSidebar);
 
+check_dlna_state();
+
 function showSidebar(){
     $("#sidebar").show();
     clearTimeout(hide_sidebar);
@@ -233,3 +235,22 @@ function out(text) {
         $("#output").fadeTo(250, 0.7).delay(1800).fadeOut(625);
     };
 }
+
+function check_dlna_state() {
+    $.ajax({
+        url: "/dlna/info",
+        dataType: "json",
+        timeout: 999,
+        type: "GET",
+        success: function (data) {
+            if ($.isEmptyObject(data)) {
+                $("#dlna_toggle").removeClass("btn-success");
+            } else {}
+            else {
+                $("#dlna_toggle").addClass("btn-success");
+            },
+            error: function (xhr, err) {
+                console.log('get dlna/info error')
+            }
+        });
+    }
