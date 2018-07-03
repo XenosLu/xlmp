@@ -247,9 +247,10 @@ function check_dlna_state() {
                 $("#dlna_toggle").removeClass("btn-success");
             } else {
                 $("#dlna_toggle").addClass("btn-success");
-            },
-            error: function (xhr, err) {
-                console.log('get dlna/info error')
             }
-        });
-    }
+        },
+        error: function (xhr, err) {
+            console.log('get dlna/info error')
+        }
+    });
+}
