@@ -1,8 +1,6 @@
 
 
-$(".player-show").show();
-
-
+$("#rate").show();
 
 $("#videosize").click(function () {
     if ($(this).text() == "auto")

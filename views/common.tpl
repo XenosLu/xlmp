@@ -34,7 +34,7 @@
     </ul>
   </div>
   <!-- player menu -->
-  <div id="rate" class="player-show btn-group dropdown">
+  <div id="rate" class="btn-group dropdown">
     <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
       <i class="glyphicon glyphicon-chevron-down"></i>
     </button>
@@ -53,11 +53,6 @@
     </ul>
   </div><!-- #rate .btn-group .dropup -->
 </div>
-<!-- <div id="sidebar"> -->
-  <!-- <button id="history" type="button" class="btn btn-default"> -->
-    <!-- <i class="glyphicon glyphicon-list-alt"></i> -->
-  <!-- </button> -->
-<!-- </div> -->
 <div id="dialog" class="col-xs-12 col-sm-8 col-md-8 col-lg-7">
   <div id="panel">
     <div class="bg-info panel-title">
