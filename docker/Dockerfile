@@ -9,7 +9,8 @@ RUN apk add --no-cache \
             git \
             nginx \
             s6 &&\
-    pip3 install tornado==4.5.3 &&\
+    # pip3 install tornado==4.5.3 &&\
+    pip3 install tornado==5.0.2 &&\
     pip3 install xmltodict==0.11.0 &&\
     mkdir /run/nginx &&\
     rm -f /etc/nginx/conf.d/default.conf
@@ -22,7 +23,7 @@ COPY deploy /usr/local/bin
 RUN chmod +x /usr/local/bin/deploy
 
 # git clone
-RUN git clone -b latest https://github.com/XenosLu/xlmp.git /xlmp
+RUN git clone https://github.com/XenosLu/xlmp.git /xlmp
 
 EXPOSE 80
 

@@ -172,9 +172,13 @@ function history(str) {
             $("#clear").show();
             var html = "";
             $.each(data["history"], function (i, n) {
-                var mediaType = "video";
-                if ((n["filename"]).lastIndexOf('.mp4') > 0)
-                    mediaType = "mp4";
+                var mediaType = "";
+                if (n["exist"])
+                {
+                    mediaType = "video";
+                    if ((n["filename"]).lastIndexOf('.mp4') > 0)
+                        mediaType = "mp4";
+                }
                 var td = new Array();
                 //var td = new Array(5);
                 td[0] = '<td class="folder" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-folder-close"></i></td>';

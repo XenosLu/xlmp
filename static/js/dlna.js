@@ -6,8 +6,8 @@ $("#dlna_toggle").addClass("active");
 // $("#dlna_toggle").attr("href", "/");
 $("#dlna_toggle").attr("onclick", 'window.location.href = "/";');
 
-// get_dmr_state();
 $(".dlna-show").show();
+// get_dmr_state();
 // var inter = setInterval("get_dmr_state()", 1100);
 $("#position-bar").on("change", function() {
     $.get("/dlna/seek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
@@ -16,16 +16,16 @@ $("#position-bar").on("change", function() {
     out(secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
     update = false;
 });
-var ws;
-ws = dlnalink();
+var ws_link;
+ws_link = dlnalink();
 
 function CheckLink(){
-    if(ws.readyState == 3)
-        ws = dlnalink();
-    console.log(ws);
+    if(ws_link.readyState == 3)
+        ws_link = dlnalink();
+    // console.log(ws);
     //ws.send('test');
 }
-setInterval("CheckLink()", 1800);
+setInterval("CheckLink()", 1200);
 function dlnalink(){
     var ws = new WebSocket("ws://" + window.location.host + "/dlnalink");
     ws.onmessage = function(e) {
@@ -61,6 +61,10 @@ function dlnalink(){
     }; 
     return ws;
 }
+
+/**
+ * receive dlnainfo through ajax, not used
+ */
 function get_dmr_state(){
     if (wait > 0) {
         wait -= 1;
@@ -103,9 +107,11 @@ function get_dmr_state(){
         });
     }
 }
+
 function set_dmr(dmr) {
     $.get("/setdmr/" + dmr);
 }
+
 function offset_value(current, value, max) {
     if (value < current)
         relduration = current;

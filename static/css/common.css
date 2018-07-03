@@ -45,7 +45,7 @@ table {
     width: 100%;
 }
 td {
-    word-break:break-all; 
+    word-break:break-all;
 }
 td:hover {
     background-color: #FBF3E9;
@@ -74,7 +74,11 @@ input[type=range]::-moz-range-thumb {
     box-shadow: inset 0px 0px 5px 1px #F0AD4E;
 }
 .filelist {
+    color: grey;
     min-width: 14em;
+}
+.filelist.folder {
+    color: black;
 }
 .filelist.mp4 {
     color: #337AB7;
@@ -148,6 +152,7 @@ footer, .remove, .filelist.other, .filelist small {
     width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
+    word-break:break-all;
 }
 #position {
     margin-top: 3em;
