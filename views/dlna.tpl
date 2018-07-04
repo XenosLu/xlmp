@@ -28,8 +28,8 @@
       </div>
         <h3 id="position"></h3>
         <input type="range" id="position-bar" min="0" max="0">
-        <button onclick="get('/dlnavol/down');" type="button" class="volume btn btn-warning btn-lg glyphicon glyphicon-minus">
-        <button onclick="get('/dlnavol/up');" type="button" class="volume btn btn-warning btn-lg glyphicon glyphicon-plus">
+        <button onclick="get('/dlna/vol/down');" type="button" class="volume btn btn-warning btn-lg glyphicon glyphicon-minus">
+        <button onclick="get('/dlna/vol/up');" type="button" class="volume btn btn-warning btn-lg glyphicon glyphicon-plus">
       </button>
     </div>
     {% end %}
