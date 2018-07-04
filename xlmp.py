@@ -667,7 +667,7 @@ HANDLERS = [
     (r'/dlna/link', DlnaWebSocketHandler),
     (r'/dlna/info', DlnaInfoHandler),
     (r'/dlna/setdmr/(?P<dmr>.*)', SetDmrHandler),
-    (r'/searchdmr', SearchDmrHandler),
+    (r'/dlna/searchdmr', SearchDmrHandler),
     (r'/dlnavol/(?P<opt>\w*)', DlnaVolumeControlHandler),
     (r'/dlna/next', DlnaNextHandler),
     (r'/dlna/load/(?P<src>.*)', DlnaLoadHandler),

@@ -45,7 +45,7 @@ function dlnalink(){
             $('#src').text(decodeURI(data["TrackURI"]));
 
             $("#dmr button").text(data["CurrentDMR"]);
-            $("#dmr ul").empty().append('<li><a onclick="$.get(\'/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
+            $("#dmr ul").empty().append('<li><a onclick="$.get(\'/dlna/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
             for (x in data["DMRs"]) {
                 $("#dmr ul").append('<li><a onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
             }
@@ -88,7 +88,7 @@ function get_dmr_state(){
                     $('#src').text(decodeURI(data["TrackURI"]));
 
                     $("#dmr button").text(data["CurrentDMR"]);
-                    $("#dmr ul").empty().append('<li><a onclick="$.get(\'/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
+                    $("#dmr ul").empty().append('<li><a onclick="$.get(\'/dlna/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
                     for (x in data["DMRs"]) {
                         $("#dmr ul").append('<li><a onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
                     }

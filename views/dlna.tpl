@@ -7,7 +7,7 @@
         <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-          <li><a onclick="get('/searchdmr');">Search DMR</a></li>
+          <li><a onclick="get('/dlna/searchdmr');">Search DMR</a></li>
         </ul>
       </div>
      <h3 id="src"></h3>
