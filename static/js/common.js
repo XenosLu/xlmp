@@ -182,7 +182,6 @@ function history(str) {
                         mediaType = "mp4";
                 }
                 var td = new Array();
-                //var td = new Array(5);
                 td[0] = '<td class="folder" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-folder-close"></i></td>';
                 td[1] = '<td><i class="glyphicon glyphicon-film"></i></td>';
                 td[2] = '<td class="filelist '+ mediaType + '" title="' + n["filename"] + '">' + n["filename"] + "<br><small>" + n["latest_date"] + " | " + secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small></td>";

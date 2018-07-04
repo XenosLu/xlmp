@@ -22,8 +22,6 @@ ws_link = dlnalink();
 function CheckLink(){
     if(ws_link.readyState == 3)
         ws_link = dlnalink();
-    // console.log(ws);
-    //ws.send('test');
 }
 setInterval("CheckLink()", 1200);
 function dlnalink(){

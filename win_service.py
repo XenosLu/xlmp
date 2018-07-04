@@ -89,4 +89,3 @@ if __name__ == '__main__':
     exe_path = win32serviceutil.LocatePythonServiceExe()
     # dll file path
     print(os.path.join(os.path.dirname(os.path.dirname(exe_path)), 'pywin32_system32', 'pywintypes36.dll'))
-    # 
