@@ -8,7 +8,6 @@ import shutil
 import sqlite3
 import sys
 import logging
-
 from threading import Thread, Event
 from urllib.parse import quote, unquote
 from time import sleep, time
@@ -20,8 +19,6 @@ import tornado.websocket
 from lib.dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
-# sys.path = ['lib'] + sys.path  # added libpath
-# from lib.dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
 
 VIDEO_PATH = 'media'  # media file path
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
@@ -227,8 +224,6 @@ def ls_dir(path):
         path = ''
     parent, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
     if path:
-        # if not path.endswith('/'):
-            # path = '%s/' % path
         path = re.sub('([^/])$', '\\1/', path)  # make sure path end with '/'
         parent = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]
     dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))
@@ -347,7 +342,6 @@ class WebPlayerHandler(tornado.web.RequestHandler):
 
     def get(self, *args, **kwargs):
         src = kwargs.get('src')
-    # def get(self, src):
         if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
             self.redirect('/')
         self.render('player.tpl', src=src, position=hist_load(src))
@@ -589,15 +583,7 @@ class TestHandler(tornado.web.RequestHandler):
     def data_received(self, chunk):
         return
 
-    # @tornado.gen.coroutine
     def get(self, *args, **kwargs):
-        # self.set_header('Access-Control-Allow-Origin', '*')
-        # self.set_header('Content-Type', 'text/event-stream')
-        # self.set_header('Cache-Control', 'no-cache')
-        logging.info(self.request.headers)
-        logging.info(self.request.remote_ip)
-        # self.write('data: xxx %s\n\n' % time())
-        # yield self.flush()
         self.write('test')
 
 
