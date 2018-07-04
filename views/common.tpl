@@ -63,7 +63,7 @@
           </a>
         </li>
         <li title="Browse video folder">
-          <a href="#tabFrame" data-toggle="tab" onclick="filelist('/fs/')">
+          <a href="#tabFrame" data-toggle="tab" onclick="filelist('/fs/ls/')">
             <i class="glyphicon glyphicon-home"></i>Home dir
           </a>
         </li>

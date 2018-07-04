@@ -659,7 +659,7 @@ def report_dlna_state():
 HANDLERS = [
     (r'/', IndexHandler),
     (r'/dlna', DlnaPlayerHandler),
-    (r'/fs/(?P<path>.*)', FileSystemListHandler),
+    (r'/fs/ls/(?P<path>.*)', FileSystemListHandler),
     (r'/move/(?P<src>.*)', FileSystemMoveHandler),
     (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
     (r'/sys/(?P<opt>\w*)', SystemCommandHandler),

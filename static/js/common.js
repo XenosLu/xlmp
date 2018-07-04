@@ -32,7 +32,7 @@ $(".close").click(toggleDialog);
 
 //table buttons
 $("#tabFrame").on("click", ".folder", function () {
-    filelist("/fs/" + this.title + "/");
+    filelist("/fs/ls/" + this.title + "/");
 }).on("click", ".move", function () {
     if (confirm("Move " + this.title + " to .old?")) {
         filelist("/move/" + this.title);
