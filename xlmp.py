@@ -650,8 +650,8 @@ def report_dlna_state():
 
 
 # context arrangement (to-do)
-# /sys/
-# /fs/
+# /sys/ done
+# /fs/ done
 # /dlna/
 # /wp/ # web player
 # save & websocket testing in tornado 5.0.3
@@ -666,7 +666,7 @@ HANDLERS = [
     (r'/test', TestHandler),  # test
     (r'/dlna/link', DlnaWebSocketHandler),
     (r'/dlna/info', DlnaInfoHandler),
-    (r'/setdmr/(?P<dmr>.*)', SetDmrHandler),
+    (r'/dlna/setdmr/(?P<dmr>.*)', SetDmrHandler),
     (r'/searchdmr', SearchDmrHandler),
     (r'/dlnavol/(?P<opt>\w*)', DlnaVolumeControlHandler),
     (r'/dlna/next', DlnaNextHandler),

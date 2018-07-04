@@ -109,7 +109,7 @@ function get_dmr_state(){
 }
 
 function set_dmr(dmr) {
-    $.get("/setdmr/" + dmr);
+    $.get("/dlna/setdmr/" + dmr);
 }
 
 function offset_value(current, value, max) {
