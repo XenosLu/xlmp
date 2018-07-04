@@ -660,7 +660,7 @@ HANDLERS = [
     (r'/', IndexHandler),
     (r'/dlna', DlnaPlayerHandler),
     (r'/fs/ls/(?P<path>.*)', FileSystemListHandler),
-    (r'/move/(?P<src>.*)', FileSystemMoveHandler),
+    (r'/fs/move/(?P<src>.*)', FileSystemMoveHandler),
     (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
     (r'/sys/(?P<opt>\w*)', SystemCommandHandler),
     (r'/test', TestHandler),  # test
