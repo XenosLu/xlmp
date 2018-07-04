@@ -652,7 +652,7 @@ def report_dlna_state():
 # context arrangement (to-do)
 # /sys/ done
 # /fs/ done
-# /dlna/
+# /dlna/ done
 # /wp/ # web player
 # save & websocket testing in tornado 5.0.3
 
