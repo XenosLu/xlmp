@@ -328,12 +328,7 @@ class IndexHandler(tornado.web.RequestHandler):
         return
 
     def get(self, *args, **kwargs):
-        if TRACKER.dmr:
-            dlna_style = 'btn-success'
-            dlna_style = ''  # test
-        else:
-            dlna_style = ''
-        self.render('index.tpl', dlna_style=dlna_style)
+        self.render('index.tpl')
 
 
 class DlnaPlayerHandler(tornado.web.RequestHandler):
@@ -342,12 +337,7 @@ class DlnaPlayerHandler(tornado.web.RequestHandler):
         return
 
     def get(self, *args, **kwargs):
-        if TRACKER.dmr:
-            dlna_style = 'btn-success'
-            dlna_style = ''  # test
-        else:
-            dlna_style = ''
-        self.render('dlna.tpl', dlna_style=dlna_style)
+        self.render('dlna.tpl')
 
 
 class WebPlayerHandler(tornado.web.RequestHandler):
@@ -360,7 +350,7 @@ class WebPlayerHandler(tornado.web.RequestHandler):
     # def get(self, src):
         if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
             self.redirect('/')
-        self.render('player.tpl', dlna_style='', src=src, position=hist_load(src))
+        self.render('player.tpl', src=src, position=hist_load(src))
 
 
 class HistoryHandler(tornado.web.RequestHandler):
