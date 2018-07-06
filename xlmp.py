@@ -8,7 +8,6 @@ import shutil
 import sqlite3
 import sys
 import logging
-
 from threading import Thread, Event
 from urllib.parse import quote, unquote
 from time import sleep, time
@@ -20,8 +19,6 @@ import tornado.websocket
 from lib.dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
-# sys.path = ['lib'] + sys.path  # added libpath
-# from lib.dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopholm/dlnap
 
 VIDEO_PATH = 'media'  # media file path
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
@@ -227,8 +224,6 @@ def ls_dir(path):
         path = ''
     parent, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
     if path:
-        # if not path.endswith('/'):
-            # path = '%s/' % path
         path = re.sub('([^/])$', '\\1/', path)  # make sure path end with '/'
         parent = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]
     dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))
@@ -283,9 +278,9 @@ def get_size(*filename):
 def hist_load(name):
     """load history from database"""
     position = run_sql('select POSITION from history where FILENAME=?', name)
-    if not position:
-        return 0
-    return position[0][0]
+    if position:
+        return position[0][0]
+    return 0
 
 
 def save_history(src, position, duration):
@@ -328,11 +323,7 @@ class IndexHandler(tornado.web.RequestHandler):
         return
 
     def get(self, *args, **kwargs):
-        if TRACKER.dmr:
-            dlna_style = 'btn-success'
-        else:
-            dlna_style = ''
-        self.render('index.tpl', dlna_style=dlna_style)
+        self.render('index.tpl')
 
 
 class DlnaPlayerHandler(tornado.web.RequestHandler):
@@ -341,11 +332,7 @@ class DlnaPlayerHandler(tornado.web.RequestHandler):
         return
 
     def get(self, *args, **kwargs):
-        if TRACKER.dmr:
-            dlna_style = 'btn-success'
-        else:
-            dlna_style = ''
-        self.render('dlna.tpl', dlna_style=dlna_style)
+        self.render('dlna.tpl')
 
 
 class WebPlayerHandler(tornado.web.RequestHandler):
@@ -355,10 +342,9 @@ class WebPlayerHandler(tornado.web.RequestHandler):
 
     def get(self, *args, **kwargs):
         src = kwargs.get('src')
-    # def get(self, src):
         if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
             self.redirect('/')
-        self.render('player.tpl', dlna_style='', src=src, position=hist_load(src))
+        self.render('player.tpl', src=src, position=hist_load(src))
 
 
 class HistoryHandler(tornado.web.RequestHandler):
@@ -597,22 +583,12 @@ class TestHandler(tornado.web.RequestHandler):
     def data_received(self, chunk):
         return
 
-    # @tornado.gen.coroutine
     def get(self, *args, **kwargs):
-        # self.set_header('Access-Control-Allow-Origin', '*')
-        # self.set_header('Content-Type', 'text/event-stream')
-        # self.set_header('Cache-Control', 'no-cache')
-        logging.info(self.request.headers)
-        logging.info(self.request.remote_ip)
-        # self.write('data: xxx %s\n\n' % time())
-        # yield self.flush()
         self.write('test')
 
 
 class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     """DLNA info retriever use web socket"""
-    # executor = ThreadPoolExecutor(9)
-    # _running = True
     users = set()
     last_message = 'DLNA web socket reporter coroutine initialized'
 
@@ -620,63 +596,47 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
         return
 
     # @tornado.gen.coroutine
-    # @tornado.concurrent.run_on_executor
     def open(self, *args, **kwargs):
         logging.info('ws connected: %s', self.request.remote_ip)
         self.users.add(self)
         DlnaWebSocketHandler.last_message = 'Websocket user connected.'
-        # if len(self.users) == 1:
-
-        # last_message = ''
-        # while self._running:
-            # # logging.info(self.executor._work_queue.unfinished_tasks)
-            # if last_message != TRACKER.state:
-                # self.write_message(TRACKER.state)
-                # # logging.info(TRACKER.state)
-                # last_message = TRACKER.state.copy()
-            # sleep(0.2)
 
     def on_message(self, message):
-        # logging.info('receive: %s' % message)
         return
 
     def on_close(self):
         logging.info('ws close: %s', self.request.remote_ip)
         self.users.remove(self)
         DlnaWebSocketHandler.last_message = 'Websocket user disconnected.'
-        # self._running = False
 
 
 def report_dlna_state():
     if DlnaWebSocketHandler.last_message != TRACKER.state:
-    # if 1:
         logging.info(DlnaWebSocketHandler.last_message)
         for ws_user in DlnaWebSocketHandler.users:
-            # logging.info(ws_user)
             ws_user.write_message(TRACKER.state)
         DlnaWebSocketHandler.last_message = TRACKER.state.copy()
 
 
 # context arrangement (to-do)
-# /sys/
-# /fs/
-# /dlna/
-# /wp/ # web player
-# save & websocket testing in tornado 5.0.3
+    # /sys/ done
+    # /fs/ done
+    # /dlna/ done
+    # /wp/ # web player
 
 HANDLERS = [
     (r'/', IndexHandler),
     (r'/dlna', DlnaPlayerHandler),
-    (r'/fs/(?P<path>.*)', FileSystemListHandler),
-    (r'/move/(?P<src>.*)', FileSystemMoveHandler),
+    (r'/fs/ls/(?P<path>.*)', FileSystemListHandler),
+    (r'/fs/move/(?P<src>.*)', FileSystemMoveHandler),
     (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
     (r'/sys/(?P<opt>\w*)', SystemCommandHandler),
     (r'/test', TestHandler),  # test
-    (r'/dlnalink', DlnaWebSocketHandler),
-    (r'/dlnainfo', DlnaInfoHandler),
-    (r'/setdmr/(?P<dmr>.*)', SetDmrHandler),
-    (r'/searchdmr', SearchDmrHandler),
-    (r'/dlnavol/(?P<opt>\w*)', DlnaVolumeControlHandler),
+    (r'/dlna/link', DlnaWebSocketHandler),
+    (r'/dlna/info', DlnaInfoHandler),
+    (r'/dlna/setdmr/(?P<dmr>.*)', SetDmrHandler),
+    (r'/dlna/searchdmr', SearchDmrHandler),
+    (r'/dlna/vol/(?P<opt>\w*)', DlnaVolumeControlHandler),
     (r'/dlna/next', DlnaNextHandler),
     (r'/dlna/load/(?P<src>.*)', DlnaLoadHandler),
     (r'/dlna/(?P<opt>\w*)/?(?P<progress>.*)', DlnaHandler),

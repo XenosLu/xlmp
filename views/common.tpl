@@ -3,8 +3,7 @@
     <button title="browser" id="history" type="button" class="btn btn-default btn-lg">
       <i class="glyphicon glyphicon-th-list"></i>
     </button>
-    <a title="switch DLNA mode" id="dlna_toggle" onclick='window.location.href = "/dlna";' type="button" class="btn btn-default {{dlna_style}} btn-lg">DLNA</a>
-    <!-- <a title="switch DLNA mode" id="dlna_toggle" href="/dlna" type="button" class="btn btn-default {{dlna_style}} btn-lg">DLNA</a> -->
+    <a title="switch DLNA mode" id="dlna_toggle" onclick='window.location.href = "/dlna";' type="button" class="btn btn-default btn-lg">DLNA</a>
   </div>
   <div class="btn-group dropdown">
     <button title="Maintenance" type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
@@ -34,7 +33,7 @@
     </ul>
   </div>
   <!-- player menu -->
-  <div id="rate" class="player-show btn-group dropdown">
+  <div id="rate" class="btn-group dropdown">
     <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
       <i class="glyphicon glyphicon-chevron-down"></i>
     </button>
@@ -53,11 +52,6 @@
     </ul>
   </div><!-- #rate .btn-group .dropup -->
 </div>
-<!-- <div id="sidebar"> -->
-  <!-- <button id="history" type="button" class="btn btn-default"> -->
-    <!-- <i class="glyphicon glyphicon-list-alt"></i> -->
-  <!-- </button> -->
-<!-- </div> -->
 <div id="dialog" class="col-xs-12 col-sm-8 col-md-8 col-lg-7">
   <div id="panel">
     <div class="bg-info panel-title">
@@ -69,7 +63,7 @@
           </a>
         </li>
         <li title="Browse video folder">
-          <a href="#tabFrame" data-toggle="tab" onclick="filelist('/fs/')">
+          <a href="#tabFrame" data-toggle="tab" onclick="filelist('/fs/ls/')">
             <i class="glyphicon glyphicon-home"></i>Home dir
           </a>
         </li>

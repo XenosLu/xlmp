@@ -22,12 +22,10 @@ ws_link = dlnalink();
 function CheckLink(){
     if(ws_link.readyState == 3)
         ws_link = dlnalink();
-    // console.log(ws);
-    //ws.send('test');
 }
 setInterval("CheckLink()", 1200);
 function dlnalink(){
-    var ws = new WebSocket("ws://" + window.location.host + "/dlnalink");
+    var ws = new WebSocket("ws://" + window.location.host + "/dlna/link");
     ws.onmessage = function(e) {
         data = $.parseJSON(e.data);
         console.log(data);
@@ -45,7 +43,7 @@ function dlnalink(){
             $('#src').text(decodeURI(data["TrackURI"]));
 
             $("#dmr button").text(data["CurrentDMR"]);
-            $("#dmr ul").empty().append('<li><a onclick="$.get(\'/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
+            $("#dmr ul").empty().append('<li><a onclick="$.get(\'/dlna/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
             for (x in data["DMRs"]) {
                 $("#dmr ul").append('<li><a onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
             }
@@ -70,7 +68,7 @@ function get_dmr_state(){
         wait -= 1;
     } else {
         $.ajax({
-            url: "/dlnainfo",
+            url: "/dlna/info",
             dataType: "json",
             timeout: 999,
             type: "GET",
@@ -88,7 +86,7 @@ function get_dmr_state(){
                     $('#src').text(decodeURI(data["TrackURI"]));
 
                     $("#dmr button").text(data["CurrentDMR"]);
-                    $("#dmr ul").empty().append('<li><a onclick="$.get(\'/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
+                    $("#dmr ul").empty().append('<li><a onclick="$.get(\'/dlna/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
                     for (x in data["DMRs"]) {
                         $("#dmr ul").append('<li><a onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
                     }
@@ -109,7 +107,7 @@ function get_dmr_state(){
 }
 
 function set_dmr(dmr) {
-    $.get("/setdmr/" + dmr);
+    $.get("/dlna/setdmr/" + dmr);
 }
 
 function offset_value(current, value, max) {

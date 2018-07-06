@@ -7,6 +7,8 @@ var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
 if(!isiOS)
     $(document).mousemove(showSidebar);
 
+check_dlna_state();
+
 function showSidebar(){
     $("#sidebar").show();
     clearTimeout(hide_sidebar);
@@ -30,10 +32,10 @@ $(".close").click(toggleDialog);
 
 //table buttons
 $("#tabFrame").on("click", ".folder", function () {
-    filelist("/fs/" + this.title + "/");
+    filelist("/fs/ls/" + this.title + "/");
 }).on("click", ".move", function () {
     if (confirm("Move " + this.title + " to .old?")) {
-        filelist("/move/" + this.title);
+        filelist("/fs/move/" + this.title);
     }
 }).on("click", ".remove", function () {
     if (confirm("Clear history of " + this.title + "?"))
@@ -180,7 +182,6 @@ function history(str) {
                         mediaType = "mp4";
                 }
                 var td = new Array();
-                //var td = new Array(5);
                 td[0] = '<td class="folder" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-folder-close"></i></td>';
                 td[1] = '<td><i class="glyphicon glyphicon-film"></i></td>';
                 td[2] = '<td class="filelist '+ mediaType + '" title="' + n["filename"] + '">' + n["filename"] + "<br><small>" + n["latest_date"] + " | " + secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small></td>";
@@ -232,4 +233,23 @@ function out(text) {
         $(document.body).append('<div id="output">' + text + "</div>");
         $("#output").fadeTo(250, 0.7).delay(1800).fadeOut(625);
     };
+}
+
+function check_dlna_state() {
+    $.ajax({
+        url: "/dlna/info",
+        dataType: "json",
+        timeout: 999,
+        type: "GET",
+        success: function (data) {
+            if ($.isEmptyObject(data)) {
+                $("#dlna_toggle").removeClass("btn-success");
+            } else {
+                $("#dlna_toggle").addClass("btn-success");
+            }
+        },
+        error: function (xhr, err) {
+            console.log('get dlna/info error')
+        }
+    });
 }

@@ -110,7 +110,7 @@ footer, .remove, .filelist.other, .filelist small {
     opacity: 0.8;
     box-shadow: inset 0px 0px 9px 0px #F1F2F6;
 }
-.dlna-show, .player-show{
+.dlna-show, .player-show, #rate {
     display: none;
 }
 #dialog {
