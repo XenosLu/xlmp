@@ -623,7 +623,6 @@ def report_dlna_state():
     # /fs/ done
     # /dlna/ done
     # /wp/ # web player
-# save testing in tornado 5.0.3 (to-do)
 
 HANDLERS = [
     (r'/', IndexHandler),
