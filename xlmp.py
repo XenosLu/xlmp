@@ -622,7 +622,7 @@ def report_dlna_state():
     # /sys/ done
     # /fs/ done
     # /dlna/ done
-    # /wp/ # web player
+    # /wp/ # web player # done # to test 
 
 HANDLERS = [
     (r'/', IndexHandler),
@@ -640,8 +640,8 @@ HANDLERS = [
     (r'/dlna/next', DlnaNextHandler),
     (r'/dlna/load/(?P<src>.*)', DlnaLoadHandler),
     (r'/dlna/(?P<opt>\w*)/?(?P<progress>.*)', DlnaHandler),
-    (r'/save/(?P<src>.*)', SaveHandler),
-    (r'/play/(?P<src>.*)', WebPlayerHandler),
+    (r'/wp/save/(?P<src>.*)', SaveHandler),
+    (r'/wp/play/(?P<src>.*)', WebPlayerHandler),
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
 ]
 
