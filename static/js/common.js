@@ -44,7 +44,7 @@ $("#tabFrame").on("click", ".folder", function () {
     if (window.document.location.pathname == "/dlna")
         get("/dlna/load/" + this.title);
     else
-        window.location.href = "/play/" + this.title;
+        window.location.href = "/wp/play/" + this.title;
 }).on("click", ".video", function () {
     if (window.document.location.pathname == "/dlna")
         get("/dlna/load/" + this.title);
