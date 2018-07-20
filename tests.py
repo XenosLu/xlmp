@@ -35,14 +35,17 @@ class TestMain(AsyncHTTPTestCase):
         self.assertEqual(type(json.loads(response.body.decode())), dict)
         response = self.fetch('/hist/test')
         self.assertEqual(response.code, 404)
-        # response = self.fetch('/hist/clear')
-        # response = self.fetch('/hist/rm')
 
-    def test_sys(self):
         response = self.fetch('/sys/backup')
+        self.assertEqual(response.code, 200)
+        response = self.fetch('/hist/clear')
         self.assertEqual(response.code, 200)
         response = self.fetch('/sys/restore')
         self.assertEqual(response.code, 200)
+        # response = self.fetch('/hist/rm')
+
+    def test_sys(self):
+
         response = self.fetch('/sys/test')
         self.assertEqual(response.code, 403)
         print(response.body)
