@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # coding=utf-8
+"""xlmp unit test"""
 import unittest
 import json
 from tornado.testing import AsyncHTTPTestCase
 from xlmp import APP
 
 class TestMain(AsyncHTTPTestCase):
+    """test class"""
     def get_app(self):
         return APP
 
