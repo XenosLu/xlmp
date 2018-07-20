@@ -9,6 +9,7 @@ import os
 
 
 class PythonService(win32serviceutil.ServiceFramework):
+    """service in windows"""
     _svc_name_ = 'pyxlmp'
     _svc_display_name_ = 'PythonXLMP'
     _svc_description_ = 'Python XLMP Service'
