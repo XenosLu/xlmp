@@ -4,7 +4,7 @@
 import unittest
 import json
 from tornado.testing import AsyncHTTPTestCase
-from xlmp import APP
+from xlmp import APP, TRACKER, LOADER
 
 class TestMain(AsyncHTTPTestCase):
     """test class"""
@@ -71,4 +71,6 @@ class TestMain(AsyncHTTPTestCase):
     # (r'/wp/play/(?P<src>.*)', WebPlayerHandler),
 
 if __name__ == '__main__':
+    TRACKER.stop()
+    LOADER.stop()
     unittest.main()
