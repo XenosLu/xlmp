@@ -38,7 +38,6 @@ class DMRTracker(Thread):
         self._failure = 0
         self._load = None
         logging.info('DMR Tracker thread initialized.')
-        self._loader = DLNALoader()
 
     def discover_dmr(self):
         """Discover DMRs from local network"""
@@ -156,8 +155,6 @@ class DMRTracker(Thread):
             logging.warning('DLNA load exception: %s', exc, exc_info=True)
             return False
         return True
-    def load(url):
-        self._loader.load(url)
 
 
 class DLNALoader(Thread):
