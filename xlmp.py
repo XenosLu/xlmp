@@ -58,7 +58,7 @@ class DMRTracker(Thread):
                 return True
         return False
 
-    def get_transport_state(self):
+    def _get_transport_state(self):
         """get transport state through DLNA"""
         info = self.dmr.info()
         if info:
@@ -66,7 +66,7 @@ class DMRTracker(Thread):
             return info.get('CurrentTransportState')
         return None
 
-    def get_position_info(self):
+    def _get_position_info(self):
         """get DLNA play position info"""
         position_info = self.dmr.position_info()
         if not position_info:
@@ -90,7 +90,7 @@ class DMRTracker(Thread):
             if self.dmr:
                 self.state['CurrentDMR'] = str(self.dmr)
                 self.state['DMRs'] = [str(i) for i in self.all_devices]
-                if self.get_transport_state() and not sleep(0.1) and self.get_position_info():
+                if self._get_transport_state() and not sleep(0.1) and self._get_position_info():
                     if self._failure > 0:
                         logging.info('reset failure count from %d to 0', self._failure)
                         self._failure = 0
@@ -123,7 +123,7 @@ class DMRTracker(Thread):
         """load video through DLNA from url for once"""
         if not self.dmr:
             return False
-        while self.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
+        while self._get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
             self.dmr.stop()
             logging.info('Waiting for DMR stopped...')
             sleep(0.85)
@@ -134,7 +134,7 @@ class DMRTracker(Thread):
                 logging.warning('Load url failed: %s', url)
                 return False
             time0 = time()
-            while self.get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
+            while self._get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
                 self.dmr.play()
                 logging.info('Waiting for DMR playing...')
                 sleep(0.3)
