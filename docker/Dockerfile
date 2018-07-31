@@ -4,7 +4,7 @@ LABEL maintainer="xenos <xenos.lu@gmail.com>"
 
             # dumb-init \
             # runit \
-            # supervisor \
+# supervisor 3.3.4 not support python3
 RUN apk add --no-cache \
             git \
             nginx \
