@@ -9,6 +9,7 @@ RUN apk add --no-cache \
             git \
             nginx \
             s6 &&\
+    pip3 install --upgrade pip==9.0.3 &&\
     pip3 install tornado==5.0.2 &&\
     pip3 install xmltodict==0.11.0 &&\
     mkdir /run/nginx &&\
@@ -27,7 +28,7 @@ RUN git clone https://github.com/XenosLu/xlmp.git /xlmp
 EXPOSE 80
 
 # media folder:
-# VOLUME /xlmp/media
+VOLUME /xlmp/media
 
 RUN chmod -R +x /xlmp/docker/s6
 # ENTRYPOINT ["/bin/sh", "/xlmp/docker/docker-entrypoint.sh"]
