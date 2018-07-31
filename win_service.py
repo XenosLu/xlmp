@@ -9,6 +9,7 @@ import os
 
 
 class PythonService(win32serviceutil.ServiceFramework):
+    """service in windows"""
     _svc_name_ = 'pyxlmp'
     _svc_display_name_ = 'PythonXLMP'
     _svc_description_ = 'Python XLMP Service'
@@ -49,8 +50,6 @@ class PythonService(win32serviceutil.ServiceFramework):
             self.logger.info('install %s finished', mod)
 
     def SvcDoRun(self):
-        # import logging
-        # logging.info('test')
         self.logger.info('service is starting...')
         self.auto_ins_module('tornado')
         self.auto_ins_module('xmltodict')

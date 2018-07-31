@@ -58,7 +58,7 @@ class DMRTracker(Thread):
                 return True
         return False
 
-    def get_transport_state(self):
+    def _get_transport_state(self):
         """get transport state through DLNA"""
         info = self.dmr.info()
         if info:
@@ -66,7 +66,7 @@ class DMRTracker(Thread):
             return info.get('CurrentTransportState')
         return None
 
-    def get_position_info(self):
+    def _get_position_info(self):
         """get DLNA play position info"""
         position_info = self.dmr.position_info()
         if not position_info:
@@ -90,7 +90,7 @@ class DMRTracker(Thread):
             if self.dmr:
                 self.state['CurrentDMR'] = str(self.dmr)
                 self.state['DMRs'] = [str(i) for i in self.all_devices]
-                if self.get_transport_state() and not sleep(0.1) and self.get_position_info():
+                if self._get_transport_state() and not sleep(0.1) and self._get_position_info():
                     if self._failure > 0:
                         logging.info('reset failure count from %d to 0', self._failure)
                         self._failure = 0
@@ -121,7 +121,9 @@ class DMRTracker(Thread):
 
     def loadonce(self, url):
         """load video through DLNA from url for once"""
-        while self.get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
+        if not self.dmr:
+            return False
+        while self._get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
             self.dmr.stop()
             logging.info('Waiting for DMR stopped...')
             sleep(0.85)
@@ -132,7 +134,7 @@ class DMRTracker(Thread):
                 logging.warning('Load url failed: %s', url)
                 return False
             time0 = time()
-            while self.get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
+            while self._get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
                 self.dmr.play()
                 logging.info('Waiting for DMR playing...')
                 sleep(0.3)
@@ -150,7 +152,6 @@ class DMRTracker(Thread):
                     return False
             logging.info(self.state)
         except Exception as exc:
-            # logging.warning('DLNA load exception: %s' % exc, exc_info=True)
             logging.warning('DLNA load exception: %s', exc, exc_info=True)
             return False
         return True
@@ -268,7 +269,7 @@ def get_size(*filename):
     size = os.path.getsize('%s/%s' % (VIDEO_PATH, ''.join(filename)))
     if size < 0:
         return 'Out of Range'
-    elif size < 1024:
+    if size < 1024:
         return '%dB' % size
     unit = ' KMGTPEZYB'
     power = min(int(math.floor(math.log(size, 1024))), 9)
@@ -320,7 +321,7 @@ def get_next_file(src):  # not strict enough
 class IndexHandler(tornado.web.RequestHandler):
     """index web page"""
     def data_received(self, chunk):
-        return
+        pass
 
     def get(self, *args, **kwargs):
         self.render('index.tpl')
@@ -329,7 +330,7 @@ class IndexHandler(tornado.web.RequestHandler):
 class DlnaPlayerHandler(tornado.web.RequestHandler):
     """DLNA player page"""
     def data_received(self, chunk):
-        return
+        pass
 
     def get(self, *args, **kwargs):
         self.render('dlna.tpl')
@@ -338,7 +339,7 @@ class DlnaPlayerHandler(tornado.web.RequestHandler):
 class WebPlayerHandler(tornado.web.RequestHandler):
     """Video play page"""
     def data_received(self, chunk):
-        return
+        pass
 
     def get(self, *args, **kwargs):
         src = kwargs.get('src')
@@ -350,7 +351,7 @@ class WebPlayerHandler(tornado.web.RequestHandler):
 class HistoryHandler(tornado.web.RequestHandler):
     """Return play history list"""
     def data_received(self, chunk):
-        return
+        pass
 
     def get(self, *args, **kwargs):
         opt = kwargs.get('opt')
@@ -363,7 +364,7 @@ class HistoryHandler(tornado.web.RequestHandler):
         else:
             raise tornado.web.HTTPError(404, reason='illegal operation')
         self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
-                                  'latest_date': s[3], 'path': os.path.dirname(s[0]), 
+                                  'latest_date': s[3], 'path': os.path.dirname(s[0]),
                                   'exist': os.path.exists('%s/%s' % (VIDEO_PATH, s[0]))}
                                  for s in run_sql('select * from history order by LATEST_DATE desc'
                                                  )]})
@@ -372,7 +373,7 @@ class HistoryHandler(tornado.web.RequestHandler):
 class FileSystemListHandler(tornado.web.RequestHandler):
     """Get static folder list in json"""
     def data_received(self, chunk):
-        return
+        pass
 
     def get(self, *args, **kwargs):
         try:
@@ -384,7 +385,7 @@ class FileSystemListHandler(tornado.web.RequestHandler):
 class FileSystemMoveHandler(tornado.web.RequestHandler):
     """Move file to '.old' folder"""
     def data_received(self, chunk):
-        return
+        pass
 
     def get(self, *args, **kwargs):
         src = kwargs.get('src')
@@ -405,7 +406,7 @@ class SaveHandler(tornado.web.RequestHandler):
     executor = ThreadPoolExecutor(9)
 
     def data_received(self, chunk):
-        return
+        pass
 
     @tornado.gen.coroutine
     @tornado.concurrent.run_on_executor
@@ -418,7 +419,7 @@ class SaveHandler(tornado.web.RequestHandler):
 class DlnaLoadHandler(tornado.web.RequestHandler):
     """DLNA load file web interface"""
     def data_received(self, chunk):
-        return
+        pass
 
     @check_dmr_exist
     def get(self, *args, **kwargs):
@@ -441,7 +442,7 @@ class DlnaLoadHandler(tornado.web.RequestHandler):
 class DlnaNextHandler(tornado.web.RequestHandler):
     """DLNA jump to next video file web interface"""
     def data_received(self, chunk):
-        return
+        pass
 
     @check_dmr_exist
     def get(self, *args, **kwargs):
@@ -460,7 +461,7 @@ class DlnaNextHandler(tornado.web.RequestHandler):
 class DlnaHandler(tornado.web.RequestHandler):
     """DLNA operation web interface"""
     def data_received(self, chunk):
-        return
+        pass
 
     @check_dmr_exist
     def get(self, *args, **kwargs):
@@ -482,7 +483,7 @@ class DlnaHandler(tornado.web.RequestHandler):
 class DlnaInfoHandler(tornado.web.RequestHandler):
     """old version of DLNA info retrieve web interface replaced by web socket"""
     def data_received(self, chunk):
-        return
+        pass
 
     def get(self, *args, **kwargs):
         self.finish(TRACKER.state)
@@ -491,7 +492,7 @@ class DlnaInfoHandler(tornado.web.RequestHandler):
 class DlnaVolumeControlHandler(tornado.web.RequestHandler):
     """Tune volume through DLNA web interface"""
     def data_received(self, chunk):
-        return
+        pass
 
     @check_dmr_exist
     def get(self, *args, **kwargs):
@@ -512,7 +513,7 @@ class DlnaVolumeControlHandler(tornado.web.RequestHandler):
 class SystemCommandHandler(tornado.web.RequestHandler):
     """some system maintainence command web interface"""
     def data_received(self, chunk):
-        return
+        pass
 
     def get(self, *args, **kwargs):
         opt = kwargs.get('opt')
@@ -560,7 +561,7 @@ class SystemCommandHandler(tornado.web.RequestHandler):
 class SetDmrHandler(tornado.web.RequestHandler):
     """set dmr web interface"""
     def data_received(self, chunk):
-        return
+        pass
 
     def get(self, *args, **kwargs):
         if TRACKER.set_dmr(kwargs.get('dmr')):
@@ -572,7 +573,7 @@ class SetDmrHandler(tornado.web.RequestHandler):
 class SearchDmrHandler(tornado.web.RequestHandler):
     """Mannually search DMR web interface"""
     def data_received(self, chunk):
-        return
+        pass
 
     def get(self, *args, **kwargs):
         TRACKER.discover_dmr()
@@ -581,7 +582,7 @@ class SearchDmrHandler(tornado.web.RequestHandler):
 class TestHandler(tornado.web.RequestHandler):
     """test only"""
     def data_received(self, chunk):
-        return
+        pass
 
     def get(self, *args, **kwargs):
         self.write('test')
@@ -593,7 +594,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     last_message = 'DLNA web socket reporter coroutine initialized'
 
     def data_received(self, chunk):
-        return
+        pass
 
     # @tornado.gen.coroutine
     def open(self, *args, **kwargs):
@@ -602,7 +603,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
         DlnaWebSocketHandler.last_message = 'Websocket user connected.'
 
     def on_message(self, message):
-        return
+        pass
 
     def on_close(self):
         logging.info('ws close: %s', self.request.remote_ip)
@@ -611,6 +612,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
 
 
 def report_dlna_state():
+    """periodly report dlna state for websocket"""
     if DlnaWebSocketHandler.last_message != TRACKER.state:
         logging.info(DlnaWebSocketHandler.last_message)
         for ws_user in DlnaWebSocketHandler.users:
@@ -622,7 +624,7 @@ def report_dlna_state():
     # /sys/ done
     # /fs/ done
     # /dlna/ done
-    # /wp/ # web player # done # to test 
+    # /wp/ # web player # done # to test
 
 HANDLERS = [
     (r'/', IndexHandler),
