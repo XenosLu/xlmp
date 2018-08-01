@@ -4,12 +4,11 @@ LABEL maintainer="xenos <xenos.lu@gmail.com>"
 
             # dumb-init \
             # runit \
-            # supervisor \
+# supervisor 3.3.4 not support python3
 RUN apk add --no-cache \
             git \
             nginx \
             s6 &&\
-    # pip3 install tornado==4.5.3 &&\
     pip3 install tornado==5.0.2 &&\
     pip3 install xmltodict==0.11.0 &&\
     mkdir /run/nginx &&\
@@ -28,7 +27,7 @@ RUN git clone -b latest https://github.com/XenosLu/xlmp.git /xlmp
 EXPOSE 80
 
 # media folder:
-# VOLUME /xlmp/media
+VOLUME /xlmp/media
 
 RUN chmod -R +x /xlmp/docker/s6
 # ENTRYPOINT ["/bin/sh", "/xlmp/docker/docker-entrypoint.sh"]
