@@ -71,6 +71,4 @@ class TestMain(AsyncHTTPTestCase):
     # (r'/wp/play/(?P<src>.*)', WebPlayerHandler),
 
 if __name__ == '__main__':
-    TRACKER.stop()
-    LOADER.stop()
     unittest.main()

@@ -668,13 +668,13 @@ run_sql('''create table if not exists history
 
 # initialize dlna threader
 TRACKER = DMRTracker()
-TRACKER.start()
 LOADER = DLNALoader()
-LOADER.start()
 
 tornado.ioloop.PeriodicCallback(report_dlna_state, 200).start()
 
 if __name__ == "__main__":
+    TRACKER.start()
+    LOADER.start()
     # if sys.platform == 'win32':
         # os.system('start http://127.0.0.1:8888/')
     APP.listen(8888, xheaders=True)
