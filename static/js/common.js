@@ -57,9 +57,10 @@ $("#tabFrame").on("click", ".folder", function () {
  * @param {String} url
  */
 function get(url) {
-    $.get(url, function(data){
-        out(data);
-    });
+    // $.get(url, function(data){
+        // out(data);
+    // });
+    $.get(url, out);
 }
 
 /**
