@@ -2,7 +2,7 @@
 {% block title %}DMC - Light Media Player{% end %}
 
     {% block main %}
-    <div class="dlna-show col-xs-12 col-sm-6 col-md-5">
+    <div class="dlna-show col-xs-12 col-sm-8 col-md-6">
       <div id="dmr" class="btn-group dropdown">
         <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>
         </button>
