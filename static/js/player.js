@@ -1,5 +1,4 @@
 
-
 $("#rate").show();
 
 $("#videosize").click(function () {
