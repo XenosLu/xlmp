@@ -45,7 +45,6 @@ class TestMain(AsyncHTTPTestCase):
         # response = self.fetch('/hist/rm')
 
     def test_sys(self):
-
         response = self.fetch('/sys/test')
         self.assertEqual(response.code, 403)
         print(response.body)
