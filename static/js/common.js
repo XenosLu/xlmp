@@ -1,15 +1,15 @@
-var RANGE = 12;  //minimum touch move range in px
+var RANGE = 12; //minimum touch move range in px
 var hide_sidebar = 0;
 
 window.onload = adapt;
 window.onresize = adapt;
 var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-if(!isiOS)
+if (!isiOS)
     $(document).mousemove(showSidebar);
 
 check_dlna_state();
 
-function showSidebar(){
+function showSidebar() {
     $("#sidebar").show();
     clearTimeout(hide_sidebar);
     hide_sidebar = setTimeout('$("#sidebar").hide()', 3000);
@@ -20,11 +20,13 @@ $("#clear").click(function () {
     if (confirm("Clear all history?"))
         history("/hist/clear");
 });
-$("#suspend").click(function() {
-    if(confirm("Suspend ?"))$.post("/suspend");
+$("#suspend").click(function () {
+    if (confirm("Suspend ?"))
+        $.post("/suspend");
 });
-$("#shutdown").click(function() {
-    if(confirm("Shutdown ?"))$.post("/shutdown");
+$("#shutdown").click(function () {
+    if (confirm("Shutdown ?"))
+        $.post("/shutdown");
 });
 // Dialog open/close toggle buttons
 $("#history").click(toggleDialog);
@@ -82,7 +84,7 @@ function showDialog() {
  * @method toggleDialog
  */
 function toggleDialog() {
-    if($("#history").hasClass("active")) {
+    if ($("#history").hasClass("active")) {
         $("#history").removeClass("active");
         $("#dialog").hide(250);
     } else {
@@ -105,10 +107,10 @@ function adapt() {
         var video_ratio = $("video").get(0).videoWidth / $("video").get(0).videoHeight;
         var page_ratio = $(window).width() / $(window).height();
         if (page_ratio < video_ratio) {
-            var width= $(window).width() + "px";
+            var width = $(window).width() + "px";
             var height = Math.floor($(window).width() / video_ratio) + "px";
         } else {
-            var width= Math.floor($(window).height() * video_ratio) + "px";
+            var width = Math.floor($(window).height() * video_ratio) + "px";
             var height = $(window).height() + "px";
         }
         $("video").get(0).style.width = width;
