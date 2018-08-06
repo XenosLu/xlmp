@@ -2,8 +2,7 @@
 {% block title %}DMC - Light Media Player{% end %}
 
     {% block main %}
-    <div class="container">
-      <div class="dlna-show col-xs-12 col-sm-6 col-md-5">
+    <div class="dlna-show col-xs-12 col-sm-6 col-md-5">
       <div id="dmr" class="btn-group dropdown">
         <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>
         </button>
@@ -32,7 +31,6 @@
         <button onclick="get('/dlna/vol/down');" type="button" class="volume btn btn-warning btn-lg glyphicon glyphicon-minus">
         <button onclick="get('/dlna/vol/up');" type="button" class="volume btn btn-warning btn-lg glyphicon glyphicon-plus">
       </button>
-      </div>
     </div>
     {% end %}
 
