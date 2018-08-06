@@ -115,6 +115,30 @@ function adapt() {
     }
 }
 
+function renderFilelist(data) {
+    if ($("#navtab li:eq(1)").attr("class") != "active")
+        $("#navtab li:eq(1) a").tab("show");
+    $("#clear").hide();
+    var html = "";
+    var icon = {
+        "folder": "folder-close",
+        "mp4": "film",
+        "video": "film",
+        "other": "file"
+    };
+    $.each(data["filesystem"], function (i, n) {
+        var size = "";
+        if (n["size"])
+            size = "<br><small>" + n["size"] + "</small>";
+        var td = new Array(3);
+        td[0] = '<td><i class="glyphicon glyphicon-' + icon[n["type"]] + '"></i></td>';
+        td[1] = '<td class="filelist ' + n["type"] + '" title="' + n["path"] + '">' + n["filename"] + size + "</td>";
+        td[2] = '<td class="move" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i></td>';
+        html += "<tr>" + td.join("") + "</tr>";
+    });
+    $("#list").empty().append(html);
+}
+
 /**
  * Render file list box from ajax
  *
@@ -127,33 +151,34 @@ function filelist(str) {
         dataType: "json",
         timeout: 1999,
         type: "get",
-        success: function (data) {
-            if ($("#navtab li:eq(1)").attr("class") != "active")
-                $("#navtab li:eq(1) a").tab("show");
-            $("#clear").hide();
-            var html = "";
-            var icon = {
-                "folder": "folder-close",
-                "mp4": "film",
-                "video": "film",
-                "other": "file"
-            };
-            $.each(data["filesystem"], function (i, n) {
-                var size = "";
-                if (n["size"])
-                    size = "<br><small>" + n["size"] + "</small>";              
-                var td = new Array(3);
-                td[0] = '<td><i class="glyphicon glyphicon-' + icon[n["type"]] + '"></i></td>';
-                td[1] = '<td class="filelist ' + n["type"] + '" title="' + n["path"] + '">' + n["filename"] + size + "</td>";
-                td[2] = '<td class="move" title="' + n["path"] + '">' +'<i class="glyphicon glyphicon-remove-circle"></i></td>';
-                html += "<tr>" + td.join("") + "</tr>";
-            });
-            $("#list").empty().append(html);
-        },
+        success: renderFilelist,
         error: function (xhr) {
             out(xhr.statusText);
         }
     });
+}
+
+function renderHistory(data) {
+    if (!$("#navtab li:eq(0)").hasClass("active"))
+        $("#navtab li:eq(0) a").tab("show");
+    $("#clear").show();
+    var html = "";
+    $.each(data["history"], function (i, n) {
+        var mediaType = "";
+        if (n["exist"]) {
+            mediaType = "video";
+            if ((n["filename"]).lastIndexOf('.mp4') > 0)
+                mediaType = "mp4";
+        }
+        var td = new Array();
+        td[0] = '<td class="folder" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-folder-close"></i></td>';
+        td[1] = '<td><i class="glyphicon glyphicon-film"></i></td>';
+        td[2] = '<td class="filelist ' + mediaType + '" title="' + n["filename"] + '">' + n["filename"] + "<br><small>" + n["latest_date"] + " | " + secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small></td>";
+        td[3] = '<td class="remove" title="' + n["filename"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i>' + "</td>";
+        //td[4] = '<td class="next" title="' + n["filename"] + '"><i class="glyphicon glyphicon-step-forward"></i></td>';
+        html += "<tr>" + td.join("") + "</tr>";
+    });
+    $('#list').empty().append(html);
 }
 
 /**
@@ -168,29 +193,7 @@ function history(str) {
         dataType: "json",
         timeout: 1999,
         type: "get",
-        success: function (data) {
-            if (!$("#navtab li:eq(0)").hasClass("active"))
-                $("#navtab li:eq(0) a").tab("show");
-            $("#clear").show();
-            var html = "";
-            $.each(data["history"], function (i, n) {
-                var mediaType = "";
-                if (n["exist"])
-                {
-                    mediaType = "video";
-                    if ((n["filename"]).lastIndexOf('.mp4') > 0)
-                        mediaType = "mp4";
-                }
-                var td = new Array();
-                td[0] = '<td class="folder" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-folder-close"></i></td>';
-                td[1] = '<td><i class="glyphicon glyphicon-film"></i></td>';
-                td[2] = '<td class="filelist '+ mediaType + '" title="' + n["filename"] + '">' + n["filename"] + "<br><small>" + n["latest_date"] + " | " + secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small></td>";
-                td[3] = '<td class="remove" title="' + n["filename"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i>' + "</td>";
-                //td[4] = '<td class="next" title="' + n["filename"] + '"><i class="glyphicon glyphicon-step-forward"></i></td>';
-                html += "<tr>" + td.join("") + "</tr>";
-            });
-            $('#list').empty().append(html);
-        },
+        success: renderHistory,
         error: function (xhr) {
             out(xhr.statusText);
         }
