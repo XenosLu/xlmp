@@ -9,24 +9,24 @@ $("#dlna_toggle").attr("onclick", 'window.location.href = "/";');
 $(".dlna-show").show();
 // get_dmr_state();
 // var inter = setInterval("get_dmr_state()", 1100);
-$("#position-bar").on("change", function() {
+$("#position-bar").on("change", function () {
     $.get("/dlna/seek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
     update = true;
-}).on("input", function() {
+}).on("input", function () {
     out(secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
     update = false;
 });
 var ws_link;
 ws_link = dlnalink();
 
-function CheckLink(){
-    if(ws_link.readyState == 3)
+function CheckLink() {
+    if (ws_link.readyState == 3)
         ws_link = dlnalink();
 }
 setInterval("CheckLink()", 1200);
-function dlnalink(){
+function dlnalink() {
     var ws = new WebSocket("ws://" + window.location.host + "/dlna/link");
-    ws.onmessage = function(e) {
+    ws.onmessage = function (e) {
         data = $.parseJSON(e.data);
         console.log(data);
         ws.send('got');
@@ -54,16 +54,16 @@ function dlnalink(){
     ws.onclose = function () {
         $("#state").text('disconnected');
     };
-    ws.onerror = function () { 
+    ws.onerror = function () {
         console.log('error');
-    }; 
+    };
     return ws;
 }
 
 /**
  * receive dlnainfo through ajax, not used
  */
-function get_dmr_state(){
+function get_dmr_state() {
     if (wait > 0) {
         wait -= 1;
     } else {
