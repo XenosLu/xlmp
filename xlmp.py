@@ -596,7 +596,6 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     def data_received(self, chunk):
         pass
 
-    # @tornado.gen.coroutine
     def open(self, *args, **kwargs):
         logging.info('ws connected: %s', self.request.remote_ip)
         self.users.add(self)
@@ -660,21 +659,19 @@ logging.basicConfig(level=logging.INFO,
                     datefmt='%Y-%m-%d %H:%M:%S')
 APP = tornado.web.Application(HANDLERS, **SETTINGS)
 
-# initialize DataBase
-run_sql('''create table if not exists history
-                (FILENAME text PRIMARY KEY not null,
-                POSITION float not null,
-                DURATION float, LATEST_DATE datetime not null);''')
-
 # initialize dlna threader
 TRACKER = DMRTracker()
 LOADER = DLNALoader()
 
-tornado.ioloop.PeriodicCallback(report_dlna_state, 200).start()
-
 if __name__ == "__main__":
+    # initialize DataBase
+    run_sql('''create table if not exists history
+                    (FILENAME text PRIMARY KEY not null,
+                    POSITION float not null,
+                    DURATION float, LATEST_DATE datetime not null);''')
     TRACKER.start()
     LOADER.start()
+    tornado.ioloop.PeriodicCallback(report_dlna_state, 200).start()
     # if sys.platform == 'win32':
         # os.system('start http://127.0.0.1:8888/')
     APP.listen(8888, xheaders=True)
