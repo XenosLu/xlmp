@@ -609,6 +609,14 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
         self.users.remove(self)
         DlnaWebSocketHandler.last_message = 'Websocket user disconnected.'
 
+    @classmethod
+    def send_dlna_state(cls):
+        if cls.last_message != TRACKER.state:
+            logging.info(cls.last_message)
+            for ws_user in cls.users:
+                ws_user.write_message(TRACKER.state)
+            cls.last_message = TRACKER.state.copy()
+
 
 def report_dlna_state():
     """periodly report dlna state for websocket"""
@@ -671,7 +679,8 @@ if __name__ == "__main__":
                     DURATION float, LATEST_DATE datetime not null);''')
     TRACKER.start()
     LOADER.start()
-    tornado.ioloop.PeriodicCallback(report_dlna_state, 200).start()
+    # tornado.ioloop.PeriodicCallback(report_dlna_state, 200).start()
+    tornado.ioloop.PeriodicCallback(DlnaWebSocketHandler.send_dlna_state, 200).start()
     # if sys.platform == 'win32':
         # os.system('start http://127.0.0.1:8888/')
     APP.listen(8888, xheaders=True)
