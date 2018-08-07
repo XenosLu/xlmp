@@ -30,26 +30,7 @@ function dlnalink() {
         data = $.parseJSON(e.data);
         console.log(data);
         ws.send('got');
-        if ($.isEmptyObject(data)) {
-            $("#state").text('No DMR');
-            $("#dlna_toggle").removeClass("btn-success");
-        } else {
-            $("#dlna_toggle").addClass("btn-success");
-            reltime = timeToSecond(data["RelTime"]);
-            if (update)
-                $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
-
-            $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
-            $('#src').text(decodeURI(data["TrackURI"]));
-
-            $("#dmr button").text(data["CurrentDMR"]);
-            $("#dmr ul").empty().append('<li><a onclick="$.get(\'/dlna/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
-            for (x in data["DMRs"]) {
-                $("#dmr ul").append('<li><a onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
-            }
-
-            $("#state").text(data["CurrentTransportState"]);
-        }
+        renderUI(data);
     }
     ws.onclose = function () {
         $("#state").text('disconnected');
@@ -59,7 +40,28 @@ function dlnalink() {
     };
     return ws;
 }
+function renderUI(data) {
+    if ($.isEmptyObject(data)) {
+        $("#state").text('No DMR');
+        $("#dlna_toggle").removeClass("btn-success");
+    } else {
+        $("#dlna_toggle").addClass("btn-success");
+        reltime = timeToSecond(data["RelTime"]);
+        if (update)
+            $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
 
+        $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
+        $('#src').text(decodeURI(data["TrackURI"]));
+
+        $("#dmr button").text(data["CurrentDMR"]);
+        $("#dmr ul").empty().append('<li><a onclick="$.get(\'/dlna/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
+        for (x in data["DMRs"]) {
+            $("#dmr ul").append('<li><a onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
+        }
+
+        $("#state").text(data["CurrentTransportState"]);
+    }
+}
 /**
  * receive dlnainfo through ajax, not used
  */
