@@ -618,15 +618,6 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
             cls.last_message = TRACKER.state.copy()
 
 
-def report_dlna_state():
-    """periodly report dlna state for websocket"""
-    if DlnaWebSocketHandler.last_message != TRACKER.state:
-        logging.info(DlnaWebSocketHandler.last_message)
-        for ws_user in DlnaWebSocketHandler.users:
-            ws_user.write_message(TRACKER.state)
-        DlnaWebSocketHandler.last_message = TRACKER.state.copy()
-
-
 # context arrangement (to-do)
     # /sys/ done
     # /fs/ done
@@ -679,7 +670,6 @@ if __name__ == "__main__":
                     DURATION float, LATEST_DATE datetime not null);''')
     TRACKER.start()
     LOADER.start()
-    # tornado.ioloop.PeriodicCallback(report_dlna_state, 200).start()
     tornado.ioloop.PeriodicCallback(DlnaWebSocketHandler.send_dlna_state, 200).start()
     # if sys.platform == 'win32':
         # os.system('start http://127.0.0.1:8888/')
