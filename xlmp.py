@@ -591,7 +591,7 @@ class TestHandler(tornado.web.RequestHandler):
 class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     """DLNA info retriever use web socket"""
     users = set()
-    last_message = 'DLNA web socket reporter coroutine initialized'
+    last_message = None
 
     def data_received(self, chunk):
         pass
@@ -599,23 +599,32 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     def open(self, *args, **kwargs):
         logging.info('ws connected: %s', self.request.remote_ip)
         self.users.add(self)
-        DlnaWebSocketHandler.last_message = 'Websocket user connected.'
+        # DlnaWebSocketHandler.last_message = 'Websocket user connected.'
 
     def on_message(self, message):
         pass
 
+    def on_pong(self, data=None):
+        logging.info('pang')
+        if self.last_message != TRACKER.state:
+            logging.info(TRACKER.state)
+            for ws_user in self.users:
+                ws_user.write_message(TRACKER.state)
+            self.last_message = TRACKER.state.copy()
+        # DlnaWebSocketHandler.send_dlna_state()
+
     def on_close(self):
         logging.info('ws close: %s', self.request.remote_ip)
         self.users.remove(self)
-        DlnaWebSocketHandler.last_message = 'Websocket user disconnected.'
+        # DlnaWebSocketHandler.last_message = 'Websocket user disconnected.'
 
-    @classmethod
-    def send_dlna_state(cls):
-        if cls.last_message != TRACKER.state:
-            logging.info(cls.last_message)
-            for ws_user in cls.users:
-                ws_user.write_message(TRACKER.state)
-            cls.last_message = TRACKER.state.copy()
+    # @classmethod
+    # def send_dlna_state(cls):
+        # if cls.last_message != TRACKER.state:
+            # logging.info(cls.last_message)
+            # for ws_user in cls.users:
+                # ws_user.write_message(TRACKER.state)
+            # cls.last_message = TRACKER.state.copy()
 
 
 # context arrangement (to-do)
@@ -650,6 +659,7 @@ SETTINGS = {
     'template_path': 'views',
     'gzip': True,
     # "debug": True,
+    'websocket_ping_interval': 0.2,
 }
 
 # initialize logging
@@ -670,7 +680,7 @@ if __name__ == "__main__":
                     DURATION float, LATEST_DATE datetime not null);''')
     TRACKER.start()
     LOADER.start()
-    tornado.ioloop.PeriodicCallback(DlnaWebSocketHandler.send_dlna_state, 200).start()
+    # tornado.ioloop.PeriodicCallback(DlnaWebSocketHandler.send_dlna_state, 200).start()
     # if sys.platform == 'win32':
         # os.system('start http://127.0.0.1:8888/')
     APP.listen(8888, xheaders=True)
