@@ -1,4 +1,4 @@
-﻿<!doctype html>
+﻿<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -11,9 +11,11 @@
     <title>{% block title %}Light Media Player{% end %}</title>
   </head>
   <body>
-    {% include common.tpl %}
-    {% block main %}
-    {% end %}
+    <div class="container">
+      {% include common.tpl %}
+      {% block main %}
+      {% end %}
+    </div>
     {% block footer %}
     <footer class="text-center"><small>&copy;2016-2018 Xenos' Light Media Player</small></footer>
     {% end %}

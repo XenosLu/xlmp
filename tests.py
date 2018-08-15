@@ -45,7 +45,6 @@ class TestMain(AsyncHTTPTestCase):
         # response = self.fetch('/hist/rm')
 
     def test_sys(self):
-
         response = self.fetch('/sys/test')
         self.assertEqual(response.code, 403)
         print(response.body)
@@ -71,6 +70,4 @@ class TestMain(AsyncHTTPTestCase):
     # (r'/wp/play/(?P<src>.*)', WebPlayerHandler),
 
 if __name__ == '__main__':
-    TRACKER.stop()
-    LOADER.stop()
     unittest.main()
