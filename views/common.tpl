@@ -52,7 +52,9 @@
        <tr v-for="item in history">
          <td><i class="icono-folder"></i></td>
          <td><i class="icono-video"></i></td>
-         <td @click="play(item.filename)">${ item.filename }</td>
+         <td @click="play(item.filename)">${ item.filename }
+           <small>${ item.latest_date } | ${ secondToTime(item.position) } / ${ secondToTime(item.duration) }</small>
+         </td>
          <td><i class="icono-trash"></i></td>
        </tr>
      </table>
