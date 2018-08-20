@@ -62,7 +62,7 @@
         <!-- td[3] = '<td class="remove" title="' + n["filename"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i>' + "</td>"; -->
         <!-- //td[4] = '<td class="next" title="' + n["filename"] + '"><i class="glyphicon glyphicon-step-forward"></i></td>'; -->
     <!-- <p class="my-4">Hello from modal!</p> -->
-          <table class="table-striped table-responsive table-condensed table table-hover table-responsive-xl table-sm">
+          <table v-show="!history_show" class="table-striped table-responsive table-condensed table table-hover table-responsive-xl table-sm">
         <tbody id="list">
         </tbody>
       </table>
