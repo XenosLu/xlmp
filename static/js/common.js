@@ -1,8 +1,9 @@
 "use strict";
-window.appView = new Vue({
+window.commonView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-common',
         data: {
+            dlnashow: false,
         },
         methods: {
             test: function (obj) {

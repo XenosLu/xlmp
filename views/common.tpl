@@ -9,27 +9,29 @@
       <b-dropdown-divider></b-dropdown-divider>
       <b-dropdown-item onclick="get('/sys/restore')">restore</b-dropdown-item>
     </b-dropdown>
-    <b-dropdown right class="dlna-show">
+    <!-- dlna menu -->
+    <b-dropdown right v-show="dlnashow">
       <b-dropdown-item onclick="get('/dlna/seek/00:00:15')">00:15</b-dropdown-item>
       <b-dropdown-item onclick="get('/dlna/seek/00:00:29')">00:30</b-dropdown-item>
       <b-dropdown-item onclick="get('/dlna/seek/00:01:00')">01:00</b-dropdown-item>
       <b-dropdown-item onclick="get('/dlna/seek/00:01:30')">01:30</b-dropdown-item>
     </b-dropdown>
+    <!-- dlna menu end -->
 
   </b-button-group>
 
   <!-- dlna menu -->
-  <div class="dlna-show btn-group dropdown">
-    <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
-      <i class="glyphicon glyphicon-chevron-down"></i>
-    </button>
-    <ul class="dropdown-menu">
-      <li><a onclick="get('/dlna/seek/00:00:15')">00:15</a></li>
-      <li><a onclick="get('/dlna/seek/00:00:29')">00:30</a></li>
-      <li><a onclick="get('/dlna/seek/00:01:00')">01:00</a></li>
-      <li><a onclick="get('/dlna/seek/00:01:30')">01:30</a></li>
-    </ul>
-  </div>
+  <!-- <div class="dlna-show btn-group dropdown"> -->
+    <!-- <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown"> -->
+      <!-- <i class="glyphicon glyphicon-chevron-down"></i> -->
+    <!-- </button> -->
+    <!-- <ul class="dropdown-menu"> -->
+      <!-- <li><a onclick="get('/dlna/seek/00:00:15')">00:15</a></li> -->
+      <!-- <li><a onclick="get('/dlna/seek/00:00:29')">00:30</a></li> -->
+      <!-- <li><a onclick="get('/dlna/seek/00:01:00')">01:00</a></li> -->
+      <!-- <li><a onclick="get('/dlna/seek/00:01:30')">01:30</a></li> -->
+    <!-- </ul> -->
+  <!-- </div> -->
   <!-- player menu -->
   <div id="rate" class="btn-group dropdown">
     <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
