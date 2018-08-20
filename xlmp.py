@@ -608,7 +608,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
         pass
 
     def on_pong(self, data=None):
-        logging.info('pang')
+        # logging.info('pong')
         if self.last_message != TRACKER.state:
             logging.info(TRACKER.state)
             for ws_user in self.users:
