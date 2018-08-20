@@ -5,7 +5,6 @@ window.commonView = new Vue({
         data: {
             dlnashow: false,
             history: [],
-            history_fields: ['xen'],
         },
         methods: {
             test: function (obj) {

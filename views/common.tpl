@@ -48,11 +48,12 @@
   <b-modal id="modal_new" size="lg" class="col-xs-12 col-sm-8 col-md-8 col-lg-7" centered hide-footer title-tag="h6" title="test">
      <b-btn onclick="history('/hist/ls')"><i class="icono-document"></i>History</b-btn>
      <b-btn onclick="filelist('/fs/ls/')"><i class="icono-home"></i>Home dir</b-btn>
-     <b-table striped hover :items="history" :fields="history_fields">
-         <template slot="xen" slot-scope="data">
-     <span >${ data.item.filename }</span>
-    </template>
-     </b-table>
+     <table>
+     <tr v-for="item in history">
+       <td>${ item.filename }</td>
+     </tr>
+     </table>
+
     <!-- <p class="my-4">Hello from modal!</p> -->
           <table class="table-striped table-responsive table-condensed table table-hover table-responsive-xl table-sm">
         <tbody id="list">
