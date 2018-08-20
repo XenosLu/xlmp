@@ -57,7 +57,7 @@ $("#tabFrame").on("click", ".folder", function () {
     }
 }).on("click", ".remove", function () {
     if (confirm("Clear history of " + this.title + "?"))
-        history("/hist/rm/" + this.title.replace(/\?/g, "%3F"));
+        history("/hist/rm/" + this.title.replace(/\?/g, "%3F"));  //?to%3F #to%23
 }).on("click", ".mp4", function () {
     if (window.document.location.pathname == "/dlna")
         get("/dlna/load/" + this.title);
