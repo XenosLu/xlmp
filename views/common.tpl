@@ -1,26 +1,23 @@
 <div id="v-common">
 <div id="sidebar" class="btn-toolbar">
-  <div class="btn-group">
-    <button title="browser" id="history" type="button" class="btn btn-default">
-      <i class="icono-list"></i>
-    </button>
-    <a title="switch DLNA mode" id="dlna_toggle" onclick='window.location.href = "/dlna";' type="button" class="btn btn-default">DLNA</a>
-  </div>
-  <div class="btn-group dropdown">
-    <button title="Maintenance" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-      <i class="glyphicon glyphicon-cog"></i>
-      <i class="glyphicon glyphicon-chevron-down"></i>
-    </button>
-    <ul class="dropdown-menu">
-      <li><a onclick="get('/sys/update')">update</a></li>
-      <li class="divider"></li>
-      <li><a onclick="get('/sys/backup')">backup</a></li>
-      <li><a onclick="get('/sys/restore')">restore</a></li>
-      <!-- <li class="divider"></li> -->
-      <!-- <li><a id="suspend"><i class="glyphicon glyphicon-off"></i>suspend</a></li> -->
-      <!-- <li><a id="shutdown"><i class="glyphicon glyphicon-off"></i>shutdown</a></li> -->
-    </ul>
-  </div>
+  <b-button-group>
+    <b-button variant="outline-dark" title="browser" id="history"><i class="icono-list"></i></b-button>
+    <b-button variant="outline-success" title="switch DLNA mode" id="dlna_toggle" onclick='window.location.href = "/dlna";'>DLNA</b-button>
+    <b-dropdown right>
+      <b-dropdown-item onclick="get('/sys/update')">update</b-dropdown-item>
+      <b-dropdown-item onclick="get('/sys/backup')">backup</b-dropdown-item>
+      <b-dropdown-divider></b-dropdown-divider>
+      <b-dropdown-item onclick="get('/sys/restore')">restore</b-dropdown-item>
+    </b-dropdown>
+    <b-dropdown right class="dlna-show">
+      <b-dropdown-item onclick="get('/dlna/seek/00:00:15')">00:15</b-dropdown-item>
+      <b-dropdown-item onclick="get('/dlna/seek/00:00:29')">00:30</b-dropdown-item>
+      <b-dropdown-item onclick="get('/dlna/seek/00:01:00')">01:00</b-dropdown-item>
+      <b-dropdown-item onclick="get('/dlna/seek/00:01:30')">01:30</b-dropdown-item>
+    </b-dropdown>
+
+  </b-button-group>
+
   <!-- dlna menu -->
   <div class="dlna-show btn-group dropdown">
     <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
