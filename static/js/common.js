@@ -1,12 +1,21 @@
 "use strict";
+var icon = {
+    "folder": "icono-folder",
+    "mp4": "icono-video",
+    "video": "icono-video",
+    "other": "icono-video"
+};
+
 window.commonView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-common',
         data: {
+            icon: icon,
             dlnashow: false,
             history_show: true,
             history: [],
             filelist: [],
+            icon: icon,
         },
         methods: {
             test: function (obj) {

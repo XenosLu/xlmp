@@ -60,7 +60,7 @@
      </table>
      <table v-show="!history_show" class="table-striped table-responsive table-condensed table table-hover table-responsive-xl table-sm">
        <tr v-for="item in filelist">
-         <td><i class="icono-video"></i></td>
+         <td><i :class="icon[item.type]"></i></td>
          <td @click="play(item.filename)">${ item.filename }<br><small>${ item.size }</small>
          </td>
          <td><i class="icono-trash"></i></td>
@@ -69,7 +69,7 @@
              <!-- td[0] = '<td><i class="glyphicon glyphicon-' + icon[n["type"]] + '"></i></td>'; -->
         <!-- td[1] = '<td class="filelist ' + n["type"] + '" title="' + n["path"] + '">' + n["filename"] + size + "</td>"; -->
         <!-- td[2] = '<td class="move" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i></td>'; -->
-        <!-- html += "<tr>" + td.join("") + "</tr>"; -->
+
         
         <!-- td[0] = '<td class="folder" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-folder-close"></i></td>'; -->
         <!-- td[1] = '<td><i class="glyphicon glyphicon-film"></i></td>'; -->
