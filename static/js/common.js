@@ -1,4 +1,18 @@
 "use strict";
+window.appView = new Vue({
+        delimiters: ['${', '}'],
+        el: '#v-common',
+        data: {
+        },
+        methods: {
+            test: function (obj) {
+                console.log("test " + obj);
+            },
+        },
+    });
+
+
+
 var RANGE = 12; //minimum touch move range in px
 var hide_sidebar = 0;
 

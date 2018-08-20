@@ -1,3 +1,4 @@
+<div id="v-common">
 <div id="sidebar" class="btn-toolbar">
   <div class="btn-group">
     <button title="browser" id="history" type="button" class="btn btn-default">
@@ -80,3 +81,4 @@
     </div><!-- .panel-footer -->
   </div><!-- #panel -->
 </div><!-- #dialog -->
+</div>
