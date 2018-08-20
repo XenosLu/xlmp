@@ -27,6 +27,14 @@ window.commonView = new Vue({
                 else
                     window.location.href = "/wp/play/" + obj;
             },
+            open: function (obj, type) {
+                if(type=='folder')
+                    filelist("/fs/ls/" + obj + "/");
+                else if (window.document.location.pathname == "/dlna")
+                    get("/dlna/load/" + obj);
+                else
+                    window.location.href = "/wp/play/" + obj;
+            },
         },
     });
 

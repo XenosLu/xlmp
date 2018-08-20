@@ -61,7 +61,7 @@
      <table v-show="!history_show" class="table-striped table-responsive table-condensed table table-hover table-responsive-xl table-sm">
        <tr v-for="item in filelist">
          <td><i :class="icon[item.type]"></i></td>
-         <td @click="play(item.filename)">${ item.filename }<br><small>${ item.size }</small>
+         <td @click="open(item.filename, item.type)">${ item.filename }<br><small>${ item.size }</small>
          </td>
          <td><i class="icono-trash"></i></td>
        </tr>
