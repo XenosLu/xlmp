@@ -10,6 +10,12 @@ window.commonView = new Vue({
             test: function (obj) {
                 console.log("test " + obj);
             },
+            play: function (obj) {
+                if (window.document.location.pathname == "/dlna")
+                    get("/dlna/load/" + obj);
+                else
+                    window.location.href = "/wp/play/" + obj;
+            },
         },
     });
 
@@ -75,9 +81,7 @@ $("#tabFrame").on("click", ".folder", function () {
  * @param {String} url
  */
 function get(url) {
-    // $.get(url, function(data){
-        // out(data);
-    // });
+    console.log('get');
     $.get(url, out);
 }
 

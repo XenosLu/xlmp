@@ -49,11 +49,18 @@
      <b-btn onclick="history('/hist/ls')"><i class="icono-document"></i>History</b-btn>
      <b-btn onclick="filelist('/fs/ls/')"><i class="icono-home"></i>Home dir</b-btn>
      <table>
-     <tr v-for="item in history">
-       <td>${ item.filename }</td>
-     </tr>
+       <tr v-for="item in history">
+         <td><i class="icono-folder"></i></td>
+         <td><i class="icono-video"></i></td>
+         <td @click="play(item.filename)">${ item.filename }</td>
+         <td><i class="icono-trash"></i></td>
+       </tr>
      </table>
-
+        <!-- td[0] = '<td class="folder" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-folder-close"></i></td>'; -->
+        <!-- td[1] = '<td><i class="glyphicon glyphicon-film"></i></td>'; -->
+        <!-- td[2] = '<td class="filelist ' + mediaType + '" title="' + n["filename"] + '">' + n["filename"] + "<br><small>" + n["latest_date"] + " | " + secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small></td>"; -->
+        <!-- td[3] = '<td class="remove" title="' + n["filename"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i>' + "</td>"; -->
+        <!-- //td[4] = '<td class="next" title="' + n["filename"] + '"><i class="glyphicon glyphicon-step-forward"></i></td>'; -->
     <!-- <p class="my-4">Hello from modal!</p> -->
           <table class="table-striped table-responsive table-condensed table table-hover table-responsive-xl table-sm">
         <tbody id="list">
