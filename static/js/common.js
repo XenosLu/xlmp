@@ -13,7 +13,6 @@ window.commonView = new Vue({
     });
 
 
-
 var RANGE = 12; //minimum touch move range in px
 var hide_sidebar = 0;
 

@@ -4,6 +4,6 @@
     {% end %}
 {% block script %}
   <script>
-  toggleDialog();
+  //toggleDialog();
   </script>
 {% end %}

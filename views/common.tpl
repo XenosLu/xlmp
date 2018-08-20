@@ -1,8 +1,8 @@
 <div id="v-common">
 <div id="sidebar" class="btn-toolbar">
   <b-button-group>
-    <b-btn v-b-modal.modal_new>demo modal</b-btn>
-    <b-button variant="outline-dark" title="browser" id="history"><i class="icono-list"></i></b-button>
+    <b-btn variant="outline-dark" title="browser" id="history" v-b-modal.modal_new><i class="icono-list"></i></b-btn>
+    <!-- <b-button variant="outline-dark" title="browser" id="history"><i class="icono-list"></i></b-button> -->
     <b-button variant="outline-success" title="switch DLNA mode" id="dlna_toggle" onclick='window.location.href = "/dlna";'>DLNA</b-button>
     <b-dropdown right>
       <b-dropdown-item onclick="get('/sys/update')">update</b-dropdown-item>
@@ -45,41 +45,18 @@
   
 
   <!-- Modal Component -->
-  <b-modal id="modal_new" centered ok-only ok-title="close" >
-    <p class="my-4">Hello from modal!</p>
+  <b-modal id="modal_new" size="lg" class="col-xs-12 col-sm-8 col-md-8 col-lg-7" centered hide-footer title-tag="h6" title="test">
+     <b-btn onclick="history('/hist/ls')"><i class="icono-document"></i>History</b-btn>
+     <b-btn onclick="filelist('/fs/ls/')"><i class="icono-home"></i>Home dir</b-btn>
+    <!-- <p class="my-4">Hello from modal!</p> -->
+          <table class="table-striped table-responsive table-condensed table table-hover table-responsive-xl table-sm">
+        <tbody id="list">
+        </tbody>
+      </table>
   </b-modal>
 
 <div id="dialog" class="col-xs-12 col-sm-8 col-md-8 col-lg-7">
-<!-- new -->
-<div role="tablist">
-    <b-card no-body class="mb-1">
-      <b-card-header header-tag="header" class="p-1" role="tab">
-        <b-btn v-b-toggle.accordion1 variant="info">Accordion 1</b-btn>
-        <b-btn v-b-toggle.accordion2 variant="info">Accordion 2</b-btn>
-        <button type="button" class="close">&times;</button>
-      </b-card-header>
-      <b-collapse is-nav id="accordion1" visible accordion="my-accordion" role="tabpanel">
-        <b-card-body>
-          <p class="card-text">
-            aaa
-          </p>
-        </b-card-body>
-      </b-collapse>
-    </b-card>
-    <b-card no-body class="mb-1">
-      <!-- <b-card-header header-tag="header" class="p-1" role="tab"> -->
-        <!-- <b-btn v-b-toggle.accordion2 variant="info">Accordion 2</b-btn> -->
-      <!-- </b-card-header> -->
-      <b-collapse id="accordion2" accordion="my-accordion" role="tabpanel">
-        <b-card-body>
-          <p class="card-text">
-            bbb
-          </p>
-        </b-card-body>
-      </b-collapse>
-    </b-card>
-  </div>
-<!-- new end -->
+
   <!-- <div id="panel" class="card"> -->
     <!-- <div class="bg-info card-header"> -->
       <!-- <button type="button" class="close">&times;</button> -->
