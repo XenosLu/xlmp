@@ -4,6 +4,7 @@ window.commonView = new Vue({
         el: '#v-common',
         data: {
             dlnashow: false,
+            history_show: true,
             history: [],
         },
         methods: {
@@ -139,6 +140,7 @@ function adapt() {
 }
 
 function renderFilelist(data) {
+    window.commonView.history_show=false;
     if ($("#navtab li:eq(1)").attr("class") != "active")
         $("#navtab li:eq(1) a").tab("show");
     $("#clear").hide();
@@ -182,11 +184,14 @@ function filelist(str) {
 }
 
 function renderHistory(data) {
+    window.commonView.history_show=true;
+    window.commonView.history = data.history;
+    /*
     if (!$("#navtab li:eq(0)").hasClass("active"))
         $("#navtab li:eq(0) a").tab("show");
     $("#clear").show();
     var html = "";
-    window.commonView.history = data.history;
+    
     $.each(data["history"], function (i, n) {
         var mediaType = "";
         if (n["exist"]) {
@@ -202,7 +207,7 @@ function renderHistory(data) {
         //td[4] = '<td class="next" title="' + n["filename"] + '"><i class="glyphicon glyphicon-step-forward"></i></td>';
         html += "<tr>" + td.join("") + "</tr>";
     });
-    $('#list').empty().append(html);
+    $('#list').empty().append(html);*/
 }
 
 /**

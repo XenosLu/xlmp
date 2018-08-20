@@ -48,7 +48,7 @@
   <b-modal id="modal_new" size="lg" class="col-xs-12 col-sm-8 col-md-8 col-lg-7" centered hide-footer title-tag="h6" title="test">
      <b-btn onclick="history('/hist/ls')"><i class="icono-document"></i>History</b-btn>
      <b-btn onclick="filelist('/fs/ls/')"><i class="icono-home"></i>Home dir</b-btn>
-     <table>
+     <table v-show="history_show">
        <tr v-for="item in history">
          <td><i class="icono-folder"></i></td>
          <td><i class="icono-video"></i></td>
