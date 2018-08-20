@@ -4,6 +4,7 @@ window.commonView = new Vue({
         el: '#v-common',
         data: {
             dlnashow: false,
+            history: [],
         },
         methods: {
             test: function (obj) {
@@ -181,6 +182,7 @@ function renderHistory(data) {
         $("#navtab li:eq(0) a").tab("show");
     $("#clear").show();
     var html = "";
+    window.commonView.history = data.history;
     $.each(data["history"], function (i, n) {
         var mediaType = "";
         if (n["exist"]) {
