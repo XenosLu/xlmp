@@ -59,12 +59,12 @@
       <ul id="navtab" class="nav nav-tabs">
         <li class="active" title="Show play history">
           <a href="#tabFrame" data-toggle="tab" onclick="history('/hist/ls')">
-            <i class="glyphicon glyphicon-list"></i>History
+            <i class="icono-document"></i>History
           </a>
         </li>
         <li title="Browse video folder">
           <a href="#tabFrame" data-toggle="tab" onclick="filelist('/fs/ls/')">
-            <i class="glyphicon glyphicon-home"></i>Home dir
+            <i class="icono-home"></i>Home dir
           </a>
         </li>
       </ul>
