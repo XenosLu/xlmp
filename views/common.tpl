@@ -1,7 +1,7 @@
 <div id="sidebar" class="btn-toolbar">
   <div class="btn-group">
     <button title="browser" id="history" type="button" class="btn btn-default btn-lg">
-      <i class="glyphicon glyphicon-th-list"></i>
+      <i class="icono-list"></i>
     </button>
     <a title="switch DLNA mode" id="dlna_toggle" onclick='window.location.href = "/dlna";' type="button" class="btn btn-default btn-lg">DLNA</a>
   </div>
@@ -53,8 +53,8 @@
   </div><!-- #rate .btn-group .dropup -->
 </div>
 <div id="dialog" class="col-xs-12 col-sm-8 col-md-8 col-lg-7">
-  <div id="panel">
-    <div class="bg-info panel-title">
+  <div id="panel" class="card">
+    <div class="bg-info card-header">
       <button type="button" class="close">&times;</button>
       <ul id="navtab" class="nav nav-tabs">
         <li class="active" title="Show play history">
@@ -69,14 +69,13 @@
         </li>
       </ul>
     </div>
-    <div id="tabFrame" class="tab-pane fade in">
-      <table class="table-striped table-responsive table-condensed">
+    <div id="tabFrame" class="card-body tab-pane fade in">
+      <table class="table-striped table-responsive table-condensed table table-hover table-responsive-xl table-sm">
         <tbody id="list">
         </tbody>
       </table>
     </div>
-    <div class="panel-footer">
-
+    <div class="card-footer">
       <button id="clear" type="button" class="btn btn-default">Clear History</button>
     </div><!-- .panel-footer -->
   </div><!-- #panel -->
