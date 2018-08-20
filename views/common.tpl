@@ -45,25 +45,37 @@
   
 
   <!-- Modal Component -->
-  <b-modal id="modal_new" size="lg" class="col-xs-12 col-sm-8 col-md-8 col-lg-7" centered hide-footer title-tag="h6" title="test">
+  <b-modal id="modal_new" size="lg" class="col-xs-12 col-sm-8 col-md-8 col-lg-7" centered hide-footer title-tag="h6" title="Browser">
      <b-btn onclick="history('/hist/ls')"><i class="icono-document"></i>History</b-btn>
      <b-btn onclick="filelist('/fs/ls/')"><i class="icono-home"></i>Home dir</b-btn>
-     <table v-show="history_show">
+     <table v-show="history_show" class="table-striped table-responsive table-condensed table table-hover table-responsive-xl table-sm">
        <tr v-for="item in history">
          <td><i class="icono-folder"></i></td>
          <td><i class="icono-video"></i></td>
-         <td @click="play(item.filename)">${ item.filename }
+         <td @click="play(item.filename)">${ item.filename }<br>
            <small>${ item.latest_date } | ${ secondToTime(item.position) } / ${ secondToTime(item.duration) }</small>
          </td>
          <td><i class="icono-trash"></i></td>
        </tr>
      </table>
+     <table v-show="!history_show" class="table-striped table-responsive table-condensed table table-hover table-responsive-xl table-sm">
+       <tr v-for="item in filelist">
+         <td><i class="icono-video"></i></td>
+         <td @click="play(item.filename)">${ item.filename }<br><small>${ item.size }</small>
+         </td>
+         <td><i class="icono-trash"></i></td>
+       </tr>
+     </table>
+             <!-- td[0] = '<td><i class="glyphicon glyphicon-' + icon[n["type"]] + '"></i></td>'; -->
+        <!-- td[1] = '<td class="filelist ' + n["type"] + '" title="' + n["path"] + '">' + n["filename"] + size + "</td>"; -->
+        <!-- td[2] = '<td class="move" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i></td>'; -->
+        <!-- html += "<tr>" + td.join("") + "</tr>"; -->
+        
         <!-- td[0] = '<td class="folder" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-folder-close"></i></td>'; -->
         <!-- td[1] = '<td><i class="glyphicon glyphicon-film"></i></td>'; -->
         <!-- td[2] = '<td class="filelist ' + mediaType + '" title="' + n["filename"] + '">' + n["filename"] + "<br><small>" + n["latest_date"] + " | " + secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small></td>"; -->
         <!-- td[3] = '<td class="remove" title="' + n["filename"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i>' + "</td>"; -->
         <!-- //td[4] = '<td class="next" title="' + n["filename"] + '"><i class="glyphicon glyphicon-step-forward"></i></td>'; -->
-    <!-- <p class="my-4">Hello from modal!</p> -->
           <table v-show="!history_show" class="table-striped table-responsive table-condensed table table-hover table-responsive-xl table-sm">
         <tbody id="list">
         </tbody>

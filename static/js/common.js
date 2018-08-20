@@ -6,6 +6,7 @@ window.commonView = new Vue({
             dlnashow: false,
             history_show: true,
             history: [],
+            filelist: [],
         },
         methods: {
             test: function (obj) {
@@ -140,7 +141,8 @@ function adapt() {
 }
 
 function renderFilelist(data) {
-    window.commonView.history_show=false;
+    window.commonView.history_show = false;
+    window.commonView.filelist = data.filesystem;
     if ($("#navtab li:eq(1)").attr("class") != "active")
         $("#navtab li:eq(1) a").tab("show");
     $("#clear").hide();
@@ -184,7 +186,7 @@ function filelist(str) {
 }
 
 function renderHistory(data) {
-    window.commonView.history_show=true;
+    window.commonView.history_show = true;
     window.commonView.history = data.history;
     /*
     if (!$("#navtab li:eq(0)").hasClass("active"))
