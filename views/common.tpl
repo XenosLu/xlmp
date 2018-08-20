@@ -1,6 +1,7 @@
 <div id="v-common">
 <div id="sidebar" class="btn-toolbar">
   <b-button-group>
+    <b-btn v-b-modal.modal_new>demo modal</b-btn>
     <b-button variant="outline-dark" title="browser" id="history"><i class="icono-list"></i></b-button>
     <b-button variant="outline-success" title="switch DLNA mode" id="dlna_toggle" onclick='window.location.href = "/dlna";'>DLNA</b-button>
     <b-dropdown right>
@@ -20,18 +21,6 @@
 
   </b-button-group>
 
-  <!-- dlna menu -->
-  <!-- <div class="dlna-show btn-group dropdown"> -->
-    <!-- <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown"> -->
-      <!-- <i class="glyphicon glyphicon-chevron-down"></i> -->
-    <!-- </button> -->
-    <!-- <ul class="dropdown-menu"> -->
-      <!-- <li><a onclick="get('/dlna/seek/00:00:15')">00:15</a></li> -->
-      <!-- <li><a onclick="get('/dlna/seek/00:00:29')">00:30</a></li> -->
-      <!-- <li><a onclick="get('/dlna/seek/00:01:00')">01:00</a></li> -->
-      <!-- <li><a onclick="get('/dlna/seek/00:01:30')">01:30</a></li> -->
-    <!-- </ul> -->
-  <!-- </div> -->
   <!-- player menu -->
   <div id="rate" class="btn-group dropdown">
     <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
@@ -52,32 +41,70 @@
     </ul>
   </div><!-- #rate .btn-group .dropup -->
 </div>
+
+  
+
+  <!-- Modal Component -->
+  <b-modal id="modal_new" centered ok-only ok-title="close" >
+    <p class="my-4">Hello from modal!</p>
+  </b-modal>
+
 <div id="dialog" class="col-xs-12 col-sm-8 col-md-8 col-lg-7">
-  <div id="panel" class="card">
-    <div class="bg-info card-header">
-      <button type="button" class="close">&times;</button>
-      <ul id="navtab" class="nav nav-tabs">
-        <li class="active" title="Show play history">
-          <a href="#tabFrame" data-toggle="tab" onclick="history('/hist/ls')">
-            <i class="icono-document"></i>History
-          </a>
-        </li>
-        <li title="Browse video folder">
-          <a href="#tabFrame" data-toggle="tab" onclick="filelist('/fs/ls/')">
-            <i class="icono-home"></i>Home dir
-          </a>
-        </li>
-      </ul>
-    </div>
-    <div id="tabFrame" class="card-body tab-pane fade in">
-      <table class="table-striped table-responsive table-condensed table table-hover table-responsive-xl table-sm">
-        <tbody id="list">
-        </tbody>
-      </table>
-    </div>
-    <div class="card-footer">
-      <button id="clear" type="button" class="btn btn-default">Clear History</button>
-    </div><!-- .panel-footer -->
-  </div><!-- #panel -->
+<!-- new -->
+<div role="tablist">
+    <b-card no-body class="mb-1">
+      <b-card-header header-tag="header" class="p-1" role="tab">
+        <b-btn v-b-toggle.accordion1 variant="info">Accordion 1</b-btn>
+        <b-btn v-b-toggle.accordion2 variant="info">Accordion 2</b-btn>
+        <button type="button" class="close">&times;</button>
+      </b-card-header>
+      <b-collapse is-nav id="accordion1" visible accordion="my-accordion" role="tabpanel">
+        <b-card-body>
+          <p class="card-text">
+            aaa
+          </p>
+        </b-card-body>
+      </b-collapse>
+    </b-card>
+    <b-card no-body class="mb-1">
+      <!-- <b-card-header header-tag="header" class="p-1" role="tab"> -->
+        <!-- <b-btn v-b-toggle.accordion2 variant="info">Accordion 2</b-btn> -->
+      <!-- </b-card-header> -->
+      <b-collapse id="accordion2" accordion="my-accordion" role="tabpanel">
+        <b-card-body>
+          <p class="card-text">
+            bbb
+          </p>
+        </b-card-body>
+      </b-collapse>
+    </b-card>
+  </div>
+<!-- new end -->
+  <!-- <div id="panel" class="card"> -->
+    <!-- <div class="bg-info card-header"> -->
+      <!-- <button type="button" class="close">&times;</button> -->
+      <!-- <ul id="navtab" class="nav nav-tabs"> -->
+        <!-- <li class="active" title="Show play history"> -->
+          <!-- <a href="#tabFrame" data-toggle="tab" onclick="history('/hist/ls')"> -->
+            <!-- <i class="icono-document"></i>History -->
+          <!-- </a> -->
+        <!-- </li> -->
+        <!-- <li title="Browse video folder"> -->
+          <!-- <a href="#tabFrame" data-toggle="tab" onclick="filelist('/fs/ls/')"> -->
+            <!-- <i class="icono-home"></i>Home dir -->
+          <!-- </a> -->
+        <!-- </li> -->
+      <!-- </ul> -->
+    <!-- </div> -->
+    <!-- <div id="tabFrame" class="card-body tab-pane fade in"> -->
+      <!-- <table class="table-striped table-responsive table-condensed table table-hover table-responsive-xl table-sm"> -->
+        <!-- <tbody id="list"> -->
+        <!-- </tbody> -->
+      <!-- </table> -->
+    <!-- </div> -->
+    <!-- <div class="card-footer"> -->
+      <!-- <button id="clear" type="button" class="btn btn-default">Clear History</button> -->
+    <!-- </div><!-- .panel-footer -->
+  <!-- </div><!-- #panel -->
 </div><!-- #dialog -->
 </div>
