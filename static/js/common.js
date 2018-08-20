@@ -28,7 +28,7 @@ window.commonView = new Vue({
                     window.location.href = "/wp/play/" + obj;
             },
             open: function (obj, type) {
-                if(type=='folder')
+                if (type == "folder")
                     filelist("/fs/ls/" + obj + "/");
                 else if (window.document.location.pathname == "/dlna")
                     get("/dlna/load/" + obj);
