@@ -5,6 +5,7 @@ window.commonView = new Vue({
         data: {
             dlnashow: false,
             history: [],
+            history_fields: ['xen'],
         },
         methods: {
             test: function (obj) {
@@ -45,8 +46,8 @@ $("#shutdown").click(function () {
         $.post("/shutdown");
 });
 // Dialog open/close toggle buttons
-$("#history").click(toggleDialog);
-$(".close").click(toggleDialog);
+//$("#history").click(toggleDialog);
+//$(".close").click(toggleDialog);
 
 //table buttons
 $("#tabFrame").on("click", ".folder", function () {
