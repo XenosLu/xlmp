@@ -1,12 +1,12 @@
 <div id="sidebar" class="btn-toolbar">
   <div class="btn-group">
-    <button title="browser" id="history" type="button" class="btn btn-default btn-lg">
+    <button title="browser" id="history" type="button" class="btn btn-default">
       <i class="icono-list"></i>
     </button>
-    <a title="switch DLNA mode" id="dlna_toggle" onclick='window.location.href = "/dlna";' type="button" class="btn btn-default btn-lg">DLNA</a>
+    <a title="switch DLNA mode" id="dlna_toggle" onclick='window.location.href = "/dlna";' type="button" class="btn btn-default">DLNA</a>
   </div>
   <div class="btn-group dropdown">
-    <button title="Maintenance" type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
+    <button title="Maintenance" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
       <i class="glyphicon glyphicon-cog"></i>
       <i class="glyphicon glyphicon-chevron-down"></i>
     </button>
