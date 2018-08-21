@@ -14,7 +14,7 @@
         <b-dropdown-item onclick="get('/sys/restore')">restore</b-dropdown-item>
       </b-dropdown>
       <!-- dlna menu -->
-      <b-dropdown right v-show="dlnashow">
+      <b-dropdown right v-show="dlna_show">
         <b-dropdown-item onclick="get('/dlna/seek/00:00:15')">00:15</b-dropdown-item>
         <b-dropdown-item onclick="get('/dlna/seek/00:00:29')">00:30</b-dropdown-item>
         <b-dropdown-item onclick="get('/dlna/seek/00:01:00')">01:00</b-dropdown-item>

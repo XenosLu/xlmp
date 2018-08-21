@@ -116,10 +116,12 @@ button {
 .dlna-show, #rate {
     display: none;
 }
+/*
 #dialog {
     display: none;
     z-index: 10;
 }
+*/
 #panel {
     opacity: 0.88;
     box-shadow: 2px 2px 5px #333333;

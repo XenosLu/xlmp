@@ -12,7 +12,7 @@ window.commonView = new Vue({
         data: {
             icon: icon,
             dlna_on: false,
-            dlnashow: false,
+            dlna_show: false,
             history_show: true,
             history: [],
             filelist: [],
