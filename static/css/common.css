@@ -49,6 +49,7 @@ table {
 */
 td {
     word-break:break-all;
+    min-width: 4em;"
 }
 .table tbody tr td{
             vertical-align: middle;

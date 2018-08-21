@@ -52,14 +52,14 @@
        <div class="table-responsive-sm">
          <table id="test" v-show="historyShow" class="table table-striped table-hover table-sm">
            <tr v-for="item in history">
-             <td class="d-sm-block" @click="open(item.path, 'folder')"><i class="oi oi-folder"></i></td>
+             <td class="bg-info" @click="open(item.path, 'folder')"><i class="oi oi-folder"></i></td>
              <!-- <td v-show="testx=='panright'" @click="open(item.path, 'folder')"><i class="oi oi-folder"></i></td> -->
              <!-- <td><i class="oi oi-video"></i></td> -->
              <td @click="play(item.filename)">
                <span :class="item.exist ? 'mp4' : 'other'">${ item.filename }</span><br>
                <small>${ item.latest_date } | ${ secondToTime(item.position) } / ${ secondToTime(item.duration) }</small>
              </td>
-             <td v-show="testx=='panleft'" @click="remove(item.filename)"><i class="oi oi-trash"></i></td>
+             <td class="bg-danger" v-show="testx=='panleft'" @click="remove(item.filename)"><i class="oi oi-trash"></i></td>
            </tr>
          </table>
          <!-- <table v-show="!historyShow" class="table table-striped table-hover table-sm"> -->
