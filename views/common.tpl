@@ -50,7 +50,7 @@
      <b-btn onclick="filelist('/fs/ls/')"><i class="icono-home"></i>Home dir</b-btn>
      <table v-show="history_show" class="table-striped table-responsive table-condensed table table-hover table-responsive-xl table-sm">
        <tr v-for="item in history">
-         <td><i class="icono-folder"></i></td>
+         <td @click="open(item.path, 'folder')"><i class="icono-folder"></i></td>
          <td><i class="icono-video"></i></td>
          <td @click="play(item.filename)">${ item.filename }<br>
            <small>${ item.latest_date } | ${ secondToTime(item.position) } / ${ secondToTime(item.duration) }</small>
