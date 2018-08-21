@@ -25,10 +25,13 @@ window.commonView = new Vue({
             showModal: function () {
                 this.modalShow = true;
                 if(this.historyShow)
-                    getHistory('/hist/ls');
+                    this.showHistory();
             },
             showHistory: function () {
-                getHistory('/hist/ls');
+                getHistory("/hist/ls");
+            },
+            showFs: function (path) {
+                filelist(path);
             },
             play: function (obj) {
                 if (window.document.location.pathname == "/dlna")
