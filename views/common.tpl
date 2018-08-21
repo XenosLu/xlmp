@@ -45,30 +45,31 @@
   
 
   <!-- Modal Component -->
-  <b-modal id="modal_new" size="lg" class="col-xs-12 col-sm-8 col-md-8 col-lg-7" centered hide-footer title-tag="h6" title="Browser">
+  <!-- <b-modal id="modal_new" size="lg" class="col-xs-12 col-sm-8 col-md-8 col-lg-7" centered hide-footer title-tag="h6" title="Browser"> -->
+  <b-modal id="modal_new" size="lg" centered hide-footer title-tag="h6" title="Browser">
      <b-btn onclick="history('/hist/ls')"><i class="icono-document"></i>History</b-btn>
      <b-btn onclick="filelist('/fs/ls/')"><i class="icono-home"></i>Home dir</b-btn>
      <div class="table-responsive-sm">
-     <table v-show="history_show" class="table-striped table-condensed table table-hover table-sm">
-       <tr v-for="item in history">
-         <td @click="open(item.path, 'folder')"><i class="icono-folder"></i></td>
-         <td><i class="icono-video"></i></td>
-         <td @click="play(item.filename)">${ item.filename }<br>
-           <small>${ item.latest_date } | ${ secondToTime(item.position) } / ${ secondToTime(item.duration) }</small>
-         </td>
-         <td @click="remove(item.filename)"><i class="icono-trash"></i></td>
-       </tr>
-     </table>
-     </div>
-     <div class="table-responsive-sm">
-     <table v-show="!history_show" class="table-striped table-condensed table table-hover table-sm">
-       <tr v-for="item in filelist">
-         <td><i :class="icon[item.type]"></i></td>
-         <td @click="open(item.path, item.type)">${ item.filename }<br><small>${ item.size }</small>
-         </td>
-         <td @click="move(item.filename)"><i class="icono-trash"></i></td>
-       </tr>
-     </table>
+       <table v-show="history_show" class="table-striped table-condensed table table-hover table-sm">
+         <tr v-for="item in history">
+           <td @click="open(item.path, 'folder')"><i class="icono-folder"></i></td>
+           <td><i class="icono-video"></i></td>
+           <td @click="play(item.filename)">${ item.filename }<br>
+             <small>${ item.latest_date } | ${ secondToTime(item.position) } / ${ secondToTime(item.duration) }</small>
+           </td>
+           <td @click="remove(item.filename)"><i class="icono-trash"></i></td>
+         </tr>
+       </table>
+       <!-- </div> -->
+       <!-- <div class="table-responsive-sm"> -->
+       <table v-show="!history_show" class="table-striped table-condensed table table-hover table-sm">
+         <tr v-for="item in filelist">
+           <td><i :class="icon[item.type]"></i></td>
+           <td @click="open(item.path, item.type)">${ item.filename }<br><small>${ item.size }</small>
+           </td>
+           <td @click="move(item.filename)"><i class="icono-trash"></i></td>
+         </tr>
+       </table>
      </div>
              <!-- td[0] = '<td><i class="glyphicon glyphicon-' + icon[n["type"]] + '"></i></td>'; -->
         <!-- td[1] = '<td class="filelist ' + n["type"] + '" title="' + n["path"] + '">' + n["filename"] + size + "</td>"; -->
