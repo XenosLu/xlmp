@@ -56,7 +56,7 @@
          <td @click="play(item.filename)">${ item.filename }<br>
            <small>${ item.latest_date } | ${ secondToTime(item.position) } / ${ secondToTime(item.duration) }</small>
          </td>
-         <td><i class="icono-trash"></i></td>
+         <td @click="remove(item.filename)"><i class="icono-trash"></i></td>
        </tr>
      </table>
      </div>
@@ -66,7 +66,7 @@
          <td><i :class="icon[item.type]"></i></td>
          <td @click="open(item.path, item.type)">${ item.filename }<br><small>${ item.size }</small>
          </td>
-         <td><i class="icono-trash"></i></td>
+         <td @click="move(item.filename)"><i class="icono-trash"></i></td>
        </tr>
      </table>
      </div>
