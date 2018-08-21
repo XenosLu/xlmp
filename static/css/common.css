@@ -112,7 +112,7 @@ footer, .remove{
     z-index: 9;
 }
 #output {
-    z-index: 99;
+    z-index: 1050;
     font-size: 1.8em;
     pointer-events: none;
     border-radius: 0.2em;
@@ -125,6 +125,10 @@ footer, .remove{
 button {
     opacity: 0.85;
     box-shadow: inset 0px 0px 9px 0px #F1F2F6;
+}
+.modal-dialog
+{
+    opacity: 0.8;
 }
 /*
 .dlna-show, #rate {
