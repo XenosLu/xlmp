@@ -41,8 +41,8 @@
 
 
     <!-- Modal Component -->
-    <!-- <b-modal id="modal_new" size="lg" class="col-xs-12 col-sm-8 col-md-8 col-lg-7" centered hide-footer title-tag="h6" title="Browser"> -->
-    <b-modal id="modal_new" v-model="modalShow" size="lg" centered hide-footer hide-header>
+    <!-- <b-modal v-model="modalShow" id="modal_new" size="lg" class="col-xs-12 col-sm-12 col-md-8 col-lg-7" centered hide-footer title-tag="h6" title="Browser"> -->
+    <b-modal v-model="modalShow" id="modal_new" size="lg" centered hide-footer hide-header>
        <b-btn @click="showHistory" :pressed="historyShow" variant="outline-dark">
          <i class="oi oi-book"></i>History
        </b-btn>
