@@ -1,11 +1,12 @@
 <div id="v-common">
   <div id="sidebar" class="btn-toolbar">
     <b-button-group>
-      <b-btn variant="outline-dark" title="browser" id="history" v-b-modal.modal_new>
+      <!-- <b-btn variant="outline-dark" title="browser" id="history" v-b-modal.modal_new> -->
+      <b-btn variant="outline-dark" title="browser" id="history" @click="showModal">
         <i class="oi oi-list"></i>
       </b-btn>
       <b-button variant="outline-success" title="switch DLNA mode" id="dlna_toggle" onclick='window.location.href = "/dlna";'>
-        DLNA <i v-show="dlna_on" class="oi oi-monitor"></i>
+        DLNA <i v-show="dlnaOn" class="oi oi-monitor"></i>
       </b-button>
       <b-dropdown right>
         <b-dropdown-item onclick="get('/sys/update')">update</b-dropdown-item>
@@ -14,7 +15,7 @@
         <b-dropdown-item onclick="get('/sys/restore')">restore</b-dropdown-item>
       </b-dropdown>
       <!-- dlna menu -->
-      <b-dropdown right v-show="dlna_show">
+      <b-dropdown right v-show="dlnaShow">
         <b-dropdown-item onclick="get('/dlna/seek/00:00:15')">00:15</b-dropdown-item>
         <b-dropdown-item onclick="get('/dlna/seek/00:00:29')">00:30</b-dropdown-item>
         <b-dropdown-item onclick="get('/dlna/seek/00:01:00')">01:00</b-dropdown-item>
@@ -48,11 +49,11 @@
 
     <!-- Modal Component -->
     <!-- <b-modal id="modal_new" size="lg" class="col-xs-12 col-sm-8 col-md-8 col-lg-7" centered hide-footer title-tag="h6" title="Browser"> -->
-    <b-modal id="modal_new" size="lg" centered hide-footer title-tag="h6" title="Browser">
-       <b-btn onclick="history('/hist/ls')"><i class="oi oi-book"></i>History</b-btn>
+    <b-modal id="modal_new" v-model="modalShow" size="lg" centered hide-footer title-tag="h6" title="Browser">
+       <b-btn onclick="getHistory('/hist/ls')"><i class="oi oi-book"></i>History</b-btn>
        <b-btn onclick="filelist('/fs/ls/')"><i class="oi oi-home"></i>Home dir</b-btn>
        <div class="table-responsive-sm">
-         <table v-show="history_show" class="table table-striped table-hover table-sm">
+         <table v-show="historyShow" class="table table-striped table-hover table-sm">
            <tr v-for="item in history">
              <td @click="open(item.path, 'folder')"><i class="oi oi-folder"></i></td>
              <td><i class="oi oi-video"></i></td>
@@ -64,7 +65,7 @@
          </table>
          <!-- </div> -->
          <!-- <div class="table-responsive-sm"> -->
-         <table v-show="!history_show" class="table table-striped table-hover table-sm">
+         <table v-show="!historyShow" class="table table-striped table-hover table-sm">
            <tr v-for="item in filelist">
              <td><i :class="icon[item.type]"></i></td>
              <td @click="open(item.path, item.type)">${ item.filename }<br><small>${ item.size }</small>

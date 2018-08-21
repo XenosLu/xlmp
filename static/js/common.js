@@ -11,15 +11,24 @@ window.commonView = new Vue({
         el: '#v-common',
         data: {
             icon: icon,
-            dlna_on: false,
-            dlna_show: false,
-            history_show: true,
+            modalShow: false,
+            dlnaOn: false,
+            dlnaShow: false,
+            historyShow: true,
             history: [],
             filelist: [],
         },
         methods: {
             test: function (obj) {
                 console.log("test " + obj);
+            },
+            showModal: function () {
+                this.modalShow = true;
+                if(this.historyShow)
+                    getHistory('/hist/ls');
+            },
+            showHistory: function () {
+                getHistory('/hist/ls');
             },
             play: function (obj) {
                 if (window.document.location.pathname == "/dlna")
@@ -29,7 +38,7 @@ window.commonView = new Vue({
             },
             remove: function (obj) {
                 if (confirm("Clear history of " + obj + "?"))
-                    history("/hist/rm/" + obj.replace(/\?/g, "%3F")); //?to%3F #to%23
+                    getHistory("/hist/rm/" + obj.replace(/\?/g, "%3F")); //?to%3F #to%23
             },
             move: function (obj) {
                 if (confirm("Move " + obj + " to .old?")) {
@@ -75,10 +84,12 @@ function showSidebar() {
     hide_sidebar = setTimeout('$("#sidebar").hide()', 3000);
 }
 
+//window.commonView.showModal();
+
 //buttons
 $("#clear").click(function () {
     if (confirm("Clear all history?"))
-        history("/hist/clear");
+        getHistory("/hist/clear");
 });
 
 // Dialog open/close toggle buttons
@@ -94,7 +105,7 @@ $("#tabFrame").on("click", ".folder", function () {
     }
 }).on("click", ".remove", function () {
     if (confirm("Clear history of " + this.title + "?"))
-        history("/hist/rm/" + this.title.replace(/\?/g, "%3F"));  //?to%3F #to%23
+        getHistory("/hist/rm/" + this.title.replace(/\?/g, "%3F"));  //?to%3F #to%23
 }).on("click", ".mp4", function () {
     if (window.document.location.pathname == "/dlna")
         get("/dlna/load/" + this.title);
@@ -124,7 +135,7 @@ function get(url) {
  */
 function showDialog() {
     if ($("#navtab li:eq(0)").attr("class") == "active")
-        history("/hist/ls");
+        getHistory("/hist/ls");
     $("#history").addClass("active");
     $("#dialog").show(250);
 }
@@ -140,7 +151,7 @@ function toggleDialog() {
         $("#dialog").hide(250);
     } else {
         if ($("#navtab li:eq(0)").attr("class") == "active")
-            history("/hist/ls");
+            getHistory("/hist/ls");
         $("#history").addClass("active");
         $("#dialog").show(250);
     }
@@ -170,7 +181,7 @@ function adapt() {
 }
 
 function renderFilelist(data) {
-    window.commonView.history_show = false;
+    window.commonView.historyShow = false;
     window.commonView.filelist = data.filesystem;
     /*
     if ($("#navtab li:eq(1)").attr("class") != "active")
@@ -217,7 +228,7 @@ function filelist(str) {
 }
 
 function renderHistory(data) {
-    window.commonView.history_show = true;
+    window.commonView.historyShow = true;
     window.commonView.history = data.history;
     /*
     if (!$("#navtab li:eq(0)").hasClass("active"))
@@ -249,7 +260,7 @@ function renderHistory(data) {
  * @method history
  * @param {String} str
  */
-function history(str) {
+function getHistory(str) {
     $.ajax({
         url: encodeURI(str),
         dataType: "json",
@@ -307,7 +318,7 @@ function check_dlna_state() {
         timeout: 999,
         type: "GET",
         success: function (data) {
-            window.commonView.dlna_on = !$.isEmptyObject(data);
+            window.commonView.dlnaOn = !$.isEmptyObject(data);
             /*
             if ($.isEmptyObject(data)) {
                 $("#dlna_toggle").removeClass("btn-success");

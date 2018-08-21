@@ -6,7 +6,7 @@ $("#dlna_toggle").addClass("active");
 // $("#dlna_toggle").attr("href", "/");
 $("#dlna_toggle").attr("onclick", 'window.location.href = "/";');
 
-window.commonView.dlna_show = true;
+window.commonView.dlnaShow = true;
 //$(".dlna-show").show();
 // get_dmr_state();
 // var inter = setInterval("get_dmr_state()", 1100);
