@@ -11,6 +11,7 @@ window.commonView = new Vue({
         el: '#v-common',
         data: {
             icon: icon,
+            dlna_on: false,
             dlnashow: false,
             history_show: true,
             history: [],
@@ -306,11 +307,14 @@ function check_dlna_state() {
         timeout: 999,
         type: "GET",
         success: function (data) {
+            window.commonView.dlna_on = !$.isEmptyObject(data);
+            /*
             if ($.isEmptyObject(data)) {
                 $("#dlna_toggle").removeClass("btn-success");
             } else {
                 $("#dlna_toggle").addClass("btn-success");
             }
+            */
         },
         error: function (xhr, err) {
             console.log('get dlna/info error')
