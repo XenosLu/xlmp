@@ -13,6 +13,7 @@ window.commonView = new Vue({
         el: '#v-common',
         data: {
             icon: icon,
+            testx: 'test',
             modalShow: false,
             dlnaOn: false,
             dlnaShow: false,
@@ -79,7 +80,8 @@ var hammertime = new Hammer(document.getElementById("test"));
 hammertime.on("pan", function (ev) {
     //控制台输出
     console.log(ev);
-    alert(ev.additionalEvent);
+    window.commonView.testx = ev.additionalEvent;
+    //alert(ev.additionalEvent);
 });
 
 

@@ -39,8 +39,6 @@
     </b-button-group>
   </div>
 
-<div id="test" class="test">事件区域</div>
-<div id="result" class="result">事件结果<br /></div>
     <!-- Modal Component -->
     <!-- <b-modal v-model="modalShow" id="modal_new" size="lg" class="col-xs-12 col-sm-12 col-md-8 col-lg-7" centered hide-footer title-tag="h6" title="Browser"> -->
     <b-modal v-model="modalShow" size="lg" centered hide-footer hide-header>
@@ -52,21 +50,16 @@
        </b-btn>
        <b-btn @click="modalShow=false" class="close">&times;</b-btn>
        <div class="table-responsive-sm">
-         <table v-show="historyShow" class="table table-striped table-hover table-sm">
-           <tr>
-           <td>           aaaaaaaaaaaaaaaaa           </td>
-           <td>           aaaaaaaaaaaaaaaaa           </td>
-           <td>           aaaaaaaaaaaaaaaaa           </td>
-           <tr>
+         <table id="test" v-show="historyShow" class="table table-striped table-hover table-sm">
            <tr v-for="item in history">
-             <!-- <td class="d-none d-sm-block" @click="open(item.path, 'folder')"><i class="oi oi-folder"></i></td> -->
-             <td @click="open(item.path, 'folder')"><i class="oi oi-folder"></i></td>
-             <td><i class="oi oi-video"></i></td>
+             <td class="d-sm-block" @click="open(item.path, 'folder')"><i class="oi oi-folder"></i></td>
+             <!-- <td v-show="testx=='panright'" @click="open(item.path, 'folder')"><i class="oi oi-folder"></i></td> -->
+             <!-- <td><i class="oi oi-video"></i></td> -->
              <td @click="play(item.filename)">
                <span :class="item.exist ? 'mp4' : 'other'">${ item.filename }</span>
                <small>${ item.latest_date } | ${ secondToTime(item.position) } / ${ secondToTime(item.duration) }</small>
              </td>
-             <td @click="remove(item.filename)"><i class="oi oi-trash"></i></td>
+             <td v-show="testx=='panleft'" @click="remove(item.filename)"><i class="oi oi-trash"></i></td>
            </tr>
          </table>
          <!-- <table v-show="!historyShow" class="table table-striped table-hover table-sm"> -->
