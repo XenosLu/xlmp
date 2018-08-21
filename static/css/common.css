@@ -42,9 +42,11 @@ video {
     left: 0;
     right: 0;
 }
+/*
 table {
     width: 100%;
 }
+*/
 td {
     word-break:break-all;
 }

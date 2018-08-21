@@ -17,9 +17,9 @@
         <b-dropdown-item onclick="get('/dlna/seek/00:01:30')">01:30</b-dropdown-item>
       </b-dropdown>
       <!-- dlna menu end -->
-  
+
     </b-button-group>
-  
+
     <!-- player menu -->
     <div id="rate" class="btn-group dropdown">
       <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
@@ -69,20 +69,15 @@
            </tr>
          </table>
        </div>
-               <!-- td[0] = '<td><i class="glyphicon glyphicon-' + icon[n["type"]] + '"></i></td>'; -->
           <!-- td[1] = '<td class="filelist ' + n["type"] + '" title="' + n["path"] + '">' + n["filename"] + size + "</td>"; -->
           <!-- td[2] = '<td class="move" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i></td>'; -->
-  
-          
+
+
           <!-- td[0] = '<td class="folder" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-folder-close"></i></td>'; -->
           <!-- td[1] = '<td><i class="glyphicon glyphicon-film"></i></td>'; -->
           <!-- td[2] = '<td class="filelist ' + mediaType + '" title="' + n["filename"] + '">' + n["filename"] + "<br><small>" + n["latest_date"] + " | " + secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small></td>"; -->
           <!-- td[3] = '<td class="remove" title="' + n["filename"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i>' + "</td>"; -->
-          <!-- //td[4] = '<td class="next" title="' + n["filename"] + '"><i class="glyphicon glyphicon-step-forward"></i></td>'; -->
-            <!-- <table v-show="!history_show" class="table-striped table-responsive table-condensed table table-hover table-responsive-xl table-sm"> -->
-          <!-- <tbody id="list"> -->
-          <!-- </tbody> -->
-        <!-- </table> -->
+
     </b-modal>
   
   <div id="dialog" class="col-xs-12 col-sm-8 col-md-8 col-lg-7">
