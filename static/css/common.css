@@ -50,6 +50,10 @@ table {
 td {
     word-break:break-all;
 }
+.table tbody tr td{
+            vertical-align: middle;
+        }
+
 td:hover {
     background-color: #FBF3E9;
 }
