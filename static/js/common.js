@@ -3,7 +3,7 @@ var icon = {
     "folder": "oi oi-folder",
     "mp4": "oi oi-video",
     "video": "oi oi-video",
-    "other": "oi oi-video"
+    "other": "oi oi-file"
 };
 
 window.commonView = new Vue({
