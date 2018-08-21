@@ -21,29 +21,22 @@
         <b-dropdown-item onclick="get('/dlna/seek/00:01:00')">01:00</b-dropdown-item>
         <b-dropdown-item onclick="get('/dlna/seek/00:01:30')">01:30</b-dropdown-item>
       </b-dropdown>
+       <b-dropdown right v-show="rateMenu">
+        <b-dropdown-item onclick="rate(0.5)">0.5X</b-dropdown-item>
+        <b-dropdown-item onclick="rate(0.75)">0.75X</b-dropdown-item>
+        <b-dropdown-divider></b-dropdown-divider>
+        <b-dropdown-item onclick="rate(1)">1X</b-dropdown-item>
+        <b-dropdown-divider></b-dropdown-divider>
+        <b-dropdown-item onclick="rate(1.5)">1.5X  </b-dropdown-item>
+        <b-dropdown-item onclick="rate(1.75)">1.75X</b-dropdown-item>
+        <b-dropdown-item onclick="rate(2)">2X      </b-dropdown-item>
+        <b-dropdown-item onclick="rate(2.5)">2.5X  </b-dropdown-item>
+        <b-dropdown-divider></b-dropdown-divider>
+        <b-dropdown-item id="videosize">orign</b-dropdown-item>
+      </b-dropdown>     
       <!-- dlna menu end -->
 
     </b-button-group>
-
-    <!-- player menu -->
-    <div v-show="rateMenu" id="rate" class="btn-group dropdown">
-      <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
-        <i class="glyphicon glyphicon-chevron-down"></i>
-      </button>
-      <ul class="dropdown-menu">
-        <li><a href="#" onclick="rate(0.5)">0.5X</a></li>
-        <li><a href="#" onclick="rate(0.75)">0.75X</a></li>
-        <li class="divider"></li>
-        <li><a href="#" onclick="rate(1)">1X</a></li>
-        <li class="divider"></li>
-        <li><a href="#" onclick="rate(1.5)">1.5X</a></li>
-        <li><a href="#" onclick="rate(1.75)">1.75X</a></li>
-        <li><a href="#" onclick="rate(2)">2X</a></li>
-        <li><a href="#" onclick="rate(2.5)">2.5X</a></li>
-        <li class="divider"></li>
-        <li><a id="videosize">orign</a></li>
-      </ul>
-    </div><!-- #rate .btn-group .dropup -->
   </div>
 
 
