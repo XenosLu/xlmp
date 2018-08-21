@@ -8,6 +8,7 @@
     <link rel="apple-touch-icon" sizes="200x200" href="/static/apple-touch-icon.png" />
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/bootstrap-vue.css" rel="stylesheet">
+    <link href="/static/css/open-iconic-bootstrap.css" rel="stylesheet">
     <link href="/static/css/icono.css" rel="stylesheet">
     <link href="{{ static_url('css/common.css') }}" rel="stylesheet">
     <script src="/static/js/vue.min.js"></script>

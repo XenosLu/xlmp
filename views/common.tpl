@@ -1,7 +1,7 @@
 <div id="v-common">
   <div id="sidebar" class="btn-toolbar">
     <b-button-group>
-      <b-btn variant="outline-dark" title="browser" id="history" v-b-modal.modal_new><i class="icono-list"></i></b-btn>
+      <b-btn variant="outline-dark" title="browser" id="history" v-b-modal.modal_new><i class="oi oi-list"></i></b-btn>
       <b-button variant="outline-success" title="switch DLNA mode" id="dlna_toggle" onclick='window.location.href = "/dlna";'>DLNA</b-button>
       <b-dropdown right>
         <b-dropdown-item onclick="get('/sys/update')">update</b-dropdown-item>
@@ -45,8 +45,9 @@
     <!-- Modal Component -->
     <!-- <b-modal id="modal_new" size="lg" class="col-xs-12 col-sm-8 col-md-8 col-lg-7" centered hide-footer title-tag="h6" title="Browser"> -->
     <b-modal id="modal_new" size="lg" centered hide-footer title-tag="h6" title="Browser">
-       <b-btn onclick="history('/hist/ls')"><i class="icono-document"></i>History</b-btn>
-       <b-btn onclick="filelist('/fs/ls/')"><i class="icono-home"></i>Home dir</b-btn>
+       <b-btn onclick="history('/hist/ls')"><i class="oi oi-book"></i>History</b-btn>
+       <!-- <b-btn onclick="filelist('/fs/ls/')"><i class="icono-home"></i>Home dir</b-btn> -->
+       <b-btn onclick="filelist('/fs/ls/')"><i class="oi oi-home"></i>Home dir</b-btn>
        <div class="table-responsive-sm">
          <table v-show="history_show" class="table table-striped table-hover table-sm">
            <tr v-for="item in history">
