@@ -9,7 +9,6 @@
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/bootstrap-vue.css" rel="stylesheet">
     <link href="/static/css/open-iconic-bootstrap.css" rel="stylesheet">
-    <link href="/static/css/icono.css" rel="stylesheet">
     <link href="{{ static_url('css/common.css') }}" rel="stylesheet">
     <script src="/static/js/vue.min.js"></script>
     <script src="/static/js/bootstrap-vue.js"></script>

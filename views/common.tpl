@@ -80,33 +80,6 @@
 
     </b-modal>
   
-  <div id="dialog" class="col-xs-12 col-sm-8 col-md-8 col-lg-7">
-  
-    <!-- <div id="panel" class="card"> -->
-      <!-- <div class="bg-info card-header"> -->
-        <!-- <button type="button" class="close">&times;</button> -->
-        <!-- <ul id="navtab" class="nav nav-tabs"> -->
-          <!-- <li class="active" title="Show play history"> -->
-            <!-- <a href="#tabFrame" data-toggle="tab" onclick="history('/hist/ls')"> -->
-              <!-- <i class="icono-document"></i>History -->
-            <!-- </a> -->
-          <!-- </li> -->
-          <!-- <li title="Browse video folder"> -->
-            <!-- <a href="#tabFrame" data-toggle="tab" onclick="filelist('/fs/ls/')"> -->
-              <!-- <i class="icono-home"></i>Home dir -->
-            <!-- </a> -->
-          <!-- </li> -->
-        <!-- </ul> -->
-      <!-- </div> -->
-      <!-- <div id="tabFrame" class="card-body tab-pane fade in"> -->
-        <!-- <table class="table-striped table-responsive table-condensed table table-hover table-responsive-xl table-sm"> -->
-          <!-- <tbody id="list"> -->
-          <!-- </tbody> -->
-        <!-- </table> -->
-      <!-- </div> -->
-      <!-- <div class="card-footer"> -->
-        <!-- <button id="clear" type="button" class="btn btn-default">Clear History</button> -->
-      <!-- </div><!-- .panel-footer -->
-    <!-- </div><!-- #panel -->
-  </div><!-- #dialog -->
+  <!-- <div id="dialog" class="col-xs-12 col-sm-8 col-md-8 col-lg-7"> -->
+  <!-- </div> -->
 </div>
