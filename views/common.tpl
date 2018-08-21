@@ -5,7 +5,7 @@
         <i class="oi oi-list"></i>
       </b-btn>
       <b-button variant="outline-success" title="switch DLNA mode" id="dlna_toggle" onclick='window.location.href = "/dlna";'>
-        <i v-show="dlna_on" class="oi oi-monitor"></i>DLNA
+        DLNA <i v-show="dlna_on" class="oi oi-monitor"></i>
       </b-button>
       <b-dropdown right>
         <b-dropdown-item onclick="get('/sys/update')">update</b-dropdown-item>
