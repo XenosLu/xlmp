@@ -65,7 +65,7 @@
              <td><i :class="icon[item.type]"></i></td>
              <td @click="open(item.path, item.type)">${ item.filename }<br><small>${ item.size }</small>
              </td>
-             <td @click="move(item.filename)"><i class="icono-trash"></i></td>
+             <td @click="move(item.filename)"><i class="oi oi-trash"></i></td>
            </tr>
          </table>
        </div>
