@@ -49,7 +49,7 @@
      <b-btn onclick="history('/hist/ls')"><i class="icono-document"></i>History</b-btn>
      <b-btn onclick="filelist('/fs/ls/')"><i class="icono-home"></i>Home dir</b-btn>
      <div class="table-responsive-sm">
-     <table v-show="history_show" class="table-striped table-responsive table-condensed table table-hover table-responsive-xl table-sm">
+     <table v-show="history_show" class="table-striped table-condensed table table-hover table-sm">
        <tr v-for="item in history">
          <td @click="open(item.path, 'folder')"><i class="icono-folder"></i></td>
          <td><i class="icono-video"></i></td>
@@ -61,7 +61,7 @@
      </table>
      </div>
      <div class="table-responsive-sm">
-     <table v-show="!history_show" class="table-striped table-responsive table-condensed table table-hover table-responsive-xl table-sm">
+     <table v-show="!history_show" class="table-striped table-condensed table table-hover table-sm">
        <tr v-for="item in filelist">
          <td><i :class="icon[item.type]"></i></td>
          <td @click="open(item.path, item.type)">${ item.filename }<br><small>${ item.size }</small>
