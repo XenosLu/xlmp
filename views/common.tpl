@@ -39,10 +39,11 @@
     </b-button-group>
   </div>
 
-
+<div id="test" class="test">事件区域</div>
+<div id="result" class="result">事件结果<br /></div>
     <!-- Modal Component -->
     <!-- <b-modal v-model="modalShow" id="modal_new" size="lg" class="col-xs-12 col-sm-12 col-md-8 col-lg-7" centered hide-footer title-tag="h6" title="Browser"> -->
-    <b-modal v-model="modalShow" id="modal_new" size="lg" centered hide-footer hide-header>
+    <b-modal v-model="modalShow" size="lg" centered hide-footer hide-header>
        <b-btn @click="showHistory" :pressed="historyShow" variant="outline-dark">
          <i class="oi oi-book"></i>History
        </b-btn>
@@ -52,6 +53,11 @@
        <b-btn @click="modalShow=false" class="close">&times;</b-btn>
        <div class="table-responsive-sm">
          <table v-show="historyShow" class="table table-striped table-hover table-sm">
+           <tr>
+           <td>           aaaaaaaaaaaaaaaaa           </td>
+           <td>           aaaaaaaaaaaaaaaaa           </td>
+           <td>           aaaaaaaaaaaaaaaaa           </td>
+           <tr>
            <tr v-for="item in history">
              <!-- <td class="d-none d-sm-block" @click="open(item.path, 'folder')"><i class="oi oi-folder"></i></td> -->
              <td @click="open(item.path, 'folder')"><i class="oi oi-folder"></i></td>
