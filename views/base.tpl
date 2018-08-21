@@ -7,7 +7,6 @@
     <link rel="shortcut icon" href="/static/favicon.ico" />
     <link rel="apple-touch-icon" sizes="200x200" href="/static/apple-touch-icon.png" />
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/css/icono.css" rel="stylesheet">
     <link href="{{ static_url('css/common.css') }}" rel="stylesheet">
     <title>{% block title %}Light Media Player{% end %}</title>
   </head>
