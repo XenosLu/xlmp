@@ -87,7 +87,9 @@ hammertime.on("pan", function (ev) {
         vector -= 1;
     } else if (ev.additionalEvent == "panright") {
         vector += 1;
-    };
+    }
+    else
+        vector = 0;
     if (vector < -15)
         vector = -15;
     else if (vector > 15)

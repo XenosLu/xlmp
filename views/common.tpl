@@ -63,7 +63,7 @@
            </tr>
          </table>
          <!-- <table v-show="!historyShow" class="table table-striped table-hover table-sm"> -->
-         <table v-show="!historyShow" class="table table-striped table-hover">
+         <table v-show="!historyShow" class="table table-striped table-hover table-sm">
            <tr v-for="item in filelist">
              <td><i :class="icon[item.type]"></i></td>
              <td :class="item.type" @click="open(item.path, item.type)">
