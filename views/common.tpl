@@ -51,15 +51,15 @@
            <tr v-for="item in history">
              <td @click="open(item.path, 'folder')"><i class="oi oi-folder"></i></td>
              <td><i class="oi oi-video"></i></td>
-             <td @click="play(item.filename)">${ item.filename }<br>
+             <td @click="play(item.filename)">
+               <span class="text-primary">${ item.filename }</span>
                <small>${ item.latest_date } | ${ secondToTime(item.position) } / ${ secondToTime(item.duration) }</small>
              </td>
              <td @click="remove(item.filename)"><i class="oi oi-trash"></i></td>
            </tr>
          </table>
-         <!-- </div> -->
-         <!-- <div class="table-responsive-sm"> -->
-         <table v-show="!historyShow" class="table table-striped table-hover table-sm">
+         <!-- <table v-show="!historyShow" class="table table-striped table-hover table-sm"> -->
+         <table v-show="!historyShow" class="table table-striped table-hover">
            <tr v-for="item in filelist">
              <td><i :class="icon[item.type]"></i></td>
              <td @click="open(item.path, item.type)">${ item.filename }<br><small>${ item.size }</small>

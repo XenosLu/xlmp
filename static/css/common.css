@@ -89,6 +89,9 @@ input[type=range]::-moz-range-thumb {
 .filelist.video {
     color: #46CC93;
 }
+td small {
+    color: grey;
+}
 footer, .remove, .filelist.other, .filelist small {
     color: grey;
 }
