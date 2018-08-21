@@ -50,7 +50,7 @@
        </b-btn>
        <b-btn @click="modalShow=false" class="close">&times;</b-btn>
        <div class="table-responsive-sm">
-         <table id="test" v-show="historyShow" class="table table-striped table-hover table-sm">
+         <table id="test" v-show="historyShow" class="table table-striped table-sm">
            <tr v-for="item in history">
              <td :class="[folder_class]" class="d-sm-block bg-info" @click="open(item.path, 'folder')"><i class="oi oi-folder"></i></td>
              <!-- <td v-show="testx=='panright'" @click="open(item.path, 'folder')"><i class="oi oi-folder"></i></td> -->
@@ -63,7 +63,7 @@
            </tr>
          </table>
          <!-- <table v-show="!historyShow" class="table table-striped table-hover table-sm"> -->
-         <table v-show="!historyShow" class="table table-striped table-hover table-sm">
+         <table v-show="!historyShow" class="table table-striped table-sm">
            <tr v-for="item in filelist">
              <td><i :class="icon[item.type]"></i></td>
              <td :class="item.type" @click="open(item.path, item.type)">

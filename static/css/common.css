@@ -49,11 +49,11 @@ table {
 */
 td {
     word-break:break-all;
-    min-width: 4em;"
+    min-width: 4em;
 }
 .table tbody tr td{
-            vertical-align: middle;
-        }
+    vertical-align: middle;
+}
 
 td:hover {
     background-color: #FBF3E9;
