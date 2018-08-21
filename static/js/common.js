@@ -28,12 +28,22 @@ window.commonView = new Vue({
                     window.location.href = "/wp/play/" + obj;
             },
             open: function (obj, type) {
-                if (type == "folder")
+                switch (type) {
+                case "folder":
                     filelist("/fs/ls/" + obj + "/");
-                else if (window.document.location.pathname == "/dlna")//////////////////////////////
-                    get("/dlna/load/" + obj);
-                else
-                    window.location.href = "/wp/play/" + obj;
+                    break;
+                case "mp4":
+                    if (window.document.location.pathname == "/dlna")
+                        get("/dlna/load/" + obj);
+                    else
+                        window.location.href = "/wp/play/" + obj;
+                    break;
+                case "video":
+                    if (window.document.location.pathname == "/dlna")
+                        get("/dlna/load/" + obj);
+                    break;
+                default:
+                }
             },
         },
     });
