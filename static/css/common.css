@@ -80,6 +80,7 @@ input[type=range]::-moz-range-thumb {
     color: grey;
     min-width: 14em;
 }
+/* updated */
 .folder {
     color: black;
 }
@@ -89,14 +90,13 @@ input[type=range]::-moz-range-thumb {
 .video {
     color: #46CC93;
 }
-/*
 td small {
     color: grey;
 }
-*/
 .other{
     color: grey;
 }
+/* updated end */
 footer, .remove{
     color: grey;
 }

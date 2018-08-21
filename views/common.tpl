@@ -54,7 +54,7 @@
              <td><i class="oi oi-video"></i></td>
              <td @click="play(item.filename)">
                <span class="mp4">${ item.filename }</span>
-               <small class="text-muted">${ item.latest_date } | ${ secondToTime(item.position) } / ${ secondToTime(item.duration) }</small>
+               <small>${ item.latest_date } | ${ secondToTime(item.position) } / ${ secondToTime(item.duration) }</small>
              </td>
              <td @click="remove(item.filename)"><i class="oi oi-trash"></i></td>
            </tr>
@@ -64,7 +64,7 @@
            <tr v-for="item in filelist">
              <td><i :class="icon[item.type]"></i></td>
              <td :class="item.type" @click="open(item.path, item.type)">
-               ${ item.filename }<br><small class="text-muted">${ item.size }</small>
+               ${ item.filename }<br><small>${ item.size }</small>
              </td>
              <td @click="move(item.filename)"><i class="oi oi-trash"></i></td>
            </tr>
