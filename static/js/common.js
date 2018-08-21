@@ -80,14 +80,7 @@ $("#clear").click(function () {
     if (confirm("Clear all history?"))
         history("/hist/clear");
 });
-$("#suspend").click(function () {
-    if (confirm("Suspend ?"))
-        $.post("/suspend");
-});
-$("#shutdown").click(function () {
-    if (confirm("Shutdown ?"))
-        $.post("/shutdown");
-});
+
 // Dialog open/close toggle buttons
 //$("#history").click(toggleDialog);
 //$(".close").click(toggleDialog);
@@ -179,6 +172,7 @@ function adapt() {
 function renderFilelist(data) {
     window.commonView.history_show = false;
     window.commonView.filelist = data.filesystem;
+    /*
     if ($("#navtab li:eq(1)").attr("class") != "active")
         $("#navtab li:eq(1) a").tab("show");
     $("#clear").hide();
@@ -200,6 +194,7 @@ function renderFilelist(data) {
         html += "<tr>" + td.join("") + "</tr>";
     });
     $("#list").empty().append(html);
+    */
 }
 
 /**
