@@ -12,6 +12,8 @@ window.commonView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-common',
         data: {
+            folder_class: "d-none",
+            remove_class: "d-none",
             icon: icon,
             testx: 'test',
             modalShow: false,
@@ -75,12 +77,35 @@ window.commonView = new Vue({
 
     
 var hammertime = new Hammer(document.getElementById("test"));
-
+var vector = 0;
 //为该dom元素指定触屏移动事件
 hammertime.on("pan", function (ev) {
     //控制台输出
-    console.log(ev);
-    window.commonView.testx = ev.additionalEvent;
+    console.log(ev.additionalEvent);
+    
+    if (ev.additionalEvent == "panleft") {
+        vector -= 1;
+    } else if (ev.additionalEvent == "panright") {
+        vector += 1;
+    };
+    if (vector < -15)
+        vector = -15;
+    else if (vector > 15)
+        vector = 15;
+    if (vector < -6)
+        window.commonView.remove_class = "";
+    else if (vector > 6)
+        window.commonView.folder_class = "";
+    else {
+        window.commonView.folder_class = "d-none";
+        window.commonView.remove_class = "d-none";
+    }
+    console.log(window.commonView.folder_class);
+    console.log(window.commonView.remove_class);
+    
+    // folder_class
+    // remove_class
+    //window.commonView.testx = ev.additionalEvent;
     //alert(ev.additionalEvent);
 });
 
