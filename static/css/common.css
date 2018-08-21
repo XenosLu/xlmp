@@ -2,6 +2,9 @@
 .icono-list {
     /* color: black; */
 }
+[class*=icono-] {
+    margin: 0;
+}
 .glyphicon-film, .glyphicon-folder-close, .glyphicon-remove-circle, .glyphicon-file {
     font-size: 1.8em;
 }
