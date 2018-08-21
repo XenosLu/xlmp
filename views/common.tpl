@@ -8,32 +8,32 @@
       <b-button variant="outline-success" title="switch DLNA mode" id="dlna_toggle" onclick='window.location.href = "/dlna";'>
         DLNA <i v-show="dlnaOn" class="oi oi-monitor"></i>
       </b-button>
-      <b-dropdown right>
+      <b-dropdown right text="Maintain">
         <b-dropdown-item onclick="get('/sys/update')">update</b-dropdown-item>
         <b-dropdown-item onclick="get('/sys/backup')">backup</b-dropdown-item>
         <b-dropdown-divider></b-dropdown-divider>
         <b-dropdown-item onclick="get('/sys/restore')">restore</b-dropdown-item>
       </b-dropdown>
       <!-- dlna menu -->
-      <b-dropdown right v-show="dlnaShow">
+      <b-dropdown right v-show="dlnaShow" text="Jump">
         <b-dropdown-item onclick="get('/dlna/seek/00:00:15')">00:15</b-dropdown-item>
         <b-dropdown-item onclick="get('/dlna/seek/00:00:29')">00:30</b-dropdown-item>
         <b-dropdown-item onclick="get('/dlna/seek/00:01:00')">01:00</b-dropdown-item>
         <b-dropdown-item onclick="get('/dlna/seek/00:01:30')">01:30</b-dropdown-item>
       </b-dropdown>
-       <b-dropdown right v-show="rateMenu">
+       <b-dropdown right class="oi oi-video" v-show="rateMenu" text="Rate">
         <b-dropdown-item onclick="rate(0.5)">0.5X</b-dropdown-item>
         <b-dropdown-item onclick="rate(0.75)">0.75X</b-dropdown-item>
         <b-dropdown-divider></b-dropdown-divider>
         <b-dropdown-item onclick="rate(1)">1X</b-dropdown-item>
         <b-dropdown-divider></b-dropdown-divider>
-        <b-dropdown-item onclick="rate(1.5)">1.5X  </b-dropdown-item>
+        <b-dropdown-item onclick="rate(1.5)">1.5X</b-dropdown-item>
         <b-dropdown-item onclick="rate(1.75)">1.75X</b-dropdown-item>
-        <b-dropdown-item onclick="rate(2)">2X      </b-dropdown-item>
-        <b-dropdown-item onclick="rate(2.5)">2.5X  </b-dropdown-item>
+        <b-dropdown-item onclick="rate(2)">2X</b-dropdown-item>
+        <b-dropdown-item onclick="rate(2.5)">2.5X</b-dropdown-item>
         <b-dropdown-divider></b-dropdown-divider>
         <b-dropdown-item id="videosize">orign</b-dropdown-item>
-      </b-dropdown>     
+      </b-dropdown>
       <!-- dlna menu end -->
 
     </b-button-group>
