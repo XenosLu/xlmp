@@ -49,7 +49,7 @@
        <div class="table-responsive-sm">
          <table v-show="historyShow" class="table table-striped table-hover table-sm">
            <tr v-for="item in history">
-             <td @click="open(item.path, 'folder')"><i class="oi oi-folder"></i></td>
+             <td class="d-none d-sm-block" @click="open(item.path, 'folder')"><i class="oi oi-folder"></i></td>
              <td><i class="oi oi-video"></i></td>
              <td @click="play(item.filename)">
                <span class="text-primary">${ item.filename }</span>
