@@ -43,8 +43,8 @@
     <!-- Modal Component -->
     <!-- <b-modal id="modal_new" size="lg" class="col-xs-12 col-sm-8 col-md-8 col-lg-7" centered hide-footer title-tag="h6" title="Browser"> -->
     <b-modal id="modal_new" v-model="modalShow" size="lg" centered hide-footer title-tag="h6" title="Browser">
-       <b-btn onclick="getHistory('/hist/ls')"><i class="oi oi-book"></i>History</b-btn>
-       <b-btn onclick="filelist('/fs/ls/')"><i class="oi oi-home"></i>Home dir</b-btn>
+       <b-btn onclick="getHistory('/hist/ls')" :pressed="historyShow" variant="outline-dark"><i class="oi oi-book"></i>History</b-btn>
+       <b-btn onclick="filelist('/fs/ls/')" :pressed="!historyShow" variant="outline-dark"><i class="oi oi-home"></i>Home dir</b-btn>
        <div class="table-responsive-sm">
          <table v-show="historyShow" class="table table-striped table-hover table-sm">
            <tr v-for="item in history">
