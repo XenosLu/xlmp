@@ -110,7 +110,7 @@ footer, .remove, .filelist.other, .filelist small {
     text-shadow: 0.1em 0.1em 0.4em #666;
 }
 button {
-    opacity: 0.8;
+    opacity: 0.85;
     box-shadow: inset 0px 0px 9px 0px #F1F2F6;
 }
 /*
