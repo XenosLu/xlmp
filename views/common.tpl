@@ -43,8 +43,12 @@
     <!-- Modal Component -->
     <!-- <b-modal id="modal_new" size="lg" class="col-xs-12 col-sm-8 col-md-8 col-lg-7" centered hide-footer title-tag="h6" title="Browser"> -->
     <b-modal id="modal_new" v-model="modalShow" size="lg" centered hide-footer hide-header>
-       <b-btn @click="showHistory" :pressed="historyShow" variant="outline-dark"><i class="oi oi-book"></i>History</b-btn>
-       <b-btn onclick="filelist('/fs/ls/')" :pressed="!historyShow" variant="outline-dark"><i class="oi oi-home"></i>Home dir</b-btn>
+       <b-btn @click="showHistory" :pressed="historyShow" variant="outline-dark">
+         <i class="oi oi-book"></i>History
+       </b-btn>
+       <b-btn onclick="filelist('/fs/ls/')" :pressed="!historyShow" variant="outline-dark">
+         <i class="oi oi-home"></i>Home dir
+       </b-btn>
        <b-btn @click="modalShow=false" class="close">&times;</b-btn>
        <div class="table-responsive-sm">
          <table v-show="historyShow" class="table table-striped table-hover table-sm">
@@ -53,7 +57,7 @@
              <td @click="open(item.path, 'folder')"><i class="oi oi-folder"></i></td>
              <td><i class="oi oi-video"></i></td>
              <td @click="play(item.filename)">
-               <span class="mp4">${ item.filename }</span>
+               <span :class="item.exist ? 'mp4' : 'other'">${ item.filename }</span>
                <small>${ item.latest_date } | ${ secondToTime(item.position) } / ${ secondToTime(item.duration) }</small>
              </td>
              <td @click="remove(item.filename)"><i class="oi oi-trash"></i></td>
