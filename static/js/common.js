@@ -27,6 +27,15 @@ window.commonView = new Vue({
                 else
                     window.location.href = "/wp/play/" + obj;
             },
+            remove: function (obj) {
+                if (confirm("Clear history of " + obj + "?"))
+                    history("/hist/rm/" + obj.replace(/\?/g, "%3F")); //?to%3F #to%23
+            },
+            move: function (obj) {
+                if (confirm("Move " + obj + " to .old?")) {
+                    filelist("/fs/move/" + obj);
+                }
+            },
             open: function (obj, type) {
                 switch (type) {
                 case "folder":
