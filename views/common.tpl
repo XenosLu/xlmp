@@ -46,17 +46,16 @@
     <!-- <b-modal id="modal_new" size="lg" class="col-xs-12 col-sm-8 col-md-8 col-lg-7" centered hide-footer title-tag="h6" title="Browser"> -->
     <b-modal id="modal_new" size="lg" centered hide-footer title-tag="h6" title="Browser">
        <b-btn onclick="history('/hist/ls')"><i class="oi oi-book"></i>History</b-btn>
-       <!-- <b-btn onclick="filelist('/fs/ls/')"><i class="icono-home"></i>Home dir</b-btn> -->
        <b-btn onclick="filelist('/fs/ls/')"><i class="oi oi-home"></i>Home dir</b-btn>
        <div class="table-responsive-sm">
          <table v-show="history_show" class="table table-striped table-hover table-sm">
            <tr v-for="item in history">
-             <td @click="open(item.path, 'folder')"><i class="icono-folder"></i></td>
-             <td><i class="icono-video"></i></td>
+             <td @click="open(item.path, 'folder')"><i class="oi oi-folder"></i></td>
+             <td><i class="oi oi-video"></i></td>
              <td @click="play(item.filename)">${ item.filename }<br>
                <small>${ item.latest_date } | ${ secondToTime(item.position) } / ${ secondToTime(item.duration) }</small>
              </td>
-             <td @click="remove(item.filename)"><i class="icono-trash"></i></td>
+             <td @click="remove(item.filename)"><i class="oi oi-trash"></i></td>
            </tr>
          </table>
          <!-- </div> -->

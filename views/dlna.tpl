@@ -14,24 +14,25 @@
       <div><span id="state">No State</span></div>
       <div class="btn-group">
         <button class="btn btn-success btn-lg" type="button" onclick="get('/dlna/play')">
-          <i class="icono-play"></i>
+          <i class="oi oi-media-play"></i>
         </button>
         <button class="btn btn-danger btn-lg" type="button" onclick="get('/dlna/pause')">
-          <i class="icono-pause"></i>
+          <i class="oi oi-media-pause"></i>
         </button>
         <button class="btn btn-danger btn-lg" type="button" onclick="get('/dlna/stop')">
-          <i class="icono-stop"></i>
+          <i class="oi oi-media-stop"></i>
         </button>
         <button class="btn btn-success btn-lg" type="button" onclick="get('/dlna/next')">
-          <i class="icono-next"></i>
+          <i class="oi oi-media-step-forward"></i>
         </button>
       </div>
         <h3 id="position"></h3>
         <input type="range" id="position-bar" min="0" max="0">
-        <button onclick="get('/dlna/vol/down');" type="button" class="volume btn btn-warning btn-lg glyphicon glyphicon-minus"><i class="icono-volumeDecrease"></i>
+        <button onclick="get('/dlna/vol/down');" type="button" class="volume btn btn-warning btn-lg">
+          <i class="oi oi-volume-low"></i>
         </button>
-        <button onclick="get('/dlna/vol/up');" type="button" class="volume btn btn-warning btn-lg glyphicon glyphicon-plus">
-        <i class="icono-volumeIncrease"></i>
+        <button onclick="get('/dlna/vol/up');" type="button" class="volume btn btn-warning btn-lg">
+          <i class="oi oi-volume-high"></i>
         </button>
     </div>
     {% end %}

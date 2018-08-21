@@ -1,9 +1,9 @@
 "use strict";
 var icon = {
-    "folder": "icono-folder",
-    "mp4": "icono-video",
-    "video": "icono-video",
-    "other": "icono-video"
+    "folder": "oi oi-folder",
+    "mp4": "oi oi-video",
+    "video": "oi oi-video",
+    "other": "oi oi-video"
 };
 
 window.commonView = new Vue({
