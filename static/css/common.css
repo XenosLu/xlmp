@@ -80,19 +80,24 @@ input[type=range]::-moz-range-thumb {
     color: grey;
     min-width: 14em;
 }
-.filelist.folder {
+.folder {
     color: black;
 }
-.filelist.mp4 {
+.mp4 {
     color: #337AB7;
 }
-.filelist.video {
+.video {
     color: #46CC93;
 }
+/*
 td small {
     color: grey;
 }
-footer, .remove, .filelist.other, .filelist small {
+*/
+.other{
+    color: grey;
+}
+footer, .remove{
     color: grey;
 }
 #sidebar{
