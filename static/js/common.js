@@ -15,6 +15,7 @@ window.commonView = new Vue({
             dlnaOn: false,
             dlnaShow: false,
             historyShow: true,
+            rateMenu: false,
             history: [],
             filelist: [],
         },

@@ -26,7 +26,7 @@
     </b-button-group>
 
     <!-- player menu -->
-    <div id="rate" class="btn-group dropdown">
+    <div v-show="rateMenu" id="rate" class="btn-group dropdown">
       <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">
         <i class="glyphicon glyphicon-chevron-down"></i>
       </button>
