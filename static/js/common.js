@@ -15,7 +15,6 @@ window.commonView = new Vue({
             history_show: true,
             history: [],
             filelist: [],
-            icon: icon,
         },
         methods: {
             test: function (obj) {
