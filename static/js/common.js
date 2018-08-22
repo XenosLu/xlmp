@@ -360,13 +360,6 @@ function check_dlna_state() {
         type: "GET",
         success: function (data) {
             window.commonView.dlnaOn = !$.isEmptyObject(data);
-            /*
-            if ($.isEmptyObject(data)) {
-                $("#dlna_toggle").removeClass("btn-success");
-            } else {
-                $("#dlna_toggle").addClass("btn-success");
-            }
-            */
         },
         error: function (xhr, err) {
             console.log('get dlna/info error')
