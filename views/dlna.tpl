@@ -16,6 +16,9 @@
           <div><span>${ state }</span></div>
         </div>
         <div class="card-body">
+          <h5 class="card-title">${ src }</h5>
+          <h6 class="card-subtitle mb-2 text-muted">${ state }</h6>
+        
           <div class="btn-group">
             <button class="btn btn-success btn-lg" type="button" onclick="get('/dlna/play')">
               <i class="oi oi-media-play"></i>

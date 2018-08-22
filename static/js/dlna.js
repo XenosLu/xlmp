@@ -8,6 +8,7 @@ window.dlnaView = new Vue({
         el: '#v-dlna',
         data: {
             state: 'No State',
+            src: '',
         }
 });
 
@@ -62,7 +63,8 @@ function renderUI(data) {
             $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
 
         $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
-        $('#src').text(decodeURI(data["TrackURI"]));
+        window.dlnaView.state = decodeURI(data["TrackURI"]);
+        // $('#src').text(decodeURI(data["TrackURI"]));
 
         $("#dmr button").text(data["CurrentDMR"]);
         $("#dmr ul").empty().append('<li><a onclick="$.get(\'/dlna/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
