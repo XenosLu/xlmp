@@ -7,10 +7,13 @@
         <div class="card-head">
           <h2 class="card-title">&nbsp;</h2>
           <b-btn-group>
-            <b-btn onclick="get('/dlna/searchdmr');">Search DMR</b-btn>
+            <!-- <b-btn onclick="get('/dlna/searchdmr');">Search DMR</b-btn> -->
             <b-dropdown right split :text="currentDMR">
+                          
+              <b-dropdown-item onclick="get('/dlna/searchdmr');">Search DMR</b-dropdown-item>
+              <b-dropdown-divider></b-dropdown-divider>
               <b-dropdown-item v-for="item in DMRs" @click="set_dmr(item)">${ item }</b-dropdown-item>
-              <!-- <b-dropdown-divider></b-dropdown-divider> -->
+
             </b-dropdown>
           </b-btn-group>
 
