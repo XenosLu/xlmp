@@ -204,7 +204,6 @@ function toggleDialog() {
  * @method adapt
  */
 function adapt() {
-    $("#tabFrame").css("max-height", ($(window).height() - 240) + "px");
     if ($("video").length == 1) {
         $("#videosize").text("orign");
         var video_ratio = $("video").get(0).videoWidth / $("video").get(0).videoHeight;

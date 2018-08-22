@@ -143,10 +143,10 @@ button {
     opacity: 0.88;
     box-shadow: 2px 2px 5px #333333;
 }
-#tabFrame {
-    overflow: auto;
+#v-dlna div {
     background-color: #F1F2F6;
 }
+
 #output, #dialog {
     position: fixed;
     top: 50%;
