@@ -2,9 +2,14 @@ var reltime = 0;
 var update = true;
 var wait = 0;
 
-$("#dlna_toggle").addClass("active");
-// $("#dlna_toggle").attr("href", "/");
-$("#dlna_toggle").attr("onclick", 'window.location.href = "/";');
+
+window.dlnaView = new Vue({
+        delimiters: ['${', '}'],
+        el: '#v-dlna',
+        data: {
+        }
+});
+
 
 window.commonView.dlnaShow = true;
 //$(".dlna-show").show();
@@ -42,11 +47,9 @@ function dlnalink() {
     return ws;
 }
 function renderUI(data) {
-    if ($.isEmptyObject(data)) {
+    if ($.isEmptyObject(data))
         $("#state").text('No DMR');
-        $("#dlna_toggle").removeClass("btn-success");
-    } else {
-        $("#dlna_toggle").addClass("btn-success");
+    else {
         reltime = timeToSecond(data["RelTime"]);
         if (update)
             $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
