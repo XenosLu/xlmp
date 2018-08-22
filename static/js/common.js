@@ -6,7 +6,6 @@ var icon = {
     "other": "oi oi-file"
 };
 
-
 window.commonView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-common',
@@ -29,7 +28,7 @@ window.commonView = new Vue({
             },
             showModal: function () {
                 this.modalShow = true;
-                if(this.historyShow)
+                if (this.historyShow)
                     this.showHistory();
             },
             showHistory: function () {
@@ -74,7 +73,6 @@ window.commonView = new Vue({
         },
     });
 
-
 var hammertime = new Hammer(document.getElementById("ModalTouch"));
 var vector = 0;
 //为该dom元素指定触屏移动事件
@@ -85,8 +83,7 @@ hammertime.on("pan", function (ev) {
         vector -= 1;
     } else if (ev.additionalEvent == "panright") {
         vector += 1;
-    }
-    else
+    } else
         vector = 0;
     if (vector < -10)
         vector = -10;
