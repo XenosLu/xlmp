@@ -1,3 +1,7 @@
+.oi-trash {
+  color: white;
+}
+
 /*** modified bootstrap style ***/
 .glyphicon-film, .glyphicon-folder-close, .glyphicon-remove-circle, .glyphicon-file {
     font-size: 1.8em;
