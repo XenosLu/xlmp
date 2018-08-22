@@ -33,7 +33,7 @@
               <i class="oi oi-media-step-forward"></i>
             </button>
           </div>
-          <h3 id="position"></h3>
+          <h3 class="card-title" id="position">${ position }</h3>
           <input type="range" id="position-bar" min="0" max="0">
           <button onclick="get('/dlna/vol/down');" type="button" class="volume btn btn-warning btn-lg">
           <i class="oi oi-volume-low"></i>

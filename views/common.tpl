@@ -22,7 +22,7 @@
         <b-dropdown-item onclick="get('/dlna/seek/00:01:00')">01:00</b-dropdown-item>
         <b-dropdown-item onclick="get('/dlna/seek/00:01:30')">01:30</b-dropdown-item>
       </b-dropdown>
-       <b-dropdown right class="oi oi-video" v-show="rateMenu" text="Rate">
+       <b-dropdown right v-show="rateMenu" text="Rate">
         <b-dropdown-item onclick="rate(0.5)">0.5X</b-dropdown-item>
         <b-dropdown-item onclick="rate(0.75)">0.75X</b-dropdown-item>
         <b-dropdown-divider></b-dropdown-divider>

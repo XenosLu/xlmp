@@ -9,6 +9,9 @@ window.dlnaView = new Vue({
         data: {
             state: 'No State',
             src: '',
+            position: '',
+            
+            
         }
 });
 
@@ -61,8 +64,8 @@ function renderUI(data) {
         reltime = timeToSecond(data["RelTime"]);
         if (update)
             $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
-
-        $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
+        window.commonView.position = data["RelTime"] + "/" + data["TrackDuration"];
+        // $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
         window.dlnaView.src = decodeURI(data["TrackURI"]);
         // $('#src').text(decodeURI(data["TrackURI"]));
 
