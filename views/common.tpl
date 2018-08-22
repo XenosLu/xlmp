@@ -57,7 +57,6 @@
                <br>
                <small class="text-white">open dir</small>
              </td>
-             <!-- <td v-show="testx=='panright'" @click="open(item.path, 'folder')"><i class="oi oi-folder"></i></td> -->
              <!-- <td><i class="oi oi-video"></i></td> -->
              <td @click="play(item.filename)">
                <span :class="item.exist ? 'mp4' : 'other'">${ item.filename }</span>

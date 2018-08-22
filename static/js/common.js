@@ -7,7 +7,6 @@ var icon = {
 };
 
 
-
 window.commonView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-common',
@@ -75,7 +74,7 @@ window.commonView = new Vue({
         },
     });
 
-    
+
 var hammertime = new Hammer(document.getElementById("test"));
 var vector = 0;
 //为该dom元素指定触屏移动事件
@@ -94,9 +93,9 @@ hammertime.on("pan", function (ev) {
         vector = -15;
     else if (vector > 15)
         vector = 15;
-    if (vector < -6)
+    if (vector < -5)
         window.commonView.remove_class = "";
-    else if (vector > 6)
+    else if (vector > 5)
         window.commonView.folder_class = "";
     else {
         window.commonView.folder_class = "d-none";
