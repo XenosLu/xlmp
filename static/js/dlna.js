@@ -63,7 +63,7 @@ function renderUI(data) {
             $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
 
         $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
-        window.dlnaView.state = decodeURI(data["TrackURI"]);
+        window.dlnaView.src = decodeURI(data["TrackURI"]);
         // $('#src').text(decodeURI(data["TrackURI"]));
 
         $("#dmr button").text(data["CurrentDMR"]);

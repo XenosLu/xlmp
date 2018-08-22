@@ -13,7 +13,7 @@
             </ul>
           </div>
           <h3 id="src"></h3>
-          <div><span>${ state }</span></div>
+          <!-- <div><span>${ state }</span></div> -->
         </div>
         <div class="card-body">
           <h5 class="card-title">${ src }</h5>
