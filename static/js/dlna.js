@@ -13,6 +13,11 @@ window.dlnaView = new Vue({
             currentDMR: '',
             DMRs: [],
 
+        },
+        methods: {
+            set_dmr: function(dmr){
+                set_dmr(dmr);
+            }
         }
 });
 
