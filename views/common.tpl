@@ -69,7 +69,7 @@
              <td :class="item.type" @click="open(item.path, item.type)">
                ${ item.filename }<br><small>${ item.size }</small>
              </td>
-             <td @click="move(item.filename)"><i class="oi oi-trash"></i></td>
+             <td :class="[remove_class]" class="d-sm-block bg-danger" @click="move(item.filename)"><i class="oi oi-trash"></i></td>
            </tr>
          </table>
        </div>
