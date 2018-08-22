@@ -1,13 +1,13 @@
 <div id="v-common">
   <div id="sidebar" class="btn-toolbar">
-    <b-button-group>
+    <b-btn-group>
       <!-- <b-btn variant="outline-dark" title="browser" id="history" v-b-modal.modal_new> -->
       <b-btn variant="outline-dark" title="browser" id="history" @click="showModal">
         <i class="oi oi-list"></i>
       </b-btn>
-      <b-button variant="outline-success" title="switch DLNA mode" id="dlna_toggle" onclick='window.location.href = "/dlna";'>
+      <b-btn variant="outline-success" title="switch DLNA mode" id="dlna_toggle" onclick='window.location.href = "/dlna";'>
         DLNA <i v-show="dlnaOn" class="oi oi-monitor"></i>
-      </b-button>
+      </b-btn>
       <b-dropdown right text="Maintain">
         <b-dropdown-item onclick="get('/sys/update')">update</b-dropdown-item>
         <b-dropdown-item onclick="get('/sys/backup')">backup</b-dropdown-item>
@@ -36,7 +36,7 @@
       </b-dropdown>
       <!-- dlna menu end -->
 
-    </b-button-group>
+    </b-btn-group>
   </div>
 
     <!-- Modal Component -->

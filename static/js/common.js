@@ -133,6 +133,7 @@ $("#clear").click(function () {
 //$("#history").click(toggleDialog);
 //$(".close").click(toggleDialog);
 
+/*
 //table buttons
 $("#tabFrame").on("click", ".folder", function () {
     filelist("/fs/ls/" + this.title + "/");
@@ -152,7 +153,7 @@ $("#tabFrame").on("click", ".folder", function () {
     if (window.document.location.pathname == "/dlna")
         get("/dlna/load/" + this.title);
 });
-
+*/
 /**
  * Ajax get and out result
  *
@@ -170,18 +171,21 @@ function get(url) {
  * @method showDialog
  * to be delete
  */
+ /*
 function showDialog() {
     if ($("#navtab li:eq(0)").attr("class") == "active")
         getHistory("/hist/ls");
     $("#history").addClass("active");
     $("#dialog").show(250);
 }
+*/
 
 /**
  * Toggle Dialog open/close
  *
  * @method toggleDialog
  */
+ /*
 function toggleDialog() {
     if ($("#history").hasClass("active")) {
         $("#history").removeClass("active");
@@ -193,7 +197,7 @@ function toggleDialog() {
         $("#dialog").show(250);
     }
 }
-
+*/
 /**
  * Auto adjust video size and dialog hieght
  *
