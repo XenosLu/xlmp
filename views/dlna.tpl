@@ -5,6 +5,15 @@
     <div id="v-dlna">
       <div class="card text-center col-xs-12 col-sm-8 col-md-6">
         <div class="card-head">
+            <b-dropdown v-for="item in DMRs" right split :text="currentDMR">
+              <b-dropdown-item>${ item }</b-dropdown-item>
+              <b-dropdown-item>Item 2</b-dropdown-item>
+              <b-dropdown-divider></b-dropdown-divider>
+              <b-dropdown-item>Item 3</b-dropdown-item>
+            </b-dropdown>
+
+        
+        
           <div id="dmr" class="btn-group dropdown">
             <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>
             </button>
@@ -42,6 +51,7 @@
           <i class="oi oi-volume-high"></i>
           </button>
         </div>
+        <div class="card-footer"></div>
       </div>
     </div>
     {% end %}
