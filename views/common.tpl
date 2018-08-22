@@ -90,10 +90,14 @@
             </tr>
           </table>
         </div>
+        <div v-show="historyShow" class="card-footer">
+          <b-btn @onclick='if (confirm("Clear all history?"))getHistory("/hist/clear");' variant="outline-dark">
+            Clear
+          </b-btn>
+        </div>
            <!-- td[1] = '<td class="filelist ' + n["type"] + '" title="' + n["path"] + '">' + n["filename"] + size + "</td>"; -->
            <!-- td[2] = '<td class="move" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i></td>'; -->
-        
-        
+
            <!-- td[0] = '<td class="folder" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-folder-close"></i></td>'; -->
            <!-- td[1] = '<td><i class="glyphicon glyphicon-film"></i></td>'; -->
            <!-- td[2] = '<td class="filelist ' + mediaType + '" title="' + n["filename"] + '">' + n["filename"] + "<br><small>" + n["latest_date"] + " | " + secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small></td>"; -->
