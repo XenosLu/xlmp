@@ -41,8 +41,8 @@
 
     <!-- Modal Component -->
     <!-- <b-modal v-model="modalShow" id="modal_new" size="lg" class="col-xs-12 col-sm-12 col-md-8 col-lg-7" centered hide-footer title-tag="h6" title="Browser"> -->
-    <b-modal v-model="modalShow" size="lg" centered hide-footer hide-header>
-      <div class="card">
+    <b-modal modal-class="'card'" v-model="modalShow" size="lg" centered hide-footer hide-header>
+      <!-- <div class="card"> -->
         <div class="card-header">
           <b-btn @click="showHistory" :pressed="historyShow" variant="outline-dark">
             <i class="oi oi-book"></i>History
@@ -100,7 +100,7 @@
            <!-- td[2] = '<td class="filelist ' + mediaType + '" title="' + n["filename"] + '">' + n["filename"] + "<br><small>" + n["latest_date"] + " | " + secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small></td>"; -->
            <!-- td[3] = '<td class="remove" title="' + n["filename"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i>' + "</td>"; -->
         </div>
-      <div>
+      <!-- <div> -->
     </b-modal>
   
   <!-- <div id="dialog" class="col-xs-12 col-sm-8 col-md-8 col-lg-7"> -->
