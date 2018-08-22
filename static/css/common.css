@@ -2,11 +2,7 @@
 .glyphicon-film, .glyphicon-folder-close, .glyphicon-remove-circle, .glyphicon-file {
     font-size: 1.8em;
 }
-.close {
-    /* font-size: 2.5em; */
-    /* margin-right: 0.25em; */
-    /* margin-top: 0.05em; */
-}
+
 /* .dropdown-menu { */
 .dropdown-item {
     opacity: 0.9;
