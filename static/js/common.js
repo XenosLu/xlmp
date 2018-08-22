@@ -104,11 +104,7 @@ hammertime.on("pan", function (ev) {
     }
     console.log(window.commonView.folder_class);
     console.log(window.commonView.remove_class);
-    
-    // folder_class
-    // remove_class
-    //window.commonView.testx = ev.additionalEvent;
-    //alert(ev.additionalEvent);
+
 });
 
 
