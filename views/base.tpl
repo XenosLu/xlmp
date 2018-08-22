@@ -21,7 +21,7 @@
       {% end %}
     </div>
     {% block footer %}
-    <footer class="text-center"><small>&copy;2016-2018 Xenos' Light Media Player</small></footer>
+    <footer class="text-center"><small class="text-muted">&copy;2016-2018 Xenos' Light Media Player</small></footer>
     {% end %}
   </body>
   <script src="/static/js/jquery-3.2.1.min.js"></script>

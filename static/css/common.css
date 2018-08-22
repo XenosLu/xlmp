@@ -2,11 +2,11 @@
   color: white;
 }
 
-/*** modified bootstrap style ***/
+/*
 .glyphicon-film, .glyphicon-folder-close, .glyphicon-remove-circle, .glyphicon-file {
     font-size: 1.8em;
 }
-
+*/
 /* .dropdown-menu { */
 .dropdown-item {
     opacity: 0.9;
@@ -95,16 +95,11 @@ input[type=range]::-moz-range-thumb {
 .video {
     color: #46CC93;
 }
-td small {
-    color: grey;
-}
 .other{
     color: grey;
 }
 /* updated end */
-footer, .remove{
-    color: grey;
-}
+
 #sidebar{
     opacity: 0.8;
     position: fixed;
