@@ -13,7 +13,7 @@
             </ul>
           </div>
           <h3 id="src"></h3>
-          <div><span id="state">No State</span></div>
+          <div><span>${ state }</span></div>
         </div>
         <div class="card-body">
           <div class="btn-group">

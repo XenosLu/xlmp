@@ -7,6 +7,7 @@ window.dlnaView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-dlna',
         data: {
+            state: 'No State',
         }
 });
 
@@ -39,7 +40,8 @@ function dlnalink() {
         renderUI(data);
     }
     ws.onclose = function () {
-        $("#state").text('disconnected');
+        window.dlnaView.state = 'disconnected';
+        // $("#state").text('disconnected');
     };
     ws.onerror = function () {
         console.log('error');
@@ -50,7 +52,8 @@ function renderUI(data) {
     if ($.isEmptyObject(data))
     {
         window.commonView.dlnaOn = false;
-        $("#state").text('No DMR');
+        window.dlnaView.state = 'No DMR';
+        // $("#state").text('No DMR');
     }
     else {
         window.commonView.dlnaOn = true;
@@ -67,7 +70,8 @@ function renderUI(data) {
             $("#dmr ul").append('<li><a onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
         }
 
-        $("#state").text(data["CurrentTransportState"]);
+        // $("#state").text(data["CurrentTransportState"]);
+        window.dlnaView.state = data.CurrentTransportState;
     }
 }
 /**
