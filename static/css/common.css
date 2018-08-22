@@ -1,7 +1,9 @@
 .oi-trash {
   color: white;
 }
-
+.icon {
+    width: 3.9em;
+}
 /*
 .glyphicon-film, .glyphicon-folder-close, .glyphicon-remove-circle, .glyphicon-file {
     font-size: 1.8em;
@@ -29,9 +31,11 @@ footer {
 a {
     cursor: default;
 }
+/*
 div {
     text-align: center;
 }
+*/
 video {
     clear: both;
     display: block;
@@ -49,7 +53,6 @@ table {
 */
 td {
     word-break:break-all;
-    min-width: 4em;
 }
 .table tbody tr td{
     vertical-align: middle;
