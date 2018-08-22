@@ -120,14 +120,15 @@ function showSidebar() {
     hide_sidebar = setTimeout('$("#sidebar").hide()', 3000);
 }
 
-//window.commonView.showModal();
+//window.commonView.showModal();  // show modal at start
 
+/*
 //buttons
 $("#clear").click(function () {
     if (confirm("Clear all history?"))
         getHistory("/hist/clear");
 });
-
+*/
 // Dialog open/close toggle buttons
 //$("#history").click(toggleDialog);
 //$(".close").click(toggleDialog);
