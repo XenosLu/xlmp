@@ -42,60 +42,65 @@
     <!-- Modal Component -->
     <!-- <b-modal v-model="modalShow" id="modal_new" size="lg" class="col-xs-12 col-sm-12 col-md-8 col-lg-7" centered hide-footer title-tag="h6" title="Browser"> -->
     <b-modal v-model="modalShow" size="lg" centered hide-footer hide-header>
-       <b-btn @click="showHistory" :pressed="historyShow" variant="outline-dark">
-         <i class="oi oi-book"></i>History
-       </b-btn>
-       <b-btn onclick="filelist('/fs/ls/')" :pressed="!historyShow" variant="outline-dark">
-         <i class="oi oi-home"></i>Home dir
-       </b-btn>
-       <b-btn @click="modalShow=false" class="close">&times;</b-btn>
-       <div id="test" class="table-responsive-sm">
-         <table v-show="historyShow" class="table table-striped table-sm">
-           <tr v-for="item in history">
-             <td :class="[folder_class]" class="icon d-sm-block bg-info" @click="open(item.path, 'folder')">
-               <i class="text-white oi oi-folder"></i>
-               <br>
-               <small class="text-white">open dir</small>
-             </td>
-             <!-- <td><i class="oi oi-video"></i></td> -->
-             <td @click="play(item.filename)">
-               <span :class="item.exist ? 'mp4' : 'other'">${ item.filename }</span>
-               <br>
-               <small class="text-muted">
-                 ${ item.latest_date } | ${ secondToTime(item.position) } / ${ secondToTime(item.duration) }
-               </small>
-             </td>
-             <td :class="[remove_class]" class="icon d-sm-block bg-danger" @click="remove(item.filename)">
-               <i class="text-white oi oi-trash"></i>
-               <br>
-               <small class="text-white">remove</small>
-             </td>
-           </tr>
-         </table>
-         <table v-show="!historyShow" class="table table-striped table-sm">
-           <tr v-for="item in filelist">
-             <td class="icon"><i :class="icon[item.type]"></i></td>
-             <td :class="item.type" @click="open(item.path, item.type)">
-               ${ item.filename }
-               <br>
-               <small class="text-muted">${ item.size }</small>
-             </td>
-             <td :class="[remove_class]" class="icon d-sm-block bg-danger" @click="move(item.filename)">
-               <i class="text-white oi oi-trash"></i><br>
-               <small class="text-white">move</small>
-             </td>
-           </tr>
-         </table>
-       </div>
-          <!-- td[1] = '<td class="filelist ' + n["type"] + '" title="' + n["path"] + '">' + n["filename"] + size + "</td>"; -->
-          <!-- td[2] = '<td class="move" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i></td>'; -->
-
-
-          <!-- td[0] = '<td class="folder" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-folder-close"></i></td>'; -->
-          <!-- td[1] = '<td><i class="glyphicon glyphicon-film"></i></td>'; -->
-          <!-- td[2] = '<td class="filelist ' + mediaType + '" title="' + n["filename"] + '">' + n["filename"] + "<br><small>" + n["latest_date"] + " | " + secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small></td>"; -->
-          <!-- td[3] = '<td class="remove" title="' + n["filename"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i>' + "</td>"; -->
-
+      <div class="card">
+        <div class="card-header">
+          <b-btn @click="showHistory" :pressed="historyShow" variant="outline-dark">
+            <i class="oi oi-book"></i>History
+          </b-btn>
+          <b-btn onclick="filelist('/fs/ls/')" :pressed="!historyShow" variant="outline-dark">
+            <i class="oi oi-home"></i>Home dir
+          </b-btn>
+          <b-btn @click="modalShow=false" class="close">&times;</b-btn>
+        </div>
+        <div class="card-body">
+        <div id="test" class="table-responsive-sm">
+          <table v-show="historyShow" class="table table-striped table-sm">
+            <tr v-for="item in history">
+              <td :class="[folder_class]" class="icon d-sm-block bg-info" @click="open(item.path, 'folder')">
+                <i class="text-white oi oi-folder"></i>
+                <br>
+                <small class="text-white">Open Dir</small>
+              </td>
+              <!-- <td><i class="oi oi-video"></i></td> -->
+              <td @click="play(item.filename)">
+                <span :class="item.exist ? 'mp4' : 'other'">${ item.filename }</span>
+                <br>
+                <small class="text-muted">
+                  ${ item.latest_date } | ${ secondToTime(item.position) } / ${ secondToTime(item.duration) }
+                </small>
+              </td>
+              <td :class="[remove_class]" class="icon d-sm-block bg-danger" @click="remove(item.filename)">
+                <i class="text-white oi oi-trash"></i>
+                <br>
+                <small class="text-white">Remove</small>
+              </td>
+            </tr>
+          </table>
+          <table v-show="!historyShow" class="table table-striped table-sm">
+            <tr v-for="item in filelist">
+              <td class="icon"><i :class="icon[item.type]"></i></td>
+              <td :class="item.type" @click="open(item.path, item.type)">
+                ${ item.filename }
+                <br>
+                <small class="text-muted">${ item.size }</small>
+              </td>
+              <td :class="[remove_class]" class="icon d-sm-block bg-danger" @click="move(item.filename)">
+                <i class="text-white oi oi-trash"></i><br>
+                <small class="text-white">Move</small>
+              </td>
+            </tr>
+          </table>
+        </div>
+           <!-- td[1] = '<td class="filelist ' + n["type"] + '" title="' + n["path"] + '">' + n["filename"] + size + "</td>"; -->
+           <!-- td[2] = '<td class="move" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i></td>'; -->
+        
+        
+           <!-- td[0] = '<td class="folder" title="' + n["path"] + '">' + '<i class="glyphicon glyphicon-folder-close"></i></td>'; -->
+           <!-- td[1] = '<td><i class="glyphicon glyphicon-film"></i></td>'; -->
+           <!-- td[2] = '<td class="filelist ' + mediaType + '" title="' + n["filename"] + '">' + n["filename"] + "<br><small>" + n["latest_date"] + " | " + secondToTime(n["position"]) + "/" + secondToTime(n["duration"]) + "</small></td>"; -->
+           <!-- td[3] = '<td class="remove" title="' + n["filename"] + '">' + '<i class="glyphicon glyphicon-remove-circle"></i>' + "</td>"; -->
+        </div>
+      <div>
     </b-modal>
   
   <!-- <div id="dialog" class="col-xs-12 col-sm-8 col-md-8 col-lg-7"> -->
