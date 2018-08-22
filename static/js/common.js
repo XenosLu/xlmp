@@ -75,13 +75,12 @@ window.commonView = new Vue({
     });
 
 
-var hammertime = new Hammer(document.getElementById("test"));
+var hammertime = new Hammer(document.getElementById("ModalTouch"));
 var vector = 0;
 //为该dom元素指定触屏移动事件
 hammertime.on("pan", function (ev) {
     //控制台输出
     console.log(ev.additionalEvent);
-    
     if (ev.additionalEvent == "panleft") {
         vector -= 1;
     } else if (ev.additionalEvent == "panright") {
@@ -103,20 +102,8 @@ hammertime.on("pan", function (ev) {
     }
     console.log(window.commonView.folder_class);
     console.log(window.commonView.remove_class);
-
 });
 
-
-/*
-//创建一个新的hammer对象并且在初始化时指定要处理的dom元素
-var hammertime = new Hammer(document.getElementById("test"));
-//添加事件
-hammertime.on("pan", function (e) {
-    document.getElementById("result").innerHTML += "X偏移量：【" + e.deltaX + "】，Y偏移量：【" + e.deltaY + "】<br />";
-    //控制台输出
-    console.log(e);
-});
-*/
     
 
 var RANGE = 12; //minimum touch move range in px

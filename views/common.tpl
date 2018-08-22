@@ -52,7 +52,7 @@
           </b-btn>
           <b-btn @click="modalShow=false" class="close">&times;</b-btn>
         </div>
-        <div id="test" class="table-responsive-sm">
+        <div id="ModalTouch" class="table-responsive-sm">
           <table v-show="historyShow" class="table table-striped table-sm">
             <tr v-for="item in history">
               <td :class="[folder_class]" class="icon d-sm-block bg-info" @click="open(item.path, 'folder')">
