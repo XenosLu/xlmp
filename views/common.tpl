@@ -58,7 +58,7 @@
               <td :class="[folder_class]" class="icon d-sm-block bg-info" @click="open(item.path, 'folder')">
                 <i class="text-white oi oi-folder"></i>
                 <br>
-                <small class="text-white">Open Dir</small>
+                <small class="text-white">go Dir</small>
               </td>
               <!-- <td><i class="oi oi-video"></i></td> -->
               <td @click="play(item.filename)">
