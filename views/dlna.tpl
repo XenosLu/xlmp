@@ -8,10 +8,8 @@
           <b-btn-group>
             <b-btn onclick="get('/dlna/searchdmr');">Search DMR</b-btn>
             <b-dropdown v-for="item in DMRs" right split :text="currentDMR">
-              <b-dropdown-item>${ item }</b-dropdown-item>
-              <b-dropdown-item>Item 2</b-dropdown-item>
-              <b-dropdown-divider></b-dropdown-divider>
-              <b-dropdown-item>Item 3</b-dropdown-item>
+              <b-dropdown-item @click="set_dmr(item)">${ item }</b-dropdown-item>
+              <!-- <b-dropdown-divider></b-dropdown-divider> -->
             </b-dropdown>
           </b-btn-group>
 
