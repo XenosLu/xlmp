@@ -48,8 +48,12 @@ function dlnalink() {
 }
 function renderUI(data) {
     if ($.isEmptyObject(data))
+    {
+        window.commonView.dlnaOn = false;
         $("#state").text('No DMR');
+    }
     else {
+        window.commonView.dlnaOn = true;
         reltime = timeToSecond(data["RelTime"]);
         if (update)
             $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
@@ -69,6 +73,7 @@ function renderUI(data) {
 /**
  * receive dlnainfo through ajax, not used
  */
+ /*
 function get_dmr_state() {
     if (wait > 0) {
         wait -= 1;
@@ -111,7 +116,7 @@ function get_dmr_state() {
         });
     }
 }
-
+*/
 function set_dmr(dmr) {
     $.get("/dlna/setdmr/" + dmr);
 }
