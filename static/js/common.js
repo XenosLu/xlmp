@@ -89,10 +89,10 @@ hammertime.on("pan", function (ev) {
     }
     else
         vector = 0;
-    if (vector < -15)
-        vector = -15;
-    else if (vector > 15)
-        vector = 15;
+    if (vector < -10)
+        vector = -10;
+    else if (vector > 10)
+        vector = 10;
     if (vector < -5)
         window.commonView.remove_class = "";
     else if (vector > 5)
