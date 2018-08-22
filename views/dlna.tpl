@@ -30,7 +30,7 @@
           <h5 class="card-title">${ src }</h5>
           <h6 class="card-subtitle mb-2 text-muted">${ state }</h6>
         
-          <div class="btn-group">
+          <b-btn-group>
             <button class="btn btn-success btn-lg" type="button" onclick="get('/dlna/play')">
               <i class="oi oi-media-play"></i>
             </button>
@@ -43,14 +43,14 @@
             <button class="btn btn-success btn-lg" type="button" onclick="get('/dlna/next')">
               <i class="oi oi-media-step-forward"></i>
             </button>
-          </div>
+          </b-btn-group>
           <h3 class="card-title" id="position">${ position }</h3>
           <input type="range" id="position-bar" min="0" max="0">
           <button onclick="get('/dlna/vol/down');" type="button" class="volume btn btn-warning btn-lg">
-          <i class="oi oi-volume-low"></i>
+            <i class="oi oi-volume-low"></i>
           </button>
           <button onclick="get('/dlna/vol/up');" type="button" class="volume btn btn-warning btn-lg">
-          <i class="oi oi-volume-high"></i>
+            <i class="oi oi-volume-high"></i>
           </button>
         </div>
         <div class="card-footer"></div>
