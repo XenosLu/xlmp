@@ -14,11 +14,10 @@
               <b-dropdown-item v-for="item in DMRs" @click="set_dmr(item)">${ item }</b-dropdown-item>
             </b-dropdown>
           </b-btn-group>
-          <h5 class="card-title">${ src }</h5>
-          <h6 class="card-subtitle mb-2 text-muted">${ state }</h6>
         </div>
         <div class="card-body">
-
+          <h5 class="card-title">${ src }</h5>
+          <h6 class="card-subtitle mb-2 text-muted">${ state }</h6>
         </div>
         <div class="card-body">
           <b-btn-group>
@@ -40,7 +39,7 @@
             ${ dlnaInfo.RelTime} / ${ dlnaInfo.TrackDuration }
           </h3>
           <!-- <input type="range" id="position-bar" min="0" max="0"> -->
-          <input class="position-bar my-5"
+          <input class="position-bar my-4"
                  v-model.number="positionBar.val"
                  type="range"
                  :min="positionBar.min"
