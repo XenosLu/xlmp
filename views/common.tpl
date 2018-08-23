@@ -1,6 +1,7 @@
 <div id="v-common">
   <b-btn-toolbar v-show="fixBarShow" class="fixed-top">
-    <b-btn-group class="mx-5">
+    <b-container>
+    <b-btn-group>
       <b-btn variant="outline-dark" title="browser" id="history" @click="showModal">
         <i class="oi oi-list"></i>
       </b-btn>
@@ -42,6 +43,7 @@
       <!-- dlna menu end -->
 
     </b-btn-group>
+    </b-container>
   </b-btn-toolbar>
 
     <!-- Modal Component -->
