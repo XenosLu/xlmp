@@ -35,7 +35,9 @@
             </button>
           </b-btn-group>
           <!-- <h3 class="card-title">${ position }</h3> -->
-          <h3 v-show="dlnaInfo.RelTime" class="card-title">${ dlnaInfo.RelTime} / ${ dlnaInfo.TrackDuration }</h3>
+          <h3 v-show="dlnaInfo.RelTime" class="card-title mt-3">
+            ${ dlnaInfo.RelTime} / ${ dlnaInfo.TrackDuration }
+          </h3>
           <!-- <input type="range" id="position-bar" min="0" max="0"> -->
           <input id="position-bar"
                  v-model.number="positionBar.val"
@@ -46,8 +48,7 @@
                  @input="positionShow">
         </div>
         <div class="card-footer">
-          <!-- <b-btn-group class="my-3"> -->
-          <b-btn-group class="my-auto">
+          <b-btn-group class="my-3">
             <button onclick="get('/dlna/vol/down');" type="button" class="mx-5 volume btn btn-warning btn-lg">
               <i class="oi oi-volume-low"></i>
             </button>
