@@ -4,7 +4,7 @@
       <b-btn variant="outline-dark" title="browser" id="history" @click="showModal">
         <i class="oi oi-list"></i>
       </b-btn>
-      <b-btn variant="outline-success" title="switch DLNA mode" id="dlna_toggle" :pressed="dlnaShow" @click="window.location.href = dlnaShow ? '/' : '/dlna'">
+      <b-btn variant="outline-success" title="switch DLNA mode" :pressed="dlnaShow" @click="window.location.href = dlnaShow ? '/' : '/dlna'">
         DLNA <i v-show="dlnaOn" class="oi oi-monitor"></i>
       </b-btn>
       <b-dropdown right text="Maintain">
@@ -94,7 +94,6 @@
         </b-btn>
       </div>
     </b-modal>
-  
   <!-- <div id="dialog" class="col-xs-12 col-sm-8 col-md-8 col-lg-7"> -->
   <!-- </div> -->
 </div>
