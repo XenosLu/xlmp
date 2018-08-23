@@ -17,7 +17,7 @@
         </div>
         <div class="card-body">
           <h5 class="card-title">${ src }</h5>
-          <h6 class="card-subtitle mb-2 text-muted">${ state }</h6>
+          <h6 class="card-subtitle text-muted">${ state }</h6>
         </div>
         <div class="card-body">
           <b-btn-group>
