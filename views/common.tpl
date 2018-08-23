@@ -11,7 +11,7 @@
                @click="window.location.href = dlnaShow ? '/' : '/dlna'">
           DLNA <i v-show="dlnaOn" class="oi oi-monitor"></i>
         </b-btn>
-      
+
         <b-dropdown right text="Maintain">
           <b-dropdown-item onclick="get('/sys/update')">update</b-dropdown-item>
           <b-dropdown-item onclick="get('/sys/backup')">backup</b-dropdown-item>

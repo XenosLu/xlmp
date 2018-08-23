@@ -108,10 +108,30 @@ hammertime.on("pan", function (ev) {
 });
 */
 hammertime.on("swipeleft", function (ev) {
+    vector -= 1;
+    if (vector < -1)
+        vector = -1;
+    if (vector==-1)
+        window.commonView.remove_class = "";
+    else
+    {
+        window.commonView.folder_class = "d-none";
+        window.commonView.remove_class = "d-none";
+    }
     console.log(ev)
     out(ev.type);//overallVelocity deltaTime angle
 });
 hammertime.on("swiperight", function (ev) {
+    vector += 1;
+    if (vector > 1)
+        vector = 1;
+    if (vector==1)
+        window.commonView.folder_class = "";
+    else
+    {
+        window.commonView.folder_class = "d-none";
+        window.commonView.remove_class = "d-none";
+    }
     console.log(ev)
     out(ev.type);//overallVelocity deltaTime angle
 });
