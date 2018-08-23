@@ -48,7 +48,7 @@
     <!-- Modal Component -->
     <!-- <b-modal v-model="modalShow" size="lg" class="col-xs-12 col-sm-12 col-md-8 col-lg-7" centered hide-footer hide-header> -->
     <b-modal modal-class="['card']" v-model="uiState.modalShow" size="lg" centered hide-footer hide-header>
-      <div class="card-header">
+      <div class="card-header" style="background-color: #C3E6CB;">
         <b-btn @click="showHistory" :pressed="uiState.historyShow" variant="outline-dark">
           <i class="oi oi-book"></i>History
         </b-btn>
