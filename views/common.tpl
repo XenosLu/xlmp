@@ -2,7 +2,7 @@
   <b-btn-toolbar v-show="fixBarShow" class="fixed-top">
     <b-container>
       <b-btn-group>
-        <b-btn variant="outline-dark" title="browser" id="history" @click="showModal">
+        <b-btn variant="outline-dark" title="browser" @click="showModal">
           <i class="oi oi-list"></i>
         </b-btn>
         <b-btn variant="outline-success"
@@ -46,7 +46,7 @@
   </b-btn-toolbar>
 
     <!-- Modal Component -->
-    <!-- <b-modal v-model="modalShow" id="modal_new" size="lg" class="col-xs-12 col-sm-12 col-md-8 col-lg-7" centered hide-footer hide-header> -->
+    <!-- <b-modal v-model="modalShow" size="lg" class="col-xs-12 col-sm-12 col-md-8 col-lg-7" centered hide-footer hide-header> -->
     <b-modal modal-class="['card']" v-model="modalShow" size="lg" centered hide-footer hide-header>
       <div class="card-header">
         <b-btn @click="showHistory" :pressed="historyShow" variant="outline-dark">

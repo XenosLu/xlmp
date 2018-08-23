@@ -71,7 +71,7 @@ input[type=range]::-moz-range-thumb {
     border-radius: 0;
     border: None;
 }
-#position-bar::-moz-range-thumb {
+.position-bar::-moz-range-thumb {
     height: 2.4em;
     width: 1em;
     box-shadow: inset 0px 0px 5px 1px #A0D468;
@@ -138,14 +138,14 @@ button {
     transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
 }
-#position-bar {
+.position-bar {
     background-color: #A0D468;
     margin-top: 1.5em;
     margin-bottom: 1.5em;
     width: 84%;
     height: 2.4em;
 }
-#position-bar::-webkit-slider-thumb{
+.position-bar::-webkit-slider-thumb{
     -webkit-appearance: none;
     height: 5.2em;
     width: 3.3em;

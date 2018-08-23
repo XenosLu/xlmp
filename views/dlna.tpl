@@ -40,7 +40,7 @@
             ${ dlnaInfo.RelTime} / ${ dlnaInfo.TrackDuration }
           </h3>
           <!-- <input type="range" id="position-bar" min="0" max="0"> -->
-          <input id="position-bar"
+          <input class="position-bar"
                  v-model.number="positionBar.val"
                  type="range"
                  :min="positionBar.min"

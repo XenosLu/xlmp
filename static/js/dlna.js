@@ -40,15 +40,15 @@ window.dlnaView = new Vue({
 
 window.commonView.dlnaShow = true;
 
-/*
-$("#position-bar").on("change", function () {
-    $.get("/dlna/seek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
-    update = true;
-}).on("input", function () {
-    out(secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
-    update = false;
-});
-*/
+
+// $("#position-bar").on("change", function () {
+    // $.get("/dlna/seek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
+    // update = true;
+// }).on("input", function () {
+    // out(secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
+    // update = false;
+// });
+
 var ws_link;
 ws_link = dlnalink();
 
