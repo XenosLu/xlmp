@@ -3,7 +3,8 @@
 
     {% block main %}
     <div id="v-dlna">
-      <div class="card text-center col-xs-12 col-sm-8 col-md-6">
+      <!-- <div class="card text-center col-xs-12 col-sm-8 col-md-6"> -->
+      <div class="card text-center col-sm-12 col-md-8 col-lg-6 col-xl-6">
         <div class="card-head">
           <h2 class="card-title">&nbsp;</h2>
           <b-btn-group>
@@ -19,6 +20,8 @@
         <div class="card-body">
           <h5 class="card-title">${ src }</h5>
           <h6 class="card-subtitle mb-2 text-muted">${ state }</h6>
+        </div>
+        <div class="card-body">
           <b-btn-group>
             <button class="btn btn-success btn-lg" type="button" onclick="get('/dlna/play')">
               <i class="oi oi-media-play"></i>
@@ -33,8 +36,8 @@
               <i class="oi oi-media-step-forward"></i>
             </button>
           </b-btn-group>
-          <h3 class="card-title">${ dlnaInfo.RelTime } / ${ dlnaInfo.TrackDuration }</h3>
           <!-- <h3 class="card-title">${ position }</h3> -->
+          <h3 class="card-title">${ dlnaInfo.RelTime } / ${ dlnaInfo.TrackDuration }</h3>
           <!-- <input type="range" id="position-bar" min="0" max="0"> -->
           <input id="position-bar" v-model.number="positionBar.val" type="range" :min="positionBar.min" :max="positionBar.max" @change="positionSeek" @input="positionShow">
           <button onclick="get('/dlna/vol/down');" type="button" class="volume btn btn-warning btn-lg">
