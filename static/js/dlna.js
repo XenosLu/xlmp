@@ -63,23 +63,13 @@ function renderUI(data) {
     }
     else {
         window.commonView.dlnaOn = true;
-        reltime = timeToSecond(data["RelTime"]);
+        reltime = timeToSecond(data.RelTime);
         if (update)
             $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
-        window.dlnaView.position = data["RelTime"] + "/" + data["TrackDuration"];
-        // $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
-        window.dlnaView.src = decodeURI(data["TrackURI"]);
-        // $('#src').text(decodeURI(data["TrackURI"]));
+        window.dlnaView.position = data.RelTime + "/" + data.TrackDuration;
+        window.dlnaView.src = decodeURI(data.TrackURI);
         window.dlnaView.currentDMR = data.CurrentDMR;
         window.dlnaView.DMRs = data.DMRs;
-        
-        // $("#dmr button").text(data["CurrentDMR"]);
-        // $("#dmr ul").empty().append('<li><a onclick="$.get(\'/dlna/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
-        // for (x in data["DMRs"]) {
-            // $("#dmr ul").append('<li><a onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
-        // }
-
-        // $("#state").text(data["CurrentTransportState"]);
         window.dlnaView.state = data.CurrentTransportState;
     }
 }
