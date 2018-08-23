@@ -83,7 +83,7 @@ var vector = 0;
 
 hammertime.on("pan", function (ev) {
     //ev.type=='pan'
-    out(ev.velocity);
+    out(ev.velocity);//overallVelocity deltaTime angle
     console.log(ev.additionalEvent);
     console.log(ev);
     if (ev.additionalEvent == "panleft") {
