@@ -12,7 +12,6 @@ window.dlnaView = new Vue({
             position: '',
             currentDMR: '',
             DMRs: [],
-
         },
         methods: {
             set_dmr: function(dmr){
@@ -21,11 +20,9 @@ window.dlnaView = new Vue({
         }
 });
 
-
 window.commonView.dlnaShow = true;
-//$(".dlna-show").show();
-// get_dmr_state();
-// var inter = setInterval("get_dmr_state()", 1100);
+
+
 $("#position-bar").on("change", function () {
     $.get("/dlna/seek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
     update = true;
@@ -51,7 +48,6 @@ function dlnalink() {
     }
     ws.onclose = function () {
         window.dlnaView.state = 'disconnected';
-        // $("#state").text('disconnected');
     };
     ws.onerror = function () {
         console.log('error');
