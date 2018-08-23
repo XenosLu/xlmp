@@ -4,7 +4,10 @@
       <b-btn variant="outline-dark" title="browser" id="history" @click="showModal">
         <i class="oi oi-list"></i>
       </b-btn>
-      <b-btn variant="outline-success" title="switch DLNA mode" :pressed="dlnaShow" @click="window.location.href = dlnaShow ? '/' : '/dlna'">
+      <b-btn variant="outline-success"
+             title="switch DLNA mode"
+             :pressed="dlnaShow"
+             @click="window.location.href = dlnaShow ? '/' : '/dlna'">
         DLNA <i v-show="dlnaOn" class="oi oi-monitor"></i>
       </b-btn>
       <b-dropdown right text="Maintain">
@@ -40,7 +43,7 @@
 
     <!-- Modal Component -->
     <!-- <b-modal v-model="modalShow" id="modal_new" size="lg" class="col-xs-12 col-sm-12 col-md-8 col-lg-7" centered hide-footer hide-header> -->
-    <b-modal modal-class="'card'" v-model="modalShow" size="lg" centered hide-footer hide-header>
+    <b-modal modal-class="['card']" v-model="modalShow" size="lg" centered hide-footer hide-header>
       <div class="card-header">
         <b-btn @click="showHistory" :pressed="historyShow" variant="outline-dark">
           <i class="oi oi-book"></i>History
@@ -50,7 +53,7 @@
         </b-btn>
         <b-btn @click="modalShow=false" class="close">&times;</b-btn>
       </div>
-      <div id="ModalTouch" class="table-responsive-sm">
+      <div id="ModalTouch" class="text-center table-responsive-sm">
         <table v-show="historyShow" class="table table-striped table-sm">
           <tr v-for="item in history">
             <td :class="[folder_class]" class="icon d-sm-block bg-info" @click="open(item.path, 'folder')">
@@ -63,7 +66,9 @@
               <span :class="item.exist ? 'mp4' : 'other'">${ item.filename }</span>
               <br>
               <small class="text-muted">
-                ${ item.latest_date } | ${ secondToTime(item.position) } / ${ secondToTime(item.duration) }
+                ${ item.latest_date } | 
+                ${ secondToTime(item.position) } /
+                ${ secondToTime(item.duration) }
               </small>
             </td>
             <td :class="[remove_class]" class="icon d-sm-block bg-danger" @click="remove(item.filename)">
@@ -88,7 +93,7 @@
           </tr>
         </table>
       </div>
-      <div v-show="historyShow" class="card-footer text-center">
+      <div v-show="historyShow" class="card-footer">
         <b-btn @click="clearHistory" variant="outline-dark">
           Clear
         </b-btn>
