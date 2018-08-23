@@ -81,6 +81,7 @@ window.commonView = new Vue({
 var hammertime = new Hammer(document.getElementById("ModalTouch"));
 var vector = 0;
 
+/*
 hammertime.on("pan", function (ev) {
     //ev.type=='pan'
     //out(ev.velocity);//overallVelocity deltaTime angle
@@ -105,9 +106,14 @@ hammertime.on("pan", function (ev) {
         window.commonView.remove_class = "d-none";
     }
 });
-
-hammertime.on("swipe", function (ev) {
-    out(ev.additionalEvent);//overallVelocity deltaTime angle
+*/
+hammertime.on("swipeleft", function (ev) {
+    console.log(ev)
+    out(ev.type);//overallVelocity deltaTime angle
+});
+hammertime.on("swiperight", function (ev) {
+    console.log(ev)
+    out(ev.type);//overallVelocity deltaTime angle
 });
 
 
