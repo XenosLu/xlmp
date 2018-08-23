@@ -87,6 +87,7 @@ hammertime.on("swipeleft", function (ev) {
     window.commonView.swipeState -= 1;
     if (window.commonView.swipeState<-1)
         window.commonView.swipeState = -1;
+    /*
     vector -= 1;
     if (vector < -1)
         vector = -1;
@@ -99,11 +100,13 @@ hammertime.on("swipeleft", function (ev) {
     }
     console.log(ev)
     out(ev.type);//overallVelocity deltaTime angle
+    */
 });
 hammertime.on("swiperight", function (ev) {
     window.commonView.swipeState += 1;
     if (window.commonView.swipeState>1)
         window.commonView.swipeState = 1;
+    /*
     vector += 1;
     if (vector > 1)
         vector = 1;
@@ -116,6 +119,7 @@ hammertime.on("swiperight", function (ev) {
     }
     console.log(ev)
     out(ev.type);//overallVelocity deltaTime angle
+    */
 });
 
 
