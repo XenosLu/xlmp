@@ -15,6 +15,18 @@ $("#videosize").click(function () {
 });
 
 /* touch for ipad start */
+var hammertimeVideo = new Hammer(document.querySelector("video"););
+
+hammertimeVideo.on("swipeleft", function (ev) {
+    out('swipeleft');
+});
+hammertimeVideo.on("swiperight", function (ev) {
+    out('swiperight');
+});
+hammertimeVideo.on("pan", function (ev) {
+    out('pan');
+});
+
 $(document).on("touchstart", function (e) {
     x0 = e.originalEvent.touches[0].screenX;
     y0 = e.originalEvent.touches[0].screenY;
