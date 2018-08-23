@@ -5,14 +5,9 @@
     width: 3.9em;
 }
 .icononly {
-    font-size: 2em;
-    width: 2em;
-}
-/*
-.glyphicon-film, .glyphicon-folder-close, .glyphicon-remove-circle, .glyphicon-file {
     font-size: 1.8em;
+    width: 1.8em;
 }
-*/
 /* .dropdown-menu { */
 .dropdown-item {
     opacity: 0.9;
@@ -35,11 +30,6 @@ footer {
 a {
     cursor: default;
 }
-/*
-div {
-    text-align: center;
-}
-*/
 video {
     clear: both;
     display: block;
