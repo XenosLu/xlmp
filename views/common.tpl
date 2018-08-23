@@ -1,6 +1,6 @@
 <div id="v-common">
-  <b-btn-toolbar v-show="fixBarShow">
-    <b-btn-group class="mx-1">
+  <b-btn-toolbar v-show="fixBarShow" class="fixed-top">
+    <b-btn-group class="mx-5">
       <b-btn variant="outline-dark" title="browser" id="history" @click="showModal">
         <i class="oi oi-list"></i>
       </b-btn>
