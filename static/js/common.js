@@ -104,10 +104,8 @@ if (!isiOS) {
 check_dlna_state();
 
 function showSidebar() {
-    // $("#sidebar").show();
     window.commonView.uiState.fixBarShow = true;
     clearTimeout(hide_sidebar);
-    // hide_sidebar = setTimeout('$("#sidebar").hide()', 3000);
     hide_sidebar = setTimeout('window.commonView.uiState.fixBarShow = false;', 3000);
 }
 
