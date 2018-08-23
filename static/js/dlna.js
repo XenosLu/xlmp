@@ -14,7 +14,7 @@ window.dlnaView = new Vue({
             DMRs: [],
             positionBar:{
                 min: 0,
-                max: 100,
+                max: 1,
                 val: 0,
             },
             dlnaInfo: {},

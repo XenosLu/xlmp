@@ -3,10 +3,9 @@
 
     {% block main %}
     <div id="v-dlna">
-      <!-- <div class="card text-center col-xs-12 col-sm-8 col-md-6"> -->
-      <div class="card text-center col-sm-12 col-md-8 col-lg-6 col-xl-6">
+      <div class="card text-center col-sm-12 col-md-8 col-lg-6 col-xl-4">
         <div class="card-head">
-          <h2 class="card-title">&nbsp;</h2>
+          <h2 class="card-title">&nbsp;</h2><!-- placeholder -->
           <b-btn-group>
             <b-dropdown right split :text="currentDMR">
               <b-dropdown-item onclick="get('/dlna/searchdmr');">Search DMR</b-dropdown-item>
@@ -39,7 +38,13 @@
           <!-- <h3 class="card-title">${ position }</h3> -->
           <h3 class="card-title">${ dlnaInfo.RelTime } / ${ dlnaInfo.TrackDuration }</h3>
           <!-- <input type="range" id="position-bar" min="0" max="0"> -->
-          <input id="position-bar" v-model.number="positionBar.val" type="range" :min="positionBar.min" :max="positionBar.max" @change="positionSeek" @input="positionShow">
+          <input id="position-bar"
+                 v-model.number="positionBar.val"
+                 type="range"
+                 :min="positionBar.min"
+                 :max="positionBar.max"
+                 @change="positionSeek"
+                 @input="positionShow">
           <button onclick="get('/dlna/vol/down');" type="button" class="volume btn btn-warning btn-lg">
             <i class="oi oi-volume-low"></i>
           </button>

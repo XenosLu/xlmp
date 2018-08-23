@@ -53,7 +53,7 @@
         </b-btn>
         <b-btn @click="modalShow=false" class="close">&times;</b-btn>
       </div>
-      <div id="ModalTouch" class="text-center table-responsive-sm">
+      <div id="ModalTouch" class="table-responsive-sm text-center">
         <table v-show="historyShow" class="table table-striped table-sm">
           <tr v-for="item in history">
             <td :class="[folder_class]" class="icon d-sm-block bg-info" @click="open(item.path, 'folder')">
@@ -66,7 +66,7 @@
               <span :class="item.exist ? 'mp4' : 'other'">${ item.filename }</span>
               <br>
               <small class="text-muted">
-                ${ item.latest_date } | 
+                ${ item.latest_date } |
                 ${ secondToTime(item.position) } /
                 ${ secondToTime(item.duration) }
               </small>
@@ -93,7 +93,7 @@
           </tr>
         </table>
       </div>
-      <div v-show="historyShow" class="card-footer">
+      <div v-show="historyShow" class="card-footer text-center">
         <b-btn @click="clearHistory" variant="outline-dark">
           Clear
         </b-btn>
