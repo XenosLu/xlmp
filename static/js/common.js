@@ -12,7 +12,7 @@ window.commonView = new Vue({
         data: {
             icon: icon,
             swipeState: 0,
-            uiState:{
+            uiState: {
                 modalShow: false,
                 dlnaOn: false,
                 dlnaShow: false,
@@ -38,7 +38,7 @@ window.commonView = new Vue({
             showFs: function (path) {
                 filelist(path);
             },
-            clearHistory: function (){// clear history button
+            clearHistory: function () { // clear history button
                 if (confirm("Clear all history?"))
                     getHistory("/hist/clear");
             },
@@ -83,44 +83,40 @@ var vector = 0;
 
 hammertime.on("swipeleft", function (ev) {
     window.commonView.swipeState -= 1;
-    if (window.commonView.swipeState<-1)
+    if (window.commonView.swipeState < -1)
         window.commonView.swipeState = -1;
     /*
     vector -= 1;
     if (vector < -1)
-        vector = -1;
+    vector = -1;
     if (vector==-1)
-        window.commonView.remove_class = "";
-    else
-    {
-        window.commonView.folder_class = "d-none";
-        window.commonView.remove_class = "d-none";
+    window.commonView.remove_class = "";
+    else{
+    window.commonView.folder_class = "d-none";
+    window.commonView.remove_class = "d-none";
     }
     console.log(ev)
     out(ev.type);//overallVelocity deltaTime angle
-    */
+     */
 });
 hammertime.on("swiperight", function (ev) {
     window.commonView.swipeState += 1;
-    if (window.commonView.swipeState>1)
+    if (window.commonView.swipeState > 1)
         window.commonView.swipeState = 1;
     /*
     vector += 1;
     if (vector > 1)
-        vector = 1;
+    vector = 1;
     if (vector==1)
-        window.commonView.folder_class = "";
-    else
-    {
-        window.commonView.folder_class = "d-none";
-        window.commonView.remove_class = "d-none";
+    window.commonView.folder_class = "";
+    else{
+    window.commonView.folder_class = "d-none";
+    window.commonView.remove_class = "d-none";
     }
     console.log(ev)
     out(ev.type);//overallVelocity deltaTime angle
-    */
+     */
 });
-
-
 
 var RANGE = 12; //minimum touch move range in px
 var hide_sidebar = 0;
