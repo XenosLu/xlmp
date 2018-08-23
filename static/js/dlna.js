@@ -12,19 +12,35 @@ window.dlnaView = new Vue({
             position: '',
             currentDMR: 'no DMR',
             DMRs: [],
-            number: 1, //test
+            positionBar:{
+                min: 0,
+                max: 100,
+                val: 0,
+            },
             dlnaInfo: {},
         },
         methods: {
             set_dmr: function(dmr){
                 set_dmr(dmr);
-            }
+            },
+            positionSeek: function(){
+                $.get("/dlna/seek/" + secondToTime(offset_value(reltime, this.positionBar.val, this.positionBar.max)));
+                update = true;
+            },
+            positionShow: function(){
+                console.log(this.positionBar.val);
+                out(secondToTime(offset_value(reltime, this.positionBar.val, this.positionBar.max)));
+                update = false;
+            },
+            test: function(){
+                console.log(this.positionBar.val);
+            },
         }
 });
 
 window.commonView.dlnaShow = true;
 
-
+/*
 $("#position-bar").on("change", function () {
     $.get("/dlna/seek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
     update = true;
@@ -32,6 +48,7 @@ $("#position-bar").on("change", function () {
     out(secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
     update = false;
 });
+*/
 var ws_link;
 ws_link = dlnalink();
 
@@ -57,16 +74,17 @@ function dlnalink() {
     return ws;
 }
 function renderUI(data) {
-    if ($.isEmptyObject(data))
-    {
+    if ($.isEmptyObject(data)) {
         window.commonView.dlnaOn = false;
         window.dlnaView.DMR = 'No DMR';
-    }
-    else {
+    } else {
         window.commonView.dlnaOn = true;
         reltime = timeToSecond(data.RelTime);
-        if (update)
-            $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
+        if (update) {
+            // $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
+            window.dlnaView.positionBar.max = timeToSecond(data.TrackDuration);
+            window.dlnaView.positionBar.val = reltime;
+        }
         window.dlnaView.position = data.RelTime + "/" + data.TrackDuration;
         window.dlnaView.src = decodeURI(data.TrackURI);
         window.dlnaView.currentDMR = data.CurrentDMR;
@@ -75,6 +93,7 @@ function renderUI(data) {
         window.dlnaView.dlnaInfo = data;
     }
 }
+
 function set_dmr(dmr) {
     $.get("/dlna/setdmr/" + dmr);
 }
