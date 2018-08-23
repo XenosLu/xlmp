@@ -37,6 +37,10 @@ window.commonView = new Vue({
             showFs: function (path) {
                 filelist(path);
             },
+            clearHistory: function (){
+                if (confirm("Clear all history?"))
+                    getHistory("/hist/clear");
+            },
             play: function (obj) {
                 if (window.document.location.pathname == "/dlna")
                     get("/dlna/load/" + obj);

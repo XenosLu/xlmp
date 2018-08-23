@@ -89,7 +89,7 @@
         </table>
       </div>
       <div v-show="historyShow" class="card-footer text-center">
-        <b-btn onclick='if (confirm("Clear all history?"))getHistory("/hist/clear");' variant="outline-dark">
+        <b-btn @click="clearHistory" variant="outline-dark">
           Clear
         </b-btn>
       </div>
