@@ -86,7 +86,7 @@ function renderUI(data) {
             window.dlnaView.positionBar.val = reltime;
         }
         window.dlnaView.position = data.RelTime + "/" + data.TrackDuration;//
-        window.dlnaView.src = decodeURI(data.TrackURI);
+        window.dlnaView.src = decodeURI(data.TrackURI); //
         window.dlnaView.currentDMR = data.CurrentDMR;
         window.dlnaView.DMRs = data.DMRs;
         window.dlnaView.state = data.CurrentTransportState;
