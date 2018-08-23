@@ -3,7 +3,7 @@
 
     {% block main %}
     <div id="v-dlna">
-      <div class="card text-center col-sm-12 col-md-8 col-lg-6 col-xl-4">
+      <div class="card text-center col-sm-12 col-md-8 col-lg-6 col-xl-5">
         <div class="card-head">
           <h2 class="card-title">&nbsp;</h2><!-- placeholder -->
           <b-btn-group>

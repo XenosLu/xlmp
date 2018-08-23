@@ -1,6 +1,7 @@
 <div id="v-common">
-  <div id="sidebar" class="btn-toolbar">
-    <b-btn-group>
+  <!-- <div id="sidebar" class="btn-toolbar"> -->
+  <b-btn-toolbar id="sidebar">
+    <b-btn-group class="mx-1">
       <b-btn variant="outline-dark" title="browser" id="history" @click="showModal">
         <i class="oi oi-list"></i>
       </b-btn>
@@ -10,12 +11,15 @@
              @click="window.location.href = dlnaShow ? '/' : '/dlna'">
         DLNA <i v-show="dlnaOn" class="oi oi-monitor"></i>
       </b-btn>
+
       <b-dropdown right text="Maintain">
         <b-dropdown-item onclick="get('/sys/update')">update</b-dropdown-item>
         <b-dropdown-item onclick="get('/sys/backup')">backup</b-dropdown-item>
         <b-dropdown-divider></b-dropdown-divider>
         <b-dropdown-item onclick="get('/sys/restore')">restore</b-dropdown-item>
       </b-dropdown>
+    <b-btn-group class="mx-1">
+    </b-btn-group>
       <!-- dlna menu -->
       <b-dropdown right v-show="dlnaShow" text="Jump">
         <b-dropdown-item onclick="get('/dlna/seek/00:00:15')">00:15</b-dropdown-item>
@@ -39,7 +43,7 @@
       <!-- dlna menu end -->
 
     </b-btn-group>
-  </div>
+  </b-btn-toolbar>
 
     <!-- Modal Component -->
     <!-- <b-modal v-model="modalShow" id="modal_new" size="lg" class="col-xs-12 col-sm-12 col-md-8 col-lg-7" centered hide-footer hide-header> -->
