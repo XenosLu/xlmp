@@ -75,10 +75,10 @@ window.commonView = new Vue({
 
 var hammertime = new Hammer(document.getElementById("ModalTouch"));
 var vector = 0;
-//为该dom元素指定触屏移动事件
+
 hammertime.on("pan", function (ev) {
-    //控制台输出
     console.log(ev.additionalEvent);
+    console.log(ev);
     if (ev.additionalEvent == "panleft") {
         vector -= 1;
     } else if (ev.additionalEvent == "panright") {
@@ -97,11 +97,8 @@ hammertime.on("pan", function (ev) {
         window.commonView.folder_class = "d-none";
         window.commonView.remove_class = "d-none";
     }
-    console.log(window.commonView.folder_class);
-    console.log(window.commonView.remove_class);
 });
 
-    
 
 var RANGE = 12; //minimum touch move range in px
 var hide_sidebar = 0;
@@ -121,7 +118,6 @@ function showSidebar() {
 }
 
 //window.commonView.showModal();  // show modal at start
-
 
 
 /**
