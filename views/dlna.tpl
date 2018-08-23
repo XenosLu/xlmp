@@ -21,18 +21,18 @@
         </div>
         <div class="card-body">
           <b-btn-group>
-            <button class="btn btn-success btn-lg" type="button" onclick="get('/dlna/play')">
-              <i class="oi oi-media-play"></i>
-            </button>
-            <button class="btn btn-danger btn-lg" type="button" onclick="get('/dlna/pause')">
-              <i class="oi oi-media-pause"></i>
-            </button>
-            <button class="btn btn-danger btn-lg" type="button" onclick="get('/dlna/stop')">
-              <i class="oi oi-media-stop"></i>
-            </button>
-            <button class="btn btn-success btn-lg" type="button" onclick="get('/dlna/next')">
-              <i class="oi oi-media-step-forward"></i>
-            </button>
+            <b-btn class="mx-1" variant="outline-success" size="lg" onclick="get('/dlna/play')">
+                <i class="oi oi-media-play"></i>
+            </b-btn>
+            <b-btn class="mx-1" variant="outline-danger" size="lg" onclick="get('/dlna/pause')">
+                <i class="oi oi-media-pause"></i>
+            </b-btn>
+            <b-btn class="mx-1" variant="outline-danger" size="lg" onclick="get('/dlna/stop')">
+                <i class="oi oi-media-stop"></i>
+            </b-btn>
+            <b-btn class="mx-1" variant="outline-success" size="lg" onclick="get('/dlna/next')">
+                <i class="oi oi-media-step-forward"></i>
+            </b-btn>
           </b-btn-group>
           <!-- <h3 class="card-title">${ position }</h3> -->
           <h3 v-show="dlnaInfo.RelTime" class="card-title mt-3">
@@ -49,12 +49,18 @@
         </div>
         <div class="card-footer">
           <b-btn-group class="my-3">
-            <button onclick="get('/dlna/vol/down');" type="button" class="mx-5 volume btn btn-warning btn-lg">
-              <i class="oi oi-volume-low"></i>
-            </button>
-            <button onclick="get('/dlna/vol/up');" type="button" class="mx-5 volume btn btn-warning btn-lg">
-              <i class="oi oi-volume-high"></i>
-            </button>
+            <b-btn class="mx-5" variant="outline-warning" size="lg" onclick="get('/dlna/vol/down')">
+                <i class="oi oi-volume-low"></i>
+            </b-btn>
+            <b-btn class="mx-5" variant="outline-warning" size="lg" onclick="get('/dlna/vol/up')">
+                <i class="oi oi-volume-high"></i>
+            </b-btn>
+            <!-- <button onclick="get('/dlna/vol/down');" type="button" class="mx-5 volume btn btn-warning btn-lg"> -->
+              <!-- <i class="oi oi-volume-low"></i> -->
+            <!-- </button> -->
+            <!-- <button onclick="get('/dlna/vol/up');" type="button" class="mx-5 volume btn btn-warning btn-lg"> -->
+              <!-- <i class="oi oi-volume-high"></i> -->
+            <!-- </button> -->
           </b-btn-group>
         </div>
       </div>
