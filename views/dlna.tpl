@@ -47,7 +47,7 @@
                  @input="positionShow">
         </div>
         <div class="card-footer">
-          <b-btn-group class="mx-5 my-3">
+          <b-btn-group class="my-3">
             <button onclick="get('/dlna/vol/down');" type="button" class="mx-5 volume btn btn-warning btn-lg">
               <i class="oi oi-volume-low"></i>
             </button>
