@@ -83,7 +83,7 @@ var vector = 0;
 
 hammertime.on("pan", function (ev) {
     //ev.type=='pan'
-    out(ev.velocity);//overallVelocity deltaTime angle
+    //out(ev.velocity);//overallVelocity deltaTime angle
     console.log(ev.additionalEvent);
     console.log(ev);
     if (ev.additionalEvent == "panleft") {
@@ -105,6 +105,11 @@ hammertime.on("pan", function (ev) {
         window.commonView.remove_class = "d-none";
     }
 });
+
+hammertime.on("swipe", function (ev) {
+    out(ev.additionalEvent);//overallVelocity deltaTime angle
+});
+
 
 
 var RANGE = 12; //minimum touch move range in px

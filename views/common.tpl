@@ -1,5 +1,5 @@
 <div id="v-common">
-  <b-btn-toolbar v-show="fixBarShow" class="fixed-top">
+  <b-btn-toolbar v-show="fixBarShow" class="fixed-top" style="opacity: 0.8;">
     <b-container>
       <b-btn-group>
         <b-btn variant="outline-dark" title="browser" @click="showModal">
