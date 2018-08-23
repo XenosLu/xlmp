@@ -4,6 +4,10 @@
 .icon {
     width: 3.9em;
 }
+.icononly {
+    font-size: 2em;
+    width: 2em;
+}
 /*
 .glyphicon-film, .glyphicon-folder-close, .glyphicon-remove-circle, .glyphicon-file {
     font-size: 1.8em;
