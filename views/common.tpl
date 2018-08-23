@@ -58,7 +58,7 @@
               <br>
               <small class="text-white">go Dir</small>
             </td>
-            <!-- <td><i class="oi oi-video"></i></td> -->
+            <td class="icononly"><i class="oi oi-video"></i></td>
             <td @click="play(item.filename)">
               <span :class="item.exist ? 'mp4' : 'other'">${ item.filename }</span>
               <br>
