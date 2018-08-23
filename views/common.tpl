@@ -1,5 +1,5 @@
 <div id="v-common">
-  <b-btn-toolbar v-show="fixBarShow" class="fixed-top" style="opacity: 0.8;">
+  <b-btn-toolbar v-show="uiState.fixBarShow" class="fixed-top" style="opacity: 0.8;">
     <b-container>
       <b-btn-group>
         <b-btn variant="outline-dark" title="browser" @click="showModal">
@@ -7,9 +7,9 @@
         </b-btn>
         <b-btn variant="outline-success"
                title="switch DLNA mode"
-               :pressed="dlnaShow"
-               @click="window.location.href = dlnaShow ? '/' : '/dlna'">
-          DLNA <i v-show="dlnaOn" class="oi oi-monitor"></i>
+               :pressed="uiState.dlnaShow"
+               @click="window.location.href = uiState.dlnaShow ? '/' : '/dlna'">
+          DLNA <i v-show="uiState.dlnaOn" class="oi oi-monitor"></i>
         </b-btn>
 
         <b-dropdown right text="Maintain">
@@ -21,13 +21,13 @@
       <b-btn-group class="mx-1">
       </b-btn-group>
         <!-- dlna menu -->
-        <b-dropdown right v-show="dlnaShow" text="Seek">
+        <b-dropdown right v-show="uiState.dlnaShow" text="Seek">
           <b-dropdown-item onclick="get('/dlna/seek/00:00:15')">00:15</b-dropdown-item>
           <b-dropdown-item onclick="get('/dlna/seek/00:00:29')">00:30</b-dropdown-item>
           <b-dropdown-item onclick="get('/dlna/seek/00:01:00')">01:00</b-dropdown-item>
           <b-dropdown-item onclick="get('/dlna/seek/00:01:30')">01:30</b-dropdown-item>
         </b-dropdown>
-         <b-dropdown right v-show="rateMenu" text="Rate">
+         <b-dropdown right v-show="uiState.rateMenu" text="Rate">
           <b-dropdown-item onclick="rate(0.5)">0.5X</b-dropdown-item>
           <b-dropdown-item onclick="rate(0.75)">0.75X</b-dropdown-item>
           <b-dropdown-divider></b-dropdown-divider>
@@ -47,20 +47,21 @@
 
     <!-- Modal Component -->
     <!-- <b-modal v-model="modalShow" size="lg" class="col-xs-12 col-sm-12 col-md-8 col-lg-7" centered hide-footer hide-header> -->
-    <b-modal modal-class="['card']" v-model="modalShow" size="lg" centered hide-footer hide-header>
+    <b-modal modal-class="['card']" v-model="uiState.modalShow" size="lg" centered hide-footer hide-header>
       <div class="card-header">
-        <b-btn @click="showHistory" :pressed="historyShow" variant="outline-dark">
+        <b-btn @click="showHistory" :pressed="uiState.historyShow" variant="outline-dark">
           <i class="oi oi-book"></i>History
         </b-btn>
-        <b-btn onclick="filelist('/fs/ls/')" :pressed="!historyShow" variant="outline-dark">
+        <b-btn onclick="filelist('/fs/ls/')" :pressed="!uiState.historyShow" variant="outline-dark">
           <i class="oi oi-home"></i>Home dir
         </b-btn>
-        <b-btn @click="modalShow=false" class="close">&times;</b-btn>
+        <b-btn @click="uiState.modalShow=false" class="close">&times;</b-btn>
       </div>
       <div id="ModalTouch" class="table-responsive-sm text-center">
-        <table v-show="historyShow" class="table table-striped table-sm">
+        <table v-show="uiState.historyShow" class="table table-striped table-sm">
           <tr v-for="item in history">
-            <td :class="[folder_class]" class="icon d-sm-block bg-info" @click="open(item.path, 'folder')">
+            <!-- <td :class="[folder_class]" class="icon d-sm-block bg-info" @click="open(item.path, 'folder')"> -->
+            <td :class="[swipeState > 0 ? '' : 'd-none']" class="icon d-sm-block bg-info" @click="open(item.path, 'folder')">
               <i class="text-white oi oi-folder"></i>
               <br>
               <small class="text-white">go Dir</small>
@@ -75,14 +76,15 @@
                 ${ secondToTime(item.duration) }
               </small>
             </td>
-            <td :class="[remove_class]" class="icon d-sm-block bg-danger" @click="remove(item.filename)">
+            <!-- <td :class="[remove_class]" class="icon d-sm-block bg-danger" @click="remove(item.filename)"> -->
+            <td :class="[swipeState < 0 ? '' : 'd-none']" class="icon d-sm-block bg-danger" @click="remove(item.filename)">
               <i class="text-white oi oi-trash"></i>
               <br>
               <small class="text-white">Remove</small>
             </td>
           </tr>
         </table>
-        <table v-show="!historyShow" class="table table-striped table-sm">
+        <table v-show="!uiState.historyShow" class="table table-striped table-sm">
           <tr v-for="item in filelist">
             <td class="iconOnly"><i :class="icon[item.type]"></i></td>
             <td :class="item.type" @click="open(item.path, item.type)">
@@ -90,14 +92,15 @@
               <br>
               <small class="text-muted">${ item.size }</small>
             </td>
-            <td :class="[remove_class]" class="icon d-sm-block bg-danger" @click="move(item.path)">
+            <!-- <td :class="[remove_class]" class="icon d-sm-block bg-danger" @click="move(item.path)"> -->
+            <td :class="[swipeState < 0 ? '' : 'd-none']" class="icon d-sm-block bg-danger" @click="move(item.path)">
               <i class="text-white oi oi-trash"></i><br>
               <small class="text-white">Move</small>
             </td>
           </tr>
         </table>
       </div>
-      <div v-show="historyShow" class="card-footer text-center">
+      <div v-show="uiState.historyShow" class="card-footer text-center">
         <b-btn @click="clearHistory" variant="outline-dark">
           Clear
         </b-btn>

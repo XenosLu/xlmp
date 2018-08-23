@@ -13,13 +13,15 @@ window.commonView = new Vue({
             folder_class: "d-none",
             remove_class: "d-none",
             icon: icon,
-            testx: 'test',
-            modalShow: false,
-            dlnaOn: false,
-            dlnaShow: false,
-            historyShow: true,
-            rateMenu: false,
-            fixBarShow: true,
+            swipeState: 0,
+            uiState:{
+                modalShow: false,
+                dlnaOn: false,
+                dlnaShow: false,
+                historyShow: true,
+                rateMenu: false,
+                fixBarShow: true,
+            },
             history: [],
             filelist: [],
         },
@@ -28,7 +30,7 @@ window.commonView = new Vue({
                 console.log("test " + obj);
             },
             showModal: function () {
-                this.modalShow = true;
+                this.uiState.modalShow = true;
                 if (this.historyShow)
                     this.showHistory();
             },
@@ -81,33 +83,10 @@ window.commonView = new Vue({
 var hammertime = new Hammer(document.getElementById("ModalTouch"));
 var vector = 0;
 
-/*
-hammertime.on("pan", function (ev) {
-    //ev.type=='pan'
-    //out(ev.velocity);//overallVelocity deltaTime angle
-    console.log(ev.additionalEvent);
-    console.log(ev);
-    if (ev.additionalEvent == "panleft") {
-        vector -= 1;
-    } else if (ev.additionalEvent == "panright") {
-        vector += 1;
-    } else
-        vector = 0;
-    if (vector < -10)
-        vector = -10;
-    else if (vector > 10)
-        vector = 10;
-    if (vector < -5)
-        window.commonView.remove_class = "";
-    else if (vector > 5)
-        window.commonView.folder_class = "";
-    else {
-        window.commonView.folder_class = "d-none";
-        window.commonView.remove_class = "d-none";
-    }
-});
-*/
 hammertime.on("swipeleft", function (ev) {
+    window.commonView.swipeState -= 1;
+    if (window.commonView.swipeState<-1)
+        window.commonView.swipeState = -1;
     vector -= 1;
     if (vector < -1)
         vector = -1;
@@ -122,6 +101,9 @@ hammertime.on("swipeleft", function (ev) {
     out(ev.type);//overallVelocity deltaTime angle
 });
 hammertime.on("swiperight", function (ev) {
+    window.commonView.swipeState += 1;
+    if (window.commonView.swipeState>1)
+        window.commonView.swipeState = 1;
     vector += 1;
     if (vector > 1)
         vector = 1;
@@ -145,17 +127,17 @@ window.onload = adapt;
 window.onresize = adapt;
 var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
 if (!isiOS) {
-    window.commonView.fixBarShow = false;
+    window.commonView.uiState.fixBarShow = false;
     $(document).mousemove(showSidebar);
 }
 check_dlna_state();
 
 function showSidebar() {
     // $("#sidebar").show();
-    window.commonView.fixBarShow = true;
+    window.commonView.uiState.fixBarShow = true;
     clearTimeout(hide_sidebar);
     // hide_sidebar = setTimeout('$("#sidebar").hide()', 3000);
-    hide_sidebar = setTimeout('window.commonView.fixBarShow = false;', 3000);
+    hide_sidebar = setTimeout('window.commonView.uiState.fixBarShow = false;', 3000);
 }
 
 //window.commonView.showModal();  // show modal at start
@@ -207,7 +189,7 @@ function filelist(str) {
         timeout: 1999,
         type: "get",
         success: function (data) {
-            window.commonView.historyShow = false;
+            window.commonView.uiState.historyShow = false;
             window.commonView.filelist = data.filesystem;
         },
         error: function (xhr) {
@@ -229,7 +211,7 @@ function getHistory(str) {
         timeout: 1999,
         type: "get",
         success: function (data) {
-            window.commonView.historyShow = true;
+            window.commonView.uiState.historyShow = true;
             window.commonView.history = data.history;
         },
         error: function (xhr) {
@@ -283,7 +265,7 @@ function check_dlna_state() {
         timeout: 999,
         type: "GET",
         success: function (data) {
-            window.commonView.dlnaOn = !$.isEmptyObject(data);
+            window.commonView.uiState.dlnaOn = !$.isEmptyObject(data);
         },
         error: function (xhr, err) {
             console.log('get dlna/info error')

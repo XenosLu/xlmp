@@ -1,5 +1,5 @@
 
-window.commonView.rateMenu = true;
+window.commonView.uiState.rateMenu = true;
 //$("#rate").show();
 
 $("#videosize").click(function () {

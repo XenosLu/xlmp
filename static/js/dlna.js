@@ -38,7 +38,7 @@ window.dlnaView = new Vue({
         }
 });
 
-window.commonView.dlnaShow = true;
+window.commonView.uiState.dlnaShow = true;
 
 
 // $("#position-bar").on("change", function () {
@@ -76,10 +76,10 @@ function dlnalink() {
 }
 function renderUI(data) {
     if ($.isEmptyObject(data)) {
-        window.commonView.dlnaOn = false;
+        window.commonView.uiState.dlnaOn = false;
         window.dlnaView.DMR = 'No DMR';
     } else {
-        window.commonView.dlnaOn = true;
+        window.commonView.uiState.dlnaOn = true;
         reltime = timeToSecond(data.RelTime);
         if (update) {
             // $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
