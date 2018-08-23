@@ -21,7 +21,7 @@
     <b-btn-group class="mx-1">
     </b-btn-group>
       <!-- dlna menu -->
-      <b-dropdown right v-show="dlnaShow" text="Jump">
+      <b-dropdown right v-show="dlnaShow" text="Seek">
         <b-dropdown-item onclick="get('/dlna/seek/00:00:15')">00:15</b-dropdown-item>
         <b-dropdown-item onclick="get('/dlna/seek/00:00:29')">00:30</b-dropdown-item>
         <b-dropdown-item onclick="get('/dlna/seek/00:01:00')">01:00</b-dropdown-item>

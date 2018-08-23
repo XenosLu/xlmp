@@ -7,7 +7,7 @@
         <div class="card-head">
           <h2 class="card-title">&nbsp;</h2><!-- placeholder -->
           <b-btn-group>
-            <b-dropdown right split :text="currentDMR">
+            <b-dropdown variant="outline-dark" right split :text="currentDMR">
               <b-dropdown-item onclick="get('/dlna/searchdmr');">Search DMR</b-dropdown-item>
               <b-dropdown-divider></b-dropdown-divider>
               <b-dropdown-item v-for="item in DMRs" @click="set_dmr(item)">${ item }</b-dropdown-item>
@@ -36,7 +36,7 @@
             </button>
           </b-btn-group>
           <!-- <h3 class="card-title">${ position }</h3> -->
-          <h3 class="card-title">${ dlnaInfo.RelTime } / ${ dlnaInfo.TrackDuration }</h3>
+          <h3 v-show="dlnaInfo.RelTime" class="card-title">${ dlnaInfo.RelTime} / ${ dlnaInfo.TrackDuration }</h3>
           <!-- <input type="range" id="position-bar" min="0" max="0"> -->
           <input id="position-bar"
                  v-model.number="positionBar.val"
@@ -45,6 +45,8 @@
                  :max="positionBar.max"
                  @change="positionSeek"
                  @input="positionShow">
+        </div>
+        <div class="card-footer">
           <button onclick="get('/dlna/vol/down');" type="button" class="volume btn btn-warning btn-lg">
             <i class="oi oi-volume-low"></i>
           </button>
@@ -52,7 +54,6 @@
             <i class="oi oi-volume-high"></i>
           </button>
         </div>
-        <div class="card-footer"></div>
       </div>
     </div>
     {% end %}
