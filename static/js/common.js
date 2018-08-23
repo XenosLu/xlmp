@@ -31,7 +31,7 @@ window.commonView = new Vue({
             },
             showModal: function () {
                 this.uiState.modalShow = true;
-                if (this.historyShow)
+                if (this.uiState.historyShow)
                     this.showHistory();
             },
             showHistory: function () {
