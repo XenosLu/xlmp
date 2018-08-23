@@ -37,7 +37,7 @@ window.commonView = new Vue({
             showFs: function (path) {
                 filelist(path);
             },
-            clearHistory: function (){
+            clearHistory: function (){// clear history button
                 if (confirm("Clear all history?"))
                     getHistory("/hist/clear");
             },
