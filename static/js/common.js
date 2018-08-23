@@ -78,14 +78,14 @@ window.commonView = new Vue({
         },
     });
 
-var hammertime = new Hammer(document.getElementById("ModalTouch"));
+var hammertimeModal = new Hammer(document.getElementById("ModalTouch"));
 
-hammertime.on("swipeleft", function (ev) {
+hammertimeModal.on("swipeleft", function (ev) {
     window.commonView.swipeState -= 1;
     if (window.commonView.swipeState < -1)
         window.commonView.swipeState = -1;
 });
-hammertime.on("swiperight", function (ev) {
+hammertimeModal.on("swiperight", function (ev) {
     window.commonView.swipeState += 1;
     if (window.commonView.swipeState > 1)
         window.commonView.swipeState = 1;
