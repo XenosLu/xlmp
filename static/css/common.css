@@ -121,12 +121,13 @@ button {
     box-shadow: inset 0px 0px 9px 0px #F1F2F6;
 }
 .modal-dialog {
-    opacity: 0.8;
-}
-#panel {
     opacity: 0.88;
     box-shadow: 2px 2px 5px #333333;
 }
+/* #panel { */
+    /* opacity: 0.88; */
+    /* box-shadow: 2px 2px 5px #333333; */
+/* } */
 #v-dlna div {
     background-color: #F1F2F6;
 }
@@ -159,7 +160,4 @@ button {
     overflow: hidden;
     text-overflow: ellipsis;
     word-break:break-all;
-}
-#position {
-    margin-top: 3em;
 }
