@@ -114,8 +114,8 @@ button {
     opacity: 0.85;
     box-shadow: inset 0px 0px 9px 0px #F1F2F6;
 }
-.modal-dialog {
-    opacity: 0.88;
+.modal-content {
+    opacity: 0.78;
     box-shadow: 2px 2px 5px #333333;
 }
 /* #panel { */

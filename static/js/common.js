@@ -10,8 +10,6 @@ window.commonView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-common',
         data: {
-            folder_class: "d-none",
-            remove_class: "d-none",
             icon: icon,
             swipeState: 0,
             uiState:{

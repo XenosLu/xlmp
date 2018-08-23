@@ -60,8 +60,9 @@
       <div id="ModalTouch" class="table-responsive-sm text-center">
         <table v-show="uiState.historyShow" class="table table-striped table-sm">
           <tr v-for="item in history">
-            <!-- <td :class="[folder_class]" class="icon d-sm-block bg-info" @click="open(item.path, 'folder')"> -->
-            <td :class="[swipeState > 0 ? '' : 'd-none']" class="icon d-sm-block bg-info" @click="open(item.path, 'folder')">
+            <td :class="[swipeState > 0 ? '' : 'd-none']"
+                class="icon d-sm-block bg-info"
+                @click="open(item.path, 'folder')">
               <i class="text-white oi oi-folder"></i>
               <br>
               <small class="text-white">go Dir</small>
@@ -76,8 +77,9 @@
                 ${ secondToTime(item.duration) }
               </small>
             </td>
-            <!-- <td :class="[remove_class]" class="icon d-sm-block bg-danger" @click="remove(item.filename)"> -->
-            <td :class="[swipeState < 0 ? '' : 'd-none']" class="icon d-sm-block bg-danger" @click="remove(item.filename)">
+            <td :class="[swipeState < 0 ? '' : 'd-none']"
+                class="icon d-sm-block bg-danger"
+                @click="remove(item.filename)">
               <i class="text-white oi oi-trash"></i>
               <br>
               <small class="text-white">Remove</small>
@@ -92,8 +94,9 @@
               <br>
               <small class="text-muted">${ item.size }</small>
             </td>
-            <!-- <td :class="[remove_class]" class="icon d-sm-block bg-danger" @click="move(item.path)"> -->
-            <td :class="[swipeState < 0 ? '' : 'd-none']" class="icon d-sm-block bg-danger" @click="move(item.path)">
+            <td :class="[swipeState < 0 ? '' : 'd-none']"
+                class="icon d-sm-block bg-danger"
+                @click="move(item.path)">
               <i class="text-white oi oi-trash"></i><br>
               <small class="text-white">Move</small>
             </td>
