@@ -82,6 +82,8 @@ var hammertime = new Hammer(document.getElementById("ModalTouch"));
 var vector = 0;
 
 hammertime.on("pan", function (ev) {
+    //ev.type=='pan'
+    out(ev.velocity);
     console.log(ev.additionalEvent);
     console.log(ev);
     if (ev.additionalEvent == "panleft") {
