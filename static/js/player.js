@@ -15,7 +15,7 @@ $("#videosize").click(function () {
 });
 
 /* touch for ipad start */
-var hammertimeVideo = new Hammer(document.querySelector("video"););
+var hammertimeVideo = new Hammer(document.querySelector("video"));
 
 hammertimeVideo.on("swipeleft", function (ev) {
     out('swipeleft');
