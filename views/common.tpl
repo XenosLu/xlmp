@@ -84,7 +84,7 @@
                 <br>
                 <small class="text-muted">${ item.size }</small>
               </td>
-              <td :class="[remove_class]" class="icon d-sm-block bg-danger" @click="move(item.filename)">
+              <td :class="[remove_class]" class="icon d-sm-block bg-danger" @click="move(item.path)">
                 <i class="text-white oi oi-trash"></i><br>
                 <small class="text-white">Move</small>
               </td>
