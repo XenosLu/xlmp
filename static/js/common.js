@@ -179,11 +179,6 @@ function filelist(str) {
     });
 }
 
-function renderHistory(data) {
-    window.commonView.historyShow = true;
-    window.commonView.history = data.history;
-}
-
 /**
  * Render history list box from ajax
  *
@@ -196,7 +191,10 @@ function getHistory(str) {
         dataType: "json",
         timeout: 1999,
         type: "get",
-        success: renderHistory,
+        success: function (data) {
+            window.commonView.historyShow = true;
+            window.commonView.history = data.history;
+        },
         error: function (xhr) {
             out(xhr.statusText);
         }
