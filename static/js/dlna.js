@@ -87,53 +87,6 @@ function renderUI(data) {
         window.dlnaView.state = data.CurrentTransportState;
     }
 }
-/**
- * receive dlnainfo through ajax, not used
- */
- /*
-function get_dmr_state() {
-    if (wait > 0) {
-        wait -= 1;
-    } else {
-        $.ajax({
-            url: "/dlna/info",
-            dataType: "json",
-            timeout: 999,
-            type: "GET",
-            success: function (data) {
-                if ($.isEmptyObject(data)) {
-                    $("#state").text('No DMR');
-                    console.log('set wait to 3 for empty');
-                    wait = 3;
-                } else {
-                    reltime = timeToSecond(data["RelTime"]);
-                    if (update)
-                        $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
-
-                    $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
-                    $('#src').text(decodeURI(data["TrackURI"]));
-
-                    $("#dmr button").text(data["CurrentDMR"]);
-                    $("#dmr ul").empty().append('<li><a onclick="$.get(\'/dlna/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
-                    for (x in data["DMRs"]) {
-                        $("#dmr ul").append('<li><a onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
-                    }
-
-                    $("#state").text(data["CurrentTransportState"]);
-                }
-            },
-            error: function (xhr, err) {
-                if (err != "parsererror")
-                    $("#state").text(xhr.statusText);
-                else
-                    $("#state").text(err);
-                console.log('set wait to 3 for error');
-                wait = 3;
-            }
-        });
-    }
-}
-*/
 function set_dmr(dmr) {
     $.get("/dlna/setdmr/" + dmr);
 }
