@@ -79,43 +79,16 @@ window.commonView = new Vue({
     });
 
 var hammertime = new Hammer(document.getElementById("ModalTouch"));
-var vector = 0;
 
 hammertime.on("swipeleft", function (ev) {
     window.commonView.swipeState -= 1;
     if (window.commonView.swipeState < -1)
         window.commonView.swipeState = -1;
-    /*
-    vector -= 1;
-    if (vector < -1)
-    vector = -1;
-    if (vector==-1)
-    window.commonView.remove_class = "";
-    else{
-    window.commonView.folder_class = "d-none";
-    window.commonView.remove_class = "d-none";
-    }
-    console.log(ev)
-    out(ev.type);//overallVelocity deltaTime angle
-     */
 });
 hammertime.on("swiperight", function (ev) {
     window.commonView.swipeState += 1;
     if (window.commonView.swipeState > 1)
         window.commonView.swipeState = 1;
-    /*
-    vector += 1;
-    if (vector > 1)
-    vector = 1;
-    if (vector==1)
-    window.commonView.folder_class = "";
-    else{
-    window.commonView.folder_class = "d-none";
-    window.commonView.remove_class = "d-none";
-    }
-    console.log(ev)
-    out(ev.type);//overallVelocity deltaTime angle
-     */
 });
 
 var RANGE = 12; //minimum touch move range in px
