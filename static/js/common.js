@@ -19,6 +19,7 @@ window.commonView = new Vue({
             dlnaShow: false,
             historyShow: true,
             rateMenu: false,
+            fixBarShow: true,
             history: [],
             filelist: [],
         },
@@ -110,15 +111,18 @@ var hide_sidebar = 0;
 window.onload = adapt;
 window.onresize = adapt;
 var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-if (!isiOS)
+if (!isiOS) {
+    window.commonView.fixBarShow = false;
     $(document).mousemove(showSidebar);
-
+}
 check_dlna_state();
 
 function showSidebar() {
-    $("#sidebar").show();
+    // $("#sidebar").show();
+    window.commonView.fixBarShow = true;
     clearTimeout(hide_sidebar);
-    hide_sidebar = setTimeout('$("#sidebar").hide()', 3000);
+    // hide_sidebar = setTimeout('$("#sidebar").hide()', 3000);
+    hide_sidebar = setTimeout('window.commonView.fixBarShow = false;', 3000);
 }
 
 //window.commonView.showModal();  // show modal at start

@@ -1,6 +1,5 @@
 <div id="v-common">
-  <!-- <div id="sidebar" class="btn-toolbar"> -->
-  <b-btn-toolbar id="sidebar">
+  <b-btn-toolbar v-show="fixBarShow">
     <b-btn-group class="mx-1">
       <b-btn variant="outline-dark" title="browser" id="history" @click="showModal">
         <i class="oi oi-list"></i>
