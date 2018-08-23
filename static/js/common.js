@@ -136,7 +136,7 @@ function get(url) {
 }
 
 /**
- * Auto adjust video size and dialog hieght
+ * Auto adjust video size
  *
  * @method adapt
  */

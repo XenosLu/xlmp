@@ -23,13 +23,11 @@ body {
     -moz-user-select: none;
     user-select: none;
     font-family: AppleSDGothicNeo-Regular;
+    margin-bottom: 2em; /* Margin bottom by footer height */
 }
 html {
   position: relative;
   min-height: 100%;
-}
-body {
-  margin-bottom: 2em; /* Margin bottom by footer height */
 }
 footer {
   position: absolute;
@@ -130,8 +128,7 @@ button {
     opacity: 0.85;
     box-shadow: inset 0px 0px 9px 0px #F1F2F6;
 }
-.modal-dialog
-{
+.modal-dialog {
     opacity: 0.8;
 }
 #panel {
@@ -142,7 +139,7 @@ button {
     background-color: #F1F2F6;
 }
 
-#output, #dialog {
+#output {
     position: fixed;
     top: 50%;
     left: 50%;
