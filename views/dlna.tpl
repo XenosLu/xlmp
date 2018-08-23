@@ -47,12 +47,16 @@
                  @input="positionShow">
         </div>
         <div class="card-footer">
-          <button onclick="get('/dlna/vol/down');" type="button" class="volume btn btn-warning btn-lg">
-            <i class="oi oi-volume-low"></i>
-          </button>
-          <button onclick="get('/dlna/vol/up');" type="button" class="volume btn btn-warning btn-lg">
-            <i class="oi oi-volume-high"></i>
-          </button>
+          <b-btn-group class="mx-5">
+            <button onclick="get('/dlna/vol/down');" type="button" class="volume btn btn-warning btn-lg">
+              <i class="oi oi-volume-low"></i>
+            </button>
+          </b-btn-group>
+          <b-btn-group class="mx-5">
+            <button onclick="get('/dlna/vol/up');" type="button" class="volume btn btn-warning btn-lg">
+              <i class="oi oi-volume-high"></i>
+            </button>
+          </b-btn-group>
         </div>
       </div>
     </div>
