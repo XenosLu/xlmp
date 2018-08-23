@@ -10,8 +10,10 @@ window.dlnaView = new Vue({
             state: 'No State',
             src: '',
             position: '',
-            currentDMR: '',
+            currentDMR: 'no DMR',
             DMRs: [],
+            number: 1, //test
+            dlnaInfo: {},
         },
         methods: {
             set_dmr: function(dmr){
@@ -58,8 +60,7 @@ function renderUI(data) {
     if ($.isEmptyObject(data))
     {
         window.commonView.dlnaOn = false;
-        window.dlnaView.state = 'No DMR';
-        // $("#state").text('No DMR');
+        window.dlnaView.DMR = 'No DMR';
     }
     else {
         window.commonView.dlnaOn = true;
@@ -71,6 +72,7 @@ function renderUI(data) {
         window.dlnaView.currentDMR = data.CurrentDMR;
         window.dlnaView.DMRs = data.DMRs;
         window.dlnaView.state = data.CurrentTransportState;
+        window.dlnaView.dlnaInfo = data;
     }
 }
 function set_dmr(dmr) {
