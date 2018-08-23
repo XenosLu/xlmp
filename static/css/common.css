@@ -50,11 +50,7 @@ video {
     left: 0;
     right: 0;
 }
-/*
-table {
-    width: 100%;
-}
-*/
+
 td {
     word-break:break-all;
 }
@@ -62,9 +58,6 @@ td {
     vertical-align: middle;
 }
 
-td:hover {
-    background-color: #FBF3E9;
-}
 input[type=range]{
     box-shadow: inset 0px 0px 9px 0px #F1F2F6;
     -webkit-appearance: none;
@@ -88,11 +81,10 @@ input[type=range]::-moz-range-thumb {
     width: 1.8em;
     box-shadow: inset 0px 0px 5px 1px #F0AD4E;
 }
-.filelist {
-    color: grey;
-    min-width: 14em;
-}
 /* updated */
+td:hover {
+    background-color: #FBF3E9;
+}
 .folder {
     color: black;
 }
