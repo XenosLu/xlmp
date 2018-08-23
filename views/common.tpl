@@ -12,7 +12,7 @@
           DLNA <i v-show="uiState.dlnaOn" class="oi oi-monitor"></i>
         </b-btn>
 
-        <b-dropdown right text="Maintain">
+        <b-dropdown variant="outline-dark" right text="Maintain">
           <b-dropdown-item onclick="get('/sys/update')">update</b-dropdown-item>
           <b-dropdown-item onclick="get('/sys/backup')">backup</b-dropdown-item>
           <b-dropdown-divider></b-dropdown-divider>
@@ -21,13 +21,13 @@
       <b-btn-group class="mx-1">
       </b-btn-group>
         <!-- dlna menu -->
-        <b-dropdown right v-show="uiState.dlnaShow" text="Seek">
+        <b-dropdown variant="outline-dark" right v-show="uiState.dlnaShow" text="Seek">
           <b-dropdown-item onclick="get('/dlna/seek/00:00:15')">00:15</b-dropdown-item>
           <b-dropdown-item onclick="get('/dlna/seek/00:00:29')">00:30</b-dropdown-item>
           <b-dropdown-item onclick="get('/dlna/seek/00:01:00')">01:00</b-dropdown-item>
           <b-dropdown-item onclick="get('/dlna/seek/00:01:30')">01:30</b-dropdown-item>
         </b-dropdown>
-         <b-dropdown right v-show="uiState.rateMenu" text="Rate">
+         <b-dropdown variant="outline-dark" right v-show="uiState.rateMenu" text="Rate">
           <b-dropdown-item onclick="rate(0.5)">0.5X</b-dropdown-item>
           <b-dropdown-item onclick="rate(0.75)">0.75X</b-dropdown-item>
           <b-dropdown-divider></b-dropdown-divider>
