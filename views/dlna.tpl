@@ -38,7 +38,6 @@
           <h3 v-show="dlnaInfo.RelTime" class="card-title mt-3">
             ${ dlnaInfo.RelTime} / ${ dlnaInfo.TrackDuration }
           </h3>
-          <!-- <input type="range" id="position-bar" min="0" max="0"> -->
           <input class="position-bar my-4"
                  v-model.number="positionBar.val"
                  type="range"
