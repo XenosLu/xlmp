@@ -103,7 +103,7 @@ hammertimeModal.on("press", function (ev) {
     console.log(target.getAttribute('data-target'));
 });
 hammertimeModal.on("tap", function (ev) {
-    out("tap");
+    // out("tap");
     console.log(ev)
     var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
     if (target.hasAttribute("data-type"))
