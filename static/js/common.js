@@ -92,13 +92,13 @@ hammertimeModal.on("swiperight", function (ev) {
         window.commonView.swipeState = 1;
 });
 hammertimeModal.on("press", function (ev) {
-    out("press");
+    // out("press");
     var target;
     if(ev.target.tagName=='TD')
         target = ev.target;
     else
         target = ev.target.parentNode;
-    console.log(target);
+    // console.log(target);
     if(target.hasAttribute("data-target"))
         window.commonView.open(target.getAttribute('data-target'), 'folder')
     console.log(target.getAttribute('data-target'));
