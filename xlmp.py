@@ -586,7 +586,7 @@ class TestHandler(tornado.web.RequestHandler):
         pass
 
     def get(self, *args, **kwargs):
-        url = 'http://127.0.0.1/douyu'
+        url = 'http://%s/douyu' % self.request.headers['Host']
         LOADER.load(url)
         self.finish('loading %s' % url)
         # self.write('test')
