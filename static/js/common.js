@@ -102,6 +102,14 @@ hammertimeModal.on("press", function (ev) {
         window.commonView.open(target.getAttribute('data-target'), 'folder');
     console.log(target.getAttribute('data-target'));
 });
+hammertimeModal.on("tap", function (ev) {
+    out("tap");
+    console.log(ev)
+    var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
+    if (target.hasAttribute("data-type"))
+        window.commonView.open(target.getAttribute('data-path'), target.getAttribute('data-type'));
+    console.log(target.getAttribute('data-target'));
+});
 var RANGE = 12; //minimum touch move range in px
 var hide_sidebar = 0;
 
