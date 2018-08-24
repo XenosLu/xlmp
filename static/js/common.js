@@ -91,7 +91,7 @@ hammertimeModal.on("swiperight", function (ev) {
     if (window.commonView.swipeState > 1)
         window.commonView.swipeState = 1;
 });
-hammertimeModal.add( new Hammer.Press({time: 1000 }) )
+hammertimeModal.add( new Hammer.Press({time: 1500 }) )
 hammertimeModal.on("press", function (ev) {
     out("press");
     var target;
