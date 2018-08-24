@@ -91,13 +91,15 @@ hammertimeModal.on("swiperight", function (ev) {
     if (window.commonView.swipeState > 1)
         window.commonView.swipeState = 1;
 });
-hammertimeModal.add(new Hammer.Press({
-        time: 500
-    }));
-hammertimeModal.on("press", function (ev) {
+press = new Hammer.Press({time: 500});
+press.requireFailure(new Hammer.Tap());
+hammertimeModal.add(press);
+hammertimeModal.on("press pressup", function (ev) {
     out("press 500");
+    if(ev.type=="pressup")
+        return
+    console.log(ev)
     var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
-    console.log(target);
     if (target.hasAttribute("data-target"))
         window.commonView.open(target.getAttribute('data-target'), 'folder');
     console.log(target.getAttribute('data-target'));
