@@ -345,6 +345,7 @@ class WebPlayerHandler(tornado.web.RequestHandler):
         src = kwargs.get('src')
         if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
             self.redirect('/')
+            return
         self.render('player.tpl', src=src, position=hist_load(src))
 
 
