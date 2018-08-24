@@ -2,20 +2,53 @@ var reltime = 0;
 var update = true;
 var wait = 0;
 
-$("#dlna_toggle").addClass("active");
-// $("#dlna_toggle").attr("href", "/");
-$("#dlna_toggle").attr("onclick", 'window.location.href = "/";');
 
-$(".dlna-show").show();
-// get_dmr_state();
-// var inter = setInterval("get_dmr_state()", 1100);
-$("#position-bar").on("change", function () {
-    $.get("/dlna/seek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
-    update = true;
-}).on("input", function () {
-    out(secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
-    update = false;
+window.dlnaView = new Vue({
+        delimiters: ['${', '}'],
+        el: '#v-dlna',
+        data: {
+            state: 'No State',
+            src: '',
+            position: '',
+            currentDMR: 'no DMR',
+            DMRs: [],
+            positionBar:{
+                min: 0,
+                max: 1,
+                val: 0,
+            },
+            dlnaInfo: {},
+        },
+        methods: {
+            set_dmr: function(dmr){
+                set_dmr(dmr);
+            },
+            positionSeek: function(){
+                $.get("/dlna/seek/" + secondToTime(offset_value(reltime, this.positionBar.val, this.positionBar.max)));
+                update = true;
+            },
+            positionShow: function(){
+                console.log(this.positionBar.val);
+                out(secondToTime(offset_value(reltime, this.positionBar.val, this.positionBar.max)));
+                update = false;
+            },
+            test: function(){
+                console.log(this.positionBar.val);
+            },
+        }
 });
+
+window.commonView.uiState.dlnaShow = true;
+
+
+// $("#position-bar").on("change", function () {
+    // $.get("/dlna/seek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
+    // update = true;
+// }).on("input", function () {
+    // out(secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
+    // update = false;
+// });
+
 var ws_link;
 ws_link = dlnalink();
 
@@ -27,13 +60,14 @@ setInterval("CheckLink()", 1200);
 function dlnalink() {
     var ws = new WebSocket("ws://" + window.location.host + "/dlna/link");
     ws.onmessage = function (e) {
-        data = $.parseJSON(e.data);
+        //data = $.parseJSON(e.data);
+        var data = JSON.parse(e.data);
         console.log(data);
         ws.send('got');
         renderUI(data);
     }
     ws.onclose = function () {
-        $("#state").text('disconnected');
+        window.dlnaView.state = 'disconnected';
     };
     ws.onerror = function () {
         console.log('error');
@@ -42,69 +76,22 @@ function dlnalink() {
 }
 function renderUI(data) {
     if ($.isEmptyObject(data)) {
-        $("#state").text('No DMR');
-        $("#dlna_toggle").removeClass("btn-success");
+        window.commonView.uiState.dlnaOn = false;
+        window.dlnaView.DMR = 'No DMR';
     } else {
-        $("#dlna_toggle").addClass("btn-success");
-        reltime = timeToSecond(data["RelTime"]);
-        if (update)
-            $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
-
-        $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
-        $('#src').text(decodeURI(data["TrackURI"]));
-
-        $("#dmr button").text(data["CurrentDMR"]);
-        $("#dmr ul").empty().append('<li><a onclick="$.get(\'/dlna/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
-        for (x in data["DMRs"]) {
-            $("#dmr ul").append('<li><a onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
+        window.commonView.uiState.dlnaOn = true;
+        reltime = timeToSecond(data.RelTime);
+        if (update) {
+            // $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
+            window.dlnaView.positionBar.max = timeToSecond(data.TrackDuration);
+            window.dlnaView.positionBar.val = reltime;
         }
-
-        $("#state").text(data["CurrentTransportState"]);
-    }
-}
-/**
- * receive dlnainfo through ajax, not used
- */
-function get_dmr_state() {
-    if (wait > 0) {
-        wait -= 1;
-    } else {
-        $.ajax({
-            url: "/dlna/info",
-            dataType: "json",
-            timeout: 999,
-            type: "GET",
-            success: function (data) {
-                if ($.isEmptyObject(data)) {
-                    $("#state").text('No DMR');
-                    console.log('set wait to 3 for empty');
-                    wait = 3;
-                } else {
-                    reltime = timeToSecond(data["RelTime"]);
-                    if (update)
-                        $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
-
-                    $("#position").text(data["RelTime"] + "/" + data["TrackDuration"]);
-                    $('#src').text(decodeURI(data["TrackURI"]));
-
-                    $("#dmr button").text(data["CurrentDMR"]);
-                    $("#dmr ul").empty().append('<li><a onclick="$.get(\'/dlna/searchdmr\')">Search DMR</a></li>').append('<li class="divider"></li>');
-                    for (x in data["DMRs"]) {
-                        $("#dmr ul").append('<li><a onclick="set_dmr(\'' + data["DMRs"][x] + '\')">' + data["DMRs"][x] + "</a></li>")
-                    }
-
-                    $("#state").text(data["CurrentTransportState"]);
-                }
-            },
-            error: function (xhr, err) {
-                if (err != "parsererror")
-                    $("#state").text(xhr.statusText);
-                else
-                    $("#state").text(err);
-                console.log('set wait to 3 for error');
-                wait = 3;
-            }
-        });
+        window.dlnaView.position = data.RelTime + "/" + data.TrackDuration;//
+        window.dlnaView.src = decodeURI(data.TrackURI); //
+        window.dlnaView.currentDMR = data.CurrentDMR;
+        window.dlnaView.DMRs = data.DMRs;
+        window.dlnaView.state = data.CurrentTransportState;
+        window.dlnaView.dlnaInfo = data;
     }
 }
 

@@ -324,7 +324,7 @@ class IndexHandler(tornado.web.RequestHandler):
         pass
 
     def get(self, *args, **kwargs):
-        self.render('index.tpl')
+        self.render('base.tpl')
 
 
 class DlnaPlayerHandler(tornado.web.RequestHandler):
@@ -345,6 +345,7 @@ class WebPlayerHandler(tornado.web.RequestHandler):
         src = kwargs.get('src')
         if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
             self.redirect('/')
+            return
         self.render('player.tpl', src=src, position=hist_load(src))
 
 
@@ -661,7 +662,7 @@ SETTINGS = {
     'static_path': 'static',
     'template_path': 'views',
     'gzip': True,
-    # "debug": True,
+    "debug": True,
     'websocket_ping_interval': 0.2,
 }
 

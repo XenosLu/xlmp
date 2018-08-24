@@ -1,11 +1,12 @@
 
-$("#rate").show();
+window.commonView.uiState.rateMenu = true;
 
 $("#videosize").click(function () {
-    if ($(this).text() == "auto")
+    if (window.commonView.uiState.videoBtnText == "auto")
         adapt();
     else {
         $(this).text("auto");
+        window.commonView.uiState.videoBtnText = "auto";
         if ($("video").get(0).width < $(window).width() && $("video").get(0).height < $(window).height()) {
             $("video").get(0).style.width = $("video").get(0).videoWidth + "px";
             $("video").get(0).style.height = $("video").get(0).videoHeight + "px";
@@ -14,6 +15,18 @@ $("#videosize").click(function () {
 });
 
 /* touch for ipad start */
+var hammertimeVideo = new Hammer(document.querySelector("video"));
+
+hammertimeVideo.on("swipeleft", function (ev) {
+    out('swipeleft');
+});
+hammertimeVideo.on("swiperight", function (ev) {
+    out('swiperight');
+});
+hammertimeVideo.on("pan", function (ev) {
+    out('pan');
+});
+
 $(document).on("touchstart", function (e) {
     x0 = e.originalEvent.touches[0].screenX;
     y0 = e.originalEvent.touches[0].screenY;
