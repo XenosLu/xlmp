@@ -1,7 +1,5 @@
 var reltime = 0;
-var update = true;
-var wait = 0;
-
+// var update = true;
 
 window.dlnaView = new Vue({
         delimiters: ['${', '}'],
@@ -14,23 +12,24 @@ window.dlnaView = new Vue({
             DMRs: [],
             positionBar:{
                 min: 0,
-                max: 1,
+                max: 0,
                 val: 0,
+                update: true,
             },
             dlnaInfo: {},
         },
         methods: {
-            set_dmr: function(dmr){
-                set_dmr(dmr);
+            setDmr: function(dmr){
+                $.get("/dlna/setdmr/" + dmr);
             },
             positionSeek: function(){
                 $.get("/dlna/seek/" + secondToTime(offset_value(reltime, this.positionBar.val, this.positionBar.max)));
-                update = true;
+                this.positionBar.update = true;
             },
             positionShow: function(){
                 console.log(this.positionBar.val);
                 out(secondToTime(offset_value(reltime, this.positionBar.val, this.positionBar.max)));
-                update = false;
+                this.positionBar.update = false;
             },
             test: function(){
                 console.log(this.positionBar.val);
@@ -60,7 +59,6 @@ setInterval("CheckLink()", 1200);
 function dlnalink() {
     var ws = new WebSocket("ws://" + window.location.host + "/dlna/link");
     ws.onmessage = function (e) {
-        //data = $.parseJSON(e.data);
         var data = JSON.parse(e.data);
         console.log(data);
         ws.send('got');
@@ -81,7 +79,7 @@ function renderUI(data) {
     } else {
         window.commonView.uiState.dlnaOn = true;
         reltime = timeToSecond(data.RelTime);
-        if (update) {
+        if (window.dlnaView.positionBar.update) {
             // $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
             window.dlnaView.positionBar.max = timeToSecond(data.TrackDuration);
             window.dlnaView.positionBar.val = reltime;
@@ -93,10 +91,6 @@ function renderUI(data) {
         window.dlnaView.state = data.CurrentTransportState;
         window.dlnaView.dlnaInfo = data;
     }
-}
-
-function set_dmr(dmr) {
-    $.get("/dlna/setdmr/" + dmr);
 }
 
 function offset_value(current, value, max) {

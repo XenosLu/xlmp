@@ -11,7 +11,7 @@
             <b-dropdown variant="outline-dark" right split :text="currentDMR">
               <b-dropdown-item onclick="get('/dlna/searchdmr');">Search DMR</b-dropdown-item>
               <b-dropdown-divider></b-dropdown-divider>
-              <b-dropdown-item v-for="item in DMRs" @click="set_dmr(item)">${ item }</b-dropdown-item>
+              <b-dropdown-item v-for="item in DMRs" @click="setDmr(item)">${ item }</b-dropdown-item>
             </b-dropdown>
           </b-btn-group>
         </div>

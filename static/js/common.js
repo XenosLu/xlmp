@@ -95,9 +95,7 @@ hammertimeModal.on("swiperight", function (ev) {
 // press.requireFailure(new Hammer.Tap());
 // hammertimeModal.add(press);
 hammertimeModal.on("press", function (ev) {
-    out("press n");
-    if(ev.type=="pressup")
-        return
+    // out("press n");
     console.log(ev)
     var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
     if (target.hasAttribute("data-target"))
