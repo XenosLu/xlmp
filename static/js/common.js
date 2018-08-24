@@ -192,6 +192,35 @@ function getHistory(str) {
     });
 }
 
+function check_dlna_state() {
+    $.ajax({
+        url: "/dlna/info",
+        dataType: "json",
+        timeout: 999,
+        type: "GET",
+        success: function (data) {
+            window.commonView.uiState.dlnaOn = !$.isEmptyObject(data);
+        },
+        error: function (xhr, err) {
+            console.log('get dlna/info error')
+        }
+    });
+}
+
+/**
+ * Made an output box to show some text notification
+ *
+ * @method out
+ * @param {String} text
+ */
+function out(text) {
+    if (text != "") {
+        $("#output").remove();
+        $(document.body).append('<div id="output">' + text + "</div>");
+        $("#output").fadeTo(250, 0.7).delay(1800).fadeOut(625);
+    };
+}
+
 /**
  * Convert Second to Time Format
  *
@@ -214,33 +243,4 @@ function secondToTime(time) {
 function timeToSecond(time) {
     var t = String(time).split(":");
     return (parseInt(t[0]) * 3600 + parseInt(t[1]) * 60 + parseInt(t[2]));
-}
-
-/**
- * Made an output box to show some text notification
- *
- * @method out
- * @param {String} text
- */
-function out(text) {
-    if (text != "") {
-        $("#output").remove();
-        $(document.body).append('<div id="output">' + text + "</div>");
-        $("#output").fadeTo(250, 0.7).delay(1800).fadeOut(625);
-    };
-}
-
-function check_dlna_state() {
-    $.ajax({
-        url: "/dlna/info",
-        dataType: "json",
-        timeout: 999,
-        type: "GET",
-        success: function (data) {
-            window.commonView.uiState.dlnaOn = !$.isEmptyObject(data);
-        },
-        error: function (xhr, err) {
-            console.log('get dlna/info error')
-        }
-    });
 }
