@@ -38,7 +38,7 @@
           <b-dropdown-item onclick="rate(2)">2X</b-dropdown-item>
           <b-dropdown-item onclick="rate(2.5)">2.5X</b-dropdown-item>
           <b-dropdown-divider></b-dropdown-divider>
-          <b-dropdown-item>${ videoBtnText }</b-dropdown-item>
+          <b-dropdown-item id="videosize">${ videoBtnText }</b-dropdown-item>
         </b-dropdown>
         <!-- dlna menu end -->
       </b-btn-group>

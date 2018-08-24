@@ -1,6 +1,5 @@
 
 window.commonView.uiState.rateMenu = true;
-//$("#rate").show();
 
 $("#videosize").click(function () {
     if (window.commonView.uiState.videoBtnText == "auto")
