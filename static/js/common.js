@@ -90,6 +90,9 @@ hammertimeModal.on("swiperight", function (ev) {
     if (window.commonView.swipeState > 1)
         window.commonView.swipeState = 1;
 });
+hammertimeModal.on("press", function (ev) {
+    out("press");
+});
 
 var RANGE = 12; //minimum touch move range in px
 var hide_sidebar = 0;
