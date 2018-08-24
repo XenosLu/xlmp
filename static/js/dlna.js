@@ -1,5 +1,4 @@
 var reltime = 0;
-// var update = true;
 
 window.dlnaView = new Vue({
         delimiters: ['${', '}'],
@@ -40,14 +39,6 @@ window.dlnaView = new Vue({
 window.commonView.uiState.dlnaShow = true;
 
 
-// $("#position-bar").on("change", function () {
-    // $.get("/dlna/seek/" + secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
-    // update = true;
-// }).on("input", function () {
-    // out(secondToTime(offset_value(reltime, $(this).val(), $(this).attr("max"))));
-    // update = false;
-// });
-
 var ws_link;
 ws_link = dlnalink();
 
@@ -80,7 +71,6 @@ function renderUI(data) {
         window.commonView.uiState.dlnaOn = true;
         reltime = timeToSecond(data.RelTime);
         if (window.dlnaView.positionBar.update) {
-            // $("#position-bar").attr("max", timeToSecond(data["TrackDuration"])).val(reltime);
             window.dlnaView.positionBar.max = timeToSecond(data.TrackDuration);
             window.dlnaView.positionBar.val = reltime;
         }
