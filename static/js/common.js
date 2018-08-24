@@ -95,11 +95,12 @@ hammertimeModal.add( new Hammer.Press({time: 1500 }) )
 hammertimeModal.on("press", function (ev) {
     out("press");
     var target;
-    if(ev.target.tagName=='TD')
-        target = ev.target;
-    else
-        target = ev.target.parentNode;
-    // console.log(target);
+    // if(ev.target.tagName=='TD')
+        // target = ev.target;
+    // else
+        // target = ev.target.parentNode;
+    target = ev.target.tagName=='TD' ? ev.target : ev.target.parentNode
+    console.log(target);
     if(target.hasAttribute("data-target"))
         window.commonView.open(target.getAttribute('data-target'), 'folder')
     console.log(target.getAttribute('data-target'));
