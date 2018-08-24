@@ -91,11 +91,11 @@ hammertimeModal.on("swiperight", function (ev) {
     if (window.commonView.swipeState > 1)
         window.commonView.swipeState = 1;
 });
-var press = new Hammer.Press({time: 500});
-press.requireFailure(new Hammer.Tap());
-hammertimeModal.add(press);
+// var press = new Hammer.Press({time: 500});
+// press.requireFailure(new Hammer.Tap());
+// hammertimeModal.add(press);
 hammertimeModal.on("press", function (ev) {
-    out("press 500");
+    out("press n");
     if(ev.type=="pressup")
         return
     console.log(ev)
