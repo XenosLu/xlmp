@@ -68,7 +68,7 @@
               <small class="text-white">go Dir</small>
             </td>
             <td class="iconOnly"><i class="oi oi-video"></i></td>
-            <td @click="play(item.filename)">
+            <td @click="play(item.filename)" :data-target="item.filename">
               <span :class="item.exist ? 'mp4' : 'other'">${ item.filename }</span>
               <br>
               <small class="text-muted">

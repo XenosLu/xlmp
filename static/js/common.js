@@ -93,6 +93,15 @@ hammertimeModal.on("swiperight", function (ev) {
 });
 hammertimeModal.on("press", function (ev) {
     out("press");
+    var target;
+    if(ev.target.tagName=='TD')
+        target = ev.target;
+    else
+        target = ev.target.parentNode;
+    console.log(target);
+    if(target.hasAttribute("data-target"))
+        window.commonView.open(target.getAttribute('data-target'), 'folder')
+    console.log(target.getAttribute('data-target'));
 });
 
 var RANGE = 12; //minimum touch move range in px
