@@ -61,7 +61,7 @@ function dlnalink() {
     ws.onmessage = function (e) {
         var data = JSON.parse(e.data);
         console.log(data);
-        ws.send('got');
+        // ws.send('got');
         renderUI(data);
     }
     ws.onclose = function () {
