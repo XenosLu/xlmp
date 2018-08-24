@@ -19,6 +19,7 @@ window.commonView = new Vue({
                 historyShow: true,
                 rateMenu: false,
                 fixBarShow: true,
+                videoBtnText: 'origin',
             },
             history: [],
             filelist: [],
@@ -133,7 +134,7 @@ function get(url) {
  */
 function adapt() {
     if ($("video").length == 1) {
-        $("#videosize").text("orign");
+        window.commonView.uiState.videoBtnText = "orign";
         var video_ratio = $("video").get(0).videoWidth / $("video").get(0).videoHeight;
         var page_ratio = $(window).width() / $(window).height();
         if (page_ratio < video_ratio) {

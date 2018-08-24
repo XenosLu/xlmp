@@ -3,10 +3,11 @@ window.commonView.uiState.rateMenu = true;
 //$("#rate").show();
 
 $("#videosize").click(function () {
-    if ($(this).text() == "auto")
+    if (window.commonView.uiState.videoBtnText == "auto")
         adapt();
     else {
         $(this).text("auto");
+        window.commonView.uiState.videoBtnText = "auto";
         if ($("video").get(0).width < $(window).width() && $("video").get(0).height < $(window).height()) {
             $("video").get(0).style.width = $("video").get(0).videoWidth + "px";
             $("video").get(0).style.height = $("video").get(0).videoHeight + "px";
