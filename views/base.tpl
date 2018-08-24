@@ -35,6 +35,8 @@
                 <b-dropdown-item onclick="get('/sys/backup')">backup</b-dropdown-item>
                 <b-dropdown-divider></b-dropdown-divider>
                 <b-dropdown-item onclick="get('/sys/restore')">restore</b-dropdown-item>
+                <b-dropdown-item onclick="get('/test')">test</b-dropdown-item>
+                <b-dropdown-item onclick="get('/douyu')">douyutest</b-dropdown-item>
               </b-dropdown>
             <b-btn-group class="mx-1">
             </b-btn-group>
