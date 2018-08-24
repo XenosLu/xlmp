@@ -91,11 +91,11 @@ hammertimeModal.on("swiperight", function (ev) {
     if (window.commonView.swipeState > 1)
         window.commonView.swipeState = 1;
 });
-hammertimeModal.add(new Hammer.Tap({
-        taps: 2
-    }))
-hammertimeModal.on("tap", function (ev) {
-    out("double tap");
+hammertimeModal.add(new Hammer.Press({
+        time: 500
+    }));
+hammertimeModal.on("press", function (ev) {
+    out("press 500");
     var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
     console.log(target);
     if (target.hasAttribute("data-target"))
