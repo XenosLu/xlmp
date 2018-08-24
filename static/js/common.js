@@ -94,7 +94,7 @@ hammertimeModal.on("swiperight", function (ev) {
 var press = new Hammer.Press({time: 500});
 press.requireFailure(new Hammer.Tap());
 hammertimeModal.add(press);
-hammertimeModal.on("press pressup", function (ev) {
+hammertimeModal.on("press", function (ev) {
     out("press 500");
     if(ev.type=="pressup")
         return
