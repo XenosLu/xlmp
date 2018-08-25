@@ -54,12 +54,6 @@
             <b-btn class="mx-5" variant="outline-warning" size="lg" onclick="get('/dlna/vol/up')">
                 <i class="oi oi-volume-high"></i>
             </b-btn>
-            <!-- <button onclick="get('/dlna/vol/down');" type="button" class="mx-5 volume btn btn-warning btn-lg"> -->
-              <!-- <i class="oi oi-volume-low"></i> -->
-            <!-- </button> -->
-            <!-- <button onclick="get('/dlna/vol/up');" type="button" class="mx-5 volume btn btn-warning btn-lg"> -->
-              <!-- <i class="oi oi-volume-high"></i> -->
-            <!-- </button> -->
           </b-btn-group>
         </div>
       </div>
