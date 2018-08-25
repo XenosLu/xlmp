@@ -6,7 +6,7 @@ window.dlnaView = new Vue({
         data: {
             state: 'No State',
             DMRs: [],
-            positionBar:{
+            positionBar: {
                 min: 0,
                 max: 0,
                 val: 0,
@@ -15,26 +15,25 @@ window.dlnaView = new Vue({
             dlnaInfo: {},
         },
         methods: {
-            setDmr: function(dmr){
+            setDmr: function (dmr) {
                 $.get("/dlna/setdmr/" + dmr);
             },
-            positionSeek: function(){
+            positionSeek: function () {
                 $.get("/dlna/seek/" + secondToTime(offset_value(reltime, this.positionBar.val, this.positionBar.max)));
                 this.positionBar.update = true;
             },
-            positionShow: function(){
+            positionShow: function () {
                 console.log(this.positionBar.val);
                 out(secondToTime(offset_value(reltime, this.positionBar.val, this.positionBar.max)));
                 this.positionBar.update = false;
             },
-            test: function(){
+            test: function () {
                 console.log(this.positionBar.val);
             },
         }
-});
+    });
 
 window.commonView.uiState.dlnaShow = true;
-
 
 var ws_link;
 ws_link = dlnalink();
