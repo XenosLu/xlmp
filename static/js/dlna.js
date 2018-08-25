@@ -40,7 +40,8 @@ hammertimeDlna.on("panleft panright swipeleft swiperight", function (ev) {
     var reltime = timeToSecond(window.dlnaView.dlnaInfo.RelTime);
     var newtime = secondToTime(reltime + ev.deltaX / 5);
     out(newtime);
-    if(ev.type.startswith("swipe")）
+    if(ev.type.startswith("swipe"))
+    if(ev.type.indexOf("swipe") != -1)
         $.get("/dlna/seek/" + newtime);
     console.log(ev);
     console.log(ev.type);
