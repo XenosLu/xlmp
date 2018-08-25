@@ -6,10 +6,10 @@
       <div class="text-center col-sm-12 col-md-8 col-lg-6 col-xl-5">
         <div class="card-head">
           <b-btn-group class="mt-5">
-            <b-dropdown variant="outline-dark" right split :text="currentDMR">
+            <b-dropdown variant="outline-dark" right split :text="dlnaInfo.currentDMR">
               <b-dropdown-item onclick="get('/dlna/searchdmr');">Search DMR</b-dropdown-item>
               <b-dropdown-divider></b-dropdown-divider>
-              <b-dropdown-item v-for="item in DMRs" @click="setDmr(item)">${ item }</b-dropdown-item>
+              <b-dropdown-item v-for="item in dlnaInfo.DMRs" @click="setDmr(item)">${ item }</b-dropdown-item>
             </b-dropdown>
           </b-btn-group>
         </div>
@@ -17,7 +17,8 @@
           <!-- <h5 class="card-title" id="src">${ src }</h5> -->
         <!-- </div> -->
         <!-- <b-card :title="src" class="my-4" id="src"></b-card> -->
-        <b-card :title="decodeURI(dlnaInfo.TrackURI)" class="my-4" id="src"></b-card>
+        <b-card :title="dlnaInfo.TrackURI ? decodeURI(dlnaInfo.TrackURI) : ''" class="my-4" id="src">
+        </b-card>
       </div>
         
       <div class="container fixed-bottom text-center">

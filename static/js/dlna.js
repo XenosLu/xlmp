@@ -73,9 +73,9 @@ function renderUI(data) {
             window.dlnaView.positionBar.max = timeToSecond(data.TrackDuration);
             window.dlnaView.positionBar.val = reltime;
         }
-        window.dlnaView.src = decodeURI(data.TrackURI); ////decodeURI(dlnaInfo.TrackURI)
-        window.dlnaView.currentDMR = data.CurrentDMR;
-        window.dlnaView.DMRs = data.DMRs;
+        // window.dlnaView.src = decodeURI(data.TrackURI); ////decodeURI(dlnaInfo.TrackURI)
+        // window.dlnaView.currentDMR = data.CurrentDMR;
+        // window.dlnaView.DMRs = data.DMRs;
         window.dlnaView.state = data.CurrentTransportState;
         window.dlnaView.dlnaInfo = data;
         
