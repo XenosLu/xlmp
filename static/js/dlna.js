@@ -35,14 +35,11 @@ window.dlnaView = new Vue({
     });
 
 window.commonView.uiState.dlnaShow = true;
-// var hammertimeDlna = new Hammer(document.body);
 var hammertimeDlna = new Hammer(document.getElementById("DlnaTouch"));
 hammertimeDlna.on("panleft panright swipeleft swiperight", function (ev) {
     var newtime = window.dlnaView.positionBar.val + ev.deltaX / 4;
-    if(newtime < 0)
-        newtime = 0;
-    else if(newtime > window.dlnaView.positionBar.max)
-        newtime = window.dlnaView.positionBar.max;
+    newtime = Math.max(newtime, 0);
+    newtime = Math.min(newtime, window.dlnaView.positionBar.max);
     out(secondToTime(newtime));
     if(ev.type.indexOf("swipe") != -1)
         $.get("/dlna/seek/" + secondToTime(newtime));
