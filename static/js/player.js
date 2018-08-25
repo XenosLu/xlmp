@@ -15,17 +15,20 @@ $("#videosize").click(function () {
 });
 
 /* touch for ipad start */
-var hammertimeVideo = new Hammer(document.querySelector("video"));
+var hammertimeVideo = new Hammer(document);
 
-hammertimeVideo.on("swipeleft", function (ev) {
-    out('swipeleft');
-});
-hammertimeVideo.on("swiperight", function (ev) {
-    out('swiperight');
-});
-hammertimeVideo.on("pan", function (ev) {
-    out('pan');
-});
+// hammertimeVideo.on("swipeleft panleft panright swiperight", function (ev) {
+    // out(ev.type);
+    // console.log(ev);
+// });
+// hammertimeVideo.on("swiperight", function (ev) {
+    // out('swiperight');
+    // console.log(ev);
+// });
+// hammertimeVideo.on("pan", function (ev) {
+    // out('pan');
+    // console.log(ev);
+// });
 
 $(document).on("touchstart", function (e) {
     x0 = e.originalEvent.touches[0].screenX;

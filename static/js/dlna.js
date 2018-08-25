@@ -35,9 +35,13 @@ window.dlnaView = new Vue({
     });
 
 window.commonView.uiState.dlnaShow = true;
+var hammertimeDlna = new Hammer(document);
+hammertimeDlna.on("swipeleft panleft panright swiperight", function (ev) {
+    out(ev.type);
+    console.log(ev);
+});
 
-var ws_link;
-ws_link = dlnalink();
+var ws_link = dlnalink();
 
 function CheckLink() {
     if (ws_link.readyState == 3)
