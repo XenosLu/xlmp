@@ -112,8 +112,6 @@ button {
 }
 .position-bar {
     background-color: #A0D468;
-    /* margin-top: 1.5em; */
-    /* margin-bottom: 1.5em; */
     width: 96%;
     height: 2.2em;
 }
@@ -130,7 +128,7 @@ button {
 input[type=range]{
     box-shadow: inset 0px 0px 9px 0px #F1F2F6;
     -webkit-appearance: none;
-    margin: auto;
+    /* margin: auto; */
 }
 input[type=range]::-moz-range-track {
     height: 0;
@@ -142,16 +140,15 @@ input[type=range]::-moz-range-thumb {
 }
 .position-bar::-moz-range-thumb {
     height: 2.4em;
-    width: 1em;
-    box-shadow: inset 0px 0px 5px 1px #A0D468;
+    width: 0.9em;
+    box-shadow: inset 0px 0px 5px 2px #A0D468;
 }
 #volume-bar::-moz-range-thumb {
     height: 1.5em;
     width: 1.8em;
     box-shadow: inset 0px 0px 5px 1px #F0AD4E;
 }
-#src {
-    /* width: 100%; */
+.title {
     overflow: hidden;
     text-overflow: ellipsis;
     word-break:break-all;
