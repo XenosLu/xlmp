@@ -151,7 +151,7 @@ input[type=range]::-moz-range-thumb {
     box-shadow: inset 0px 0px 5px 1px #F0AD4E;
 }
 #src {
-    width: 100%;
+    /* width: 100%; */
     overflow: hidden;
     text-overflow: ellipsis;
     word-break:break-all;

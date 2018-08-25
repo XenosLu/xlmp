@@ -13,12 +13,10 @@
             </b-dropdown>
           </b-btn-group>
         </div>
-        <div class="card-body">
+        <!-- <div class="card-body"> -->
           <!-- <h5 class="card-title" id="src">${ src }</h5> -->
-        </div>
-        
-        <b-card :title="src" id="src"></b-card>
-        
+        <!-- </div> -->
+        <b-card :title="src" class="my-4" id="src"></b-card>
       </div>
         
       <div class="container fixed-bottom text-center">
