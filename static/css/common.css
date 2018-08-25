@@ -1,6 +1,3 @@
-/* .oi-trash { */
-  /* color: white; */
-/* } */
 .icon {
     width: 3.8em;
     opacity: 0.7;
@@ -37,9 +34,6 @@ footer {
   line-height: 2em;
 }
 
-a {
-    cursor: default;
-}
 video {
     clear: both;
     display: block;
@@ -86,6 +80,11 @@ td:hover {
     border: 1px solid #777777;
     box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
     text-shadow: 0.1em 0.1em 0.4em #666;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
 }
 button {
     opacity: 0.85;
@@ -103,13 +102,7 @@ button {
     /* background-color: #F1F2F6; */
 }
 
-#output {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-}
+/* bars */
 .position-bar {
     background-color: #A0D468;
     width: 96%;
@@ -143,11 +136,13 @@ input[type=range]::-moz-range-thumb {
     width: 0.9em;
     box-shadow: inset 0px 0px 5px 2px #A0D468;
 }
-#volume-bar::-moz-range-thumb {
+.volume-bar::-moz-range-thumb {
     height: 1.5em;
     width: 1.8em;
     box-shadow: inset 0px 0px 5px 1px #F0AD4E;
 }
+/* bars end */
+/* dlna title */
 .title {
     overflow: hidden;
     text-overflow: ellipsis;
