@@ -5,7 +5,7 @@ window.dlnaView = new Vue({
         el: '#v-dlna',
         data: {
             state: 'No State',
-            src: '',
+            src: 'no title',
             currentDMR: 'no DMR',
             DMRs: [],
             positionBar:{

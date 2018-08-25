@@ -3,7 +3,7 @@
 
     {% block main %}
     <div id="v-dlna">
-      <div class="card text-center col-sm-12 col-md-8 col-lg-6 col-xl-5">
+      <div class="text-center col-sm-12 col-md-8 col-lg-6 col-xl-5">
         <div class="card-head">
           <b-btn-group class="mt-5">
             <b-dropdown variant="outline-dark" right split :text="currentDMR">
@@ -14,9 +14,12 @@
           </b-btn-group>
         </div>
         <div class="card-body">
-          <h5 class="card-title" id="src">${ src }</h5>
-          
+          <!-- <h5 class="card-title" id="src">${ src }</h5> -->
         </div>
+        
+        <b-card :title="src">
+        </b-card>
+        
       </div>
         
       <div class="container fixed-bottom text-center">
