@@ -17,8 +17,7 @@
           <!-- <h5 class="card-title" id="src">${ src }</h5> -->
         </div>
         
-        <b-card :title="src">
-        </b-card>
+        <b-card :title="src" id="src"></b-card>
         
       </div>
         
