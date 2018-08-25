@@ -16,7 +16,8 @@
         <!-- <div class="card-body"> -->
           <!-- <h5 class="card-title" id="src">${ src }</h5> -->
         <!-- </div> -->
-        <b-card :title="src" class="my-4" id="src"></b-card>
+        <!-- <b-card :title="src" class="my-4" id="src"></b-card> -->
+        <b-card :title="decodeURI(dlnaInfo.TrackURI)" class="my-4" id="src"></b-card>
       </div>
         
       <div class="container fixed-bottom text-center">
