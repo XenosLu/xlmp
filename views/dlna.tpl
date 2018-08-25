@@ -13,7 +13,7 @@
             </b-dropdown>
           </b-btn-group>
         </div>
-        <b-card :title="dlnaInfo.TrackURI ? decodeURI(dlnaInfo.TrackURI) : ''" class="my-4 title">
+        <b-card bg-variant="light" :title="dlnaInfo.TrackURI ? decodeURI(dlnaInfo.TrackURI) : ''" class="my-4 title">
         </b-card>
       </div>
 
