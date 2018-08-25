@@ -1,11 +1,9 @@
-var reltime = 0;
+// var reltime = 0;
 
 window.dlnaView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-dlna',
         data: {
-            // state: 'No State',
-            // DMRs: [],
             positionBar: {
                 min: 0,
                 max: 0,
@@ -22,12 +20,12 @@ window.dlnaView = new Vue({
                 $.get("/dlna/setdmr/" + dmr);
             },
             positionSeek: function () {
-                $.get("/dlna/seek/" + secondToTime(offset_value(reltime, this.positionBar.val, this.positionBar.max)));
+                $.get("/dlna/seek/" + secondToTime(offset_value(timeToSecond(dlnaInfo.RelTime), this.positionBar.val, this.positionBar.max)));
                 this.positionBar.update = true;
             },
             positionShow: function () {
                 console.log(this.positionBar.val);
-                out(secondToTime(offset_value(reltime, this.positionBar.val, this.positionBar.max)));
+                out(secondToTime(offset_value(timeToSecond(dlnaInfo.RelTime), this.positionBar.val, this.positionBar.max)));
                 this.positionBar.update = false;
             },
             test: function () {
@@ -54,7 +52,6 @@ function dlnalink() {
         renderUI(data);
     }
     ws.onclose = function () {
-        // window.dlnaView.state = 'disconnected';
         window.dlnaView.dlnaInfo.CurrentTransportState = 'disconnected';
     };
     ws.onerror = function () {
@@ -70,12 +67,11 @@ function renderUI(data) {
         window.dlnaView.dlnaInfo.CurrentTransportState = '';
     } else {
         window.commonView.uiState.dlnaOn = true;
-        reltime = timeToSecond(data.RelTime);
+        // reltime = timeToSecond(data.RelTime);
         if (window.dlnaView.positionBar.update) {
             window.dlnaView.positionBar.max = timeToSecond(data.TrackDuration);
-            window.dlnaView.positionBar.val = reltime;
+            window.dlnaView.positionBar.val = timeToSecond(data.RelTime);
         }
-        // window.dlnaView.state = data.CurrentTransportState;
         window.dlnaView.dlnaInfo = data;
     }
 }
