@@ -135,10 +135,10 @@ button {
 }
 .position-bar {
     background-color: #A0D468;
-    margin-top: 1.5em;
-    margin-bottom: 1.5em;
+    /* margin-top: 1.5em; */
+    /* margin-bottom: 1.5em; */
     width: 84%;
-    height: 2.4em;
+    height: 2.2em;
 }
 .position-bar::-webkit-slider-thumb{
     -webkit-appearance: none;

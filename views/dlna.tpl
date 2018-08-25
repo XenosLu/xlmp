@@ -17,42 +17,63 @@
           <h5 class="card-title" id="src">${ src }</h5>
           <h6 class="card-subtitle text-muted">${ state }</h6>
         </div>
-        <div class="card-body">
-          <b-btn-group>
-            <b-btn class="mx-1" variant="outline-success" size="lg" onclick="get('/dlna/play')">
-                <i class="oi oi-media-play"></i>
-            </b-btn>
-            <b-btn class="mx-1" variant="outline-danger" size="lg" onclick="get('/dlna/pause')">
-                <i class="oi oi-media-pause"></i>
-            </b-btn>
-            <b-btn class="mx-1" variant="outline-danger" size="lg" onclick="get('/dlna/stop')">
-                <i class="oi oi-media-stop"></i>
-            </b-btn>
-            <b-btn class="mx-1" variant="outline-success" size="lg" onclick="get('/dlna/next')">
-                <i class="oi oi-media-step-forward"></i>
-            </b-btn>
-          </b-btn-group>
+        <div class="card-body mb-5">
+
           <!-- <h3 class="card-title">${ position }</h3> -->
           <h3 v-show="dlnaInfo.RelTime" class="card-title mt-3">
             ${ dlnaInfo.RelTime} / ${ dlnaInfo.TrackDuration }
           </h3>
-          <input class="position-bar my-4"
+
+        </div>
+        <div class="container fixed-bottom">
+        <div class="card-footer col-sm-12 col-md-8 col-lg-6 col-xl-5">
+          
+                    <input class="position-bar my-4"
                  v-model.number="positionBar.val"
                  type="range"
                  :min="positionBar.min"
                  :max="positionBar.max"
                  @change="positionSeek"
                  @input="positionShow">
-        </div>
-        <div class="card-footer">
-          <b-btn-group class="my-3">
-            <b-btn class="mx-5" variant="outline-warning" size="lg" onclick="get('/dlna/vol/down')">
+          
+          
+          
+          
+          <b-btn-toolbar justify class="my-3 text-center">
+          
+          <!-- <div class="container-fluid"> -->
+            <b-btn-group>
+            <b-btn class="mx-1" variant="outline-warning" size="lg" onclick="get('/dlna/vol/down')">
                 <i class="oi oi-volume-low"></i>
             </b-btn>
-            <b-btn class="mx-5" variant="outline-warning" size="lg" onclick="get('/dlna/vol/up')">
+            </b-btn-group>
+          
+            <b-btn-group>
+            <b-btn class="" variant="outline-success" size="lg" onclick="get('/dlna/play')">
+                <i class="oi oi-media-play"></i>
+            </b-btn>
+            <b-btn class="" variant="outline-danger" size="lg" onclick="get('/dlna/pause')">
+                <i class="oi oi-media-pause"></i>
+            </b-btn>
+            <b-btn class="" variant="outline-danger" size="lg" onclick="get('/dlna/stop')">
+                <i class="oi oi-media-stop"></i>
+            </b-btn>
+            <b-btn class="" variant="outline-success" size="lg" onclick="get('/dlna/next')">
+                <i class="oi oi-media-step-forward"></i>
+            </b-btn>
+          </b-btn-group>
+          
+          <!-- <b-btn-group class="my-3"> -->
+
+            <b-btn-group>
+            <b-btn class="mx-1" variant="outline-warning" size="lg" onclick="get('/dlna/vol/up')">
                 <i class="oi oi-volume-high"></i>
             </b-btn>
           </b-btn-group>
+          <!-- </div> -->
+</b-btn-toolbar>
+          
+          </div>
         </div>
       </div>
     </div>
