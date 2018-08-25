@@ -36,9 +36,14 @@ window.dlnaView = new Vue({
 
 window.commonView.uiState.dlnaShow = true;
 var hammertimeDlna = new Hammer(document);
-hammertimeDlna.on("swipeleft panleft panright swiperight", function (ev) {
-    out(ev.type);
+hammertimeDlna.on("panleft panright swipeleft swiperight", function (ev) {
+    var reltime = timeToSecond(window.dlnaView.dlnaInfo.RelTime);
+    var newtime = secondToTime(reltime + ev.deltaX / 5);
+    out(newtime);
+    if(ev.type.startswith("swipe")）
+        $.get("/dlna/seek/" + newtime);
     console.log(ev);
+    console.log(ev.type);
 });
 
 var ws_link = dlnalink();
