@@ -19,16 +19,19 @@
         </div>
         <div class="card-body mb-5">
 
-          <!-- <h3 class="card-title">${ position }</h3> -->
+          <!-- <h5 v-show="dlnaInfo.RelTime" class="card-title mt-3"> -->
+            <!-- ${ dlnaInfo.RelTime} / ${ dlnaInfo.TrackDuration } -->
+          <!-- </h5> -->
+
+        </div>
+      </div>
+        
+      <div class="container fixed-bottom text-center">
+        <div class="card-footer col-sm-12 col-md-8 col-lg-6 col-xl-5">
           <h6 v-show="dlnaInfo.RelTime" class="card-title mt-3">
             ${ dlnaInfo.RelTime} / ${ dlnaInfo.TrackDuration }
           </h6>
-
-        </div>
-        </div>
-      <div class="container fixed-bottom text-center">
-        <div class="card-footer col-sm-12 col-md-8 col-lg-6 col-xl-5">
-          <input class="position-bar my-4"
+          <input class="position-bar my-3"
                  v-model.number="positionBar.val"
                  type="range"
                  :min="positionBar.min"
