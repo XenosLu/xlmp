@@ -5,8 +5,6 @@
     <div id="v-dlna">
       <div class="card text-center col-sm-12 col-md-8 col-lg-6 col-xl-5">
         <div class="card-head">
-          <!-- <h2 class="card-title">&nbsp;</h2> -->
-          <!-- placeholder -->
           <b-btn-group class="mt-5">
             <b-dropdown variant="outline-dark" right split :text="currentDMR">
               <b-dropdown-item onclick="get('/dlna/searchdmr');">Search DMR</b-dropdown-item>
