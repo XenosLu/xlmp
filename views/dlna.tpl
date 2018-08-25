@@ -6,7 +6,7 @@
       <div class="text-center col-sm-12 col-md-8 col-lg-6 col-xl-5">
         <div class="card-head">
           <b-btn-group class="mt-5">
-            <b-dropdown variant="outline-dark" right split :text="dlnaInfo.currentDMR">
+            <b-dropdown variant="outline-dark" right split :text="dlnaInfo.CurrentDMR">
               <b-dropdown-item onclick="get('/dlna/searchdmr');">Search DMR</b-dropdown-item>
               <b-dropdown-divider></b-dropdown-divider>
               <b-dropdown-item v-for="item in dlnaInfo.DMRs" @click="setDmr(item)">${ item }</b-dropdown-item>
