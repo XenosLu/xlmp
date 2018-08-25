@@ -6,7 +6,7 @@ window.dlnaView = new Vue({
         data: {
             state: 'No State',
             // src: '',
-            currentDMR: 'no DMR',
+            // currentDMR: 'no DMR',
             DMRs: [],
             positionBar:{
                 min: 0,
@@ -65,7 +65,8 @@ function dlnalink() {
 function renderUI(data) {
     if ($.isEmptyObject(data)) {
         window.commonView.uiState.dlnaOn = false;
-        window.dlnaView.DMR = 'No DMR';
+        // window.dlnaView.DMR = 'No DMR';
+        window.dlnaView.dlnaInfo.CurrentDMR = 'No DMR';
     } else {
         window.commonView.uiState.dlnaOn = true;
         reltime = timeToSecond(data.RelTime);
