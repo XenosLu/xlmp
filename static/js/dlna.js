@@ -35,13 +35,18 @@ window.dlnaView = new Vue({
     });
 
 window.commonView.uiState.dlnaShow = true;
-var hammertimeDlna = new Hammer(document);
+// var hammertimeDlna = new Hammer(document.body);
+var hammertimeDlna = new Hammer(document.getElementById("DlnaTouch"));
 hammertimeDlna.on("panleft panright swipeleft swiperight", function (ev) {
     var reltime = timeToSecond(window.dlnaView.dlnaInfo.RelTime);
-    var newtime = secondToTime(reltime + ev.deltaX / 5);
-    out(newtime);
+    var newtime = reltime + ev.deltaX / 5;
+    if(newtime < 0)
+        newtime = 0;
+    else if(newtime > window.dlnaView.positionBar.max)
+        newtime = window.dlnaView.positionBar.max;
+    out(secondToTime(newtime));
     if(ev.type.indexOf("swipe") != -1)
-        $.get("/dlna/seek/" + newtime);
+        $.get("/dlna/seek/" + secondToTime(newtime));
     console.log(ev);
     console.log(ev.type);
 });
