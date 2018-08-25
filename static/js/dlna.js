@@ -38,8 +38,7 @@ window.commonView.uiState.dlnaShow = true;
 // var hammertimeDlna = new Hammer(document.body);
 var hammertimeDlna = new Hammer(document.getElementById("DlnaTouch"));
 hammertimeDlna.on("panleft panright swipeleft swiperight", function (ev) {
-    var reltime = timeToSecond(window.dlnaView.dlnaInfo.RelTime);
-    var newtime = reltime + ev.deltaX / 5;
+    var newtime = window.dlnaView.positionBar.val + ev.deltaX / 4;
     if(newtime < 0)
         newtime = 0;
     else if(newtime > window.dlnaView.positionBar.max)
