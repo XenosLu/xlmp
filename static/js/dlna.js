@@ -4,15 +4,17 @@ window.dlnaView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-dlna',
         data: {
-            state: 'No State',
-            DMRs: [],
+            // state: 'No State',
+            // DMRs: [],
             positionBar: {
                 min: 0,
                 max: 0,
                 val: 0,
                 update: true,
             },
-            dlnaInfo: {},
+            dlnaInfo: {
+                CurrentDMR : '',
+            },
         },
         methods: {
             setDmr: function (dmr) {
@@ -51,7 +53,8 @@ function dlnalink() {
         renderUI(data);
     }
     ws.onclose = function () {
-        window.dlnaView.state = 'disconnected';
+        // window.dlnaView.state = 'disconnected';
+        window.dlnaView.dlnaInfo.CurrentTransportState = 'disconnected';
     };
     ws.onerror = function () {
         console.log('error');
@@ -62,7 +65,8 @@ function dlnalink() {
 function renderUI(data) {
     if ($.isEmptyObject(data)) {
         window.commonView.uiState.dlnaOn = false;
-        window.dlnaView.dlnaInfo.CurrentDMR = 'No DMR';
+        window.dlnaView.dlnaInfo.CurrentDMR = 'no DMR';
+        window.dlnaView.dlnaInfo.CurrentTransportState = '';
     } else {
         window.commonView.uiState.dlnaOn = true;
         reltime = timeToSecond(data.RelTime);
@@ -70,7 +74,7 @@ function renderUI(data) {
             window.dlnaView.positionBar.max = timeToSecond(data.TrackDuration);
             window.dlnaView.positionBar.val = reltime;
         }
-        window.dlnaView.state = data.CurrentTransportState;
+        // window.dlnaView.state = data.CurrentTransportState;
         window.dlnaView.dlnaInfo = data;
     }
 }
