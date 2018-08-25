@@ -14,6 +14,7 @@ window.dlnaView = new Vue({
             },
             dlnaInfo: {
                 CurrentDMR : '',
+                CurrentTransportState : '',
             },
         },
         methods: {
