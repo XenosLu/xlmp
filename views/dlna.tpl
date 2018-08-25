@@ -16,7 +16,7 @@
         <b-card :title="dlnaInfo.TrackURI ? decodeURI(dlnaInfo.TrackURI) : ''" class="my-4" id="src">
         </b-card>
       </div>
-        
+
       <div class="container fixed-bottom text-center">
         <div class="card-footer col-sm-12 col-md-8 col-lg-6 col-xl-5">
           <h6 class="card-subtitle text-muted">${ dlnaInfo.CurrentTransportState }</h6>
