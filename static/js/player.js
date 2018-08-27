@@ -19,7 +19,7 @@ var hammertimeVideo = new Hammer(document);
 
 hammertimeVideo.on("panleft panright swipeleft swiperight", function (ev) {
     var time = ev.deltaX / 4;
-    out(secondToTime($("video").get(0).currentTime + newtime));
+    out(secondToTime($("video").get(0).currentTime + time));
     if(ev.type.indexOf("swipe") != -1)
         $("video").get(0).currentTime += time;
     console.log(ev);
