@@ -1,5 +1,3 @@
-// var reltime = 0;
-
 window.dlnaView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-dlna',
@@ -77,7 +75,6 @@ function renderUI(data) {
         window.dlnaView.dlnaInfo.CurrentTransportState = '';
     } else {
         window.commonView.uiState.dlnaOn = true;
-        // reltime = timeToSecond(data.RelTime);
         if (window.dlnaView.positionBar.update) {
             window.dlnaView.positionBar.max = timeToSecond(data.TrackDuration);
             window.dlnaView.positionBar.val = timeToSecond(data.RelTime);
