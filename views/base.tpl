@@ -107,7 +107,7 @@
             </table>
             <table v-show="!uiState.historyShow" class="table table-striped table-sm">
               <tr v-for="item in filelist">
-                <td class="iconOnly"><i :class="icon[item.type]"></i></td>
+                <td class="iconOnly"><i :class="icon[item.type]" class="oi"></i></td>
                 <!-- <td :class="item.type" @click="open(item.path, item.type)" :data-type="item.type" :data-open="item.path"> -->
                 <td :class="item.type" :data-type="item.type" :data-path="item.path">
                   ${ item.filename }
