@@ -409,7 +409,7 @@ class SaveHandler(tornado.web.RequestHandler):
     def data_received(self, chunk):
         pass
 
-    @tornado.gen.coroutine
+    # @tornado.gen.coroutine
     @tornado.concurrent.run_on_executor
     def post(self, *args, **kwargs):
         position = self.get_argument('position', 0)
