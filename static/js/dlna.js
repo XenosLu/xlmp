@@ -47,12 +47,9 @@ hammertimeDlna.on("panleft panright swipeleft swiperight", function (ev) {
 
 var ws_link = dlnalink();
 
-// function CheckLink() {
-    // if (ws_link.readyState == 3)
-        // ws_link = dlnalink();
-// }
+
 setInterval("ws_link.check()", 1200);
-// setInterval("CheckLink()", 1200);
+
 function dlnalink() {
     var ws = new WebSocket("ws://" + window.location.host + "/dlna/link");
     ws.onmessage = function (e) {
