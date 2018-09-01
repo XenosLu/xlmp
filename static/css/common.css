@@ -22,6 +22,9 @@ body {
     font-family: AppleSDGothicNeo-Regular;
     margin-bottom: 2em; /* Margin bottom by footer height */
 }
+#v-alert {
+    z-index: 1051;
+}
 html {
   position: relative;
   min-height: 100%;

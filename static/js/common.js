@@ -79,6 +79,42 @@ window.commonView = new Vue({
         },
     });
 
+window.alertBox = new Vue({
+        delimiters: ['${', '}'],
+        el: "#v-alert",
+        data() {
+            return {
+                dismissCountDown: 0,
+                content: '',
+                title: '',
+                class_style: 'success'
+            }
+        },
+        methods: {
+            countDownChanged(dismissCountDown) {
+                // console.log(dismissCountDown);
+                this.dismissCountDown = dismissCountDown
+            },
+            show(type, content) {
+                var title_map = {
+                    "info": "Info",
+                    "danger": "Error!",
+                    "success": "Success!",
+                    "warning": "dealing...",
+                };
+                this.class_style = type;
+                this.title = title_map[type];
+                this.content = content;
+                if (type === "warning")
+                    this.dismissCountDown = 999;
+                else if (type === 'danger')
+                    this.dismissCountDown = 9;
+                else
+                    this.dismissCountDown = 5;
+            }
+        }
+    });
+
 var hammertimeModal = new Hammer(document.getElementById("ModalTouch"));
 
 hammertimeModal.on("swipeleft", function (ev) {
@@ -139,7 +175,12 @@ function showSidebar() {
  */
 function get(url) {
     console.log('get');
-    $.get(url, out);
+    $.get(url, out2);
+    // $.get(url, out);
+}
+
+function out2(text){
+   window.alertBox.show("success", text);
 }
 
 /**
