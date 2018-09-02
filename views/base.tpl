@@ -24,7 +24,9 @@
   </b-container>
   </div>
   <!-- alert box end -->
-
+  <!-- output box -->
+  <!-- <div id="v-output">test</div> -->
+  <!-- output box end-->
     <div class="container">
       <div id="v-common">
         <b-btn-toolbar v-show="uiState.fixBarShow" class="fixed-top" style="opacity: 0.8;">
@@ -39,7 +41,6 @@
                      @click="window.location.href = uiState.dlnaShow ? '/' : '/dlna'">
                 DLNA <i v-show="uiState.dlnaOn" class="oi oi-monitor"></i>
               </b-btn>
-        
               <b-dropdown variant="outline-dark" right text="Maintain">
                 <b-dropdown-item onclick="get('/sys/update')">update</b-dropdown-item>
                 <b-dropdown-item onclick="get('/sys/backup')">backup</b-dropdown-item>
@@ -56,6 +57,8 @@
                 <b-dropdown-item onclick="get('/dlna/seek/00:01:00')">01:00</b-dropdown-item>
                 <b-dropdown-item onclick="get('/dlna/seek/00:01:30')">01:30</b-dropdown-item>
               </b-dropdown>
+              <!-- dlna menu end -->
+              <!-- wp menu -->
                <b-dropdown variant="outline-dark" right v-show="uiState.rateMenu" text="Rate">
                 <b-dropdown-item onclick="rate(0.5)">0.5X</b-dropdown-item>
                 <b-dropdown-item onclick="rate(0.75)">0.75X</b-dropdown-item>
@@ -69,7 +72,7 @@
                 <b-dropdown-divider></b-dropdown-divider>
                 <b-dropdown-item id="videosize">${ uiState.videoBtnText }</b-dropdown-item>
               </b-dropdown>
-              <!-- dlna menu end -->
+              <!-- wp menu end -->
             </b-btn-group>
           </b-container>
         </b-btn-toolbar>
