@@ -21,6 +21,7 @@ window.commonView = new Vue({
                 fixBarShow: true,
                 videoBtnText: 'origin',
             },
+            wp_src: '',
             history: [],
             filelist: [],
         },
@@ -47,7 +48,8 @@ window.commonView = new Vue({
                 if (window.document.location.pathname == "/dlna")
                     get("/dlna/load/" + obj);
                 else
-                    window.location.href = "/wp/play/" + obj;
+                    this.wp_src = obj;
+                    // window.location.href = "/wp/play/" + obj;
             },
             remove: function (obj) {
                 if (confirm("Clear history of " + obj + "?"))
@@ -67,7 +69,8 @@ window.commonView = new Vue({
                     if (window.document.location.pathname == "/dlna")
                         get("/dlna/load/" + obj);
                     else
-                        window.location.href = "/wp/play/" + obj;
+                        this.wp_src = obj;
+                        // window.location.href = "/wp/play/" + obj;
                     break;
                 case "video":
                     if (window.document.location.pathname == "/dlna")

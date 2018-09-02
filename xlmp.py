@@ -297,7 +297,8 @@ def check_dmr_exist(func):
     def no_dmr(self, *args, **kwargs):
         """check if DMR exist"""
         if not TRACKER.dmr:
-            self.finish('Error: No DMR.')
+            # self.finish('Error: No DMR.')
+            self.finish({'error': 'No DMR.'})
             return None
         return func(self, *args, **kwargs)
     return no_dmr
@@ -467,7 +468,6 @@ class DlnaHandler(tornado.web.RequestHandler):
     @check_dmr_exist
     def get(self, *args, **kwargs):
         opt = kwargs.get('opt')
-        self.write('opt: %s ' % opt)
         if opt in ('play', 'pause', 'stop'):
             method = getattr(TRACKER.dmr, opt)
             ret = method()
@@ -478,6 +478,7 @@ class DlnaHandler(tornado.web.RequestHandler):
         # if ret:
             # self.finish('Done.')
         # else:
+        self.write('opt: %s ' % opt)
         if not ret:
             self.finish('Error: Failed!')
 
