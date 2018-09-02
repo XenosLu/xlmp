@@ -629,7 +629,7 @@ HANDLERS = [
     (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
     (r'/sys/(?P<opt>\w*)', SystemCommandHandler),
     (r'/test', TestHandler),  # test
-    (r'/dlna/link', DlnaWebSocketHandler),
+    (r'/link', DlnaWebSocketHandler),
     (r'/dlna/info', DlnaInfoHandler),
     (r'/dlna/setdmr/(?P<dmr>.*)', SetDmrHandler),
     (r'/dlna/searchdmr', SearchDmrHandler),

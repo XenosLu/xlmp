@@ -51,7 +51,7 @@ var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
 
 function dlnalink() {
-    var ws = new WebSocket("ws://" + window.location.host + "/dlna/link");
+    var ws = new WebSocket("ws://" + window.location.host + "/link");
     ws.onmessage = function (e) {
         var data = JSON.parse(e.data);
         console.log(data);
