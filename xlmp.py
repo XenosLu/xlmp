@@ -475,9 +475,10 @@ class DlnaHandler(tornado.web.RequestHandler):
             ret = TRACKER.dmr.seek(kwargs.get('progress'))
         else:
             return
-        if ret:
-            self.finish('Done.')
-        else:
+        # if ret:
+            # self.finish('Done.')
+        # else:
+        if not ret:
             self.finish('Error: Failed!')
 
 
