@@ -6,8 +6,7 @@
     {% block footer %}{% end %}
 {% block script %}
 <script>
-var lastplaytime = 0;  //in seconds
-var text = "";  //temp output text
+
 $("video").on("error", function () {
     out("error");
 }).on("loadeddata", function () {  //auto load position

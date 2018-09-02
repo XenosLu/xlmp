@@ -1,4 +1,6 @@
 "use strict";
+var lastplaytime = 0;  //in seconds
+var text = "";  //temp output text
 var icon = {
     "folder": "oi-folder",
     "mp4": "oi-video",
@@ -79,6 +81,11 @@ window.commonView = new Vue({
                 default:
                 }
             },
+        },
+        updated: function () {
+            this.$nextTick(function () {
+                
+                })
         },
     });
 
