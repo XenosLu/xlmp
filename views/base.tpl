@@ -30,7 +30,7 @@
     <div class="container">
       
       <div id="v-common">
-        <video v-if="wp_src!==''" :src="'/video/' + wp_src" poster controls preload="meta">No video support!</video>
+        <video v-if="wp_src!==''" :key="wp_src" :src="'/video/' + wp_src" poster controls preload="meta">No video support!</video>
         <b-btn-toolbar v-show="uiState.fixBarShow" class="fixed-top" style="opacity: 0.8;">
           <b-container>
             <b-btn-group>
