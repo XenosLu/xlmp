@@ -131,7 +131,6 @@ hammertimeModal.on("swiperight", function (ev) {
 // press.requireFailure(new Hammer.Tap());
 // hammertimeModal.add(press);
 hammertimeModal.on("press", function (ev) {
-    // out("press n");
     console.log(ev)
     var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
     if (target.hasAttribute("data-target"))
@@ -139,7 +138,6 @@ hammertimeModal.on("press", function (ev) {
     console.log(target.getAttribute('data-target'));
 });
 hammertimeModal.on("tap", function (ev) {
-    // out("tap");
     console.log(ev)
     var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
     if (target.hasAttribute("data-type"))
