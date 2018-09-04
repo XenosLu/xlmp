@@ -38,6 +38,11 @@ window.commonView = new Vue({
                 CurrentTransportState : '',
             },
         },
+        updated: function () {
+            this.$nextTick(function () {
+                dlna_add_touch();
+            })
+        },
         methods: {
             test: function (obj) {
                 console.log("test " + obj);
@@ -337,14 +342,16 @@ function timeToSecond(time) {
     return (parseInt(t[0]) * 3600 + parseInt(t[1]) * 60 + parseInt(t[2]));
 }
 
-var hammertimeDlna = new Hammer(document.getElementById("DlnaTouch"));
-hammertimeDlna.on("panleft panright swipeleft swiperight", function (ev) {
-    var newtime = window.commonView.positionBar.val + ev.deltaX / 4;
-    newtime = Math.max(newtime, 0);
-    newtime = Math.min(newtime, window.commonView.positionBar.max);
-    out(secondToTime(newtime));
-    if(ev.type.indexOf("swipe") != -1)
-        $.get("/dlna/seek/" + secondToTime(newtime));
-    console.log(ev);
-    console.log(ev.type);
-});
+function dlna_add_touch() {
+    var hammertimeDlna = new Hammer(document.getElementById("DlnaTouch"));
+    hammertimeDlna.on("panleft panright swipeleft swiperight", function (ev) {
+        var newtime = window.commonView.positionBar.val + ev.deltaX / 4;
+        newtime = Math.max(newtime, 0);
+        newtime = Math.min(newtime, window.commonView.positionBar.max);
+        out(secondToTime(newtime));
+        if (ev.type.indexOf("swipe") != -1)
+            $.get("/dlna/seek/" + secondToTime(newtime));
+        console.log(ev);
+        console.log(ev.type);
+    });
+}
