@@ -7,7 +7,7 @@ var icon = {
     "video": "oi-video",
     "other": "oi-file"
 };
-
+// window.document.title = "test";
 window.commonView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-common',
