@@ -16,7 +16,7 @@
   </head>
   <body>
   <!-- alert box -->
-  <div id="v-alert" class="fixed-bottom">
+  <div id="v-alert" class="fixed-top">
     <b-container>
       <b-alert :show="dismissCountDown" :variant="class_style" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged" dismissible>
          <strong>${ title }</strong> ${ content }
