@@ -334,7 +334,7 @@ class DlnaPlayerHandler(tornado.web.RequestHandler):
         pass
 
     def get(self, *args, **kwargs):
-        self.render('dlna.tpl')
+        self.render('dlna.html')
 
 
 class WebPlayerHandler(tornado.web.RequestHandler):
@@ -347,7 +347,7 @@ class WebPlayerHandler(tornado.web.RequestHandler):
         if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
             self.redirect('/')
             return
-        self.render('player.tpl', src=src, position=hist_load(src))
+        self.render('player.html', src=src, position=hist_load(src))
 
 
 class HistoryHandler(tornado.web.RequestHandler):
