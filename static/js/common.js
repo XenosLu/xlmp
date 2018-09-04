@@ -63,6 +63,8 @@ window.commonView = new Vue({
                     getHistory("/hist/clear");
             },
             play: function (obj) {
+                this.open(obj, 'mp4');
+                return;
                 // if (window.document.location.pathname == "/dlna")
                 if (this.uiState.dlnaShow)
                     get("/dlna/load/" + obj);
