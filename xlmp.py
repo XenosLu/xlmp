@@ -457,7 +457,7 @@ class DlnaNextHandler(tornado.web.RequestHandler):
             url = 'http://%s/video/%s' % (self.request.headers['Host'], quote(next_file))
             LOADER.load(url)
         else:
-            self.finish("Can't get next file")
+            self.finish({'warning': 'Can't get next file')
 
 
 class DlnaHandler(tornado.web.RequestHandler):
@@ -475,12 +475,10 @@ class DlnaHandler(tornado.web.RequestHandler):
             ret = TRACKER.dmr.seek(kwargs.get('progress'))
         else:
             return
-        # if ret:
-            # self.finish('Done.')
-        # else:
-        self.write('opt: %s ' % opt)
+        if ret:
+            self.finish({'success': 'opt: %s ' % opt})
         if not ret:
-            self.finish('Error: Failed!')
+            self.finish({'error': 'Failed!'})
 
 
 class DlnaInfoHandler(tornado.web.RequestHandler):
@@ -506,11 +504,11 @@ class DlnaVolumeControlHandler(tornado.web.RequestHandler):
         elif opt == 'down':
             vol -= 1
         if not 0 <= vol <= 100:
-            self.finish('volume range exceeded')
+            self.finish({'warning':'volume range exceeded'})
         elif TRACKER.dmr.volume(vol):
             self.finish(str(vol))
         else:
-            self.finish('failed')
+            self.finish({'error': 'failed'})
 
 
 class SystemCommandHandler(tornado.web.RequestHandler):
@@ -643,7 +641,7 @@ SETTINGS = {
     'static_path': 'static',
     'template_path': 'views',
     'gzip': True,
-    "debug": True,
+    # 'debug': True,
     'websocket_ping_interval': 0.2,
 }
 
@@ -657,7 +655,7 @@ APP = tornado.web.Application(HANDLERS, **SETTINGS)
 TRACKER = DMRTracker()
 LOADER = DLNALoader()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     # initialize DataBase
     run_sql('''create table if not exists history
                     (FILENAME text PRIMARY KEY not null,
