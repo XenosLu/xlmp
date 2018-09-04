@@ -2,7 +2,6 @@ window.dlnaView.mode = "DLNA";
 window.commonView.uiState.dlnaShow = true;
 
 
-
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
 function dlnalink() {
