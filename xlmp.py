@@ -457,7 +457,7 @@ class DlnaNextHandler(tornado.web.RequestHandler):
             url = 'http://%s/video/%s' % (self.request.headers['Host'], quote(next_file))
             LOADER.load(url)
         else:
-            self.finish({'warning': 'Can't get next file')
+            self.finish({'warning': "Can't get next file")
 
 
 class DlnaHandler(tornado.web.RequestHandler):
