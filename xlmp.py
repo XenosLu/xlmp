@@ -588,10 +588,7 @@ class TestHandler(tornado.web.RequestHandler):
         pass
 
     def get(self, *args, **kwargs):
-        # url = 'http://%s/douyu' % self.request.headers['Host']
-        LOADER.load(url)
-        self.finish('loading %s' % url)
-        # self.write('test')
+        self.write('test')
 
 
 class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
@@ -668,7 +665,6 @@ if __name__ == "__main__":
                     DURATION float, LATEST_DATE datetime not null);''')
     TRACKER.start()
     LOADER.start()
-    # tornado.ioloop.PeriodicCallback(DlnaWebSocketHandler.send_dlna_state, 200).start()
     # if sys.platform == 'win32':
         # os.system('start http://127.0.0.1:8888/')
     APP.listen(8888, xheaders=True)
