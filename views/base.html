@@ -40,6 +40,7 @@
               <b-btn variant="outline-success"
                      title="switch DLNA mode"
                      :pressed="uiState.dlnaShow"
+                     @click="uiState.dlnaShow = true"
                      @click="window.location.href = uiState.dlnaShow ? '/' : '/dlna'">
                 DLNA <i v-show="uiState.dlnaOn" class="oi oi-monitor"></i>
               </b-btn>

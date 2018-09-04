@@ -1,3 +1,4 @@
+// window.document.title = "DMC - Light Media Player";
 
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
