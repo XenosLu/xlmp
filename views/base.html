@@ -40,8 +40,8 @@
               <b-btn variant="outline-success"
                      title="switch DLNA mode"
                      :pressed="uiState.dlnaShow"
-                     @click="uiState.dlnaShow = true"
-                     @click="window.location.href = uiState.dlnaShow ? '/' : '/dlna'">
+                     @click="uiState.dlnaShow = uiState.dlnaShow ? false : true">
+                     <!-- @click="window.location.href = uiState.dlnaShow ? '/' : '/dlna'"> -->
                 DLNA <i v-show="uiState.dlnaOn" class="oi oi-monitor"></i>
               </b-btn>
               <b-dropdown variant="outline-dark" right text="Maintain">
