@@ -325,7 +325,7 @@ class IndexHandler(tornado.web.RequestHandler):
         pass
 
     def get(self, *args, **kwargs):
-        self.render('base.tpl')
+        self.render('base.html')
 
 
 class DlnaPlayerHandler(tornado.web.RequestHandler):

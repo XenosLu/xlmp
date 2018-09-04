@@ -1,4 +1,4 @@
-{% extends base.tpl %}
+{% extends base.html %}
 {% block title %}DMC - Light Media Player{% end %}
 
     {% block main %}
