@@ -58,7 +58,8 @@ window.commonView = new Vue({
                     getHistory("/hist/clear");
             },
             play: function (obj) {
-                if (window.document.location.pathname == "/dlna")
+                // if (window.document.location.pathname == "/dlna")
+                if (this.uiState.dlnaShow)
                     get("/dlna/load/" + obj);
                 else
                     // this.wp_src = obj;
@@ -79,14 +80,16 @@ window.commonView = new Vue({
                     filelist("/fs/ls/" + obj + "/");
                     break;
                 case "mp4":
-                    if (window.document.location.pathname == "/dlna")
+                    // if (window.document.location.pathname == "/dlna")
+                    if (this.uiState.dlnaShow)
                         get("/dlna/load/" + obj);
                     else
                         // this.wp_src = obj;
                         window.location.href = "/wp/play/" + obj;
                     break;
                 case "video":
-                    if (window.document.location.pathname == "/dlna")
+                    // if (window.document.location.pathname == "/dlna")
+                    if (this.uiState.dlnaShow)
                         get("/dlna/load/" + obj);
                     break;
                 default:
