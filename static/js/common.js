@@ -89,6 +89,41 @@ window.commonView = new Vue({
         },
     });
 
+window.dlnaView = new Vue({
+        delimiters: ['${', '}'],
+        el: '#v-dlna',
+        data: {
+            mode: 'WebPlayer',
+            positionBar: {
+                min: 0,
+                max: 0,
+                val: 0,
+                update: true,
+            },
+            dlnaInfo: {
+                CurrentDMR : 'no DMR',
+                CurrentTransportState : '',
+            },
+        },
+        methods: {
+            setDmr: function (dmr) {
+                $.get("/dlna/setdmr/" + dmr);
+            },
+            positionSeek: function () {
+                $.get("/dlna/seek/" + secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBar.val, this.positionBar.max)));
+                this.positionBar.update = true;
+            },
+            positionShow: function () {
+                console.log(this.positionBar.val);
+                out(secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBar.val, this.positionBar.max)));
+                this.positionBar.update = false;
+            },
+            test: function () {
+                console.log(this.positionBar.val);
+            },
+        }
+    });
+
 window.alertBox = new Vue({
         delimiters: ['${', '}'],
         el: "#v-alert",
@@ -124,6 +159,7 @@ window.alertBox = new Vue({
             }
         }
     });
+
 
 var hammertimeModal = new Hammer(document.getElementById("ModalTouch"));
 
