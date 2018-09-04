@@ -144,10 +144,8 @@
             </b-btn>
           </div>
         </b-modal>
-      </div>
-      
-      <div id="v-dlna">
-        <div v-show="mode=='DLNA'">
+
+        <div v-if="mode=='DLNA'">
           <div class="text-center col-sm-12 col-md-8 col-lg-6 col-xl-5">
             <div class="card-head">
               <b-btn-group class="mt-5">

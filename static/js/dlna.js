@@ -9,7 +9,7 @@ function dlnalink() {
         renderUI(data);
     }
     ws.onclose = function () {
-        window.dlnaView.dlnaInfo.CurrentTransportState = 'disconnected';
+        window.commonView.dlnaInfo.CurrentTransportState = 'disconnected';
     };
     ws.onerror = function () {
         console.log('error');
@@ -24,15 +24,15 @@ function dlnalink() {
 function renderUI(data) {
     if ($.isEmptyObject(data)) {
         window.commonView.uiState.dlnaOn = false;
-        window.dlnaView.dlnaInfo.CurrentDMR = 'no DMR';
-        window.dlnaView.dlnaInfo.CurrentTransportState = '';
+        window.commonView.dlnaInfo.CurrentDMR = 'no DMR';
+        window.commonView.dlnaInfo.CurrentTransportState = '';
     } else {
         window.commonView.uiState.dlnaOn = true;
-        if (window.dlnaView.positionBar.update) {
-            window.dlnaView.positionBar.max = timeToSecond(data.TrackDuration);
-            window.dlnaView.positionBar.val = timeToSecond(data.RelTime);
+        if (window.commonView.positionBar.update) {
+            window.commonView.positionBar.max = timeToSecond(data.TrackDuration);
+            window.commonView.positionBar.val = timeToSecond(data.RelTime);
         }
-        window.dlnaView.dlnaInfo = data;
+        window.commonView.dlnaInfo = data;
     }
 }
 

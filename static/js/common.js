@@ -26,6 +26,17 @@ window.commonView = new Vue({
             wp_src: '',
             history: [],
             filelist: [],
+            mode: 'WebPlayer',
+            positionBar: {
+                min: 0,
+                max: 0,
+                val: 0,
+                update: true,
+            },
+            dlnaInfo: {
+                CurrentDMR : 'no DMR',
+                CurrentTransportState : '',
+            },
         },
         methods: {
             test: function (obj) {
@@ -81,31 +92,6 @@ window.commonView = new Vue({
                 default:
                 }
             },
-        },
-        updated: function () {
-            this.$nextTick(function () {
-                
-                })
-        },
-    });
-
-window.dlnaView = new Vue({
-        delimiters: ['${', '}'],
-        el: '#v-dlna',
-        data: {
-            mode: 'WebPlayer',
-            positionBar: {
-                min: 0,
-                max: 0,
-                val: 0,
-                update: true,
-            },
-            dlnaInfo: {
-                CurrentDMR : 'no DMR',
-                CurrentTransportState : '',
-            },
-        },
-        methods: {
             setDmr: function (dmr) {
                 $.get("/dlna/setdmr/" + dmr);
             },
@@ -118,11 +104,14 @@ window.dlnaView = new Vue({
                 out(secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBar.val, this.positionBar.max)));
                 this.positionBar.update = false;
             },
-            test: function () {
-                console.log(this.positionBar.val);
-            },
-        }
+        },
+        updated: function () {
+            this.$nextTick(function () {
+                
+                })
+        },
     });
+
 
 window.alertBox = new Vue({
         delimiters: ['${', '}'],
@@ -347,9 +336,9 @@ function timeToSecond(time) {
 
 var hammertimeDlna = new Hammer(document.getElementById("DlnaTouch"));
 hammertimeDlna.on("panleft panright swipeleft swiperight", function (ev) {
-    var newtime = window.dlnaView.positionBar.val + ev.deltaX / 4;
+    var newtime = window.commonView.positionBar.val + ev.deltaX / 4;
     newtime = Math.max(newtime, 0);
-    newtime = Math.min(newtime, window.dlnaView.positionBar.max);
+    newtime = Math.min(newtime, window.commonView.positionBar.max);
     out(secondToTime(newtime));
     if(ev.type.indexOf("swipe") != -1)
         $.get("/dlna/seek/" + secondToTime(newtime));
