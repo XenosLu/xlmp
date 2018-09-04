@@ -619,7 +619,7 @@ SETTINGS = {
     'static_path': 'static',
     'template_path': 'views',
     'gzip': True,
-    # 'debug': True,
+    'debug': True,
     'websocket_ping_interval': 0.2,
 }
 
