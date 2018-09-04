@@ -535,28 +535,6 @@ class SystemCommandHandler(tornado.web.RequestHandler):
             self.finish(shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE))
         else:
             raise tornado.web.HTTPError(403, reason='no such operation')
-# @post('/suspend')
-# def suspend():
-    # """Suepend server"""
-    # if sys.platform == 'win32':
-        # import ctypes
-        # dll = ctypes.WinDLL('powrprof.dll')
-        # if dll.SetSuspendState(0, 1, 0):
-            # return 'Suspending...'
-        # else:
-            # return 'Suspend Failure!'
-    # else:
-        # return 'OS not supported!'
-
-
-# @post('/shutdown')
-# def shutdown():
-    # """Shutdown server"""
-    # if sys.platform == 'win32':
-        # os.system("shutdown.exe -f -s -t 0")
-    # else:
-        # os.system("sudo /sbin/shutdown -h now")
-    # return 'shutting down...'
 
 
 class SetDmrHandler(tornado.web.RequestHandler):
