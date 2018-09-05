@@ -37,6 +37,7 @@ window.commonView = new Vue({
             dlnaInfo: { // updated by websocket
                 CurrentDMR: 'no DMR',
                 CurrentTransportState: '',
+                TrackURI: '',
             },
         },
         computed: {

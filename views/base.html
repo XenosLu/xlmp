@@ -171,9 +171,10 @@
           <div class="text-center col-sm-12 col-md-8 col-lg-6 col-xl-5">
             <div class="my-1 py-3"></div>
             <b-card bg-variant="light"
-                    :title="dlnaInfo.TrackURI ? decodeURI(dlnaInfo.TrackURI) : ''"
+                    :title="decodeURI(dlnaInfo.TrackURI)"
                     class="my-5 title"
                     id="DlnaTouch">
+                    <!-- :title="dlnaInfo.TrackURI ? decodeURI(dlnaInfo.TrackURI) : ''" -->
             </b-card>
           </div>
           
