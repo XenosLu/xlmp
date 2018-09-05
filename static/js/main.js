@@ -244,21 +244,6 @@ function getHistory(str) {
     });
 }
 
-function check_dlna_state() {  // no longer needed
-    $.ajax({
-        url: "/dlna/info",
-        dataType: "json",
-        timeout: 999,
-        type: "GET",
-        success: function (data) {
-            window.commonView.uiState.dlnaOn = !$.isEmptyObject(data);
-        },
-        error: function (xhr, err) {
-            console.log('get dlna/info error')
-        }
-    });
-}
-
 /**
  * Made an output box to show some text notification
  *
