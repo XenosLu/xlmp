@@ -126,8 +126,8 @@ window.commonView = new Vue({
         },
         updated: function () {
             this.$nextTick(function () {
-                    // if(this.uiState.dlnaMode)
-                        // dlnaTouch();
+                    if(this.uiState.dlnaMode)
+                        dlnaTouch();
                 })
         },
     });
