@@ -346,10 +346,15 @@ function dlnalink() {
 function renderDlna(data) {
     if ($.isEmptyObject(data)) {
         window.commonView.uiState.dlnaOn = false;
+        console.log('test');
+        if(window.commonView.mode === "DLNA")
+            window.commonView.mode = "";
         window.commonView.dlnaInfo.CurrentDMR = 'no DMR';
         window.commonView.dlnaInfo.CurrentTransportState = '';
     } else {
         window.commonView.uiState.dlnaOn = true;
+        if(window.commonView.mode === "")
+            window.commonView.mode = "DLNA";
         if (window.commonView.positionBar.update) {
             window.commonView.positionBar.max = timeToSecond(data.TrackDuration);
             window.commonView.positionBar.val = timeToSecond(data.RelTime);
