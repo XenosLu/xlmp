@@ -17,8 +17,8 @@ window.commonView = new Vue({
             mode: '',
             uiState: {
                 dlnaOn: false,  // true if dlna dmr exist
-                dlnaMode: false,  // true if in dlna player mode
-                wpMode: false,  // true if in web player mode
+                // dlnaMode: false,  // true if in dlna player mode
+                // wpMode: false,  // true if in web player mode
                 modalShow: false,  // true if the modal is show
                 historyShow: true,  // ture if modal is history, false if modal content is file list
                 fixBarShow: true,
@@ -41,10 +41,10 @@ window.commonView = new Vue({
         },
         computed: {
             dlnaMode: function() {
-                return this.mode === "DLNA";
+                return this.mode === 'DLNA';
             },
             wpMode: function() {
-                return this.mode === "WebPlayer";
+                return this.mode === 'WebPlayer';
             },
             // testx: function() {
                 // return 1
@@ -52,16 +52,16 @@ window.commonView = new Vue({
         },
         methods: {
             dlnaToogle: function () {
-                if(this.mode !== "DLNA")
-                    this.mode = "DLNA";
+                if(this.mode !== 'DLNA')
+                    this.mode = 'DLNA';
                 else
-                    this.mode = "";
+                    this.mode = '';
             },
             videoToggle: function () {
-                if (this.uiState.videoBtnText == "auto")
+                if (this.uiState.videoBtnText == 'auto')
                     adapt();
                 else {
-                    this.uiState.videoBtnText = "auto";
+                    this.uiState.videoBtnText = 'auto';
                     if ($("video").get(0).width < $(window).width() && $("video").get(0).height < $(window).height()) {
                         $("video").get(0).style.width = $("video").get(0).videoWidth + "px";
                         $("video").get(0).style.height = $("video").get(0).videoHeight + "px";
