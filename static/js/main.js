@@ -23,7 +23,7 @@ window.commonView = new Vue({
                 fixBarShow: true,
                 videoBtnText: 'origin',
             },
-            position: 0;
+            position: 0,
             wp_src: '',  // web player source, not used
             history: [],  // updated by ajax
             filelist: [],  // updated by ajax
