@@ -72,8 +72,6 @@ window.commonView = new Vue({
                 this.uiState.modalShow = true;
                 if (this.uiState.historyShow)
                     this.showHistory();
-                else
-                    this.showFs();
             },
             showHistory: function () {
                 getHistory("/hist/ls");
