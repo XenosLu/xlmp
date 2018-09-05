@@ -1,16 +1,18 @@
 {% extends base.html %}
-{% block title %}{{src}} - Light Media Player{% end %}
-    {% block main %}
-      <video src="/video/{{src}}" poster controls preload="meta">No video support!</video>
-    {% end %}
+
     {% block footer %}{% end %}
 {% block script %}
 <script>
+window.commonView.uiState.wpMode = true;
+window.commonView.wp_src = "{{src}}";
+window.commonView.position = {{position}};
+window.document.title = window.commonView.wp_src + " - Light Media Player";
+
 
 $("video").on("error", function () {
     out("error");
 }).on("loadeddata", function () {  //auto load position
-    this.currentTime = Math.max({{position}} - 0.5, 0);
+    this.currentTime = Math.max(window.commonView.position - 0.5, 0);
     text = "<small>Play from</small><br>";
 }).on("seeking", function () {  //show position when changed
     out(text + secondToTime(this.currentTime) + '/' + secondToTime(this.duration));
@@ -19,7 +21,7 @@ $("video").on("error", function () {
     lastplaytime = new Date().getTime();  //to detect if video is playing
     if (this.readyState == 4 && Math.floor(Math.random() * 99) > 80) {  //randomly save play position
         $.ajax({
-            url: "/wp/save/{{src}}",
+            url: "/wp/save/" + window.commonView.wp_src,
             data: {
                 position: this.currentTime,
                 duration: this.duration
@@ -44,20 +46,6 @@ $("video").on("error", function () {
     }
 });
 
-window.commonView.uiState.wpMode = true;
-
-$("#videosize").click(function () {
-    if (window.commonView.uiState.videoBtnText == "auto")
-        adapt();
-    else {
-        $(this).text("auto");
-        window.commonView.uiState.videoBtnText = "auto";
-        if ($("video").get(0).width < $(window).width() && $("video").get(0).height < $(window).height()) {
-            $("video").get(0).style.width = $("video").get(0).videoWidth + "px";
-            $("video").get(0).style.height = $("video").get(0).videoHeight + "px";
-        }
-    }
-});
 touchWebPlayer();
 
 </script>
