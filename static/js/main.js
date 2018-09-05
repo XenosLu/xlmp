@@ -37,6 +37,11 @@ window.commonView = new Vue({
                 CurrentTransportState : '',
             },
         },
+        computed: {
+            // testx: function() {
+                // return 1
+            // }
+        },
         methods: {
             test: function (obj) {
                 console.log("test " + obj);
