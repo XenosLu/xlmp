@@ -52,17 +52,16 @@
                 <b-dropdown-item onclick="get('/test')">test</b-dropdown-item>
               </b-dropdown>
             </b-btn-group>  
-
+            <!-- dlna seek menu -->
             <b-btn-group class="mx-1">
-              <!-- dlna menu -->
               <b-dropdown variant="outline-dark" right v-show="uiState.dlnaShow" text="Seek">
                 <b-dropdown-item onclick="get('/dlna/seek/00:00:15')">00:15</b-dropdown-item>
                 <b-dropdown-item onclick="get('/dlna/seek/00:00:29')">00:30</b-dropdown-item>
                 <b-dropdown-item onclick="get('/dlna/seek/00:01:00')">01:00</b-dropdown-item>
                 <b-dropdown-item onclick="get('/dlna/seek/00:01:30')">01:30</b-dropdown-item>
               </b-dropdown>
-              <!-- dlna menu end -->
             </b-btn-group>
+            <!-- dlna seek menu end -->
             <!-- wp menu -->
             <b-btn-group v-show="uiState.rateMenu" class="mx-1"> 
                <b-dropdown variant="outline-dark" right text="Rate">
@@ -80,7 +79,7 @@
               </b-dropdown>
             </b-btn-group>
             <!-- wp menu end -->
-            <!-- dmr menu -->
+            <!-- dlna dmr menu -->
             <b-btn-group class="mx-1" v-show="uiState.dlnaShow">
               <b-dropdown variant="outline-dark" right split :text="dlnaInfo.CurrentDMR">
                 <b-dropdown-item onclick="get('/dlna/searchdmr');">Search DMR</b-dropdown-item>
@@ -88,7 +87,7 @@
                 <b-dropdown-item v-for="item in dlnaInfo.DMRs" @click="setDmr(item)">${ item }</b-dropdown-item>
               </b-dropdown>
             </b-btn-group>
-            <!-- dmr menu end -->
+            <!-- dlna dmr menu end -->
           </b-container>
         </b-btn-toolbar>
         
