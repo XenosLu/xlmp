@@ -13,20 +13,20 @@ window.commonView = new Vue({
         el: '#v-common',
         data: {
             icon: icon,
-            swipeState: 0,
+            swipeState: 0,  // modal touch state
             uiState: {
-                modalShow: false,
-                dlnaOn: false,
-                dlnaShow: false,
-                historyShow: true,
-                rateMenu: false,
+                dlnaOn: false,  // true if dlna dmr exist
+                dlnaMode: false,  // true if in dlna player mode
+                modalShow: false,  // true if the modal is show
+                historyShow: true,  // ture if modal is history, false if modal content is file list
+                rateMenu: false,  // true if in web player mode
                 fixBarShow: true,
                 videoBtnText: 'origin',
             },
-            wp_src: '',
+            wp_src: '',  // web player source, not used
             history: [],
             filelist: [],
-            positionBar: {
+            positionBar: {  // for dlna player
                 min: 0,
                 max: 0,
                 val: 0,
@@ -60,7 +60,7 @@ window.commonView = new Vue({
                 this.open(obj, 'mp4');
                 // return;
                 // // if (window.document.location.pathname == "/dlna")
-                // if (this.uiState.dlnaShow)
+                // if (this.uiState.dlnaMode)
                     // get("/dlna/load/" + obj);
                 // else
                     // // this.wp_src = obj;
@@ -82,7 +82,7 @@ window.commonView = new Vue({
                     break;
                 case "mp4":
                     // if (window.document.location.pathname == "/dlna")
-                    if (this.uiState.dlnaShow)
+                    if (this.uiState.dlnaMode)
                         get("/dlna/load/" + obj);
                     else
                         // this.wp_src = obj;
@@ -90,7 +90,7 @@ window.commonView = new Vue({
                     break;
                 case "video":
                     // if (window.document.location.pathname == "/dlna")
-                    if (this.uiState.dlnaShow)
+                    if (this.uiState.dlnaMode)
                         get("/dlna/load/" + obj);
                     break;
                 default:
@@ -111,7 +111,7 @@ window.commonView = new Vue({
         },
         updated: function () {
             this.$nextTick(function () {
-                    if(this.uiState.dlnaShow)
+                    if(this.uiState.dlnaMode)
                         dlnaTouch();
                 })
         },
