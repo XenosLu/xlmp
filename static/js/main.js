@@ -362,3 +362,17 @@ function rate(x) {
     out(x + "X");
     $("video").get(0).playbackRate = x;
 }
+
+function touchWebPlayer() {
+    var hammertimeVideo = new Hammer(document);
+
+    hammertimeVideo.on("panleft panright swipeleft swiperight", function (ev) {
+        var deltaTime = ev.deltaX / 4;
+        if (ev.type.indexOf("swipe") != -1)
+            $("video").get(0).currentTime += deltaTime;
+        else
+            out(secondToTime($("video").get(0).currentTime + deltaTime));
+        console.log(ev);
+        console.log(ev.type);
+    });
+}
