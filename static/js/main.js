@@ -120,6 +120,9 @@ window.commonView = new Vue({
                 out(secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBar.val, this.positionBar.max)));
                 this.positionBar.update = false;
             },
+            get: function (url) {
+                $.get(url, out2);
+            },
         },
         updated: function () {
             this.$nextTick(function () {

@@ -52,20 +52,20 @@
                 DLNA <i v-show="uiState.dlnaOn" class="oi oi-monitor"></i>
               </b-btn>
               <b-dropdown variant="outline-dark" right text="Maintain">
-                <b-dropdown-item onclick="get('/sys/update')">update</b-dropdown-item>
-                <b-dropdown-item onclick="get('/sys/backup')">backup</b-dropdown-item>
+                <b-dropdown-item @click="get('/sys/update')">update</b-dropdown-item>
+                <b-dropdown-item @click="get('/sys/backup')">backup</b-dropdown-item>
                 <b-dropdown-divider></b-dropdown-divider>
-                <b-dropdown-item onclick="get('/sys/restore')">restore</b-dropdown-item>
-                <b-dropdown-item onclick="get('/test')">test</b-dropdown-item>
+                <b-dropdown-item @click="get('/sys/restore')">restore</b-dropdown-item>
+                <b-dropdown-item @click="get('/test')">test</b-dropdown-item>
               </b-dropdown>
             </b-btn-group>  
             <!-- dlna seek menu -->
             <b-btn-group class="mx-1">
               <b-dropdown variant="outline-dark" right v-show="uiState.dlnaMode" text="Seek">
-                <b-dropdown-item onclick="get('/dlna/seek/00:00:15')">00:15</b-dropdown-item>
-                <b-dropdown-item onclick="get('/dlna/seek/00:00:29')">00:30</b-dropdown-item>
-                <b-dropdown-item onclick="get('/dlna/seek/00:01:00')">01:00</b-dropdown-item>
-                <b-dropdown-item onclick="get('/dlna/seek/00:01:30')">01:30</b-dropdown-item>
+                <b-dropdown-item @click="get('/dlna/seek/00:00:15')">00:15</b-dropdown-item>
+                <b-dropdown-item @click="get('/dlna/seek/00:00:29')">00:30</b-dropdown-item>
+                <b-dropdown-item @click="get('/dlna/seek/00:01:00')">01:00</b-dropdown-item>
+                <b-dropdown-item @click="get('/dlna/seek/00:01:30')">01:30</b-dropdown-item>
               </b-dropdown>
             </b-btn-group>
             <!-- dlna seek menu end -->
@@ -89,7 +89,7 @@
             <!-- dlna dmr menu -->
             <b-btn-group class="mx-1" v-show="uiState.dlnaMode">
               <b-dropdown variant="outline-dark" right split :text="dlnaInfo.CurrentDMR">
-                <b-dropdown-item onclick="get('/dlna/searchdmr');">Search DMR</b-dropdown-item>
+                <b-dropdown-item @click="get('/dlna/searchdmr');">Search DMR</b-dropdown-item>
                 <b-dropdown-divider></b-dropdown-divider>
                 <b-dropdown-item v-for="item in dlnaInfo.DMRs" @click="setDmr(item)">
                   ${ item }
@@ -192,26 +192,26 @@
                      @input="positionShow">
               <b-btn-toolbar justify class="my-3 text-center">
                 <b-btn-group>
-                  <b-btn class="mx-1" variant="outline-warning" size="lg" onclick="get('/dlna/vol/down')">
+                  <b-btn class="mx-1" variant="outline-warning" size="lg" @click="get('/dlna/vol/down')">
                       <i class="oi oi-volume-low"></i>
                   </b-btn>
                 </b-btn-group>
                 <b-btn-group>
-                  <b-btn class="" variant="outline-success" size="lg" onclick="get('/dlna/play')">
+                  <b-btn class="" variant="outline-success" size="lg" @click="get('/dlna/play')">
                       <i class="oi oi-media-play"></i>
                   </b-btn>
-                  <b-btn class="" variant="outline-danger" size="lg" onclick="get('/dlna/pause')">
+                  <b-btn class="" variant="outline-danger" size="lg" @click="get('/dlna/pause')">
                       <i class="oi oi-media-pause"></i>
                   </b-btn>
-                  <b-btn class="" variant="outline-danger" size="lg" onclick="get('/dlna/stop')">
+                  <b-btn class="" variant="outline-danger" size="lg" @click="get('/dlna/stop')">
                       <i class="oi oi-media-stop"></i>
                   </b-btn>
-                  <b-btn class="" variant="outline-success" size="lg" onclick="get('/dlna/next')">
+                  <b-btn class="" variant="outline-success" size="lg" @click="get('/dlna/next')">
                       <i class="oi oi-media-step-forward"></i>
                   </b-btn>
                 </b-btn-group>
                 <b-btn-group>
-                  <b-btn class="mx-1" variant="outline-warning" size="lg" onclick="get('/dlna/vol/up')">
+                  <b-btn class="mx-1" variant="outline-warning" size="lg" @click="get('/dlna/vol/up')">
                     <i class="oi oi-volume-high"></i>
                   </b-btn>
                 </b-btn-group>
@@ -220,7 +220,6 @@
           </div>
         </div>
       </div>
-
       {% block main %}
       {% end %}
     </div>
