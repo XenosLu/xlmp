@@ -112,7 +112,7 @@ window.commonView = new Vue({
         updated: function () {
             this.$nextTick(function () {
                     if(this.uiState.dlnaShow)
-                        dlna_add_touch();
+                        dlnaTouch();
                 })
         },
     });
@@ -316,7 +316,7 @@ function out(text) {
 }
 
 
-function dlna_add_touch() {
+function dlnaTouch() {
     var hammertimeDlna = new Hammer(document.getElementById("DlnaTouch"));
     hammertimeDlna.on("panleft panright swipeleft swiperight", function (ev) {
         var newtime = window.commonView.positionBar.val + ev.deltaX / 4;
