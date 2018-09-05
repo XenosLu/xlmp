@@ -14,8 +14,8 @@ window.commonView = new Vue({
         data: {
             icon: icon,
             swipeState: 0,  // modal touch state
+            mode: '',
             uiState: {
-                mode: '',
                 dlnaOn: false,  // true if dlna dmr exist
                 dlnaMode: false,  // true if in dlna player mode
                 wpMode: false,  // true if in web player mode
