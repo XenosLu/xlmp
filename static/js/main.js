@@ -60,13 +60,6 @@ window.commonView = new Vue({
             },
             play: function (obj) {
                 this.open(obj, 'mp4');
-                // return;
-                // // if (window.document.location.pathname == "/dlna")
-                // if (this.uiState.dlnaMode)
-                    // get("/dlna/load/" + obj);
-                // else
-                    // // this.wp_src = obj;
-                    // window.location.href = "/wp/play/" + obj;
             },
             remove: function (obj) {
                 if (confirm("Clear history of " + obj + "?"))
