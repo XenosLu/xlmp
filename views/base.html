@@ -51,8 +51,9 @@
                 <b-dropdown-item onclick="get('/sys/restore')">restore</b-dropdown-item>
                 <b-dropdown-item onclick="get('/test')">test</b-dropdown-item>
               </b-dropdown>
+            </b-btn-group>  
+
             <b-btn-group class="mx-1">
-            </b-btn-group>
               <!-- dlna menu -->
               <b-dropdown variant="outline-dark" right v-show="uiState.dlnaShow" text="Seek">
                 <b-dropdown-item onclick="get('/dlna/seek/00:00:15')">00:15</b-dropdown-item>
@@ -61,8 +62,10 @@
                 <b-dropdown-item onclick="get('/dlna/seek/00:01:30')">01:30</b-dropdown-item>
               </b-dropdown>
               <!-- dlna menu end -->
-              <!-- wp menu -->
-               <b-dropdown variant="outline-dark" right v-show="uiState.rateMenu" text="Rate">
+            </b-btn-group>
+            <!-- wp menu -->
+            <b-btn-group v-show="uiState.rateMenu" class="mx-1"> 
+               <b-dropdown variant="outline-dark" right text="Rate">
                 <b-dropdown-item onclick="rate(0.5)">0.5X</b-dropdown-item>
                 <b-dropdown-item onclick="rate(0.75)">0.75X</b-dropdown-item>
                 <b-dropdown-divider></b-dropdown-divider>
@@ -75,8 +78,17 @@
                 <b-dropdown-divider></b-dropdown-divider>
                 <b-dropdown-item id="videosize">${ uiState.videoBtnText }</b-dropdown-item>
               </b-dropdown>
-              <!-- wp menu end -->
             </b-btn-group>
+            <!-- wp menu end -->
+            <!-- dmr menu -->
+            <b-btn-group class="mx-1" v-show="uiState.dlnaShow">
+              <b-dropdown variant="outline-dark" right split :text="dlnaInfo.CurrentDMR">
+                <b-dropdown-item onclick="get('/dlna/searchdmr');">Search DMR</b-dropdown-item>
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-item v-for="item in dlnaInfo.DMRs" @click="setDmr(item)">${ item }</b-dropdown-item>
+              </b-dropdown>
+            </b-btn-group>
+            <!-- dmr menu end -->
           </b-container>
         </b-btn-toolbar>
         
@@ -148,16 +160,8 @@
 
         <div v-if="uiState.dlnaShow">
           <div class="text-center col-sm-12 col-md-8 col-lg-6 col-xl-5">
-            <div class="card-head">
-              <b-btn-group class="mt-5">
-                <b-dropdown variant="outline-dark" right split :text="dlnaInfo.CurrentDMR">
-                  <b-dropdown-item onclick="get('/dlna/searchdmr');">Search DMR</b-dropdown-item>
-                  <b-dropdown-divider></b-dropdown-divider>
-                  <b-dropdown-item v-for="item in dlnaInfo.DMRs" @click="setDmr(item)">${ item }</b-dropdown-item>
-                </b-dropdown>
-              </b-btn-group>
-            </div>
-            <b-card bg-variant="light" :title="dlnaInfo.TrackURI ? decodeURI(dlnaInfo.TrackURI) : ''" class="my-4 title" id="DlnaTouch">
+
+            <b-card bg-variant="light" :title="dlnaInfo.TrackURI ? decodeURI(dlnaInfo.TrackURI) : ''" class="my-5 title" id="DlnaTouch">
             </b-card>
           </div>
           
