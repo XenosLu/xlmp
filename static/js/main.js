@@ -1,6 +1,6 @@
 "use strict";
-var lastplaytime = 0;  //in seconds
-var text = "";  //temp output text
+var lastplaytime = 0; //in seconds
+var text = ""; //temp output text
 var icon = {
     "folder": "oi-folder",
     "mp4": "oi-video",
@@ -13,43 +13,43 @@ window.commonView = new Vue({
         el: '#v-common',
         data: {
             icon: icon,
-            swipeState: 0,  // modal touch state
+            swipeState: 0, // modal touch state
             mode: '',
             uiState: {
-                dlnaOn: false,  // true if dlna dmr exist
+                dlnaOn: false, // true if dlna dmr exist
                 // dlnaMode: false,  // true if in dlna player mode
                 // wpMode: false,  // true if in web player mode
-                modalShow: false,  // true if the modal is show
-                historyShow: true,  // ture if modal is history, false if modal content is file list
+                modalShow: false, // true if the modal is show
+                historyShow: true, // ture if modal is history, false if modal content is file list
                 fixBarShow: true,
                 videoBtnText: 'origin',
             },
             position: 0,
-            wp_src: '',  // web player source, not used
-            history: [],  // updated by ajax
-            filelist: [],  // updated by ajax
-            positionBar: {  // for dlna player
+            wp_src: '', // web player source, not used
+            history: [], // updated by ajax
+            filelist: [], // updated by ajax
+            positionBar: { // for dlna player
                 min: 0,
                 max: 0,
                 val: 0,
                 update: true,
             },
-            dlnaInfo: {  // updated by websocket
-                CurrentDMR : 'no DMR',
-                CurrentTransportState : '',
+            dlnaInfo: { // updated by websocket
+                CurrentDMR: 'no DMR',
+                CurrentTransportState: '',
             },
         },
         computed: {
-            dlnaMode: function() {
+            dlnaMode: function () {
                 return this.mode === 'DLNA';
             },
-            wpMode: function() {
+            wpMode: function () {
                 return this.mode === 'WebPlayer';
             },
         },
         methods: {
             dlnaToogle: function () {
-                if(this.mode !== 'DLNA')
+                if (this.mode !== 'DLNA')
                     this.mode = 'DLNA';
                 else
                     this.mode = '';
@@ -146,9 +146,9 @@ window.commonView = new Vue({
         },
         updated: function () {
             this.$nextTick(function () {
-                    if (this.dlnaMode)
-                        dlnaTouch();
-                })
+                if (this.dlnaMode)
+                    dlnaTouch();
+            })
         },
     });
 
@@ -220,8 +220,8 @@ function get(url) {
     // $.get(url, out);
 }
 
-function out2(text){
-   window.alertBox.show("success", text);
+function out2(text) {
+    window.alertBox.show("success", text);
 }
 
 /**
@@ -247,7 +247,6 @@ function adapt() {
         $("video").get(0).style.height = height;
     }
 }
-
 
 /**
  * Render history list box from ajax
@@ -285,7 +284,6 @@ function out(text) {
     };
 }
 
-
 function dlnaTouch() {
     var hammertimeDlna = new Hammer(document.getElementById("DlnaTouch"));
     hammertimeDlna.on("panleft panright swipeleft swiperight", function (ev) {
@@ -319,7 +317,7 @@ function dlnalink() {
     };
     ws.check = function () {
         if (this.readyState == 3)
-        ws_link = dlnalink();
+            ws_link = dlnalink();
     };
     return ws;
 }
@@ -328,13 +326,13 @@ function renderDlna(data) {
     if ($.isEmptyObject(data)) {
         window.commonView.uiState.dlnaOn = false;
         console.log('test');
-        if(window.commonView.mode === "DLNA")
+        if (window.commonView.mode === "DLNA")
             window.commonView.mode = "";
         window.commonView.dlnaInfo.CurrentDMR = 'no DMR';
         window.commonView.dlnaInfo.CurrentTransportState = '';
     } else {
         window.commonView.uiState.dlnaOn = true;
-        if(window.commonView.mode === "")
+        if (window.commonView.mode === "")
             window.commonView.mode = "DLNA";
         if (window.commonView.positionBar.update) {
             window.commonView.positionBar.max = timeToSecond(data.TrackDuration);
@@ -439,4 +437,3 @@ function videoEvnets() {
         }
     });
 }
-
