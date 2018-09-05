@@ -17,22 +17,22 @@ window.commonView = new Vue({
             uiState: {
                 dlnaOn: false,  // true if dlna dmr exist
                 dlnaMode: false,  // true if in dlna player mode
+                wpMode: false,  // true if in web player mode
                 modalShow: false,  // true if the modal is show
                 historyShow: true,  // ture if modal is history, false if modal content is file list
-                rateMenu: false,  // true if in web player mode
                 fixBarShow: true,
                 videoBtnText: 'origin',
             },
             wp_src: '',  // web player source, not used
-            history: [],
-            filelist: [],
+            history: [],  // updated by ajax
+            filelist: [],  // updated by ajax
             positionBar: {  // for dlna player
                 min: 0,
                 max: 0,
                 val: 0,
                 update: true,
             },
-            dlnaInfo: {
+            dlnaInfo: {  // updated by websocket
                 CurrentDMR : 'no DMR',
                 CurrentTransportState : '',
             },
@@ -45,6 +45,8 @@ window.commonView = new Vue({
                 this.uiState.modalShow = true;
                 if (this.uiState.historyShow)
                     this.showHistory();
+                else
+                    this.showFs();
             },
             showHistory: function () {
                 getHistory("/hist/ls");

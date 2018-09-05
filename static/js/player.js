@@ -1,5 +1,5 @@
 
-window.commonView.uiState.rateMenu = true;
+window.commonView.uiState.wpMode = true;
 
 $("#videosize").click(function () {
     if (window.commonView.uiState.videoBtnText == "auto")

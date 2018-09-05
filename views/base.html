@@ -2,7 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=0.8, user-scalable=0, minimal-ui">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=0.8, maximum-scale=0.8, user-scalable=0, minimal-ui">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <link rel="shortcut icon" href="/static/favicon.ico" />
     <link rel="apple-touch-icon" sizes="200x200" href="/static/apple-touch-icon.png" />
@@ -18,7 +19,11 @@
   <!-- alert box -->
   <div id="v-alert" class="fixed-top">
     <b-container>
-      <b-alert :show="dismissCountDown" :variant="class_style" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged" dismissible>
+      <b-alert :show="dismissCountDown"
+               :variant="class_style"
+               @dismissed="dismissCountDown=0"
+               @dismiss-count-down="countDownChanged"
+               dismissible>
          <strong>${ title }</strong> ${ content }
       </b-alert>
   </b-container>
@@ -30,7 +35,9 @@
     <div class="container">
       
       <div id="v-common">
-        <video v-if="wp_src!==''" :key="wp_src" :src="'/video/' + wp_src" poster controls preload="meta">No video support!</video>
+        <video v-if="wp_src!==''" :key="wp_src" :src="'/video/' + wp_src" poster controls preload="meta">
+          No video support!
+        </video>
         <b-btn-toolbar v-show="uiState.fixBarShow" class="fixed-top" style="opacity: 0.8;">
           <b-container>
             <b-btn-group>
@@ -63,7 +70,7 @@
             </b-btn-group>
             <!-- dlna seek menu end -->
             <!-- wp menu -->
-            <b-btn-group v-show="uiState.rateMenu" class="mx-1"> 
+            <b-btn-group v-show="uiState.wpMode" class="mx-1"> 
                <b-dropdown variant="outline-dark" right text="Rate">
                 <b-dropdown-item onclick="rate(0.5)">0.5X</b-dropdown-item>
                 <b-dropdown-item onclick="rate(0.75)">0.75X</b-dropdown-item>
@@ -84,7 +91,9 @@
               <b-dropdown variant="outline-dark" right split :text="dlnaInfo.CurrentDMR">
                 <b-dropdown-item onclick="get('/dlna/searchdmr');">Search DMR</b-dropdown-item>
                 <b-dropdown-divider></b-dropdown-divider>
-                <b-dropdown-item v-for="item in dlnaInfo.DMRs" @click="setDmr(item)">${ item }</b-dropdown-item>
+                <b-dropdown-item v-for="item in dlnaInfo.DMRs" @click="setDmr(item)">
+                  ${ item }
+                </b-dropdown-item>
               </b-dropdown>
             </b-btn-group>
             <!-- dlna dmr menu end -->
@@ -92,8 +101,10 @@
         </b-btn-toolbar>
         
         <!-- Modal Component -->
-        <!-- <b-modal v-model="modalShow" size="lg" class="col-xs-12 col-sm-12 col-md-8 col-lg-7" centered hide-footer hide-header> -->
-        <b-modal modal-class="['card']" v-model="uiState.modalShow" size="lg" centered hide-footer hide-header>
+        <b-modal modal-class="['card']"
+                 v-model="uiState.modalShow"
+                 size="lg"
+                 centered hide-footer hide-header>
           <div class="card-header" style="background-color: #C3E6CB;">
             <b-btn @click="showHistory" :pressed="uiState.historyShow" variant="outline-dark">
               <i class="oi oi-book"></i>History
