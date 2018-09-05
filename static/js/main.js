@@ -191,7 +191,6 @@ window.alertBox = new Vue({
 
 modalTouch();
 
-// var RANGE = 12; //minimum touch move range in px
 var hide_sidebar = 0;
 
 window.onload = adapt;
