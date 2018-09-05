@@ -40,6 +40,9 @@ window.commonView = new Vue({
             },
         },
         computed: {
+            dlnaOn: function () {
+                return this.dlnaInfo.CurrentDMR === 'no DMR';
+            },
             dlnaMode: function () {
                 return this.mode === 'DLNA';
             },
@@ -119,6 +122,7 @@ window.commonView = new Vue({
                     else
                         // this.wp_src = obj;
                         window.location.href = "/wp/play/" + obj;
+                        // this.mode = "WebPlayer";
                     break;
                 case "video":
                     // if (window.document.location.pathname == "/dlna")
@@ -324,14 +328,12 @@ function dlnalink() {
 
 function renderDlna(data) {
     if ($.isEmptyObject(data)) {
-        window.commonView.uiState.dlnaOn = false;
         console.log('test');
         if (window.commonView.mode === "DLNA")
             window.commonView.mode = "";
         window.commonView.dlnaInfo.CurrentDMR = 'no DMR';
         window.commonView.dlnaInfo.CurrentTransportState = '';
     } else {
-        window.commonView.uiState.dlnaOn = true;
         if (window.commonView.mode === "")
             window.commonView.mode = "DLNA";
         if (window.commonView.positionBar.update) {

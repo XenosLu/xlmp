@@ -48,7 +48,7 @@
                      title="switch DLNA mode"
                      :pressed="dlnaMode"
                      @click="dlnaToogle">
-                DLNA <i v-show="uiState.dlnaOn" class="oi oi-monitor"></i>
+                DLNA <i v-show="dlnaOn" class="oi oi-monitor"></i>
               </b-btn>
               <b-dropdown variant="outline-dark" right text="Maintain">
                 <b-dropdown-item @click="get('/sys/update')">update</b-dropdown-item>
