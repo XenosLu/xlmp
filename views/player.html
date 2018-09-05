@@ -43,6 +43,34 @@ $("video").on("error", function () {
         out(str + "<small>buffering...</small>");
     }
 });
+
+window.commonView.uiState.wpMode = true;
+
+$("#videosize").click(function () {
+    if (window.commonView.uiState.videoBtnText == "auto")
+        adapt();
+    else {
+        $(this).text("auto");
+        window.commonView.uiState.videoBtnText = "auto";
+        if ($("video").get(0).width < $(window).width() && $("video").get(0).height < $(window).height()) {
+            $("video").get(0).style.width = $("video").get(0).videoWidth + "px";
+            $("video").get(0).style.height = $("video").get(0).videoHeight + "px";
+        }
+    }
+});
+
+
+var hammertimeVideo = new Hammer(document);
+
+hammertimeVideo.on("panleft panright swipeleft swiperight", function (ev) {
+    var deltaTime = ev.deltaX / 4;
+    if(ev.type.indexOf("swipe") != -1)
+        $("video").get(0).currentTime += deltaTime;
+    else
+        out(secondToTime($("video").get(0).currentTime + deltaTime));
+    console.log(ev);
+    console.log(ev.type);
+});
+
 </script>
-<script src="{{ static_url('js/player.js') }}"></script>
 {% end %}
