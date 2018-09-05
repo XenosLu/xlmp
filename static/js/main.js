@@ -124,7 +124,6 @@ window.commonView = new Vue({
         },
     });
 
-
 window.alertBox = new Vue({
         delimiters: ['${', '}'],
         el: "#v-alert",
@@ -162,7 +161,7 @@ window.alertBox = new Vue({
 
 modalTouch();
 
-var RANGE = 12; //minimum touch move range in px
+// var RANGE = 12; //minimum touch move range in px
 var hide_sidebar = 0;
 
 window.onload = adapt;
@@ -172,7 +171,6 @@ if (!isiOS) {
     window.commonView.uiState.fixBarShow = false;
     $(document).mousemove(showSidebar);
 }
-check_dlna_state();
 
 function showSidebar() {
     window.commonView.uiState.fixBarShow = true;
@@ -206,6 +204,8 @@ function out2(text){
  */
 function adapt() {
     if ($("video").length == 1) {
+        // document.body.clientWidth
+        // document.body.clientHeight
         window.commonView.uiState.videoBtnText = "orign";
         var video_ratio = $("video").get(0).videoWidth / $("video").get(0).videoHeight;
         var page_ratio = $(window).width() / $(window).height();
@@ -244,7 +244,7 @@ function getHistory(str) {
     });
 }
 
-function check_dlna_state() {
+function check_dlna_state() {  // no longer needed
     $.ajax({
         url: "/dlna/info",
         dataType: "json",
