@@ -111,7 +111,8 @@ window.commonView = new Vue({
         },
         updated: function () {
             this.$nextTick(function () {
-                    dlna_add_touch();
+                    if(this.uiState.dlnaShow)
+                        dlna_add_touch();
                 })
         },
     });
@@ -313,8 +314,6 @@ function out(text) {
         $("#output").fadeTo(250, 0.7).delay(1800).fadeOut(625);
     };
 }
-
-
 
 
 function dlna_add_touch() {
