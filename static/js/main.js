@@ -15,6 +15,7 @@ window.commonView = new Vue({
             icon: icon,
             swipeState: 0,  // modal touch state
             uiState: {
+                mode: '',
                 dlnaOn: false,  // true if dlna dmr exist
                 dlnaMode: false,  // true if in dlna player mode
                 wpMode: false,  // true if in web player mode
@@ -39,6 +40,12 @@ window.commonView = new Vue({
             },
         },
         computed: {
+            dlnaMode: function() {
+                return this.mode === "DLNA";
+            },
+            wpMode: function() {
+                return this.mode === "webPlayer";
+            },
             // testx: function() {
                 // return 1
             // }
@@ -138,7 +145,7 @@ window.commonView = new Vue({
         },
         updated: function () {
             this.$nextTick(function () {
-                    if(this.uiState.dlnaMode)
+                    if (this.uiState.dlnaMode)
                         dlnaTouch();
                 })
         },
