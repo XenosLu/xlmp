@@ -46,9 +46,8 @@
               </b-btn>
               <b-btn variant="outline-success"
                      title="switch DLNA mode"
-                     :pressed="uiState.dlnaMode"
-                     @click="uiState.dlnaMode = uiState.dlnaMode ? false : true">
-                     <!-- @click="window.location.href = uiState.dlnaMode ? '/' : '/dlna'"> -->
+                     :pressed="dlnaMode"
+                     @click="dlnaToogle">
                 DLNA <i v-show="uiState.dlnaOn" class="oi oi-monitor"></i>
               </b-btn>
               <b-dropdown variant="outline-dark" right text="Maintain">
@@ -61,7 +60,7 @@
             </b-btn-group>  
             <!-- dlna seek menu -->
             <b-btn-group class="mx-1">
-              <b-dropdown variant="outline-dark" right v-show="uiState.dlnaMode" text="Seek">
+              <b-dropdown variant="outline-dark" right v-show="dlnaMode" text="Seek">
                 <b-dropdown-item @click="get('/dlna/seek/00:00:15')">00:15</b-dropdown-item>
                 <b-dropdown-item @click="get('/dlna/seek/00:00:29')">00:30</b-dropdown-item>
                 <b-dropdown-item @click="get('/dlna/seek/00:01:00')">01:00</b-dropdown-item>
@@ -70,7 +69,7 @@
             </b-btn-group>
             <!-- dlna seek menu end -->
             <!-- wp menu -->
-            <b-btn-group v-show="uiState.wpMode" class="mx-1"> 
+            <b-btn-group v-show="wpMode" class="mx-1"> 
                <b-dropdown variant="outline-dark" right text="Rate">
                 <b-dropdown-item onclick="rate(0.5)">0.5X</b-dropdown-item>
                 <b-dropdown-item onclick="rate(0.75)">0.75X</b-dropdown-item>
@@ -88,7 +87,7 @@
             </b-btn-group>
             <!-- wp menu end -->
             <!-- dlna dmr menu -->
-            <b-btn-group class="mx-1" v-show="uiState.dlnaMode">
+            <b-btn-group class="mx-1" v-show="dlnaMode">
               <b-dropdown variant="outline-dark" right split :text="dlnaInfo.CurrentDMR">
                 <b-dropdown-item @click="get('/dlna/searchdmr');">Search DMR</b-dropdown-item>
                 <b-dropdown-divider></b-dropdown-divider>
@@ -168,7 +167,7 @@
           </div>
         </b-modal>
 
-        <div v-if="uiState.dlnaMode">
+        <div v-if="dlnaMode">
           <div class="text-center col-sm-12 col-md-8 col-lg-6 col-xl-5">
             <div class="my-1 py-3"></div>
             <b-card bg-variant="light"

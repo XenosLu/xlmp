@@ -44,13 +44,19 @@ window.commonView = new Vue({
                 return this.mode === "DLNA";
             },
             wpMode: function() {
-                return this.mode === "webPlayer";
+                return this.mode === "WebPlayer";
             },
             // testx: function() {
                 // return 1
             // }
         },
         methods: {
+            dlnaToogle: function () {
+                if(this.mode !== "DLNA")
+                    this.mode = "DLNA";
+                else
+                    this.mode = "";
+            },
             videoToggle: function () {
                 if (this.uiState.videoBtnText == "auto")
                     adapt();
@@ -113,7 +119,7 @@ window.commonView = new Vue({
                     break;
                 case "mp4":
                     // if (window.document.location.pathname == "/dlna")
-                    if (this.uiState.dlnaMode)
+                    if (this.dlnaMode)
                         get("/dlna/load/" + obj);
                     else
                         // this.wp_src = obj;
@@ -121,7 +127,7 @@ window.commonView = new Vue({
                     break;
                 case "video":
                     // if (window.document.location.pathname == "/dlna")
-                    if (this.uiState.dlnaMode)
+                    if (this.dlnaMode)
                         get("/dlna/load/" + obj);
                     break;
                 default:
@@ -145,7 +151,7 @@ window.commonView = new Vue({
         },
         updated: function () {
             this.$nextTick(function () {
-                    if (this.uiState.dlnaMode)
+                    if (this.dlnaMode)
                         dlnaTouch();
                 })
         },
