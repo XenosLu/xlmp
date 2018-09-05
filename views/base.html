@@ -71,15 +71,15 @@
             <!-- wp menu -->
             <b-btn-group v-show="wpMode" class="mx-1"> 
                <b-dropdown variant="outline-dark" right text="Rate">
-                <b-dropdown-item onclick="rate(0.5)">0.5X</b-dropdown-item>
-                <b-dropdown-item onclick="rate(0.75)">0.75X</b-dropdown-item>
+                <b-dropdown-item @click="rate(0.5)">0.5X</b-dropdown-item>
+                <b-dropdown-item @click="rate(0.75)">0.75X</b-dropdown-item>
                 <b-dropdown-divider></b-dropdown-divider>
-                <b-dropdown-item onclick="rate(1)">1X</b-dropdown-item>
+                <b-dropdown-item @click="rate(1)">1X</b-dropdown-item>
                 <b-dropdown-divider></b-dropdown-divider>
-                <b-dropdown-item onclick="rate(1.5)">1.5X</b-dropdown-item>
-                <b-dropdown-item onclick="rate(1.75)">1.75X</b-dropdown-item>
-                <b-dropdown-item onclick="rate(2)">2X</b-dropdown-item>
-                <b-dropdown-item onclick="rate(2.5)">2.5X</b-dropdown-item>
+                <b-dropdown-item @click="rate(1.5)">1.5X</b-dropdown-item>
+                <b-dropdown-item @click="rate(1.75)">1.75X</b-dropdown-item>
+                <b-dropdown-item @click="rate(2)">2X</b-dropdown-item>
+                <b-dropdown-item @click="rate(2.5)">2.5X</b-dropdown-item>
                 <b-dropdown-divider></b-dropdown-divider>
                 <!-- <b-dropdown-item id="videosize">${ uiState.videoBtnText }</b-dropdown-item> -->
                 <b-dropdown-item @click="videoToggle">${ uiState.videoBtnText }</b-dropdown-item>

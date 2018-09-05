@@ -148,6 +148,10 @@ window.commonView = new Vue({
             get: function (url) {
                 $.get(url, out2);
             },
+            rate: function (x) {
+                out(x + "X");
+                $("video").get(0).playbackRate = x;
+            },
         },
         updated: function () {
             this.$nextTick(function () {
