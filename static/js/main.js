@@ -351,3 +351,14 @@ function modalTouch() {
         console.log(target.getAttribute('data-target'));
     });
 }
+
+/**
+ * Set play rate
+ *
+ * @method rate
+ * @param {Number} x
+ */
+function rate(x) {
+    out(x + "X");
+    $("video").get(0).playbackRate = x;
+}

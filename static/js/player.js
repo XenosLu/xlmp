@@ -60,13 +60,3 @@ hammertimeVideo.on("panleft panright swipeleft swiperight", function (ev) {
 // });
 /***********************************************************/
 
-/**
- * Set play rate
- *
- * @method rate
- * @param {Number} x
- */
-function rate(x) {
-    out(x + "X");
-    $("video").get(0).playbackRate = x;
-}
