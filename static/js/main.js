@@ -42,7 +42,7 @@ window.commonView = new Vue({
         },
         computed: {
             dlnaOn: function () {
-                return this.dlnaInfo.CurrentDMR === 'no DMR';
+                return this.dlnaInfo.CurrentDMR !== 'no DMR';
             },
             dlnaMode: function () {
                 return this.mode === 'DLNA';
@@ -57,6 +57,7 @@ window.commonView = new Vue({
                     this.mode = 'DLNA';
                 else
                     this.mode = '';
+                localStorage.mode = this.mode;
             },
             videoToggle: function () {
                 if (this.uiState.videoBtnText == 'auto')
@@ -200,6 +201,9 @@ modalTouch();
 
 var hide_sidebar = 0;
 
+if (typeof(localStorage.mode) !== "undefined")
+    window.commonView.mode = localStorage.mode;
+
 window.onload = adapt;
 window.onresize = adapt;
 var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
@@ -334,13 +338,9 @@ function dlnalink() {
 function renderDlna(data) {
     if ($.isEmptyObject(data)) {
         console.log('test');
-        if (window.commonView.mode === "DLNA")
-            window.commonView.mode = "";
         window.commonView.dlnaInfo.CurrentDMR = 'no DMR';
         window.commonView.dlnaInfo.CurrentTransportState = '';
     } else {
-        if (window.commonView.mode === "")
-            window.commonView.mode = "DLNA";
         if (window.commonView.positionBar.update) {
             window.commonView.positionBar.max = timeToSecond(data.TrackDuration);
             window.commonView.positionBar.val = timeToSecond(data.RelTime);
