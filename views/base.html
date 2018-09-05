@@ -82,7 +82,8 @@
                 <b-dropdown-item onclick="rate(2)">2X</b-dropdown-item>
                 <b-dropdown-item onclick="rate(2.5)">2.5X</b-dropdown-item>
                 <b-dropdown-divider></b-dropdown-divider>
-                <b-dropdown-item id="videosize">${ uiState.videoBtnText }</b-dropdown-item>
+                <!-- <b-dropdown-item id="videosize">${ uiState.videoBtnText }</b-dropdown-item> -->
+                <b-dropdown-item @click="videoToggle">${ uiState.videoBtnText }</b-dropdown-item>
               </b-dropdown>
             </b-btn-group>
             <!-- wp menu end -->
