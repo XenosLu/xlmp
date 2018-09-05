@@ -481,15 +481,6 @@ class DlnaHandler(tornado.web.RequestHandler):
             self.finish({'error': 'Failed!'})
 
 
-class DlnaInfoHandler(tornado.web.RequestHandler):
-    """old version of DLNA info retrieve web interface replaced by web socket"""
-    def data_received(self, chunk):
-        pass
-
-    def get(self, *args, **kwargs):
-        self.finish(TRACKER.state)
-
-
 class DlnaVolumeControlHandler(tornado.web.RequestHandler):
     """Tune volume through DLNA web interface"""
     def data_received(self, chunk):
@@ -603,7 +594,6 @@ HANDLERS = [
     (r'/sys/(?P<opt>\w*)', SystemCommandHandler),
     (r'/test', TestHandler),  # test
     (r'/link', DlnaWebSocketHandler),
-    (r'/dlna/info', DlnaInfoHandler),
     (r'/dlna/setdmr/(?P<dmr>.*)', SetDmrHandler),
     (r'/dlna/searchdmr', SearchDmrHandler),
     (r'/dlna/vol/(?P<opt>\w*)', DlnaVolumeControlHandler),
