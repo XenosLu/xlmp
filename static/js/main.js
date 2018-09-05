@@ -37,11 +37,6 @@ window.commonView = new Vue({
                 CurrentTransportState : '',
             },
         },
-        updated: function () {
-            this.$nextTick(function () {
-                dlna_add_touch();
-            })
-        },
         methods: {
             test: function (obj) {
                 console.log("test " + obj);
@@ -116,7 +111,7 @@ window.commonView = new Vue({
         },
         updated: function () {
             this.$nextTick(function () {
-                
+                    dlna_add_touch();
                 })
         },
     });

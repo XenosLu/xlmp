@@ -36,12 +36,3 @@ function renderUI(data) {
         window.commonView.dlnaInfo = data;
     }
 }
-
-function offset_value(current, value, max) {
-    if (value < current)
-        relduration = current;
-    else
-        relduration = max - current;
-    var s = Math.sin((value - current) / relduration * 1.5707963267948966192313216916);
-    return Math.round(current + Math.abs(Math.pow(s, 3)) * (value - current));
-}
