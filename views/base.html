@@ -109,7 +109,7 @@
             <b-btn @click="showHistory" :pressed="uiState.historyShow" variant="outline-dark">
               <i class="oi oi-book"></i>History
             </b-btn>
-            <b-btn @click="showFs" :pressed="!uiState.historyShow" variant="outline-dark">
+            <b-btn @click="showFs('/fs/ls/')" :pressed="!uiState.historyShow" variant="outline-dark">
               <i class="oi oi-home"></i>Home dir
             </b-btn>
             <b-btn @click="uiState.modalShow=false" class="close">&times;</b-btn>

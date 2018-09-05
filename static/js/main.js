@@ -52,7 +52,19 @@ window.commonView = new Vue({
                 getHistory("/hist/ls");
             },
             showFs: function (path) {
-                filelist(path);
+                $.ajax({
+                    url: encodeURI(path),
+                    dataType: "json",
+                    timeout: 1999,
+                    type: "get",
+                    success: function (data) {
+                        window.commonView.uiState.historyShow = false;
+                        window.commonView.filelist = data.filesystem;
+                    },
+                    error: function (xhr) {
+                        out(xhr.statusText);
+                    }
+                });
             },
             clearHistory: function () { // clear history button
                 if (confirm("Clear all history?"))
@@ -67,13 +79,13 @@ window.commonView = new Vue({
             },
             move: function (obj) {
                 if (confirm("Move " + obj + " to .old?")) {
-                    filelist("/fs/move/" + obj);
+                    this.showFs("/fs/move/" + obj);
                 }
             },
             open: function (obj, type) {
                 switch (type) {
                 case "folder":
-                    filelist("/fs/ls/" + obj + "/");
+                    this.showFs("/fs/ls/" + obj + "/");
                     break;
                 case "mp4":
                     // if (window.document.location.pathname == "/dlna")
@@ -209,27 +221,6 @@ function adapt() {
     }
 }
 
-/**
- * Render file list box from ajax
- *
- * @method filelist
- * @param {String} str
- */
-function filelist(str) {
-    $.ajax({
-        url: encodeURI(str),
-        dataType: "json",
-        timeout: 1999,
-        type: "get",
-        success: function (data) {
-            window.commonView.uiState.historyShow = false;
-            window.commonView.filelist = data.filesystem;
-        },
-        error: function (xhr) {
-            out(xhr.statusText);
-        }
-    });
-}
 
 /**
  * Render history list box from ajax
