@@ -228,7 +228,7 @@ class DMRTracker_new(Thread):
 
     @asyncio.coroutine
     def main_loop(self):
-        self._failure = 0
+        failure = 0
         while True:
             if self.dmr:
                 self.state['CurrentDMR'] = str(self.dmr)
@@ -237,13 +237,13 @@ class DMRTracker_new(Thread):
                     yield
                     if self._get_position_info():
                         sleep(0.1)
-                        if self._failure > 0:
-                            logging.info('reset failure count from %d to 0', self._failure)
-                            self._failure = 0
+                        if failure > 0:
+                            logging.info('reset failure count from %d to 0', failure)
+                            failure = 0
                 else:
-                    self._failure += 1
-                    logging.warning('Losing DMR count: %d', self._failure)
-                    if self._failure >= 3:
+                    failure += 1
+                    logging.warning('Losing DMR count: %d', failure)
+                    if failure >= 3:
                         logging.info('No DMR currently.')
                         self.state = {'CurrentDMR': 'no DMR'}
                         self.dmr = None
@@ -251,7 +251,7 @@ class DMRTracker_new(Thread):
             else:
                 logging.info('searching...')
                 self.discover_dmr()
-                sleep(2.5)
+                yield from asyncio.sleep(2.5)
 
     def run(self):
         asyncio.set_event_loop(self._loop)
