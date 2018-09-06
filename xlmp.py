@@ -262,6 +262,7 @@ class DMRTracker_new(Thread):
     def load_coroutine(self):
         failure = 0
         while failure < 3:
+            logging.info('load failure count: %s', failure)
             sleep(0.5)
             url = self._url
             if self.loadonce(url):
@@ -739,7 +740,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def on_pong(self, data=None):
         if self.last_message != TRACKER.state:
-            logging.info(TRACKER.state)
+            logging.debug(TRACKER.state)
             for ws_user in self.users:
                 ws_user.write_message(TRACKER.state)
             self.last_message = TRACKER.state.copy()
