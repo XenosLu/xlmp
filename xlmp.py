@@ -325,16 +325,16 @@ class IndexHandler(tornado.web.RequestHandler):
         pass
 
     def get(self, *args, **kwargs):
-        self.render('base.html')
+        self.render('index.html')
 
 
 class DlnaPlayerHandler(tornado.web.RequestHandler):
-    """DLNA player page"""
+    """DLNA player page, gonna be canceled"""
     def data_received(self, chunk):
         pass
 
     def get(self, *args, **kwargs):
-        self.render('dlna.html')
+        self.render('index.html')
 
 
 class WebPlayerHandler(tornado.web.RequestHandler):
