@@ -168,7 +168,6 @@ class DMRTracker_new(Thread):
         self.state = {'CurrentDMR': 'no DMR'}  # DMR device state
         self.dmr = None  # DMR device object
         self.all_devices = []  # DMR device list
-        self._failure = 0
         self._load = None
         self._loop = asyncio.new_event_loop()
         logging.info('DMR Tracker thread initialized.')
@@ -221,7 +220,6 @@ class DMRTracker_new(Thread):
     def async_run(self, func, *args, **kwargs):
         pass
         # run func in loop
-        # time.sleep(3)
         # @asyncio.coroutine
         # def job():
             # func(*args, **kwargs)
@@ -229,14 +227,17 @@ class DMRTracker_new(Thread):
 
     @asyncio.coroutine
     def main_loop(self):
+        self._failure = 0
         while True:
             if self.dmr:
                 self.state['CurrentDMR'] = str(self.dmr)
                 self.state['DMRs'] = [str(i) for i in self.all_devices]
-                if self._get_transport_state() and not sleep(0.1) and self._get_position_info():
+                if self._get_transport_state():
                     if self._failure > 0:
                         logging.info('reset failure count from %d to 0', self._failure)
                         self._failure = 0
+                yield from asyncio.sleep(0.1)
+                self._get_position_info()
                 else:
                     self._failure += 1
                     logging.warning('Losing DMR count: %d', self._failure)
@@ -255,6 +256,7 @@ class DMRTracker_new(Thread):
         self._loop.run_until_complete(self.main_loop())
 
     def load(self, url):
+        """Load video through DLNA from URL """
         logging.info('start loading')
         self._url = url
         self._loadfinish = False
@@ -266,7 +268,7 @@ class DMRTracker_new(Thread):
         failure = 0
         while failure < 3:
             logging.info('load failure count: %s', failure)
-            sleep(0.5)
+            sleep(0.1)
             if url != self._url or self._loadfinish:
                 return
             if self.loadonce(url):
@@ -283,9 +285,6 @@ class DMRTracker_new(Thread):
                 return
             else:
                 failure += 1
-                # if failure >= 3:
-                    # return
-
 
     def loadonce(self, url):
         """load video through DLNA from url for once"""
@@ -578,7 +577,6 @@ class SaveHandler(tornado.web.RequestHandler):
     def data_received(self, chunk):
         pass
 
-    # @tornado.gen.coroutine
     @tornado.concurrent.run_on_executor
     def post(self, *args, **kwargs):
         position = self.get_argument('position', 0)
