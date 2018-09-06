@@ -336,17 +336,11 @@ function dlnalink() {
 }
 
 function renderDlna(data) {
-    if ($.isEmptyObject(data)) {
-        console.log('test');
-        window.commonView.dlnaInfo.CurrentDMR = 'no DMR';
-        window.commonView.dlnaInfo.CurrentTransportState = '';
-    } else {
         if (window.commonView.positionBar.update) {
             window.commonView.positionBar.max = timeToSecond(data.TrackDuration);
             window.commonView.positionBar.val = timeToSecond(data.RelTime);
         }
         window.commonView.dlnaInfo = data;
-    }
 }
 
 function modalTouch() {

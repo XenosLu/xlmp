@@ -32,7 +32,7 @@ class DMRTracker(Thread):
         self._flag.set()
         self._running = Event()
         self._running.set()
-        self.state = {}  # DMR device state
+        self.state = {'CurrentDMR': 'no DMR'}  # DMR device state
         self.dmr = None  # DMR device object
         self.all_devices = []  # DMR device list
         self._failure = 0
@@ -99,7 +99,7 @@ class DMRTracker(Thread):
                     logging.warning('Losing DMR count: %d', self._failure)
                     if self._failure >= 3:
                         logging.info('No DMR currently.')
-                        self.state = {}
+                        self.state = {'CurrentDMR': 'no DMR'}
                         self.dmr = None
                 sleep(0.8)
             else:
