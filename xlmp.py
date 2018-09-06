@@ -257,7 +257,7 @@ class DMRTracker_new(Thread):
     def load(self, url):
         self._url = url
         asyncio.run_coroutine_threadsafe(self.load_coroutine(), self._loop)
-   
+
     @asyncio.coroutine
     def load_coroutine(self):
         failure = 0
