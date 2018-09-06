@@ -160,7 +160,7 @@ class DMRTracker(Thread):
 class DMRTracker_new(Thread):
     """DLNA Digital Media Renderer tracker thread"""
     def __init__(self, *args, **kwargs):
-        super(DMRTracker, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._flag = Event()
         self._flag.set()
         self._running = Event()
@@ -226,6 +226,7 @@ class DMRTracker_new(Thread):
         # def job():
             # func(*args, **kwargs)
         # asyncio.run_coroutine_threadsafe(job(), thread_loop)
+
     @asyncio.coroutine
     def main_loop(self):
         while True:
@@ -245,14 +246,39 @@ class DMRTracker_new(Thread):
                         self.dmr = None
                 yield from asyncio.sleep(0.8)
             else:
+                logging.info('searching...')
                 self.discover_dmr()
                 sleep(2.5)
 
     def run(self):
         asyncio.set_event_loop(self._loop)
-        # add job in loop
-        loop.run_until_complete(main_loop)
-        # loop.run_until_complete(task2)
+        self._loop.run_until_complete(self.main_loop())
+
+    def load(self, url):
+        self._url = url
+        asyncio.run_coroutine_threadsafe(self.load_coroutine(), self._loop)
+   
+    @asyncio.coroutine
+    def load_coroutine(self)
+        failure = 0
+        while failure < 3:
+            sleep(0.5)
+            url = self._url
+            if self.loadonce(url):
+                logging.info('Loaded url: %s successed', url)
+                src = unquote(re.sub('http://.*/video/', '', url))
+                position = hist_load(src)
+                if position:
+                    self.dmr.seek(second_to_time(position))
+                    logging.info('Loaded position: %s', second_to_time(position))
+                logging.info('Load Successed.')
+                self.state['CurrentTransportState'] = 'Load Successed.'
+            else:
+                failure += 1
+                if failure >= 3:
+                    return
+            if url != self._url:
+                    return
 
     def loadonce(self, url):
         """load video through DLNA from url for once"""
@@ -572,7 +598,8 @@ class DlnaLoadHandler(tornado.web.RequestHandler):
             return
         logging.info('start loading...tracker state:%s', TRACKER.state.get('CurrentTransportState'))
         url = 'http://%s/video/%s' % (srv_host, quote(src))
-        LOADER.load(url)
+        # LOADER.load(url)
+        TRACKER.load(url)
         self.finish('loading %s' % src)
 
 
@@ -590,7 +617,8 @@ class DlnaNextHandler(tornado.web.RequestHandler):
         logging.info('next file recognized: %s', next_file)
         if next_file:
             url = 'http://%s/video/%s' % (self.request.headers['Host'], quote(next_file))
-            LOADER.load(url)
+            # LOADER.load(url)
+            TRACKER.load(url)
         else:
             self.finish({'warning': "Can't get next file"})
 
@@ -756,7 +784,8 @@ logging.basicConfig(level=logging.INFO,
 APP = tornado.web.Application(HANDLERS, **SETTINGS)
 
 # initialize dlna threader
-TRACKER = DMRTracker()
+# TRACKER = DMRTracker()
+TRACKER = DMRTracker_new()
 LOADER = DLNALoader()
 
 if __name__ == '__main__':
