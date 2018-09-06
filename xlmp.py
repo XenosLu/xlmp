@@ -234,7 +234,7 @@ class DMRTracker_new(Thread):
                 self.state['DMRs'] = [str(i) for i in self.all_devices]
                 if self._get_transport_state():
                     yield from asyncio.sleep(0.1)
-                    if self._get_position_info()
+                    if self._get_position_info():
                         if self._failure > 0:
                             logging.info('reset failure count from %d to 0', self._failure)
                             self._failure = 0
