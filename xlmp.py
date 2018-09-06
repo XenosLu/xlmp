@@ -257,15 +257,17 @@ class DMRTracker_new(Thread):
     def load(self, url):
         logging.info('start loading')
         self._url = url
-        asyncio.run_coroutine_threadsafe(self.load_coroutine(), self._loop)
+        asyncio.run_coroutine_threadsafe(self.load_coroutine(url), self._loop)
+        logging.info('coroutine loaded')
 
     @asyncio.coroutine
-    def load_coroutine(self):
+    def load_coroutine(self, url):
         failure = 0
         while failure < 3:
             logging.info('load failure count: %s', failure)
             sleep(0.5)
-            url = self._url
+            if url != self._url:
+                    return
             if self.loadonce(url):
                 logging.info('Loaded url: %s successed', url)
                 src = unquote(re.sub('http://.*/video/', '', url))
@@ -278,10 +280,9 @@ class DMRTracker_new(Thread):
                 return
             else:
                 failure += 1
-                if failure >= 3:
-                    return
-            if url != self._url:
-                    return
+                # if failure >= 3:
+                    # return
+
 
     def loadonce(self, url):
         """load video through DLNA from url for once"""
