@@ -8,6 +8,7 @@ import shutil
 import sqlite3
 import sys
 import logging
+import asyncio
 from threading import Thread, Event
 from urllib.parse import quote, unquote
 from time import sleep, time
@@ -118,6 +119,140 @@ class DMRTracker(Thread):
         """stop tracker thread"""
         self._flag.set()
         self._running.clear()
+
+    def loadonce(self, url):
+        """load video through DLNA from url for once"""
+        if not self.dmr:
+            return False
+        while self._get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
+            self.dmr.stop()
+            logging.info('Waiting for DMR stopped...')
+            sleep(0.85)
+        try:
+            if self.dmr.set_current_media(url):
+                logging.info('Loaded %s', url)
+            else:
+                logging.warning('Load url failed: %s', url)
+                return False
+            time0 = time()
+            while self._get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
+                self.dmr.play()
+                logging.info('Waiting for DMR playing...')
+                sleep(0.3)
+                if (time() - time0) > 5:
+                    logging.info('waiting for DMR playing timeout')
+                    return False
+            sleep(0.5)
+            time0 = time()
+            logging.info('checking duration to make sure loaded...')
+            while self.dmr.position_info().get('TrackDuration') == '00:00:00':
+                sleep(0.5)
+                logging.info('Waiting for duration to be recognized correctly, url=%s', url)
+                if (time() - time0) > 15:
+                    logging.info('Load duration timeout')
+                    return False
+            logging.info(self.state)
+        except Exception as exc:
+            logging.warning('DLNA load exception: %s', exc, exc_info=True)
+            return False
+        return True
+
+class DMRTracker_new(Thread):
+    """DLNA Digital Media Renderer tracker thread"""
+    def __init__(self, *args, **kwargs):
+        super(DMRTracker, self).__init__(*args, **kwargs)
+        self._flag = Event()
+        self._flag.set()
+        self._running = Event()
+        self._running.set()
+        self.state = {'CurrentDMR': 'no DMR'}  # DMR device state
+        self.dmr = None  # DMR device object
+        self.all_devices = []  # DMR device list
+        self._failure = 0
+        self._load = None
+        self._loop = asyncio.new_event_loop()
+        logging.info('DMR Tracker thread initialized.')
+
+    def discover_dmr(self):
+        """Discover DMRs from local network"""
+        logging.debug('Starting DMR search...')
+        if self.dmr:
+            logging.info('Current DMR: %s', self.dmr)
+        self.all_devices = discover(name='', ip='', timeout=3,
+                                    st=URN_AVTransport_Fmt, ssdp_version=1)
+        if self.all_devices:
+            self.dmr = self.all_devices[0]
+            logging.info('Found DMR device: %s', self.dmr)
+
+    def set_dmr(self, str_dmr):
+        """set one of the DMRs as current DMR"""
+        for i in self.all_devices:
+            if str(i) == str_dmr:
+                self.dmr = i
+                return True
+        return False
+
+    def _get_transport_state(self):
+        """get transport state through DLNA"""
+        info = self.dmr.info()
+        if info:
+            self.state['CurrentTransportState'] = info.get('CurrentTransportState')
+            return info.get('CurrentTransportState')
+        return None
+
+    def _get_position_info(self):
+        """get DLNA play position info"""
+        position_info = self.dmr.position_info()
+        if not position_info:
+            return None
+        for key in ('RelTime', 'TrackDuration'):
+            self.state[key] = position_info[key]
+        if self.state.get('CurrentTransportState') == 'PLAYING':
+            if position_info['TrackURI']:
+                self.state['TrackURI'] = unquote(
+                    re.sub('http://.*/video/', '', position_info['TrackURI']))
+                save_history(self.state['TrackURI'],
+                             time_to_second(self.state['RelTime']),
+                             time_to_second(self.state['TrackDuration']))
+            else:
+                logging.info('no Track uri')
+        return position_info.get('TrackDuration')
+
+    def async_run(self, func, *args, **kwargs):
+        pass
+        # run func in loop
+        # time.sleep(3)
+        # @asyncio.coroutine
+        # def job():
+            # func(*args, **kwargs)
+        # asyncio.run_coroutine_threadsafe(job(), thread_loop)
+    @asyncio.coroutine
+    def main_loop(self):
+        while True:
+            if self.dmr:
+                self.state['CurrentDMR'] = str(self.dmr)
+                self.state['DMRs'] = [str(i) for i in self.all_devices]
+                if self._get_transport_state() and not sleep(0.1) and self._get_position_info():
+                    if self._failure > 0:
+                        logging.info('reset failure count from %d to 0', self._failure)
+                        self._failure = 0
+                else:
+                    self._failure += 1
+                    logging.warning('Losing DMR count: %d', self._failure)
+                    if self._failure >= 3:
+                        logging.info('No DMR currently.')
+                        self.state = {'CurrentDMR': 'no DMR'}
+                        self.dmr = None
+                yield from asyncio.sleep(0.8)
+            else:
+                self.discover_dmr()
+                sleep(2.5)
+
+    def run(self):
+        asyncio.set_event_loop(self._loop)
+        # add job in loop
+        loop.run_until_complete(main_loop)
+        # loop.run_until_complete(task2)
 
     def loadonce(self, url):
         """load video through DLNA from url for once"""
