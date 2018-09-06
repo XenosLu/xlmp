@@ -234,6 +234,7 @@ class DMRTracker_new(Thread):
                 self.state['CurrentDMR'] = str(self.dmr)
                 self.state['DMRs'] = [str(i) for i in self.all_devices]
                 if self._get_transport_state():
+                    yield
                     if self._get_position_info():
                         sleep(0.1)
                         if self._failure > 0:
@@ -293,7 +294,8 @@ class DMRTracker_new(Thread):
         while self._get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
             self.dmr.stop()
             logging.info('Waiting for DMR stopped...')
-            sleep(0.75)
+            # sleep(0.75)
+            sleep(0.65)
         try:
             if self.dmr.set_current_media(url):
                 logging.info('Loaded %s', url)
