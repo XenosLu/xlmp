@@ -196,6 +196,7 @@ class DMRTracker_new(Thread):
         info = self.dmr.info()
         if info:
             self.state['CurrentTransportState'] = info.get('CurrentTransportState')
+            sleep(0.1)
             return info.get('CurrentTransportState')
         return None
 
@@ -233,8 +234,8 @@ class DMRTracker_new(Thread):
                 self.state['CurrentDMR'] = str(self.dmr)
                 self.state['DMRs'] = [str(i) for i in self.all_devices]
                 if self._get_transport_state():
-                    yield from asyncio.sleep(0.1)
                     if self._get_position_info():
+                        sleep(0.1)
                         if self._failure > 0:
                             logging.info('reset failure count from %d to 0', self._failure)
                             self._failure = 0
@@ -268,7 +269,6 @@ class DMRTracker_new(Thread):
         failure = 0
         while failure < 3:
             logging.info('load failure count: %s', failure)
-            sleep(0.1)
             if url != self._url or self._loadfinish:
                 return
             if self.loadonce(url):
@@ -293,7 +293,7 @@ class DMRTracker_new(Thread):
         while self._get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
             self.dmr.stop()
             logging.info('Waiting for DMR stopped...')
-            sleep(0.85)
+            sleep(0.75)
         try:
             if self.dmr.set_current_media(url):
                 logging.info('Loaded %s', url)
