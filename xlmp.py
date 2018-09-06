@@ -267,7 +267,7 @@ class DMRTracker_new(Thread):
             logging.info('load failure count: %s', failure)
             sleep(0.5)
             if url != self._url:
-                    return
+                return
             if self.loadonce(url):
                 logging.info('Loaded url: %s successed', url)
                 src = unquote(re.sub('http://.*/video/', '', url))
