@@ -259,7 +259,7 @@ class DMRTracker_new(Thread):
         asyncio.run_coroutine_threadsafe(self.load_coroutine(), self._loop)
    
     @asyncio.coroutine
-    def load_coroutine(self)
+    def load_coroutine(self):
         failure = 0
         while failure < 3:
             sleep(0.5)
