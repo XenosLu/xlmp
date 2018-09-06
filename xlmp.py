@@ -257,6 +257,7 @@ class DMRTracker_new(Thread):
     def load(self, url):
         logging.info('start loading')
         self._url = url
+        self._loadfinish = False
         asyncio.run_coroutine_threadsafe(self.load_coroutine(url), self._loop)
         logging.info('coroutine loaded')
 
@@ -265,9 +266,9 @@ class DMRTracker_new(Thread):
         failure = 0
         while failure < 3:
             logging.info('load failure count: %s', failure)
-            if url != self._url:
-                return
             sleep(0.5)
+            if url != self._url and self._loadfinish:
+                return
             if self.loadonce(url):
                 logging.info('Loaded url: %s successed', url)
                 src = unquote(re.sub('http://.*/video/', '', url))
@@ -277,6 +278,7 @@ class DMRTracker_new(Thread):
                     logging.info('Loaded position: %s', second_to_time(position))
                 logging.info('Load Successed.')
                 self.state['CurrentTransportState'] = 'Load Successed.'
+                self._loadfinish = True
                 return
             else:
                 failure += 1
