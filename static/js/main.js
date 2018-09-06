@@ -16,9 +16,7 @@ window.commonView = new Vue({
             swipeState: 0, // modal touch state
             mode: '',
             uiState: {
-                dlnaOn: false, // true if dlna dmr exist
-                // dlnaMode: false,  // true if in dlna player mode
-                // wpMode: false,  // true if in web player mode
+                // dlnaOn: false, // true if dlna dmr exist
                 modalShow: false, // true if the modal is show
                 historyShow: true, // ture if modal is history, false if modal content is file list
                 fixBarShow: true,
