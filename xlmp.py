@@ -278,7 +278,8 @@ class DMRTracker_new(Thread):
                     logging.info('Loaded position: %s', second_to_time(position))
                 logging.info('Load Successed.')
                 self.state['CurrentTransportState'] = 'Load Successed.'
-                self._loadfinish = True
+                if url == self._url:
+                    self._loadfinish = True
                 return
             else:
                 failure += 1
