@@ -267,7 +267,7 @@ class DMRTracker_new(Thread):
         while failure < 3:
             logging.info('load failure count: %s', failure)
             sleep(0.5)
-            if url != self._url and self._loadfinish:
+            if url != self._url or self._loadfinish:
                 return
             if self.loadonce(url):
                 logging.info('Loaded url: %s successed', url)
