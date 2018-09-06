@@ -255,6 +255,7 @@ class DMRTracker_new(Thread):
         self._loop.run_until_complete(self.main_loop())
 
     def load(self, url):
+        logging.info('start loading')
         self._url = url
         asyncio.run_coroutine_threadsafe(self.load_coroutine(), self._loop)
 
@@ -274,6 +275,7 @@ class DMRTracker_new(Thread):
                     logging.info('Loaded position: %s', second_to_time(position))
                 logging.info('Load Successed.')
                 self.state['CurrentTransportState'] = 'Load Successed.'
+                return
             else:
                 failure += 1
                 if failure >= 3:
