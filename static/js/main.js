@@ -334,11 +334,11 @@ function dlnalink() {
 }
 
 function renderDlna(data) {
-        if (window.commonView.positionBar.update) {
-            window.commonView.positionBar.max = timeToSecond(data.TrackDuration);
-            window.commonView.positionBar.val = timeToSecond(data.RelTime);
-        }
-        window.commonView.dlnaInfo = data;
+    if (window.commonView.positionBar.update) {
+        window.commonView.positionBar.max = timeToSecond(data.TrackDuration);
+        window.commonView.positionBar.val = timeToSecond(data.RelTime);
+    }
+    window.commonView.dlnaInfo = data;
 }
 
 function modalTouch() {
