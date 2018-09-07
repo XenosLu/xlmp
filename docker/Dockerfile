@@ -2,7 +2,6 @@
 FROM xenocider/container:python3.5.2
 LABEL maintainer="xenos <xenos.lu@gmail.com>"
 
-            # dumb-init \
             # runit \
 # supervisor 3.3.4 not support python3
 RUN apk add --no-cache \
@@ -33,5 +32,4 @@ VOLUME /xlmp/media
 RUN chmod -R +x /xlmp/docker/s6
 # ENTRYPOINT ["/bin/sh", "/xlmp/docker/docker-entrypoint.sh"]
 # CMD ["/usr/bin/supervisord", "-c", "/xlmp/docker/supervisord.conf"]
-# CMD ["/usr/bin/dumb-init", "/bin/sh", "/xlmp/docker/init"]
 CMD ["/bin/s6-svscan", "/xlmp/docker/s6/"]
