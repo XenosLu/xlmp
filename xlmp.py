@@ -37,7 +37,7 @@ class DMRTracker(Thread):
         self.dmr = None  # DMR device object
         self.all_devices = []  # DMR device list
         self._failure = 0
-        self._load = None
+        # self._load = None
         logging.info('DMR Tracker thread initialized.')
 
     def discover_dmr(self):
@@ -157,8 +157,8 @@ class DMRTracker(Thread):
             return False
         return True
 
-class DMRTracker_new(Thread):
-    """DLNA Digital Media Renderer tracker thread"""
+class DMRTracker_coroutine(Thread):
+    """DLNA Digital Media Renderer tracker coroutine thread"""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._flag = Event()
@@ -168,7 +168,7 @@ class DMRTracker_new(Thread):
         self.state = {'CurrentDMR': 'no DMR'}  # DMR device state
         self.dmr = None  # DMR device object
         self.all_devices = []  # DMR device list
-        self._load = None
+        # self._load = None
         self._loop = asyncio.new_event_loop()
         logging.info('DMR Tracker thread initialized.')
 
@@ -790,7 +790,7 @@ APP = tornado.web.Application(HANDLERS, **SETTINGS)
 
 # initialize dlna threader
 # TRACKER = DMRTracker()
-TRACKER = DMRTracker_new()
+TRACKER = DMRTracker_coroutine()
 # LOADER = DLNALoader()
 
 if __name__ == '__main__':
