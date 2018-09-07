@@ -221,7 +221,6 @@ class DMRTracker_coroutine(Thread):
                 logging.info('no Track uri')
         return position_info.get('TrackDuration')
 
-    @tornado.concurrent.run_on_executor
     def async_run(self, func, *args, **kwargs):
         """run block func in coroutine loop in thread"""
         async def job():
@@ -724,6 +723,7 @@ class SearchDmrHandler(tornado.web.RequestHandler):
 
 
 class TestHandler(tornado.web.RequestHandler):
+    executor = ThreadPoolExecutor(99)
     """test only"""
     def data_received(self, chunk):
         pass
@@ -732,11 +732,11 @@ class TestHandler(tornado.web.RequestHandler):
         sleep(1)
         return 'test sleep 1'
 
-    @tornado.gen.coroutine
+    @tornado.concurrent.run_on_executor
     def get(self, *args, **kwargs):
-        x = yield from TRACKER.async_run(self.test)
+        x = TRACKER.async_run(self.test)
         logging.info(x)
-        self.write('test')
+        self.write(x)
 
 
 class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
