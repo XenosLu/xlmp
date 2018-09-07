@@ -249,12 +249,14 @@ class DMRTracker_coroutine(Thread):
                         self.dmr = None
                 yield from asyncio.sleep(0.8)
             else:
+                logging.debug('searching DMR')
                 self.discover_dmr()
                 yield from asyncio.sleep(2.5)
 
     def run(self):
         asyncio.set_event_loop(self._loop)
-        self._loop.run_until_complete(self.main_loop())
+        task = self._loop.create_task(self.main_loop())
+        self._loop.run_until_complete(task)
 
     def load(self, url):
         """Load video through DLNA from URL """
