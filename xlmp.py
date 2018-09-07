@@ -248,7 +248,6 @@ class DMRTracker_new(Thread):
                         self.dmr = None
                 yield from asyncio.sleep(0.8)
             else:
-                logging.info('searching...')
                 self.discover_dmr()
                 yield from asyncio.sleep(2.5)
 
