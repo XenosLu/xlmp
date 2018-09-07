@@ -219,11 +219,12 @@ class DMRTracker_new(Thread):
         return position_info.get('TrackDuration')
 
     def async_run(self, func, *args, **kwargs):
-        # run func in loop
-        @asyncio.coroutine
-        def job():
-            func(*args, **kwargs)
-        asyncio.run_coroutine_threadsafe(job(), self._loop)
+        """run block func in coroutine loop in thread"""
+        async def job():
+            return func(*args, **kwargs)
+        future = asyncio.run_coroutine_threadsafe(job(), self._loop)
+        # future.add_done_callback(callback)
+        # return future.result()  # block
 
     @asyncio.coroutine
     def main_loop(self):
