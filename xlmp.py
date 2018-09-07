@@ -159,6 +159,8 @@ class DMRTracker(Thread):
 
 class DMRTracker_coroutine(Thread):
     """DLNA Digital Media Renderer tracker coroutine thread"""
+    executor = ThreadPoolExecutor(99)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._flag = Event()
@@ -170,6 +172,7 @@ class DMRTracker_coroutine(Thread):
         self.all_devices = []  # DMR device list
         # self._load = None
         self._loop = asyncio.new_event_loop()
+        
         logging.info('DMR Tracker thread initialized.')
 
     def discover_dmr(self):
@@ -218,13 +221,14 @@ class DMRTracker_coroutine(Thread):
                 logging.info('no Track uri')
         return position_info.get('TrackDuration')
 
+    @tornado.concurrent.run_on_executor
     def async_run(self, func, *args, **kwargs):
         """run block func in coroutine loop in thread"""
         async def job():
             return func(*args, **kwargs)
         future = asyncio.run_coroutine_threadsafe(job(), self._loop)
         # future.add_done_callback(callback)
-        # return future.result()  # block
+        return future.result()  # block
 
     @asyncio.coroutine
     def main_loop(self):
@@ -724,7 +728,14 @@ class TestHandler(tornado.web.RequestHandler):
     def data_received(self, chunk):
         pass
 
+    def test(self):
+        sleep(1)
+        return 'test sleep 1'
+
+    @tornado.gen.coroutine
     def get(self, *args, **kwargs):
+        x = yield from TRACKER.async_run(self.test)
+        logging.info(x)
         self.write('test')
 
 
