@@ -219,12 +219,11 @@ class DMRTracker_new(Thread):
         return position_info.get('TrackDuration')
 
     def async_run(self, func, *args, **kwargs):
-        pass
         # run func in loop
-        # @asyncio.coroutine
-        # def job():
-            # func(*args, **kwargs)
-        # asyncio.run_coroutine_threadsafe(job(), thread_loop)
+        @asyncio.coroutine
+        def job():
+            func(*args, **kwargs)
+        asyncio.run_coroutine_threadsafe(job(), self._loop)
 
     @asyncio.coroutine
     def main_loop(self):
@@ -466,7 +465,6 @@ def check_dmr_exist(func):
     def no_dmr(self, *args, **kwargs):
         """check if DMR exist"""
         if not TRACKER.dmr:
-            # self.finish('Error: No DMR.')
             self.finish({'error': 'No DMR.'})
             return None
         return func(self, *args, **kwargs)
@@ -793,7 +791,7 @@ APP = tornado.web.Application(HANDLERS, **SETTINGS)
 # initialize dlna threader
 # TRACKER = DMRTracker()
 TRACKER = DMRTracker_new()
-LOADER = DLNALoader()
+# LOADER = DLNALoader()
 
 if __name__ == '__main__':
     # initialize DataBase
@@ -802,7 +800,7 @@ if __name__ == '__main__':
                     POSITION float not null,
                     DURATION float, LATEST_DATE datetime not null);''')
     TRACKER.start()
-    LOADER.start()
+    # LOADER.start()
     # if sys.platform == 'win32':
         # os.system('start http://127.0.0.1:8888/')
     APP.listen(8888, xheaders=True)
