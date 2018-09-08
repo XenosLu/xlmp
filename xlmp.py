@@ -303,13 +303,14 @@ class DMRTracker_coroutine(Thread):
             self.dmr.stop()
             logging.info('Waiting for DMR stopped...')
             sleep(0.75)
+        # try:
+        if self.dmr.set_current_media(url):
+            logging.info('Loaded %s', url)
+        else:
+            logging.warning('Load url failed: %s', url)
+            return False
+        time0 = time()
         try:
-            if self.dmr.set_current_media(url):
-                logging.info('Loaded %s', url)
-            else:
-                logging.warning('Load url failed: %s', url)
-                return False
-            time0 = time()
             while self._get_transport_state() not in ('PLAYING', 'TRANSITIONING'):
                 self.dmr.play()
                 logging.info('Waiting for DMR playing...')
