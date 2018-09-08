@@ -306,9 +306,9 @@ class DMRTracker_coroutine(Thread):
             sleep(0.75)
         # try:
         if self.dmr.set_current_media(url):
-            logging.info('Loaded %s', url)
+            logging.info('Loaded %s', unquote(url))
         else:
-            logging.warning('Load url failed: %s', url)
+            logging.warning('Load url failed: %s', unquote(url))
             return False
         time0 = time()
         try:
