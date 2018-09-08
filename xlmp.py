@@ -279,7 +279,7 @@ class DMRTracker_coroutine(Thread):
             if url != self._url or self._loadfinish:
                 return
             if self.loadonce(url):
-                logging.info('Loaded url: %s successed', url)
+                logging.info('Loaded url: %s successed', unquote(url))
                 src = unquote(re.sub('http://.*/video/', '', url))
                 position = hist_load(src)
                 if position:
@@ -331,6 +331,7 @@ class DMRTracker_coroutine(Thread):
         except Exception as exc:
             logging.warning('DLNA load exception: %s', exc, exc_info=True)
             return False
+            
         return True
 
 
