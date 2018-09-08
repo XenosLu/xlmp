@@ -200,7 +200,6 @@ class DMRTracker_coroutine(Thread):
         info = self.dmr.info()
         if info:
             self.state['CurrentTransportState'] = info.get('CurrentTransportState')
-            sleep(0.1)
             return info.get('CurrentTransportState')
         logging.info('get info failed')
         return None
@@ -239,6 +238,7 @@ class DMRTracker_coroutine(Thread):
                 self.state['CurrentDMR'] = str(self.dmr)
                 self.state['DMRs'] = [str(i) for i in self.all_devices]
                 if self._get_transport_state():
+                    sleep(0.1)
                     yield
                     if self._get_position_info():
                         sleep(0.1)
