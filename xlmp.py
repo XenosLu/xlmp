@@ -304,6 +304,7 @@ class DMRTracker_coroutine(Thread):
             self.dmr.stop()
             logging.info('Waiting for DMR stopped...')
             sleep(0.75)
+            sleep(0.73)
         # try:
         if self.dmr.set_current_media(url):
             logging.info('Loaded %s', unquote(url))
