@@ -202,6 +202,7 @@ class DMRTracker_coroutine(Thread):
             self.state['CurrentTransportState'] = info.get('CurrentTransportState')
             sleep(0.1)
             return info.get('CurrentTransportState')
+        logging.info('get info failed')
         return None
 
     def _get_position_info(self):
@@ -251,7 +252,8 @@ class DMRTracker_coroutine(Thread):
                         logging.info('No DMR currently.')
                         self.state = {'CurrentDMR': 'no DMR'}
                         self.dmr = None
-                yield from asyncio.sleep(0.8)
+                yield from asyncio.sleep(0.7)
+                sleep(0.1)
             else:
                 logging.debug('searching DMR')
                 self.discover_dmr()
