@@ -300,6 +300,7 @@ class DMRTracker_coroutine(Thread):
         if not self.dmr:
             return False
         while self._get_transport_state() not in ('STOPPED', 'NO_MEDIA_PRESENT'):
+            logging.info('send stop')
             self.dmr.stop()
             logging.info('Waiting for DMR stopped...')
             sleep(0.75)
