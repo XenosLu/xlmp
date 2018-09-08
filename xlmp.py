@@ -145,7 +145,8 @@ class DMRTracker(Thread):
             sleep(0.5)
             time0 = time()
             logging.info('checking duration to make sure loaded...')
-            while self.dmr.position_info().get('TrackDuration') == '00:00:00':
+            # while self.dmr.position_info().get('TrackDuration') == '00:00:00':
+            while self._get_position_info() == '00:00:00':
                 sleep(0.5)
                 logging.info('Waiting for duration to be recognized correctly, url=%s', url)
                 if (time() - time0) > 15:
@@ -273,7 +274,6 @@ class DMRTracker_coroutine(Thread):
     def load_coroutine(self, url):
         failure = 0
         while failure < 3:
-            logging.info('load failure count: %s', failure)
             if url != self._url or self._loadfinish:
                 return
             if self.loadonce(url):
@@ -290,6 +290,7 @@ class DMRTracker_coroutine(Thread):
                 return
             else:
                 failure += 1
+                logging.info('load failure count: %s', failure)
 
     def loadonce(self, url):
         """load video through DLNA from url for once"""
@@ -311,7 +312,7 @@ class DMRTracker_coroutine(Thread):
                 self.dmr.play()
                 logging.info('Waiting for DMR playing...')
                 sleep(0.3)
-                if (time() - time0) > 5:
+                if (time() - time0) > 10:
                     logging.info('waiting for DMR playing timeout')
                     return False
             sleep(0.5)
