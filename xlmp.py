@@ -276,6 +276,7 @@ class DMRTracker_coroutine(Thread):
     def load_coroutine(self, url):
         failure = 0
         while failure < 3:
+            sleep(0.4)
             if url != self._url or self._loadfinish:
                 return
             if self.loadonce(url):
