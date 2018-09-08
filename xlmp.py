@@ -652,7 +652,7 @@ class DlnaHandler(tornado.web.RequestHandler):
             ret = method()
         elif opt == 'seek':
             ret = TRACKER.dmr.seek(kwargs.get('progress'))
-        elif opt == 'playtoogle':
+        elif opt == 'playtoggle':
             pass
             if TRACKER.state.get('CurrentTransportState') == 'PLAYING':
                 ret = TRACKER.dmr.pause()
