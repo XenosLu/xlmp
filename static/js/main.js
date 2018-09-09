@@ -1,6 +1,4 @@
 "use strict";
-var lastplaytime = 0; //in seconds
-var text = ""; //temp output text
 var icon = {
     "folder": "oi-folder",
     "mp4": "oi-video",
@@ -12,7 +10,11 @@ window.commonView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-common',
         data: {
-            lastplaytime: 0,
+            video: {
+                lastplaytime: 0,
+                position: 0,
+                extraText: '',
+            },
             icon: icon,
             vmodel: '',
             swipeState: 0, // modal touch state
@@ -23,7 +25,6 @@ window.commonView = new Vue({
                 fixBarShow: true,
                 videoBtnText: 'origin',
             },
-            position: 0,
             wp_src: '', // web player source, not used
             history: [], // updated by ajax
             filelist: [], // updated by ajax
@@ -152,7 +153,7 @@ window.commonView = new Vue({
                 this.$refs.video.playbackRate = x;
             },
             videosave: function () {
-                this.lastplaytime = new Date().getTime(); //to detect if video is playing
+                this.video.lastplaytime = new Date().getTime(); //to detect if video is playing
                 if (this.$refs.video.readyState == 4 && Math.floor(Math.random() * 99) > 70) { //randomly save play position
                     $.ajax({
                         url: "/wp/save/" + window.commonView.wp_src,
@@ -169,19 +170,19 @@ window.commonView = new Vue({
                 }
             },
             videoload: function () {
-                this.$refs.video.currentTime = Math.max(window.commonView.position - 0.5, 0);
-                text = "<small>Play from</small><br>";
+                this.$refs.video.currentTime = Math.max(this.video.position - 0.5, 0);
+                this.video.extraText = "<small>Play from</small><br>";
             },
             videoseek: function () { //show position when changed
-                out(text + secondToTime(this.$refs.video.currentTime) + '/' + secondToTime(this.$refs.video.duration));
-                text = "";
+                out(this.video.extraText + secondToTime(this.$refs.video.currentTime) + '/' + secondToTime(this.$refs.video.duration));
+                this.video.extraText = "";
             },
             videoerror: function() {
                 out("error");
             },
             videoprogress: function() { //show buffered when hanged
                 var str = "";
-                if (new Date().getTime() - this.lastplaytime > 1000) {
+                if (new Date().getTime() - this.video.lastplaytime > 1000) {
                     for (var i = 0, t = this.$refs.video.buffered.length; i < t; i++) {
                         if (this.$refs.video.currentTime >= this.$refs.video.buffered.start(i) && this.$refs.video.currentTime <= this.$refs.video.buffered.end(i)) {
                             str = secondToTime(this.$refs.video.buffered.start(i)) + "-" + secondToTime(this.$refs.video.buffered.end(i)) + "<br>";
@@ -271,8 +272,8 @@ function get(url) {
     $.get(url, out);
 }
 
-function out2(text) {
-    window.alertBox.show("success", text);
+function out2(str) {
+    window.alertBox.show("success", str);
 }
 
 /**
@@ -325,12 +326,12 @@ function getHistory(str) {
  * Made an output box to show some text notification
  *
  * @method out
- * @param {String} text
+ * @param {String} str
  */
-function out(text) {
-    if (text != "") {
+function out(str) {
+    if (str != "") {
         $("#output").remove();
-        $(document.body).append('<div id="output">' + text + "</div>");
+        $(document.body).append('<div id="output">' + str + "</div>");
         $("#output").fadeTo(250, 0.7).delay(1800).fadeOut(625);
     };
 }
