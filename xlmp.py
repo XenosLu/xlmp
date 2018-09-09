@@ -217,7 +217,7 @@ class DMRTracker_coroutine(Thread):
             if position_info['TrackURI']:
                 self.state['TrackURI'] = unquote(
                     re.sub('http://.*/video/', '', position_info['TrackURI']))
-                self.url_prefix = re.sub('(http://.*/video/).*', '\\1', position_info['TrackURI']))
+                self.url_prefix = re.sub('(http://.*/video/).*', '\\1', position_info['TrackURI'])
                 save_history(self.state['TrackURI'],
                              time_to_second(self.state['RelTime']),
                              time_to_second(self.state['TrackDuration']))
