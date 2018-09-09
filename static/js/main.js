@@ -18,7 +18,7 @@ window.commonView = new Vue({
             icon: icon,
             vmodel: '',
             swipeState: 0, // modal touch state
-            mode: '',
+            mode: '', // mode of player, switch between empty/DLNA/WebPlayer
             uiState: {
                 modalShow: false, // true if the modal is show
                 historyShow: true, // ture if modal is history, false if modal content is file list
