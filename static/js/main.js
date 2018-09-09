@@ -167,9 +167,13 @@ window.commonView = new Vue({
                     });
                 }
             },
-            autoload: function () {
+            videoload: function () {
                 this.$refs.video.currentTime = Math.max(window.commonView.position - 0.5, 0);
                 text = "<small>Play from</small><br>";
+            },
+            videoseek: function () { //show position when changed
+                out(text + secondToTime(this.$refs.video.currentTime) + '/' + secondToTime(this.$refs.video.duration));
+                text = "";
             },
         },
         updated: function () {
@@ -179,6 +183,9 @@ window.commonView = new Vue({
             })
         },
     });
+    
+
+    
 function videoEvnets() {
     $("video").on("error", function () {
         out("error");
@@ -229,7 +236,7 @@ window.alertBox = new Vue({
                 else if (type === 'danger')
                     this.dismissCountDown = 9;
                 else
-                    this.dismissCountDown = 5;
+                    this.dismissCountDown = 3;
             }
         }
     });

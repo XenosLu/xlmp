@@ -38,7 +38,8 @@
         <video v-if="wp_src!==''"
                ref="video"
                @timeupdate="videosave"
-               @loadeddata="autoload"
+               @loadeddata="videoload"
+               @seeking="videoseek"
                :key="wp_src"
                :src="'/video/' + wp_src"
                poster controls preload="meta">
