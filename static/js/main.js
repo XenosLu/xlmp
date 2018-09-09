@@ -17,7 +17,6 @@ window.appView = new Vue({
                 sizeBtnText: 'origin',
             },
             icon: icon,
-            vmodel: '',
             swipeState: 0, // modal touch state
             mode: '', // mode of player, switch between empty/DLNA/WebPlayer
             uiState: {
@@ -56,7 +55,7 @@ window.appView = new Vue({
                 console.log("test " + obj);
             },
             dlnaToogle: function () {
-                this.mode = this.mode !=='DLNA' ? 'DLNA' : '';
+                this.mode = this.mode !== 'DLNA' ? 'DLNA' : '';
                 localStorage.mode = this.mode;
             },
             videoSizeToggle: function () {
@@ -174,10 +173,10 @@ window.appView = new Vue({
                 out(this.video.extraText + secondToTime(this.$refs.video.currentTime) + '/' + secondToTime(this.$refs.video.duration));
                 this.video.extraText = "";
             },
-            videoerror: function() {
+            videoerror: function () {
                 out("error");
             },
-            videoprogress: function() { //show buffered when hanged
+            videoprogress: function () { //show buffered when hanged
                 var str = "";
                 if (new Date().getTime() - this.video.lastplaytime > 1000) {
                     for (var i = 0, t = this.$refs.video.buffered.length; i < t; i++) {
@@ -189,7 +188,7 @@ window.appView = new Vue({
                     out(str + "<small>buffering...</small>");
                 }
             },
-            
+
         },
         updated: function () {
             this.$nextTick(function () {
@@ -198,7 +197,6 @@ window.appView = new Vue({
             })
         },
     });
-
 
 window.alertBox = new Vue({
         delimiters: ['${', '}'],
