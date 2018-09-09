@@ -14,6 +14,7 @@ window.commonView = new Vue({
                 lastplaytime: 0,
                 position: 0,
                 extraText: '',
+                sizeBtnText: 'origin',
             },
             icon: icon,
             vmodel: '',
@@ -23,7 +24,6 @@ window.commonView = new Vue({
                 modalShow: false, // true if the modal is show
                 historyShow: true, // ture if modal is history, false if modal content is file list
                 fixBarShow: true,
-                videoBtnText: 'origin',
             },
             wp_src: '', // web player source, not used
             history: [], // updated by ajax
@@ -59,11 +59,11 @@ window.commonView = new Vue({
                 this.mode = this.mode !=='DLNA' ? 'DLNA' : '';
                 localStorage.mode = this.mode;
             },
-            videoToggle: function () {
-                if (this.uiState.videoBtnText == 'auto')
+            videoSizeToggle: function () {
+                if (this.video.sizeBtnText == 'auto')
                     adapt();
                 else {
-                    this.uiState.videoBtnText = 'auto';
+                    this.video.sizeBtnText = 'auto';
                     if (this.$refs.video.width < $(window).width() && this.$refs.video.height < $(window).height()) {
                         this.$refs.video.style.width = this.$refs.video.videoWidth + "px";
                         this.$refs.video.style.height = this.$refs.video.videoHeight + "px";
@@ -279,11 +279,11 @@ function out2(str) {
  * @method adapt
  */
 function adapt() {
-    if ($("video").length == 1) {
+    if (window.commonView.wpMode) {
         // document.body.clientWidth
         // document.body.clientHeight
-        window.commonView.uiState.videoBtnText = "orign";
-        var video_ratio = $("video").get(0).videoWidth / $("video").get(0).videoHeight;
+        window.commonView.video.sizeBtnText = "orign";
+        var video_ratio = window.commonView.$refs.video.videoWidth / window.commonView.$refs.video.videoHeight;
         var page_ratio = $(window).width() / $(window).height();
         if (page_ratio < video_ratio) {
             var width = $(window).width() + "px";
@@ -292,8 +292,8 @@ function adapt() {
             var width = Math.floor($(window).height() * video_ratio) + "px";
             var height = $(window).height() + "px";
         }
-        $("video").get(0).style.width = width;
-        $("video").get(0).style.height = height;
+        window.commonView.$refs.video.style.width = width;
+        window.commonView.$refs.video.style.height = height;
     }
 }
 
@@ -328,7 +328,7 @@ function getHistory(str) {
 function out(str) {
     if (str != "") {
         $("#output").remove();
-        $(document.body).append('<div id="output">' + str + "</div>");
+        $(document.body).append('<div id="output">' + JSON.stringify(str) + "</div>");
         $("#output").fadeTo(250, 0.7).delay(1800).fadeOut(625);
     };
 }
