@@ -27,12 +27,8 @@ window.appView = new Vue({
             wp_src: '', // web player source, not used
             history: [], // updated by ajax
             filelist: [], // updated by ajax
-            positionBar: { // for dlna player
-                min: 0,
-                max: 0,
-                val: 0,
-                update: true,
-            },
+            positionBarCanUpdate: true,  //dlna position bar
+            positionBarVal: 0,
             dlnaInfo: { // updated by websocket
                 CurrentDMR: 'no DMR',
                 CurrentTransportState: '',
@@ -49,12 +45,9 @@ window.appView = new Vue({
             wpMode: function () { // check if in web player mode
                 return this.mode === 'WebPlayer';
             },
-            positionBar_test: function (){
-                return {
-                    max: timeToSecond(data.TrackDuration),
-                    val: timeToSecond(data.RelTime),
-                }
-            }
+            positionBarMax: function (){
+                return timeToSecond(this.dlnaInfo.TrackDuration)
+            },
         },
         methods: {
             test: function (obj) {
@@ -139,13 +132,12 @@ window.appView = new Vue({
                 $.get("/dlna/setdmr/" + dmr);
             },
             positionSeek: function () {
-                $.get("/dlna/seek/" + secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBar.val, this.positionBar.max)));
-                this.positionBar.update = true;
+                $.get("/dlna/seek/" + secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBarVal, this.positionBarMax)));
+                this.positionBarCanUpdate = true;
             },
             positionShow: function () {
-                console.log(this.positionBar.val);
-                out(secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBar.val, this.positionBar.max)));
-                this.positionBar.update = false;
+                out(secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBarVal, this.positionBarMax)));
+                this.positionBarCanUpdate = false;
             },
             get: function (url) {
                 $.get(url, out);
@@ -340,7 +332,7 @@ function out(str) {
 function dlnaTouch() {
     var hammertimeDlna = new Hammer(document.getElementById("DlnaTouch"));
     hammertimeDlna.on("panleft panright swipeleft swiperight", function (ev) {
-        var newtime = window.appView.positionBar.val + ev.deltaX / 4;
+        var newtime = window.appView.positionBarVal + ev.deltaX / 4;
         newtime = Math.max(newtime, 0);
         newtime = Math.min(newtime, window.appView.positionBar.max);
         out(secondToTime(newtime));
@@ -376,9 +368,9 @@ function dlnalink() {
 }
 
 function renderDlna(data) {
-    if (window.appView.positionBar.update) {
-        window.appView.positionBar.max = timeToSecond(data.TrackDuration);
-        window.appView.positionBar.val = timeToSecond(data.RelTime);
+    if (window.appView.positionBarCanUpdate) {
+        // window.appView.positionBar.max = timeToSecond(data.TrackDuration);
+        window.appView.positionBarVal = timeToSecond(data.RelTime);
     }
     window.appView.dlnaInfo = data;
 }
