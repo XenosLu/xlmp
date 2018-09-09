@@ -182,7 +182,7 @@ window.commonView = new Vue({
             videoprogress: function() { //show buffered when hanged
                 var str = "";
                 if (new Date().getTime() - this.lastplaytime > 1000) {
-                    for (i = 0, t = this.$refs.video.buffered.length; i < t; i++) {
+                    for (var i = 0, t = this.$refs.video.buffered.length; i < t; i++) {
                         if (this.$refs.video.currentTime >= this.$refs.video.buffered.start(i) && this.$refs.video.currentTime <= this.$refs.video.buffered.end(i)) {
                             str = secondToTime(this.$refs.video.buffered.start(i)) + "-" + secondToTime(this.$refs.video.buffered.end(i)) + "<br>";
                             break;
