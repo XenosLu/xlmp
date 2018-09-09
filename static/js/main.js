@@ -145,7 +145,7 @@ window.commonView = new Vue({
                 this.positionBar.update = false;
             },
             get: function (url) {
-                $.get(url, out2);
+                $.get(url, out);
             },
             rate: function (x) {
                 out(x + "X");
@@ -227,7 +227,7 @@ function showSidebar() {
  */
 function get(url) {
     console.log('get');
-    $.get(url, out2);
+    $.get(url, out);
     // $.get(url, out);
 }
 
