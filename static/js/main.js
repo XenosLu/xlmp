@@ -13,6 +13,7 @@ window.commonView = new Vue({
         el: '#v-common',
         data: {
             icon: icon,
+            vmodel: '',
             swipeState: 0, // modal touch state
             mode: '',
             uiState: {
@@ -50,6 +51,26 @@ window.commonView = new Vue({
             },
         },
         methods: {
+            autosave: function(){
+                console.log(this.$refs.video);
+                lastplaytime = new Date().getTime(); //to detect if video is playing
+                if (this.$refs.video.readyState == 4 && Math.floor(Math.random() * 99) > 70) { //randomly save play position
+                    $.ajax({
+                        url: "/wp/save/" + window.commonView.wp_src,
+                        data: {
+                            position: this.$refs.video.currentTime,
+                            duration: this.$refs.video.duration
+                        },
+                        timeout: 999,
+                        type: "POST",
+                        error: function (xhr) {
+                            out("save: " + xhr.statusText);
+                        }
+                    });
+                }
+    
+                
+            },
             dlnaToogle: function () {
                 if (this.mode !== 'DLNA')
                     this.mode = 'DLNA';
@@ -159,6 +180,28 @@ window.commonView = new Vue({
             })
         },
     });
+function videoEvnets() {
+    $("video").on("error", function () {
+        out("error");
+    }).on("loadeddata", function () { //auto load position
+        this.currentTime = Math.max(window.commonView.position - 0.5, 0);
+        text = "<small>Play from</small><br>";
+    }).on("seeking", function () { //show position when changed
+        out(text + secondToTime(this.currentTime) + '/' + secondToTime(this.duration));
+        text = "";
+    }).on("progress", function () { //show buffered
+        var str = "";
+        if (new Date().getTime() - lastplaytime > 1000) {
+            for (i = 0, t = this.buffered.length; i < t; i++) {
+                if (this.currentTime >= this.buffered.start(i) && this.currentTime <= this.buffered.end(i)) {
+                    str = secondToTime(this.buffered.start(i)) + "-" + secondToTime(this.buffered.end(i)) + "<br>";
+                    break;
+                }
+            }
+            out(str + "<small>buffering...</small>");
+        }
+    });
+}
 
 window.alertBox = new Vue({
         delimiters: ['${', '}'],
@@ -398,41 +441,3 @@ function touchWebPlayer() {
     });
 }
 
-function videoEvnets() {
-    $("video").on("error", function () {
-        out("error");
-    }).on("loadeddata", function () { //auto load position
-        this.currentTime = Math.max(window.commonView.position - 0.5, 0);
-        text = "<small>Play from</small><br>";
-    }).on("seeking", function () { //show position when changed
-        out(text + secondToTime(this.currentTime) + '/' + secondToTime(this.duration));
-        text = "";
-    }).on("timeupdate", function () { //auto save play position
-        lastplaytime = new Date().getTime(); //to detect if video is playing
-        if (this.readyState == 4 && Math.floor(Math.random() * 99) > 80) { //randomly save play position
-            $.ajax({
-                url: "/wp/save/" + window.commonView.wp_src,
-                data: {
-                    position: this.currentTime,
-                    duration: this.duration
-                },
-                timeout: 999,
-                type: "POST",
-                error: function (xhr) {
-                    out("save: " + xhr.statusText);
-                }
-            });
-        }
-    }).on("progress", function () { //show buffered
-        var str = "";
-        if (new Date().getTime() - lastplaytime > 1000) {
-            for (i = 0, t = this.buffered.length; i < t; i++) {
-                if (this.currentTime >= this.buffered.start(i) && this.currentTime <= this.buffered.end(i)) {
-                    str = secondToTime(this.buffered.start(i)) + "-" + secondToTime(this.buffered.end(i)) + "<br>";
-                    break;
-                }
-            }
-            out(str + "<small>buffering...</small>");
-        }
-    });
-}
