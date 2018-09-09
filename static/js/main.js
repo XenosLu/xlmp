@@ -41,13 +41,13 @@ window.commonView = new Vue({
             },
         },
         computed: {
-            dlnaOn: function () {
+            dlnaOn: function () { // check if dlna dmr is exist
                 return this.dlnaInfo.CurrentDMR !== 'no DMR';
             },
-            dlnaMode: function () {
+            dlnaMode: function () { // check if in dlna mode
                 return this.mode === 'DLNA';
             },
-            wpMode: function () {
+            wpMode: function () { // check if in web player mode
                 return this.mode === 'WebPlayer';
             },
         },
