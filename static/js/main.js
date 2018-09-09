@@ -117,7 +117,6 @@ window.commonView = new Vue({
                     this.showFs("/fs/ls/" + obj + "/");
                     break;
                 case "mp4":
-                    // if (window.document.location.pathname == "/dlna")
                     if (this.dlnaMode)
                         get("/dlna/load/" + obj);
                     else
@@ -126,7 +125,6 @@ window.commonView = new Vue({
                         // this.mode = "WebPlayer";
                     break;
                 case "video":
-                    // if (window.document.location.pathname == "/dlna")
                     if (this.dlnaMode)
                         get("/dlna/load/" + obj);
                     break;
