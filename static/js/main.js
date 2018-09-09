@@ -64,9 +64,9 @@ window.commonView = new Vue({
                     adapt();
                 else {
                     this.uiState.videoBtnText = 'auto';
-                    if ($("video").get(0).width < $(window).width() && $("video").get(0).height < $(window).height()) {
-                        $("video").get(0).style.width = $("video").get(0).videoWidth + "px";
-                        $("video").get(0).style.height = $("video").get(0).videoHeight + "px";
+                    if (this.$refs.video.width < $(window).width() && this.$refs.video.height < $(window).height()) {
+                        this.$refs.video.style.width = this.$refs.video.videoWidth + "px";
+                        this.$refs.video.style.height = this.$refs.video.videoHeight + "px";
                     }
                 }
             },
