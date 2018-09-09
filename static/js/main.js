@@ -118,10 +118,11 @@ window.commonView = new Vue({
                 case "mp4":
                     if (this.dlnaMode)
                         get("/dlna/load/" + obj);
-                    else
+                    else {
                         // this.wp_src = obj;
                         window.location.href = "/wp/play/" + obj;
                         // this.mode = "WebPlayer";
+                    }
                     break;
                 case "video":
                     if (this.dlnaMode)
@@ -167,7 +168,7 @@ window.commonView = new Vue({
                     });
                 }
             },
-            autoload: function(){
+            autoload: function () {
                 this.$refs.video.currentTime = Math.max(window.commonView.position - 0.5, 0);
                 text = "<small>Play from</small><br>";
             },
@@ -435,4 +436,3 @@ function touchWebPlayer() {
         console.log(ev.type);
     });
 }
-
