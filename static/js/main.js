@@ -17,7 +17,6 @@ window.commonView = new Vue({
             swipeState: 0, // modal touch state
             mode: '',
             uiState: {
-                // dlnaOn: false, // true if dlna dmr exist
                 modalShow: false, // true if the modal is show
                 historyShow: true, // ture if modal is history, false if modal content is file list
                 fixBarShow: true,
@@ -426,7 +425,6 @@ function rate(x) {
 
 function touchWebPlayer() {
     var hammertimeVideo = new Hammer(document);
-
     hammertimeVideo.on("panleft panright swipeleft swiperight", function (ev) {
         var deltaTime = ev.deltaX / 4;
         if (ev.type.indexOf("swipe") != -1)
