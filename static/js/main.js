@@ -51,7 +51,7 @@ window.commonView = new Vue({
             },
         },
         methods: {
-            autosave: function(){
+            autosave: function () {
                 console.log(this.$refs.video);
                 lastplaytime = new Date().getTime(); //to detect if video is playing
                 if (this.$refs.video.readyState == 4 && Math.floor(Math.random() * 99) > 70) { //randomly save play position
@@ -68,8 +68,6 @@ window.commonView = new Vue({
                         }
                     });
                 }
-    
-                
             },
             dlnaToogle: function () {
                 if (this.mode !== 'DLNA')
