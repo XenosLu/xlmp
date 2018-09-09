@@ -770,8 +770,9 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     def on_pong(self, data=None):
         if self.last_message != TRACKER.state:
             logging.debug(TRACKER.state)
-            for ws_user in self.users:
-                ws_user.write_message(TRACKER.state)
+            self.write_message(TRACKER.state)
+            # for ws_user in self.users:
+                # ws_user.write_message(TRACKER.state)
             self.last_message = TRACKER.state.copy()
 
     def on_close(self):
