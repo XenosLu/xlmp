@@ -762,7 +762,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     def open(self, *args, **kwargs):
         logging.info('ws connected: %s', self.request.remote_ip)
         self.users.add(self)
-        self.write_message(TRACKER.state)
+        # self.write_message(TRACKER.state)
 
     def on_message(self, message):
         pass
