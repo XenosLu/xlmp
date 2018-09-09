@@ -260,7 +260,6 @@ function showSidebar() {
 
 //window.commonView.showModal();  // show modal at start
 
-
 /**
  * Ajax get and out result
  *
@@ -412,17 +411,6 @@ function modalTouch() {
             window.commonView.open(target.getAttribute('data-path'), target.getAttribute('data-type'));
         console.log(target.getAttribute('data-target'));
     });
-}
-
-/**
- * Set play rate
- *
- * @method rate
- * @param {Number} x
- */
-function rate(x) {
-    out(x + "X");
-    $("video").get(0).playbackRate = x;
 }
 
 function touchWebPlayer() {
