@@ -164,14 +164,16 @@ class DMRTracker_coroutine(Thread):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._flag = Event()
-        self._flag.set()
-        self._running = Event()
-        self._running.set()
+        # self._flag = Event()
+        # self._flag.set()
+        # self._running = Event()
+        # self._running.set()
+        self.loop_playback = Event()
+        self._load_inprogess = Event()
         self.state = {'CurrentDMR': 'no DMR'}  # DMR device state
         self.dmr = None  # DMR device object
         self.all_devices = []  # DMR device list
-        # self._load = None
+        self.url_prefix = None
         self._loop = asyncio.new_event_loop()
         
         logging.info('DMR Tracker thread initialized.')
@@ -215,6 +217,7 @@ class DMRTracker_coroutine(Thread):
             if position_info['TrackURI']:
                 self.state['TrackURI'] = unquote(
                     re.sub('http://.*/video/', '', position_info['TrackURI']))
+                self.url_prefix = re.sub('(http://.*/video/).*', '\\1', position_info['TrackURI']))
                 save_history(self.state['TrackURI'],
                              time_to_second(self.state['RelTime']),
                              time_to_second(self.state['TrackDuration']))
@@ -237,8 +240,11 @@ class DMRTracker_coroutine(Thread):
             if self.dmr:
                 self.state['CurrentDMR'] = str(self.dmr)
                 self.state['DMRs'] = [str(i) for i in self.all_devices]
-                if self._get_transport_state():
+                transport_state = self._get_transport_state()
+                if transport_state:
                     sleep(0.1)
+                    if transport_state == 'STOPPED' and self.loop_playback.isSet() and not self.loadnext():
+                        self.loop_playback.clear()
                     yield
                     if self._get_position_info():
                         sleep(0.1)
@@ -268,7 +274,8 @@ class DMRTracker_coroutine(Thread):
         """Load video through DLNA from URL """
         logging.info('start loading')
         self._url = url
-        self._loadfinish = False
+        self.loop_playback.set()
+        self._load_inprogess.set()
         asyncio.run_coroutine_threadsafe(self.load_coroutine(url), self._loop)
         logging.info('coroutine loaded')
 
@@ -277,7 +284,7 @@ class DMRTracker_coroutine(Thread):
         failure = 0
         while failure < 3:
             sleep(0.4)
-            if url != self._url or self._loadfinish:
+            if url != self._url or not self._load_inprogess.isSet():
                 return
             if self.loadonce(url):
                 logging.info('Loaded url: %s successed', unquote(url))
@@ -289,11 +296,23 @@ class DMRTracker_coroutine(Thread):
                 logging.info('Load Successed.')
                 self.state['CurrentTransportState'] = 'Load Successed.'
                 if url == self._url:
-                    self._loadfinish = True
+                    self._load_inprogess.clear()
                 return
             else:
                 failure += 1
                 logging.info('load failure count: %s', failure)
+
+    def loadnext(self):
+        """load next video"""
+        if not self.state.get('TrackURI'):
+            return False
+        next_file = get_next_file(self.state['TrackURI'])
+        logging.info('next file recognized: %s', next_file)
+        if next_file and self.url_prefix:
+            url = '%s%s' % (self.url_prefix, quote(next_file))
+            self.load(url)
+            return True
+        return False
 
     def loadonce(self, url):
         """load video through DLNA from url for once"""
@@ -485,6 +504,7 @@ def check_dmr_exist(func):
 
 def get_next_file(src):  # not strict enough
     """get next related video file"""
+    logging.info(src)
     fullname = '%s/%s' % (VIDEO_PATH, src)
     filepath = os.path.dirname(fullname)
     dirs = sorted([i for i in os.listdir(filepath)
@@ -626,16 +646,17 @@ class DlnaNextHandler(tornado.web.RequestHandler):
 
     @check_dmr_exist
     def get(self, *args, **kwargs):
-        if not TRACKER.state.get('TrackURI'):
-            self.finish('No current url')
-            return
-        next_file = get_next_file(TRACKER.state['TrackURI'])
-        logging.info('next file recognized: %s', next_file)
-        if next_file:
-            url = 'http://%s/video/%s' % (self.request.headers['Host'], quote(next_file))
-            # LOADER.load(url)
-            TRACKER.load(url)
-        else:
+        # if not TRACKER.state.get('TrackURI'):
+            # self.finish('No current url')
+            # return
+        # next_file = get_next_file(TRACKER.state['TrackURI'])
+        # logging.info('next file recognized: %s', next_file)
+        # if next_file:
+            # url = 'http://%s/video/%s' % (self.request.headers['Host'], quote(next_file))
+            # # LOADER.load(url)
+            # TRACKER.load(url)
+        if not TRACKER.loadnext():
+        # else:
             self.finish({'warning': "Can't get next file"})
 
 
@@ -648,6 +669,8 @@ class DlnaHandler(tornado.web.RequestHandler):
     def get(self, *args, **kwargs):
         opt = kwargs.get('opt')
         if opt in ('play', 'pause', 'stop'):
+            if opt == 'stop':
+                TRACKER.loop_playback.clear()
             method = getattr(TRACKER.dmr, opt)
             ret = method()
         elif opt == 'seek':
