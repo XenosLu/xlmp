@@ -185,9 +185,6 @@ window.commonView = new Vue({
 function videoEvnets() {
     $("video").on("error", function () {
         out("error");
-    }).on("loadeddata", function () { //auto load position
-        this.currentTime = Math.max(window.commonView.position - 0.5, 0);
-        text = "<small>Play from</small><br>";
     }).on("seeking", function () { //show position when changed
         out(text + secondToTime(this.currentTime) + '/' + secondToTime(this.duration));
         text = "";
