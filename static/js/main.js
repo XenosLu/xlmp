@@ -51,24 +51,6 @@ window.commonView = new Vue({
             },
         },
         methods: {
-            autosave: function () {
-                console.log(this.$refs.video);
-                lastplaytime = new Date().getTime(); //to detect if video is playing
-                if (this.$refs.video.readyState == 4 && Math.floor(Math.random() * 99) > 70) { //randomly save play position
-                    $.ajax({
-                        url: "/wp/save/" + window.commonView.wp_src,
-                        data: {
-                            position: this.$refs.video.currentTime,
-                            duration: this.$refs.video.duration
-                        },
-                        timeout: 999,
-                        type: "POST",
-                        error: function (xhr) {
-                            out("save: " + xhr.statusText);
-                        }
-                    });
-                }
-            },
             dlnaToogle: function () {
                 if (this.mode !== 'DLNA')
                     this.mode = 'DLNA';
@@ -169,6 +151,28 @@ window.commonView = new Vue({
             rate: function (x) {
                 out(x + "X");
                 $("video").get(0).playbackRate = x;
+            },
+            autosave: function () {
+                console.log(this.$refs.video);
+                lastplaytime = new Date().getTime(); //to detect if video is playing
+                if (this.$refs.video.readyState == 4 && Math.floor(Math.random() * 99) > 70) { //randomly save play position
+                    $.ajax({
+                        url: "/wp/save/" + window.commonView.wp_src,
+                        data: {
+                            position: this.$refs.video.currentTime,
+                            duration: this.$refs.video.duration
+                        },
+                        timeout: 999,
+                        type: "POST",
+                        error: function (xhr) {
+                            out("save: " + xhr.statusText);
+                        }
+                    });
+                }
+            },
+            autoload: function(){
+                this.$refs.video.currentTime = Math.max(window.commonView.position - 0.5, 0);
+                text = "<small>Play from</small><br>";
             },
         },
         updated: function () {
