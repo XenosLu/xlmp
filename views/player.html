@@ -3,10 +3,10 @@
     {% block footer %}{% end %}
 {% block script %}
 <script>
-window.commonView.mode = "WebPlayer";
-window.commonView.wp_src = "{{src}}";
-window.commonView.video.position = {{position}};
-window.document.title = window.commonView.wp_src + " - Light Media Player";
+window.appView.mode = "WebPlayer";
+window.appView.wp_src = "{{src}}";
+window.appView.video.position = {{position}};
+window.document.title = window.appView.wp_src + " - Light Media Player";
 touchWebPlayer();
 </script>
 {% end %}

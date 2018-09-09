@@ -6,7 +6,7 @@ var icon = {
     "other": "oi-file"
 };
 
-window.commonView = new Vue({
+window.appView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-common',
         data: {
@@ -85,8 +85,8 @@ window.commonView = new Vue({
                     timeout: 1999,
                     type: "get",
                     success: function (data) {
-                        window.commonView.uiState.historyShow = false;
-                        window.commonView.filelist = data.filesystem;
+                        window.appView.uiState.historyShow = false;
+                        window.appView.filelist = data.filesystem;
                     },
                     error: function (xhr) {
                         out(xhr.statusText);
@@ -153,7 +153,7 @@ window.commonView = new Vue({
                 this.video.lastplaytime = new Date().getTime(); //to detect if video is playing
                 if (this.$refs.video.readyState == 4 && Math.floor(Math.random() * 99) > 70) { //randomly save play position
                     $.ajax({
-                        url: "/wp/save/" + window.commonView.wp_src,
+                        url: "/wp/save/" + window.appView.wp_src,
                         data: {
                             position: this.$refs.video.currentTime,
                             duration: this.$refs.video.duration
@@ -240,23 +240,23 @@ modalTouch();
 var hide_sidebar = 0;
 
 if (typeof(localStorage.mode) !== "undefined")
-    window.commonView.mode = localStorage.mode;
+    window.appView.mode = localStorage.mode;
 
 window.onload = adapt;
 window.onresize = adapt;
 var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
 if (!isiOS) {
-    window.commonView.uiState.fixBarShow = false;
+    window.appView.uiState.fixBarShow = false;
     $(document).mousemove(showSidebar);
 }
 
 function showSidebar() {
-    window.commonView.uiState.fixBarShow = true;
+    window.appView.uiState.fixBarShow = true;
     clearTimeout(hide_sidebar);
-    hide_sidebar = setTimeout('window.commonView.uiState.fixBarShow = false;', 3000);
+    hide_sidebar = setTimeout('window.appView.uiState.fixBarShow = false;', 3000);
 }
 
-//window.commonView.showModal();  // show modal at start
+//window.appView.showModal();  // show modal at start
 
 /**
  * Ajax get and out result
@@ -279,11 +279,11 @@ function out2(str) {
  * @method adapt
  */
 function adapt() {
-    if (window.commonView.wpMode) {
+    if (window.appView.wpMode) {
         // document.body.clientWidth
         // document.body.clientHeight
-        window.commonView.video.sizeBtnText = "orign";
-        var video_ratio = window.commonView.$refs.video.videoWidth / window.commonView.$refs.video.videoHeight;
+        window.appView.video.sizeBtnText = "orign";
+        var video_ratio = window.appView.$refs.video.videoWidth / window.appView.$refs.video.videoHeight;
         var page_ratio = $(window).width() / $(window).height();
         if (page_ratio < video_ratio) {
             var width = $(window).width() + "px";
@@ -292,8 +292,8 @@ function adapt() {
             var width = Math.floor($(window).height() * video_ratio) + "px";
             var height = $(window).height() + "px";
         }
-        window.commonView.$refs.video.style.width = width;
-        window.commonView.$refs.video.style.height = height;
+        window.appView.$refs.video.style.width = width;
+        window.appView.$refs.video.style.height = height;
     }
 }
 
@@ -310,8 +310,8 @@ function getHistory(str) {
         timeout: 1999,
         type: "get",
         success: function (data) {
-            window.commonView.uiState.historyShow = true;
-            window.commonView.history = data.history;
+            window.appView.uiState.historyShow = true;
+            window.appView.history = data.history;
         },
         error: function (xhr) {
             out(xhr.statusText);
@@ -336,9 +336,9 @@ function out(str) {
 function dlnaTouch() {
     var hammertimeDlna = new Hammer(document.getElementById("DlnaTouch"));
     hammertimeDlna.on("panleft panright swipeleft swiperight", function (ev) {
-        var newtime = window.commonView.positionBar.val + ev.deltaX / 4;
+        var newtime = window.appView.positionBar.val + ev.deltaX / 4;
         newtime = Math.max(newtime, 0);
-        newtime = Math.min(newtime, window.commonView.positionBar.max);
+        newtime = Math.min(newtime, window.appView.positionBar.max);
         out(secondToTime(newtime));
         if (ev.type.indexOf("swipe") != -1)
             $.get("/dlna/seek/" + secondToTime(newtime));
@@ -359,7 +359,7 @@ function dlnalink() {
         renderDlna(data);
     }
     ws.onclose = function () {
-        window.commonView.dlnaInfo.CurrentTransportState = 'disconnected';
+        window.appView.dlnaInfo.CurrentTransportState = 'disconnected';
     };
     ws.onerror = function () {
         console.log('error');
@@ -372,25 +372,25 @@ function dlnalink() {
 }
 
 function renderDlna(data) {
-    if (window.commonView.positionBar.update) {
-        window.commonView.positionBar.max = timeToSecond(data.TrackDuration);
-        window.commonView.positionBar.val = timeToSecond(data.RelTime);
+    if (window.appView.positionBar.update) {
+        window.appView.positionBar.max = timeToSecond(data.TrackDuration);
+        window.appView.positionBar.val = timeToSecond(data.RelTime);
     }
-    window.commonView.dlnaInfo = data;
+    window.appView.dlnaInfo = data;
 }
 
 function modalTouch() {
     var hammertimeModal = new Hammer(document.getElementById("ModalTouch"));
 
     hammertimeModal.on("swipeleft", function (ev) {
-        window.commonView.swipeState -= 1;
-        if (window.commonView.swipeState < -1)
-            window.commonView.swipeState = -1;
+        window.appView.swipeState -= 1;
+        if (window.appView.swipeState < -1)
+            window.appView.swipeState = -1;
     });
     hammertimeModal.on("swiperight", function (ev) {
-        window.commonView.swipeState += 1;
-        if (window.commonView.swipeState > 1)
-            window.commonView.swipeState = 1;
+        window.appView.swipeState += 1;
+        if (window.appView.swipeState > 1)
+            window.appView.swipeState = 1;
     });
     // var press = new Hammer.Press({time: 500});
     // press.requireFailure(new Hammer.Tap());
@@ -399,14 +399,14 @@ function modalTouch() {
         console.log(ev)
         var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
         if (target.hasAttribute("data-target"))
-            window.commonView.open(target.getAttribute('data-target'), 'folder');
+            window.appView.open(target.getAttribute('data-target'), 'folder');
         console.log(target.getAttribute('data-target'));
     });
     hammertimeModal.on("tap", function (ev) {
         console.log(ev)
         var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
         if (target.hasAttribute("data-type"))
-            window.commonView.open(target.getAttribute('data-path'), target.getAttribute('data-type'));
+            window.appView.open(target.getAttribute('data-path'), target.getAttribute('data-type'));
         console.log(target.getAttribute('data-target'));
     });
 }
