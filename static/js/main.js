@@ -148,7 +148,7 @@ window.commonView = new Vue({
             },
             rate: function (x) {
                 out(x + "X");
-                $("video").get(0).playbackRate = x;
+                this.$refs.video.playbackRate = x;
             },
             autosave: function () {
                 console.log(this.$refs.video);
