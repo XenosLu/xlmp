@@ -37,7 +37,7 @@
       <div id="v-common">
         <video v-if="wp_src!==''"
                ref="video"
-               @timeupdate="autosave"
+               @timeupdate="videosave"
                @loadeddata="autoload"
                :key="wp_src"
                :src="'/video/' + wp_src"

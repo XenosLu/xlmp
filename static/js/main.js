@@ -150,8 +150,7 @@ window.commonView = new Vue({
                 out(x + "X");
                 this.$refs.video.playbackRate = x;
             },
-            autosave: function () {
-                console.log(this.$refs.video);
+            videosave: function () {
                 lastplaytime = new Date().getTime(); //to detect if video is playing
                 if (this.$refs.video.readyState == 4 && Math.floor(Math.random() * 99) > 70) { //randomly save play position
                     $.ajax({
