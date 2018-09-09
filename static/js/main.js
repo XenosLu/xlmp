@@ -51,8 +51,8 @@ window.appView = new Vue({
             },
             positionBar_test: function (){
                 return {
-                    max: timeToSecond(data.TrackDuration);
-                    val: timeToSecond(data.RelTime);
+                    max: timeToSecond(data.TrackDuration),
+                    val: timeToSecond(data.RelTime),
                 }
             }
         },
