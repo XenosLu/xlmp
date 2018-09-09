@@ -56,10 +56,7 @@ window.commonView = new Vue({
                 console.log("test " + obj);
             },
             dlnaToogle: function () {
-                if (this.mode !== 'DLNA')
-                    this.mode = 'DLNA';
-                else
-                    this.mode = '';
+                this.mode = this.mode !=='DLNA' ? 'DLNA' : '';
                 localStorage.mode = this.mode;
             },
             videoToggle: function () {
