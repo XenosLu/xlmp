@@ -49,6 +49,12 @@ window.appView = new Vue({
             wpMode: function () { // check if in web player mode
                 return this.mode === 'WebPlayer';
             },
+            positionBar_test: function (){
+                return {
+                    max: timeToSecond(data.TrackDuration);
+                    val: timeToSecond(data.RelTime);
+                }
+            }
         },
         methods: {
             test: function (obj) {
