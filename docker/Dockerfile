@@ -28,7 +28,7 @@ EXPOSE 80
 # media folder:
 VOLUME /xlmp/media
 
-RUN chmod -R +x /xlmp/docker/s6
+# RUN chmod -R +x /xlmp/docker/s6
 # ENTRYPOINT ["/bin/sh", "/xlmp/docker/docker-entrypoint.sh"]
 # CMD ["/usr/bin/supervisord", "-c", "/xlmp/docker/supervisord.conf"]
 CMD ["/bin/s6-svscan", "/xlmp/docker/s6/"]
