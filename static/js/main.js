@@ -64,9 +64,25 @@ window.appView = new Vue({
                 this.mode = this.mode !== '' ? '' : 'DLNA';
                 localStorage.mode = this.mode;
             },
+            videoAdapt: function () {
+                if (this.wpMode) {
+                    this.video.sizeBtnText = "orign";
+                    var video_ratio = this.$refs.video.videoWidth / this.$refs.video.videoHeight;
+                    var page_ratio = window.innerWidth / window.innerHeight;
+                    if (page_ratio < video_ratio) {
+                        var width = window.innerWidth + "px";
+                        var height = Math.floor(window.innerWidth / video_ratio) + "px";
+                    } else {
+                        var width = Math.floor(window.innerHeight * video_ratio) + "px";
+                        var height = window.innerHeight + "px";
+                    }
+                    this.$refs.video.style.width = width;
+                    this.$refs.video.style.height = height;
+                }
+            },
             videoSizeToggle: function () {
                 if (this.video.sizeBtnText == 'auto')
-                    adapt();
+                    this.videoAdapt();
                 else {
                     this.video.sizeBtnText = 'auto';
                     if (this.$refs.video.width < window.innerWidth && this.$refs.video.height < window.innerHeight) {
@@ -172,7 +188,7 @@ window.appView = new Vue({
                 }
             },
             videoload: function () {
-                adapt();
+                this.videoAdapt();
                 // console.log(this.wpPosition); //test only
                 this.$refs.video.currentTime = Math.max(this.wpPosition - 0.5, 0);
                 // this.$refs.video.currentTime = Math.max(this.video.position - 0.5, 0);
@@ -255,7 +271,7 @@ var hide_sidebar = 0;
 if (typeof(localStorage.mode) !== "undefined")
     window.appView.mode = localStorage.mode;
 
-window.onresize = adapt;
+window.onresize = window.appView.videoAdapt;
 var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
 if (!isiOS) {
     window.appView.uiState.fixBarShow = false;
@@ -285,27 +301,6 @@ function out2(str) {
     window.alertBox.show("success", str);
 }
 
-/**
- * Auto adjust video size
- *
- * @method adapt
- */
-function adapt() {
-    if (window.appView.wpMode) {
-        window.appView.video.sizeBtnText = "orign";
-        var video_ratio = window.appView.$refs.video.videoWidth / window.appView.$refs.video.videoHeight;
-        var page_ratio = window.innerWidth / window.innerHeight;
-        if (page_ratio < video_ratio) {
-            var width = window.innerWidth + "px";
-            var height = Math.floor(window.innerWidth / video_ratio) + "px";
-        } else {
-            var width = Math.floor(window.innerHeight * video_ratio) + "px";
-            var height = window.innerHeight + "px";
-        }
-        window.appView.$refs.video.style.width = width;
-        window.appView.$refs.video.style.height = height;
-    }
-}
 
 /**
  * Render history list box from ajax
