@@ -126,7 +126,6 @@ window.appView = new Vue({
                         // window.location.href = "/wp/play/" + obj;
                         this.wp_src = obj;
                         this.mode = "WebPlayer";
-                        window.document.title = this.wp_src + " - Light Media Player";
                         this.uiState.modalShow = false;
                     }
                     break;
@@ -202,9 +201,17 @@ window.appView = new Vue({
         updated: function () {
             this.$nextTick(function () {
                 if (this.dlnaMode)
+                {
+                    window.document.title = "DMC - Light Media Player";
                     dlnaTouch();
-                if (this.wpMode)
+                }
+                else if (this.wpMode)
+                {
+                    window.document.title = this.wp_src + " - Light Media Player";
                     adapt();
+                }
+                else
+                    window.document.title = "Light Media Player";
             })
         },
     });
@@ -356,7 +363,6 @@ function dlnaTouch() {
     });
 }
 
-// window.document.title = "DMC - Light Media Player";
 
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
