@@ -26,18 +26,17 @@ HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
 
 
 class DMRTracker(Thread):
-    """DLNA Digital Media Renderer tracker coroutine thread"""
+    """DLNA Digital Media Renderer tracker thread with coroutine"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.loop_playback = Event()
+        self._loop = asyncio.new_event_loop()
         self._load_inprogess = Event()
+        self.loop_playback = Event()
         self.state = {'CurrentDMR': 'no DMR'}  # DMR device state
         self.dmr = None  # DMR device object
         self.all_devices = []  # DMR device list
         self.url_prefix = None
-        self._loop = asyncio.new_event_loop()
-        
         logging.info('DMR Tracker thread initialized.')
 
     def discover_dmr(self):
