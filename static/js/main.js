@@ -16,6 +16,7 @@ window.appView = new Vue({
                 // position: 0, // no longer needed
                 extraText: '',
                 sizeBtnText: 'origin',
+                src: '',
             },
             icon: icon,
             swipeState: 0, // modal touch state
@@ -25,7 +26,7 @@ window.appView = new Vue({
                 historyShow: true, // ture if modal is history, false if modal content is file list
                 fixBarShow: true,
             },
-            wp_src: '', // web player source
+            // video.src: '', // web player source
             history: [], // updated by ajax
             filelist: [], // updated by ajax
             positionBarCanUpdate: true, //dlna position bar
@@ -51,7 +52,7 @@ window.appView = new Vue({
             },
             wpPosition: function () {
                 for (var item in this.history) {
-                    if (this.history[item].filename == window.appView.wp_src)
+                    if (this.history[item].filename == window.appView.video.src)
                         return this.history[item].position;
                 }
                 return 0;
@@ -141,7 +142,7 @@ window.appView = new Vue({
                         get("/dlna/load/" + obj);
                     else {
                         // window.location.href = "/wp/play/" + obj;
-                        this.wp_src = obj;
+                        this.video.src = obj;
                         this.mode = "WebPlayer";
                         this.uiState.modalShow = false;
                     }
@@ -175,7 +176,7 @@ window.appView = new Vue({
                 this.video.lastplaytime = new Date().getTime(); //to detect if video is playing
                 if (this.$refs.video.readyState == 4 && Math.floor(Math.random() * 99) > 70) { //randomly save play position
                     $.ajax({
-                        url: "/wp/save/" + window.appView.wp_src,
+                        url: "/wp/save/" + window.appView.video.src,
                         data: {
                             position: this.$refs.video.currentTime,
                             duration: this.$refs.video.duration
@@ -221,7 +222,7 @@ window.appView = new Vue({
                     window.document.title = "DMC - Light Media Player";
                     dlnaTouch();
                 } else if (this.wpMode) {
-                    window.document.title = this.wp_src + " - Light Media Player";
+                    window.document.title = this.video.src + " - Light Media Player";
                     touchWebPlayer();
                 } else
                     window.document.title = "Light Media Player";

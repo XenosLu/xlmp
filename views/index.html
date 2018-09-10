@@ -42,8 +42,8 @@
                @loadedmetadata  ="videoAdapt"
                @loadeddata="videoload"
                @progress="videoprogress"
-               :key="wp_src"
-               :src="'/video/' + wp_src"
+               :key="video.src"
+               :src="'/video/' + video.src"
                poster controls preload="meta">
           No video support!
         </video>
