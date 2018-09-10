@@ -53,11 +53,15 @@
               <b-btn variant="outline-dark" title="browser" @click="showModal">
                 <i class="oi oi-list"></i>
               </b-btn>
-              <b-btn variant="outline-success"
+              <b-btn v-show="!wpMode"
+                     variant="outline-success"
                      title="switch DLNA mode"
                      :pressed="dlnaMode"
                      @click="dlnaToogle">
                 DLNA <i v-show="dlnaOn" class="oi oi-monitor"></i>
+              </b-btn>
+              <b-btn variant="outline-warning" v-show="wpMode" @click="dlnaToogle">
+                  Close
               </b-btn>
               <b-dropdown variant="outline-dark" right text="Maintain">
                 <b-dropdown-item @click="get('/sys/update')">update</b-dropdown-item>

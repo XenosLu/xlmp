@@ -61,7 +61,7 @@ window.appView = new Vue({
                 console.log("test " + obj);
             },
             dlnaToogle: function () {
-                this.mode = this.mode !== 'DLNA' ? 'DLNA' : '';
+                this.mode = this.mode !== '' ? '' : 'DLNA';
                 localStorage.mode = this.mode;
             },
             videoSizeToggle: function () {
