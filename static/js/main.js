@@ -1,4 +1,5 @@
 "use strict";
+var hide_sidebar = 0;
 var icon = {
     "folder": "oi-folder",
     "mp4": "oi-video",
@@ -227,7 +228,23 @@ window.appView = new Vue({
                     window.document.title = "Light Media Player";
             })
         },
+        beforeCreate: function () {},
+        created: function () {
+
+            console.log('created')
+
+            if (typeof(localStorage.mode) !== "undefined")
+                this.mode = localStorage.mode;
+
+        },
     });
+window.onresize = window.appView.videoAdapt;
+modalTouch();
+var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+if (!isiOS) {
+    window.appView.uiState.fixBarShow = false;
+    $(document).mousemove(showSidebar);
+}
 
 window.alertBox = new Vue({
         delimiters: ['${', '}'],
@@ -264,19 +281,8 @@ window.alertBox = new Vue({
         }
     });
 
-modalTouch();
-
-var hide_sidebar = 0;
-
-if (typeof(localStorage.mode) !== "undefined")
-    window.appView.mode = localStorage.mode;
-
-window.onresize = window.appView.videoAdapt;
-var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-if (!isiOS) {
-    window.appView.uiState.fixBarShow = false;
-    $(document).mousemove(showSidebar);
-}
+var ws_link = dlnalink();
+setInterval("ws_link.check()", 1200);
 
 function showSidebar() {
     window.appView.uiState.fixBarShow = true;
@@ -351,8 +357,6 @@ function dlnaTouch() {
     });
 }
 
-var ws_link = dlnalink();
-setInterval("ws_link.check()", 1200);
 function dlnalink() {
     var ws = new WebSocket("ws://" + window.location.host + "/link");
     ws.onmessage = function (e) {
