@@ -69,7 +69,7 @@ window.appView = new Vue({
                     adapt();
                 else {
                     this.video.sizeBtnText = 'auto';
-                    if (this.$refs.video.width < $(window).width() && this.$refs.video.height < $(window).height()) {
+                    if (this.$refs.video.width < window.innerWidth && this.$refs.video.height < window.innerHeight) {
                         this.$refs.video.style.width = this.$refs.video.videoWidth + "px";
                         this.$refs.video.style.height = this.$refs.video.videoHeight + "px";
                     }
@@ -293,19 +293,15 @@ function out2(str) {
  */
 function adapt() {
     if (window.appView.wpMode) {
-        console.log(document.body.clientWidth); // test
-        console.log(document.body.clientHeight); // test failed
-        console.log($(window).width()); // test
-        console.log($(window).height()); // test
         window.appView.video.sizeBtnText = "orign";
         var video_ratio = window.appView.$refs.video.videoWidth / window.appView.$refs.video.videoHeight;
-        var page_ratio = $(window).width() / $(window).height();
+        var page_ratio = window.innerWidth / window.innerHeight;
         if (page_ratio < video_ratio) {
-            var width = $(window).width() + "px";
-            var height = Math.floor($(window).width() / video_ratio) + "px";
+            var width = window.innerWidth + "px";
+            var height = Math.floor(window.innerWidth / video_ratio) + "px";
         } else {
-            var width = Math.floor($(window).height() * video_ratio) + "px";
-            var height = $(window).height() + "px";
+            var width = Math.floor(window.innerHeight * video_ratio) + "px";
+            var height = window.innerHeight + "px";
         }
         window.appView.$refs.video.style.width = width;
         window.appView.$refs.video.style.height = height;
