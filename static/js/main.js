@@ -49,7 +49,7 @@ window.appView = new Vue({
             positionBarMax: function () {
                 return timeToSecond(this.dlnaInfo.TrackDuration);
             },
-            wpPosition: function () { // test
+            wpPosition: function () {
                 for (var item in this.history) {
                     if (this.history[item].filename == window.appView.wp_src)
                         return this.history[item].position;
@@ -190,7 +190,7 @@ window.appView = new Vue({
             },
             videoload: function () {
                 this.videoAdapt();
-                // console.log(this.wpPosition); //test only
+                out('adpat');
                 this.$refs.video.currentTime = Math.max(this.wpPosition - 0.5, 0);
                 // this.$refs.video.currentTime = Math.max(this.video.position - 0.5, 0);
                 this.video.extraText = "<small>Play from</small><br>";
@@ -241,8 +241,6 @@ window.appView = new Vue({
         },
     });
 
-modalTouch();
-
 window.alertBox = new Vue({
         delimiters: ['${', '}'],
         el: "#v-alert",
@@ -280,6 +278,9 @@ window.alertBox = new Vue({
 
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
+
+
+modalTouch();
 
 function showSidebar() {
     window.appView.uiState.fixBarShow = true;
