@@ -294,7 +294,7 @@ function out2(str) {
 function adapt() {
     if (window.appView.wpMode) {
         console.log(document.body.clientWidth); // test
-        console.log(document.body.clientHeight); // test
+        console.log(document.body.clientHeight); // test failed
         console.log($(window).width()); // test
         console.log($(window).height()); // test
         window.appView.video.sizeBtnText = "orign";
