@@ -359,7 +359,10 @@ function dlnalink() {
     ws.onmessage = function (e) {
         var data = JSON.parse(e.data);
         console.log(data);
-        renderDlna(data);
+        if (window.appView.positionBarCanUpdate) {
+            window.appView.positionBarVal = timeToSecond(data.RelTime);
+        }
+        window.appView.dlnaInfo = data;
     }
     ws.onclose = function () {
         window.appView.dlnaInfo.CurrentTransportState = 'disconnected';
@@ -372,13 +375,6 @@ function dlnalink() {
             ws_link = dlnalink();
     };
     return ws;
-}
-
-function renderDlna(data) {
-    if (window.appView.positionBarCanUpdate) {
-        window.appView.positionBarVal = timeToSecond(data.RelTime);
-    }
-    window.appView.dlnaInfo = data;
 }
 
 function modalTouch() {
