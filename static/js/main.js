@@ -24,7 +24,7 @@ window.appView = new Vue({
                 historyShow: true, // ture if modal is history, false if modal content is file list
                 fixBarShow: true,
             },
-            wp_src: '', // web player source, not used
+            wp_src: '', // web player source
             history: [], // updated by ajax
             filelist: [], // updated by ajax
             positionBarCanUpdate: true, //dlna position bar
