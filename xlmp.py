@@ -158,6 +158,7 @@ class DMRTracker(Thread):
             return False
         return True
 
+
 class DMRTracker_coroutine(Thread):
     """DLNA Digital Media Renderer tracker coroutine thread"""
 
@@ -633,7 +634,6 @@ class DlnaLoadHandler(tornado.web.RequestHandler):
             return
         logging.info('start loading...tracker state:%s', TRACKER.state.get('CurrentTransportState'))
         url = 'http://%s/video/%s' % (srv_host, quote(src))
-        # LOADER.load(url)
         TRACKER.load(url)
         self.finish('loading %s' % src)
 
@@ -645,17 +645,7 @@ class DlnaNextHandler(tornado.web.RequestHandler):
 
     @check_dmr_exist
     def get(self, *args, **kwargs):
-        # if not TRACKER.state.get('TrackURI'):
-            # self.finish('No current url')
-            # return
-        # next_file = get_next_file(TRACKER.state['TrackURI'])
-        # logging.info('next file recognized: %s', next_file)
-        # if next_file:
-            # url = 'http://%s/video/%s' % (self.request.headers['Host'], quote(next_file))
-            # # LOADER.load(url)
-            # TRACKER.load(url)
         if not TRACKER.loadnext():
-        # else:
             self.finish({'warning': "Can't get next file"})
 
 
@@ -837,9 +827,7 @@ logging.basicConfig(level=logging.INFO,
 APP = tornado.web.Application(HANDLERS, **SETTINGS)
 
 # initialize dlna threader
-# TRACKER = DMRTracker()
 TRACKER = DMRTracker_coroutine()
-# LOADER = DLNALoader()
 
 if __name__ == '__main__':
     # initialize DataBase
@@ -848,7 +836,6 @@ if __name__ == '__main__':
                     POSITION float not null,
                     DURATION float, LATEST_DATE datetime not null);''')
     TRACKER.start()
-    # LOADER.start()
     # if sys.platform == 'win32':
         # os.system('start http://127.0.0.1:8888/')
     APP.listen(8888, xheaders=True)
