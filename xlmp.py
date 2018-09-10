@@ -78,7 +78,7 @@ class DMRTracker(Thread):
             if position_info['TrackURI']:
                 self.state['TrackURI'] = unquote(
                     re.sub('http://.*/video/', '', position_info['TrackURI']))
-                self.url_prefix = re.sub('(http://.*/video/).*', '\\1', position_info['TrackURI'])
+                # self.url_prefix = re.sub('(http://.*/video/).*', '\\1', position_info['TrackURI'])
                 save_history(self.state['TrackURI'],
                              time_to_second(self.state['RelTime']),
                              time_to_second(self.state['TrackDuration']))
@@ -447,6 +447,7 @@ class DlnaLoadHandler(tornado.web.RequestHandler):
             self.finish('Error: File not found.')
             return
         logging.info('start loading...tracker state:%s', TRACKER.state.get('CurrentTransportState'))
+        TRACKER.url_prefix = 'http://%s/video/' % srv_host
         url = 'http://%s/video/%s' % (srv_host, quote(src))
         TRACKER.load(url)
         self.finish('loading %s' % src)
