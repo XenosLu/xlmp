@@ -214,7 +214,6 @@ window.appView = new Vue({
                     out(str + "<small>buffering...</small>");
                 }
             },
-
         },
         updated: function () {
             this.$nextTick(function () {
@@ -278,7 +277,6 @@ window.alertBox = new Vue({
 
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
-
 
 modalTouch();
 
