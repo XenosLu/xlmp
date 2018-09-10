@@ -424,9 +424,9 @@ function touchWebPlayer() {
     hammertimeVideo.on("panleft panright swipeleft swiperight", function (ev) {
         var deltaTime = ev.deltaX / 4;
         if (ev.type.indexOf("swipe") != -1)
-            $("video").get(0).currentTime += deltaTime;
+            window.appView.$refs.video.currentTime += deltaTime;
         else
-            out(secondToTime($("video").get(0).currentTime + deltaTime));
+            window.appView.$refs.video.currentTime + deltaTime));
         console.log(ev);
         console.log(ev.type);
     });
