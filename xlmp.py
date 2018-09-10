@@ -608,7 +608,7 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
 
 HANDLERS = [
     (r'/', IndexHandler),
-    (r'/dlna', DlnaPlayerHandler),
+    # (r'/dlna', DlnaPlayerHandler),
     (r'/fs/ls/(?P<path>.*)', FileSystemListHandler),
     (r'/fs/move/(?P<src>.*)', FileSystemMoveHandler),
     (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
