@@ -381,7 +381,6 @@ function dlnalink() {
 
 function renderDlna(data) {
     if (window.appView.positionBarCanUpdate) {
-        // window.appView.positionBar.max = timeToSecond(data.TrackDuration);
         window.appView.positionBarVal = timeToSecond(data.RelTime);
     }
     window.appView.dlnaInfo = data;
