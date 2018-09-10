@@ -30,10 +30,6 @@ class DMRTracker(Thread):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self._flag = Event()
-        # self._flag.set()
-        # self._running = Event()
-        # self._running.set()
         self.loop_playback = Event()
         self._load_inprogess = Event()
         self.state = {'CurrentDMR': 'no DMR'}  # DMR device state
