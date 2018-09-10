@@ -42,6 +42,7 @@
                @seeking="videoseek"
                @error="videoerror"
                @progress="videoprogress"
+               @canplay="videoAdapt"
                :key="wp_src"
                :src="'/video/' + wp_src"
                poster controls preload="meta">
