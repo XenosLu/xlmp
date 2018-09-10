@@ -12,7 +12,7 @@ window.appView = new Vue({
         data: {
             video: {
                 lastplaytime: 0,
-                position: 0,  // no longer needed
+                position: 0, // no longer needed
                 extraText: '',
                 sizeBtnText: 'origin',
             },
@@ -27,7 +27,7 @@ window.appView = new Vue({
             wp_src: '', // web player source, not used
             history: [], // updated by ajax
             filelist: [], // updated by ajax
-            positionBarCanUpdate: true,  //dlna position bar
+            positionBarCanUpdate: true, //dlna position bar
             positionBarVal: 0,
             dlnaInfo: { // updated by websocket
                 CurrentDMR: 'no DMR',
@@ -45,7 +45,7 @@ window.appView = new Vue({
             wpMode: function () { // check if in web player mode
                 return this.mode === 'WebPlayer';
             },
-            positionBarMax: function (){
+            positionBarMax: function () {
                 return timeToSecond(this.dlnaInfo.TrackDuration);
             },
             wpPosition: function () { // test
@@ -200,17 +200,13 @@ window.appView = new Vue({
         },
         updated: function () {
             this.$nextTick(function () {
-                if (this.dlnaMode)
-                {
+                if (this.dlnaMode) {
                     window.document.title = "DMC - Light Media Player";
                     dlnaTouch();
-                }
-                else if (this.wpMode)
-                {
+                } else if (this.wpMode) {
                     window.document.title = this.wp_src + " - Light Media Player";
                     adapt();
-                }
-                else
+                } else
                     window.document.title = "Light Media Player";
             })
         },
@@ -362,7 +358,6 @@ function dlnaTouch() {
         console.log(ev.type);
     });
 }
-
 
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
