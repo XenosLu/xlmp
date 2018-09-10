@@ -46,8 +46,28 @@ window.appView = new Vue({
                 return this.mode === 'WebPlayer';
             },
             positionBarMax: function (){
-                return timeToSecond(this.dlnaInfo.TrackDuration)
+                return timeToSecond(this.dlnaInfo.TrackDuration);
             },
+            wpPosition: function () { // test
+                // var position;
+                // this.history.forEach(function (obj) {
+                    // // console.log(obj);
+                    // // console.log(obj.filename);
+                    // // console.log(obj.position);
+                    // if (obj.filename == window.appView.wp_src)
+                        // return obj.position;
+                // })
+                for (var item in this.history) {
+                    if (this.history[item].filename == window.appView.wp_src)
+                        return this.history[item].position;
+                }
+                // sleep(2000);
+                // console.log(this.wp_src);
+                // console.log(this.history);
+                // return this.wp_src;
+                // $.get(this.wp_src)
+                // window.appView.video.position = {{position}};
+            }
         },
         methods: {
             test: function (obj) {
@@ -164,7 +184,9 @@ window.appView = new Vue({
                 }
             },
             videoload: function () {
-                this.$refs.video.currentTime = Math.max(this.video.position - 0.5, 0);
+                // console.log(this.wpPosition); //test only
+                this.$refs.video.currentTime = Math.max(this.wpPosition - 0.5, 0);
+                // this.$refs.video.currentTime = Math.max(this.video.position - 0.5, 0);
                 this.video.extraText = "<small>Play from</small><br>";
             },
             videoseek: function () { //show position when changed
