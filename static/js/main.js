@@ -225,6 +225,7 @@ window.appView = new Vue({
                     touchWebPlayer();
                 } else
                     window.document.title = "Light Media Player";
+                            this.videoAdapt();
             })
         },
         created: function () {
@@ -232,6 +233,7 @@ window.appView = new Vue({
             if (typeof(localStorage.mode) !== "undefined")
                 this.mode = localStorage.mode;
             window.onresize = this.videoAdapt;
+
             var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
             if (!isiOS) {
                 this.uiState.fixBarShow = false;
