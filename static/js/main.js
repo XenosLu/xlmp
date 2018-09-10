@@ -255,7 +255,6 @@ var hide_sidebar = 0;
 if (typeof(localStorage.mode) !== "undefined")
     window.appView.mode = localStorage.mode;
 
-// window.onload = adapt;
 window.onresize = adapt;
 var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
 if (!isiOS) {
