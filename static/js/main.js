@@ -426,7 +426,7 @@ function touchWebPlayer() {
         if (ev.type.indexOf("swipe") != -1)
             window.appView.$refs.video.currentTime += deltaTime;
         else
-            window.appView.$refs.video.currentTime + deltaTime));
+            out(secondToTime(window.appView.$refs.video.currentTime + deltaTime));
         console.log(ev);
         console.log(ev.type);
     });
