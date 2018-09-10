@@ -160,7 +160,6 @@ class DMRTracker(Thread):
 
 class DMRTracker_coroutine(Thread):
     """DLNA Digital Media Renderer tracker coroutine thread"""
-    executor = ThreadPoolExecutor(99)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -604,7 +603,7 @@ class FileSystemMoveHandler(tornado.web.RequestHandler):
 
 class SaveHandler(tornado.web.RequestHandler):
     """Save play history"""
-    executor = ThreadPoolExecutor(9)
+    executor = ThreadPoolExecutor(5)
 
     def data_received(self, chunk):
         pass
