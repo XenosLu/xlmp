@@ -172,6 +172,7 @@ window.appView = new Vue({
                 }
             },
             videoload: function () {
+                adapt();
                 // console.log(this.wpPosition); //test only
                 this.$refs.video.currentTime = Math.max(this.wpPosition - 0.5, 0);
                 // this.$refs.video.currentTime = Math.max(this.video.position - 0.5, 0);
@@ -206,7 +207,6 @@ window.appView = new Vue({
                 } else if (this.wpMode) {
                     window.document.title = this.wp_src + " - Light Media Player";
                     touchWebPlayer();
-                    adapt();
                 } else
                     window.document.title = "Light Media Player";
             })
@@ -293,8 +293,10 @@ function out2(str) {
  */
 function adapt() {
     if (window.appView.wpMode) {
-        // document.body.clientWidth
-        // document.body.clientHeight
+        console.log(document.body.clientWidth); // test
+        console.log(document.body.clientHeight); // test
+        console.log($(window).width()); // test
+        console.log($(window).height()); // test
         window.appView.video.sizeBtnText = "orign";
         var video_ratio = window.appView.$refs.video.videoWidth / window.appView.$refs.video.videoHeight;
         var page_ratio = $(window).width() / $(window).height();
