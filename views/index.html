@@ -33,22 +33,15 @@
   <!-- <div id="v-output">test</div> -->
   <!-- output box end-->
     <div class="container">
-      <!--  -->
       <div id="v-common">
         <video v-if="wpMode"
                ref="video"
                @timeupdate="videosave"
                @seeking="videoseek"
                @error="videoerror"
-
-               @loadstart       ="videoAdapt"
-               @durationchange  ="videoAdapt"
                @loadedmetadata  ="videoAdapt"
                @loadeddata="videoload"
                @progress="videoprogress"
-               @canplay         ="videoAdapt"
-               @canplaythrough  ="videoAdapt"
-
                :key="wp_src"
                :src="'/video/' + wp_src"
                poster controls preload="meta">
