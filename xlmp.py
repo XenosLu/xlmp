@@ -356,53 +356,6 @@ class DMRTracker_coroutine(Thread):
         return True
 
 
-class DLNALoader(Thread):
-    """Load url through DLNA"""
-    def __init__(self, *args, **kwargs):
-        super(DLNALoader, self).__init__(*args, **kwargs)
-        self._running = Event()
-        self._running.set()
-        self._flag = Event()
-        self._failure = 0
-        self._url = ''
-        logging.info('DLNA URL loader thread initialized.')
-
-    def run(self):
-        while self._running.isSet():
-            self._flag.wait()
-            TRACKER.pause()
-            sleep(0.5)
-            url = self._url
-            if TRACKER.loadonce(url):
-                logging.info('Loaded url: %s successed', url)
-                src = unquote(re.sub('http://.*/video/', '', url))
-                position = hist_load(src)
-                if position:
-                    TRACKER.dmr.seek(second_to_time(position))
-                    logging.info('Loaded position: %s', second_to_time(position))
-                logging.info('Load Successed.')
-                TRACKER.state['CurrentTransportState'] = 'Load Successed.'
-                if url == self._url:
-                    self._flag.clear()
-            else:
-                self._failure += 1
-                if self._failure >= 3:
-                    self._flag.clear()
-            TRACKER.resume()
-            logging.info('tracker resume')
-
-    def stop(self):
-        """stop loader thread"""
-        self._flag.set()
-        self._running.clear()
-
-    def load(self, url):
-        """Load video through DLNA from URL """
-        self._url = url
-        self._failure = 0
-        self._flag.set()
-
-
 def run_sql(sql, *args):
     """run sql through sqlite3"""
     with sqlite3.connect(HISTORY_DB_FILE) as conn:
