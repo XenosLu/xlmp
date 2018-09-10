@@ -205,6 +205,7 @@ window.appView = new Vue({
                     dlnaTouch();
                 } else if (this.wpMode) {
                     window.document.title = this.wp_src + " - Light Media Player";
+                    touchWebPlayer();
                     adapt();
                 } else
                     window.document.title = "Light Media Player";
