@@ -12,7 +12,7 @@ window.appView = new Vue({
         data: {
             video: {
                 lastplaytime: 0,
-                position: 0,
+                position: 0,  // no longer needed
                 extraText: '',
                 sizeBtnText: 'origin',
             },
@@ -49,24 +49,11 @@ window.appView = new Vue({
                 return timeToSecond(this.dlnaInfo.TrackDuration);
             },
             wpPosition: function () { // test
-                // var position;
-                // this.history.forEach(function (obj) {
-                    // // console.log(obj);
-                    // // console.log(obj.filename);
-                    // // console.log(obj.position);
-                    // if (obj.filename == window.appView.wp_src)
-                        // return obj.position;
-                // })
                 for (var item in this.history) {
                     if (this.history[item].filename == window.appView.wp_src)
                         return this.history[item].position;
                 }
-                // sleep(2000);
-                // console.log(this.wp_src);
-                // console.log(this.history);
-                // return this.wp_src;
-                // $.get(this.wp_src)
-                // window.appView.video.position = {{position}};
+                return 0;
             }
         },
         methods: {
@@ -136,9 +123,11 @@ window.appView = new Vue({
                     if (this.dlnaMode)
                         get("/dlna/load/" + obj);
                     else {
-                        // this.wp_src = obj;
-                        window.location.href = "/wp/play/" + obj;
-                        // this.mode = "WebPlayer";
+                        // window.location.href = "/wp/play/" + obj;
+                        this.wp_src = obj;
+                        this.mode = "WebPlayer";
+                        window.document.title = this.wp_src + " - Light Media Player";
+                        this.uiState.modalShow = false;
                     }
                     break;
                 case "video":
@@ -214,6 +203,8 @@ window.appView = new Vue({
             this.$nextTick(function () {
                 if (this.dlnaMode)
                     dlnaTouch();
+                if (this.wpMode)
+                    adapt();
             })
         },
     });
@@ -260,7 +251,7 @@ var hide_sidebar = 0;
 if (typeof(localStorage.mode) !== "undefined")
     window.appView.mode = localStorage.mode;
 
-window.onload = adapt;
+// window.onload = adapt;
 window.onresize = adapt;
 var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
 if (!isiOS) {
