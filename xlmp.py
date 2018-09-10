@@ -25,7 +25,7 @@ VIDEO_PATH = 'media'  # media file path
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
 
 
-class DMRTracker_coroutine(Thread):
+class DMRTracker(Thread):
     """DLNA Digital Media Renderer tracker coroutine thread"""
 
     def __init__(self, *args, **kwargs):
@@ -645,7 +645,7 @@ logging.basicConfig(level=logging.INFO,
 APP = tornado.web.Application(HANDLERS, **SETTINGS)
 
 # initialize dlna threader
-TRACKER = DMRTracker_coroutine()
+TRACKER = DMRTracker()
 
 if __name__ == '__main__':
     # initialize DataBase
