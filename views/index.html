@@ -38,11 +38,18 @@
         <video v-if="wpMode"
                ref="video"
                @timeupdate="videosave"
-               @loadeddata="videoload"
+               
                @seeking="videoseek"
                @error="videoerror"
+
+               @loadstart       ="videoAdapt"
+               @durationchange  ="videoAdapt"
+               @loadedmetadata  ="videoAdapt"
+               @loadeddata="videoload"
                @progress="videoprogress"
-               @canplay="videoAdapt"
+               @canplay         ="videoAdapt"
+               @canplaythrough  ="videoAdapt"
+
                :key="wp_src"
                :src="'/video/' + wp_src"
                poster controls preload="meta">
