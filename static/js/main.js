@@ -301,7 +301,6 @@ function out2(str) {
     window.alertBox.show("success", str);
 }
 
-
 /**
  * Render history list box from ajax
  *
