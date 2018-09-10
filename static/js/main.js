@@ -228,23 +228,21 @@ window.appView = new Vue({
                     window.document.title = "Light Media Player";
             })
         },
-        beforeCreate: function () {},
         created: function () {
-
             console.log('created')
-
             if (typeof(localStorage.mode) !== "undefined")
                 this.mode = localStorage.mode;
-
+            window.onresize = this.videoAdapt;
+            var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+            if (!isiOS) {
+                this.uiState.fixBarShow = false;
+                $(document).mousemove(showSidebar);
+            }
         },
     });
-window.onresize = window.appView.videoAdapt;
+
 modalTouch();
-var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-if (!isiOS) {
-    window.appView.uiState.fixBarShow = false;
-    $(document).mousemove(showSidebar);
-}
+
 
 window.alertBox = new Vue({
         delimiters: ['${', '}'],
