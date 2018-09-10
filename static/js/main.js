@@ -243,7 +243,6 @@ window.appView = new Vue({
 
 modalTouch();
 
-
 window.alertBox = new Vue({
         delimiters: ['${', '}'],
         el: "#v-alert",
