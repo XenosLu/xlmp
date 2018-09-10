@@ -13,7 +13,7 @@ window.appView = new Vue({
         data: {
             video: {
                 lastplaytime: 0,
-                position: 0, // no longer needed
+                // position: 0, // no longer needed
                 extraText: '',
                 sizeBtnText: 'origin',
             },
