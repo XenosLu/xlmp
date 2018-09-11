@@ -135,7 +135,6 @@ class DMRTracker(Thread):
         """Load video through DLNA from URL """
         logging.info('start loading')
         self._url = url
-        self.loop_playback.set()
         self._load_inprogess.set()
         asyncio.run_coroutine_threadsafe(self.load_coroutine(url), self._loop)
         logging.info('coroutine loaded')
@@ -158,8 +157,8 @@ class DMRTracker(Thread):
                 self.state['CurrentTransportState'] = 'Load Successed.'
                 if url == self._url:
                     self._load_inprogess.clear()
-                if time_to_second(self.state.get('TrackDuration')) > 600:
-                    self.loop_playback.clear()
+                if time_to_second(self.state.get('TrackDuration')) <= 600:
+                    self.loop_playback.set()
                 return
             else:
                 failure += 1
