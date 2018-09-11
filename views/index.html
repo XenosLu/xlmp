@@ -29,11 +29,13 @@
   </b-container>
   </div>
   <!-- alert box end -->
-    <div class="container">
-      <div id="v-common">
-        <!-- output box -->
-        <div ref="output" class="output">${ output }</div>
-        <!-- output box end -->
+    
+    <div id="v-common">
+      <!-- output box -->
+      <div ref="output" class="output position-fixed center-block">${ output }</div>
+      <!-- output box end -->
+      <div class="container">
+
         <video v-if="wpMode"
                ref="video"
                @timeupdate="videosave"

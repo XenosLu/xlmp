@@ -69,6 +69,7 @@ window.appView = new Vue({
                     this.output = str;
                     var el = this.$refs.output;
                     Velocity(el, 'stop');
+                Velocity(el, {translateX: '-50%', translateY: '-50%'}, {duration: 0});
                     Velocity(el, {opacity: 0.8}, {duration: 250});
                     Velocity(el, {opacity: 0}, {delay: 1800, duration: 625});
                 }
