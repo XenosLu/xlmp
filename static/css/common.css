@@ -73,13 +73,14 @@ td:hover {
 }
 /* updated end */
 
-#output {
+.output, #output {
     z-index: 1050;
     font-size: 1.8em;
     pointer-events: none;
     border-radius: 0.2em;
     padding: 0.2em;
-    opacity: 0.8;
+    /* opacity: 0.8; */
+    opacity: 0;
     border: 1px solid #777777;
     box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
     text-shadow: 0.1em 0.1em 0.4em #666;

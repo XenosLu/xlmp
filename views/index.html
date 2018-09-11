@@ -31,9 +31,13 @@
   <!-- alert box end -->
   <!-- output box -->
   <!-- <div id="v-output">test</div> -->
+  
   <!-- output box end-->
     <div class="container">
       <div id="v-common">
+        <!-- output box -->
+        <div ref="output" class="output">${ output }</div>
+        <!-- output box end -->
         <video v-if="wpMode"
                ref="video"
                @timeupdate="videosave"
@@ -50,6 +54,9 @@
         <b-btn-toolbar v-show="uiState.fixBarShow" class="fixed-top opacity-08">
           <b-container>
             <b-btn-group>
+              <b-btn v-show="false" @click="test" variant="outline-dark">
+                test
+              </b-btn>
               <b-btn variant="outline-dark" title="browser" @click="showModal">
                 <i class="oi oi-list"></i>
               </b-btn>
@@ -241,6 +248,7 @@
     </footer>
     {% end %}
   </body>
+  <script src="/static/js/velocity.min.js"></script>
   <script src="/static/js/jquery-3.2.1.min.js"></script>
   <script src="/static/js/hammer.min.js"></script>
   <script src="{{ static_url('js/common.js') }}"></script>

@@ -36,6 +36,7 @@ window.appView = new Vue({
                 CurrentTransportState: '',
                 TrackURI: '',
             },
+            output: '',
         },
         computed: {
             dlnaOn: function () { // check if dlna dmr is exist
@@ -60,7 +61,21 @@ window.appView = new Vue({
         },
         methods: {
             test: function (obj) {
-                console.log("test " + obj);
+                // this.output = this.output ? false : true;
+                // console.log("test " + obj);
+                // this.output = false;
+                // this.output = true;
+                this.out('xenocider');
+
+            },
+            out: function (str) {
+                if (str!== "") {
+                    this.output = str;
+                    var el = this.$refs.output;
+                    Velocity(el, 'stop');
+                    Velocity(el, {opacity: 0.7}, {duration: 250});
+                    Velocity(el, {opacity: 0}, {delay: 1800, duration: 625});
+                }
             },
             dlnaToogle: function () {
                 this.mode = this.mode !== '' ? '' : 'DLNA';
@@ -333,11 +348,12 @@ function getHistory(str) {
  * @param {String} str
  */
 function out(str) {
-    if (str != "") {
-        $("#output").remove();
-        $(document.body).append('<div id="output">' + JSON.stringify(str) + "</div>");
-        $("#output").fadeTo(250, 0.7).delay(1800).fadeOut(625);
-    };
+    window.appView.out(str);
+    // if (str != "") {
+        // $("#output").remove();
+        // $(document.body).append('<div id="output">' + JSON.stringify(str) + "</div>");
+        // $("#output").fadeTo(250, 0.7).delay(1800).fadeOut(625);
+    // };
 }
 
 function dlnaTouch() {
