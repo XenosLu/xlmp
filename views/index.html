@@ -47,7 +47,7 @@
                poster controls preload="meta">
           No video support!
         </video>
-        <b-btn-toolbar v-show="uiState.fixBarShow" class="fixed-top" style="opacity: 0.8;">
+        <b-btn-toolbar v-show="uiState.fixBarShow" class="fixed-top opacity-08">
           <b-container>
             <b-btn-group>
               <b-btn variant="outline-dark" title="browser" @click="showModal">
@@ -117,7 +117,7 @@
                  v-model="uiState.modalShow"
                  size="lg"
                  centered hide-footer hide-header>
-          <div class="card-header" style="background-color: #C3E6CB;">
+          <div class="card-header bg-C3E6CB">
             <b-btn @click="showHistory" :pressed="uiState.historyShow" variant="outline-dark">
               <i class="oi oi-book"></i>History
             </b-btn>

@@ -622,7 +622,7 @@ HANDLERS = [
     (r'/dlna/load/(?P<src>.*)', DlnaLoadHandler),
     (r'/dlna/(?P<opt>\w*)/?(?P<progress>.*)', DlnaHandler),
     (r'/wp/save/(?P<src>.*)', SaveHandler),
-    (r'/wp/play/(?P<src>.*)', WebPlayerHandler),
+    (r'/wp/play/(?P<src>.*)', WebPlayerHandler),  # no longer needed
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
 ]
 

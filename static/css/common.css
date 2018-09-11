@@ -151,3 +151,9 @@ input[type=range]::-moz-range-thumb {
     text-overflow: ellipsis;
     word-break:break-all;
 }
+.opacity-08 {
+    opacity: 0.8;
+}
+.bg-C3E6CB {
+    background-color: #C3E6CB;
+}
