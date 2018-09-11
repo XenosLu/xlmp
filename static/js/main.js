@@ -61,19 +61,15 @@ window.appView = new Vue({
         },
         methods: {
             test: function (obj) {
-                // this.output = this.output ? false : true;
-                // console.log("test " + obj);
-                // this.output = false;
-                // this.output = true;
-                this.out('xenocider');
-
+                console.log("test " + obj);
+                this.out('test');
             },
             out: function (str) {
                 if (str!== "") {
                     this.output = str;
                     var el = this.$refs.output;
                     Velocity(el, 'stop');
-                    Velocity(el, {opacity: 0.7}, {duration: 250});
+                    Velocity(el, {opacity: 0.8}, {duration: 250});
                     Velocity(el, {opacity: 0}, {delay: 1800, duration: 625});
                 }
             },
