@@ -163,7 +163,7 @@ input[type=range]::-moz-range-thumb {
     display: flex;
     /* justify-content: space-between; */
     align-items: center;
-    
+    /* align-items: stretch; */
 }
 .item {
   flex-grow: 1; /* default 0 */
