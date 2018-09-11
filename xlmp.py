@@ -167,6 +167,7 @@ class DMRTracker(Thread):
         """load next video"""
         if not self.state.get('TrackURI'):
             return False
+        logging.info(self.state.get('TrackDuration'))
         next_file = get_next_file(self.state['TrackURI'])
         logging.info('next file recognized: %s', next_file)
         if next_file and self.url_prefix:
