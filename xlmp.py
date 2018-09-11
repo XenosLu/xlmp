@@ -104,7 +104,7 @@ class DMRTracker(Thread):
                 transport_state = self._get_transport_state()
                 if transport_state:
                     sleep(0.1)
-                    if transport_state == 'STOPPED' and self.loop_playback.isSet() and not self.loadnext():
+                    if transport_state == 'STOPPED' and self.loop_playback.isSet() and time_to_second(self.state.get('TrackDuration')) <= 600 and not self.loadnext():
                         self.loop_playback.clear()
                     yield
                     if self._get_position_info():
@@ -167,7 +167,6 @@ class DMRTracker(Thread):
         """load next video"""
         if not self.state.get('TrackURI'):
             return False
-        logging.info(self.state.get('TrackDuration'))
         next_file = get_next_file(self.state['TrackURI'])
         logging.info('next file recognized: %s', next_file)
         if next_file and self.url_prefix:
