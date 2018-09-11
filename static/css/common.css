@@ -74,7 +74,7 @@ td:hover {
 /* updated end */
 
 .output, #output {
-    z-index: 1050;
+    z-index: 1051;
     font-size: 1.8em;
     pointer-events: none;
     border-radius: 0.2em;
@@ -157,4 +157,18 @@ input[type=range]::-moz-range-thumb {
 }
 .bg-C3E6CB {
     background-color: #C3E6CB;
+}
+/* test */
+.box {
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
+    
+}
+.item {
+  flex-grow: 1; /* default 0 */
+}
+
+.item2 {
+  flex-grow: 2; /* default 0 */
 }
