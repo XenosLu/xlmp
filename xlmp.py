@@ -104,7 +104,7 @@ class DMRTracker(Thread):
                 transport_state = self._get_transport_state()
                 if transport_state:
                     sleep(0.1)
-                    if transport_state == 'STOPPED' and self.loop_playback.isSet() and time_to_second(self.state.get('TrackDuration')) <= 600 and not self.loadnext():
+                    if transport_state == 'STOPPED' and self.loop_playback.isSet() and not self.loadnext():
                         self.loop_playback.clear()
                     yield
                     if self._get_position_info():
@@ -158,6 +158,8 @@ class DMRTracker(Thread):
                 self.state['CurrentTransportState'] = 'Load Successed.'
                 if url == self._url:
                     self._load_inprogess.clear()
+                if time_to_second(self.state.get('TrackDuration')) > 600:
+                    self.loop_playback.clear()
                 return
             else:
                 failure += 1
