@@ -7,6 +7,148 @@ var icon = {
     "other": "oi-file"
 };
 
+function showSidebar() {
+    window.appView.uiState.fixBarShow = true;
+    clearTimeout(hide_sidebar);
+    hide_sidebar = setTimeout('window.appView.uiState.fixBarShow = false;', 3000);
+}
+
+//window.appView.showModal();  // show modal at start
+
+/**
+ * Ajax get and out result
+ *
+ * @method get
+ * @param {String} url
+ */
+function get(url) {
+    console.log('get');
+    $.get(url, out);
+}
+
+function out2(str) {
+    window.alertBox.show("success", str);
+}
+
+/**
+ * Render history list box from ajax
+ *
+ * @method history
+ * @param {String} str
+ */
+function getHistory(str) {
+    $.ajax({
+        url: encodeURI(str),
+        dataType: "json",
+        timeout: 1999,
+        type: "get",
+        success: function (data) {
+            window.appView.uiState.historyShow = true;
+            window.appView.history = data.history;
+        },
+        error: function (xhr) {
+            out(xhr.statusText);
+        }
+    });
+}
+
+/**
+ * Made an output box to show some text notification
+ *
+ * @method out
+ * @param {String} str
+ */
+function out(str) {
+    window.appView.out(str);
+    // if (str != "") {
+        // $("#output").remove();
+        // $(document.body).append('<div id="output">' + JSON.stringify(str) + "</div>");
+        // $("#output").fadeTo(250, 0.7).delay(1800).fadeOut(625);
+    // };
+}
+
+function dlnaTouch() {
+    var hammertimeDlna = new Hammer(document.getElementById("DlnaTouch"));
+    hammertimeDlna.on("panleft panright swipeleft swiperight", function (ev) {
+        var newtime = window.appView.positionBarVal + ev.deltaX / 4;
+        newtime = Math.max(newtime, 0);
+        newtime = Math.min(newtime, window.appView.positionBar.max);
+        out(secondToTime(newtime));
+        if (ev.type.indexOf("swipe") != -1)
+            $.get("/dlna/seek/" + secondToTime(newtime));
+        console.log(ev);
+        console.log(ev.type);
+    });
+}
+
+function dlnalink() {
+    var ws = new WebSocket("ws://" + window.location.host + "/link");
+    ws.onmessage = function (e) {
+        var data = JSON.parse(e.data);
+        console.log(data);
+        if (window.appView.positionBarCanUpdate) {
+            window.appView.positionBarVal = timeToSecond(data.RelTime);
+        }
+        window.appView.dlnaInfo = data;
+    }
+    ws.onclose = function () {
+        window.appView.dlnaInfo.CurrentTransportState = 'disconnected';
+    };
+    ws.onerror = function () {
+        console.log('error');
+    };
+    ws.check = function () {
+        if (this.readyState == 3)
+            ws_link = dlnalink();
+    };
+    return ws;
+}
+
+function modalTouch() {
+    var hammertimeModal = new Hammer(document.getElementById("ModalTouch"));
+
+    hammertimeModal.on("swipeleft", function (ev) {
+        window.appView.swipeState -= 1;
+        if (window.appView.swipeState < -1)
+            window.appView.swipeState = -1;
+    });
+    hammertimeModal.on("swiperight", function (ev) {
+        window.appView.swipeState += 1;
+        if (window.appView.swipeState > 0)
+            window.appView.swipeState = 0;
+    });
+    // var press = new Hammer.Press({time: 500});
+    // press.requireFailure(new Hammer.Tap());
+    // hammertimeModal.add(press);
+    hammertimeModal.on("press", function (ev) {
+        console.log(ev)
+        var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
+        if (target.hasAttribute("data-target"))
+            window.appView.open(target.getAttribute('data-target'), 'folder');
+        console.log(target.getAttribute('data-target'));
+    });
+    hammertimeModal.on("tap", function (ev) {
+        console.log(ev)
+        var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
+        if (target.hasAttribute("data-type"))
+            window.appView.open(target.getAttribute('data-path'), target.getAttribute('data-type'));
+        console.log(target.getAttribute('data-target'));
+    });
+}
+
+function touchWebPlayer() {
+    var hammertimeVideo = new Hammer(document);
+    hammertimeVideo.on("panleft panright swipeleft swiperight", function (ev) {
+        var deltaTime = ev.deltaX / 4;
+        if (ev.type.indexOf("swipe") != -1)
+            window.appView.$refs.video.currentTime += deltaTime;
+        else
+            out(secondToTime(window.appView.$refs.video.currentTime + deltaTime));
+        console.log(ev);
+        console.log(ev.type);
+    });
+}
+
 window.appView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-common',
@@ -292,145 +434,3 @@ var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
 
 modalTouch();
-
-function showSidebar() {
-    window.appView.uiState.fixBarShow = true;
-    clearTimeout(hide_sidebar);
-    hide_sidebar = setTimeout('window.appView.uiState.fixBarShow = false;', 3000);
-}
-
-//window.appView.showModal();  // show modal at start
-
-/**
- * Ajax get and out result
- *
- * @method get
- * @param {String} url
- */
-function get(url) {
-    console.log('get');
-    $.get(url, out);
-}
-
-function out2(str) {
-    window.alertBox.show("success", str);
-}
-
-/**
- * Render history list box from ajax
- *
- * @method history
- * @param {String} str
- */
-function getHistory(str) {
-    $.ajax({
-        url: encodeURI(str),
-        dataType: "json",
-        timeout: 1999,
-        type: "get",
-        success: function (data) {
-            window.appView.uiState.historyShow = true;
-            window.appView.history = data.history;
-        },
-        error: function (xhr) {
-            out(xhr.statusText);
-        }
-    });
-}
-
-/**
- * Made an output box to show some text notification
- *
- * @method out
- * @param {String} str
- */
-function out(str) {
-    window.appView.out(str);
-    // if (str != "") {
-        // $("#output").remove();
-        // $(document.body).append('<div id="output">' + JSON.stringify(str) + "</div>");
-        // $("#output").fadeTo(250, 0.7).delay(1800).fadeOut(625);
-    // };
-}
-
-function dlnaTouch() {
-    var hammertimeDlna = new Hammer(document.getElementById("DlnaTouch"));
-    hammertimeDlna.on("panleft panright swipeleft swiperight", function (ev) {
-        var newtime = window.appView.positionBarVal + ev.deltaX / 4;
-        newtime = Math.max(newtime, 0);
-        newtime = Math.min(newtime, window.appView.positionBar.max);
-        out(secondToTime(newtime));
-        if (ev.type.indexOf("swipe") != -1)
-            $.get("/dlna/seek/" + secondToTime(newtime));
-        console.log(ev);
-        console.log(ev.type);
-    });
-}
-
-function dlnalink() {
-    var ws = new WebSocket("ws://" + window.location.host + "/link");
-    ws.onmessage = function (e) {
-        var data = JSON.parse(e.data);
-        console.log(data);
-        if (window.appView.positionBarCanUpdate) {
-            window.appView.positionBarVal = timeToSecond(data.RelTime);
-        }
-        window.appView.dlnaInfo = data;
-    }
-    ws.onclose = function () {
-        window.appView.dlnaInfo.CurrentTransportState = 'disconnected';
-    };
-    ws.onerror = function () {
-        console.log('error');
-    };
-    ws.check = function () {
-        if (this.readyState == 3)
-            ws_link = dlnalink();
-    };
-    return ws;
-}
-
-function modalTouch() {
-    var hammertimeModal = new Hammer(document.getElementById("ModalTouch"));
-
-    hammertimeModal.on("swipeleft", function (ev) {
-        window.appView.swipeState -= 1;
-        if (window.appView.swipeState < -1)
-            window.appView.swipeState = -1;
-    });
-    hammertimeModal.on("swiperight", function (ev) {
-        window.appView.swipeState += 1;
-        if (window.appView.swipeState > 0)
-            window.appView.swipeState = 0;
-    });
-    // var press = new Hammer.Press({time: 500});
-    // press.requireFailure(new Hammer.Tap());
-    // hammertimeModal.add(press);
-    hammertimeModal.on("press", function (ev) {
-        console.log(ev)
-        var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
-        if (target.hasAttribute("data-target"))
-            window.appView.open(target.getAttribute('data-target'), 'folder');
-        console.log(target.getAttribute('data-target'));
-    });
-    hammertimeModal.on("tap", function (ev) {
-        console.log(ev)
-        var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
-        if (target.hasAttribute("data-type"))
-            window.appView.open(target.getAttribute('data-path'), target.getAttribute('data-type'));
-        console.log(target.getAttribute('data-target'));
-    });
-}
-
-function touchWebPlayer() {
-    var hammertimeVideo = new Hammer(document);
-    hammertimeVideo.on("panleft panright swipeleft swiperight", function (ev) {
-        var deltaTime = ev.deltaX / 4;
-        if (ev.type.indexOf("swipe") != -1)
-            window.appView.$refs.video.currentTime += deltaTime;
-        else
-            out(secondToTime(window.appView.$refs.video.currentTime + deltaTime));
-        console.log(ev);
-        console.log(ev.type);
-    });
-}

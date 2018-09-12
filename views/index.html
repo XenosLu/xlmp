@@ -134,11 +134,12 @@
           <div id="ModalTouch" class="table-responsive-sm text-center">
             <table v-show="uiState.historyShow" class="table table-striped table-sm">
               <tr v-for="item in history">
-                <td class="icon bg-info d-sm-table-cell d-none"
-                    @click="open(item.path, 'folder')">
-                  <i class="text-white oi oi-folder"></i>
-                  <br>
-                  <small class="text-white">go Dir</small>
+                <td class="icon d-sm-table-cell d-none">
+                  <b-btn variant="outline-dark" class="bg-info" @click="open(item.path, 'folder')">
+                    <i class="text-white oi oi-folder"></i>
+                    <br>
+                    <small class="text-white">go Dir</small>
+                  </b-btn>
                 </td>
                 <td class="iconOnly"><i class="oi oi-video"></i></td>
                 <td @click="play(item.filename)" :data-target="item.path">
@@ -150,12 +151,14 @@
                     ${ secondToTime(item.duration) }
                   </small>
                 </td>
-                <td :class="[swipeState < 0 ? '' : 'd-none']"
-                    class="icon d-sm-table-cell bg-danger"
-                    @click="remove(item.filename)">
-                  <i class="text-white oi oi-trash"></i>
-                  <br>
-                  <small class="text-white">Remove</small>
+                <td :class="[swipeState < 0 ? '' : 'd-none']" class="icon d-sm-table-cell">
+                  <b-btn variant="outline-dark"
+                         class="bg-danger text-white"
+                         @click="remove(item.filename)">
+                    <i class="oi oi-trash"></i>
+                    <br>
+                    <small>Remove</small>
+                  </b-btn>
                 </td>
               </tr>
             </table>
