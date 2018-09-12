@@ -17,7 +17,7 @@
   </head>
   <body>
   <!-- alert box -->
-  <div id="v-alert" class="fixed-top">
+  <div id="v-alert" class="fixed-top z-index-1051">
     <b-container>
       <b-alert :show="dismissCountDown"
                :variant="class_style"
@@ -32,7 +32,7 @@
     
     <div id="v-common">
       <!-- output box -->
-      <div ref="output" class="output position-fixed center-block">${ output }</div>
+      <div ref="output" class="output position-fixed z-index-1051">${ output }</div>
       <!-- output box end -->
       <div class="container">
 

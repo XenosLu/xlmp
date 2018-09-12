@@ -7,11 +7,17 @@
     font-size: 1.6em;
     width: 1.4em;
 }
+.opacity-08 {
+    opacity: 0.8;
+}
+.bg-C3E6CB {
+    background-color: #C3E6CB;
+}
 /* .dropdown-menu { */
 .dropdown-item {
     opacity: 0.9;
     /* min-width: 6em; */
-    /* font-size: 1.5em; */
+    font-size: 1.2em;
 }
 /*** modified bootstrap style ***/
 body {
@@ -22,7 +28,7 @@ body {
     font-family: AppleSDGothicNeo-Regular;
     margin-bottom: 2em; /* Margin bottom by footer height */
 }
-#v-alert {
+.z-index-1051 {
     z-index: 1051;
 }
 html {
@@ -74,7 +80,6 @@ td:hover {
 /* updated end */
 
 .output {
-    z-index: 1051;
     font-size: 1.8em;
     pointer-events: none;
     border-radius: 0.2em;
@@ -102,9 +107,6 @@ button {
     /* opacity: 0.88; */
     /* box-shadow: 2px 2px 5px #333333; */
 /* } */
-#v-dlna div {
-    /* background-color: #F1F2F6; */
-}
 
 /* bars */
 .position-bar {
@@ -141,6 +143,7 @@ input[type=range]::-moz-range-thumb {
     box-shadow: inset 0px 0px 5px 2px #A0D468;
 }
 .volume-bar::-moz-range-thumb {
+    /* not used */
     height: 1.5em;
     width: 1.8em;
     box-shadow: inset 0px 0px 5px 1px #F0AD4E;
@@ -152,12 +155,7 @@ input[type=range]::-moz-range-thumb {
     text-overflow: ellipsis;
     word-break:break-all;
 }
-.opacity-08 {
-    opacity: 0.8;
-}
-.bg-C3E6CB {
-    background-color: #C3E6CB;
-}
+
 /* test */
 .box {
     display: flex;
