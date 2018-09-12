@@ -53,8 +53,7 @@ video {
     left: 0;
     right: 0;
 }
-
-td {
+.break-all {
     word-break:break-all;
 }
 .table tbody tr td{
@@ -153,7 +152,6 @@ input[type=range]::-moz-range-thumb {
 .title {
     overflow: hidden;
     text-overflow: ellipsis;
-    word-break:break-all;
 }
 
 /* test */
