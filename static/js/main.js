@@ -218,18 +218,26 @@ window.appView = new Vue({
                         clearTimeout(this.outputTimerId);
                         this.outputTimerId = null;
                     }
+                    if (this.outputShow === true) {
+                        var el = this.$refs.output;
+                        Velocity(el, 'stop');
+                        Velocity(el, {translateY: -30}, {duration: 25});
+                        Velocity(el, {translateY: 0}, {duration: 125});
+                        Velocity(el, {translateY: -15}, {duration: 125});
+                        Velocity(el, {translateY: 0}, {duration: 25});
+                    }
                     this.output = str;
                     this.outputShow = true;
                     this.outputTimerId = setTimeout(function () {
                             _this.outputShow = false;
                             console.log('output hide');
-                        }, 2250);
+                        }, 2100);
                 }
             },
             outFadeIn: function (el, done) {
                 Velocity(el, 'stop');
                 Velocity(el, {translateX: '-50%', translateY: '-50%'}, {duration: 0});
-                Velocity(el, {opacity: 0.8, rotateZ: [0, '360deg']}, {duration: 250});
+                Velocity(el, {opacity: 0.8}, {duration: 250});
             },
             outFadeOut: function (el, done) {
                 Velocity(el, 'stop');

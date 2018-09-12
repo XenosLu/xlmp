@@ -35,7 +35,7 @@
       <!-- <transition @before-enter="beforeEnter" -->
       <transition @enter="outFadeIn"
                   @leave="outFadeOut">
-        <div v-if="outputShow" class="output position-fixed z-index-1051">${ output }</div>
+        <div v-if="outputShow" ref="output" class="output position-fixed z-index-1051">${ output }</div>
       </transition>
       <!-- output box end -->
       <div class="container">
