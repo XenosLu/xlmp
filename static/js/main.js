@@ -158,7 +158,7 @@ window.appView = new Vue({
                 // position: 0, // no longer needed
                 extraText: '',
                 sizeBtnText: 'origin',
-                src: '',
+                src: '', // web player source
             },
             icon: icon,
             swipeState: 0, // modal touch state
@@ -168,7 +168,6 @@ window.appView = new Vue({
                 historyShow: true, // ture if modal is history, false if modal content is file list
                 fixBarShow: true,
             },
-            // video.src: '', // web player source
             history: [], // updated by ajax
             filelist: [], // updated by ajax
             positionBarCanUpdate: true, //dlna position bar
@@ -207,7 +206,7 @@ window.appView = new Vue({
                 this.out('test');
             },
             out: function (str) {
-                if (str!== "") {
+                if (str !== "") {
                     this.output = str;
                     var el = this.$refs.output;
                     Velocity(el, 'stop');
@@ -432,5 +431,4 @@ window.alertBox = new Vue({
 
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
-
 modalTouch();
