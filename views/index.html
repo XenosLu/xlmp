@@ -135,10 +135,12 @@
             <table v-show="uiState.historyShow" class="table table-striped table-sm">
               <tr v-for="item in history">
                 <td class="icon d-sm-table-cell d-none">
-                  <b-btn variant="outline-dark" class="bg-info" @click="open(item.path, 'folder')">
-                    <i class="text-white oi oi-folder"></i>
+                  <b-btn variant="outline-dark"
+                         class="bg-info text-white"
+                         @click="open(item.path, 'folder')">
+                    <i class="oi oi-folder"></i>
                     <br>
-                    <small class="text-white">go Dir</small>
+                    <small>go Dir</small>
                   </b-btn>
                 </td>
                 <td class="iconOnly"><i class="oi oi-video"></i></td>
