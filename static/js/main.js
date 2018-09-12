@@ -155,7 +155,6 @@ window.appView = new Vue({
         data: {
             video: {
                 lastplaytime: 0,
-                // position: 0, // no longer needed
                 extraText: '',
                 sizeBtnText: 'origin',
                 src: '', // web player source
