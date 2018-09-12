@@ -400,8 +400,8 @@ function modalTouch() {
     });
     hammertimeModal.on("swiperight", function (ev) {
         window.appView.swipeState += 1;
-        if (window.appView.swipeState > 1)
-            window.appView.swipeState = 1;
+        if (window.appView.swipeState > 0)
+            window.appView.swipeState = 0;
     });
     // var press = new Hammer.Press({time: 500});
     // press.requireFailure(new Hammer.Tap());
