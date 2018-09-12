@@ -1,6 +1,5 @@
 .icon {
     width: 3.8em;
-    /* opacity: 0.7; */
     font-size: 1em;
 }
 .iconOnly {
@@ -13,13 +12,6 @@
 .bg-C3E6CB {
     background-color: #C3E6CB;
 }
-/* .dropdown-menu { */
-.dropdown-item {
-    opacity: 0.9;
-    /* min-width: 6em; */
-    font-size: 1.2em;
-}
-/*** modified bootstrap style ***/
 body {
     background-color: #F1F2F6;
     -webkit-user-select: none;
@@ -60,7 +52,6 @@ video {
     vertical-align: middle;
 }
 
-/* updated */
 td:hover {
     background-color: #FBF3E9;
 }
@@ -76,37 +67,6 @@ td:hover {
 .other{
     color: grey;
 }
-/* updated end */
-
-.output {
-    font-size: 1.8em;
-    pointer-events: none;
-    border-radius: 0.2em;
-    padding: 0.2em;
-    /* opacity: 0.8; */
-    opacity: 0;
-    border: 1px solid #777777;
-    box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
-    text-shadow: 0.1em 0.1em 0.4em #666;
-    /* position: fixed; */
-    top: 50%;
-    left: 50%;
-    /* transform: translate(-50%, -50%); */
-    /* -webkit-transform: translate(-50%, -50%); */
-}
-button {
-    opacity: 0.85;
-    box-shadow: inset 0px 0px 9px 0px #F1F2F6;
-}
-.modal-content {
-    opacity: 0.78;
-    box-shadow: 2px 2px 5px #333333;
-}
-/* #panel { */
-    /* opacity: 0.88; */
-    /* box-shadow: 2px 2px 5px #333333; */
-/* } */
-
 /* bars */
 .position-bar {
     background-color: #A0D468;
@@ -154,6 +114,40 @@ input[type=range]::-moz-range-thumb {
     text-overflow: ellipsis;
 }
 
+/* #panel { */
+    /* opacity: 0.88; */
+    /* box-shadow: 2px 2px 5px #333333; */
+/* } */
+.output {
+    font-size: 1.8em;
+    pointer-events: none;
+    border-radius: 0.2em;
+    padding: 0.2em;
+    /* opacity: 0.8; */
+    opacity: 0;
+    border: 1px solid #777777;
+    box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
+    text-shadow: 0.1em 0.1em 0.4em #666;
+    /* position: fixed; */
+    top: 50%;
+    left: 50%;
+    /* transform: translate(-50%, -50%); */
+    /* -webkit-transform: translate(-50%, -50%); */
+}
+button {
+    opacity: 0.85;
+    box-shadow: inset 0px 0px 9px 0px #F1F2F6;
+}
+.modal-content {
+    opacity: 0.78;
+    box-shadow: 2px 2px 5px #333333;
+}
+/* .dropdown-menu { */
+.dropdown-item {
+    opacity: 0.9;
+    /* min-width: 6em; */
+    font-size: 1.2em;
+}
 /* test */
 .box {
     display: flex;
