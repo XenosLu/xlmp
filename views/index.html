@@ -32,10 +32,13 @@
     
     <div id="v-common">
       <!-- output box -->
-      <div ref="output" class="output position-fixed z-index-1051">${ output }</div>
+      <!-- <transition @before-enter="beforeEnter" -->
+      <transition @enter="outFadeIn"
+                  @leave="outFadeOut">
+        <div v-if="outputShow" class="output position-fixed z-index-1051">${ output }</div>
+      </transition>
       <!-- output box end -->
       <div class="container">
-
         <video v-if="wpMode"
                ref="video"
                @timeupdate="videosave"

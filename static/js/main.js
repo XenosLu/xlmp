@@ -177,6 +177,13 @@ window.appView = new Vue({
                 TrackURI: '',
             },
             output: '',
+            outputShow: false,
+            outputTimerId: null,
+        },
+        watch: {
+            outputCountDown: function() {
+                this.startOutputCountDown();
+            }
         },
         computed: {
             dlnaOn: function () { // check if dlna dmr is exist
@@ -205,6 +212,30 @@ window.appView = new Vue({
                 this.out('test');
             },
             out: function (str) {
+                if (str !== "") {
+                    var _this = this;
+                    if (this.outputTimerId) {
+                        clearTimeout(this.outputTimerId);
+                        this.outputTimerId = null;
+                    }
+                    this.output = str;
+                    this.outputShow = true;
+                    this.outputTimerId = setTimeout(function () {
+                            _this.outputShow = false;
+                            console.log('output hide');
+                        }, 2250);
+                }
+            },
+            outFadeIn: function (el, done) {
+                Velocity(el, 'stop');
+                Velocity(el, {translateX: '-50%', translateY: '-50%'});
+                Velocity(el, {opacity: 0.8}, {duration: 300});
+            },
+            outFadeOut: function (el, done) {
+                Velocity(el, 'stop');
+                Velocity(el, {opacity: 0}, {duration: 600});
+            },
+            out_old: function (str) {
                 if (str !== "") {
                     this.output = str;
                     var el = this.$refs.output;
