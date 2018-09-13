@@ -36,7 +36,7 @@ function getHistory(str) {
             window.appView.history = data.history;
         },
         error: function (xhr) {
-            out(xhr.statusText);
+            window.appView.out(xhr.statusText);
         }
     });
 }
@@ -127,7 +127,7 @@ function touchWebPlayer() {
         if (ev.type.indexOf("swipe") != -1)
             window.appView.$refs.video.currentTime += deltaTime;
         else
-            out(secondToTime(window.appView.$refs.video.currentTime + deltaTime));
+            window.appView.out(secondToTime(window.appView.$refs.video.currentTime + deltaTime));
         console.log(ev);
         console.log(ev.type);
     });
@@ -298,7 +298,7 @@ window.appView = new Vue({
                         window.appView.filelist = data.filesystem;
                     },
                     error: function (xhr) {
-                        out(xhr.statusText);
+                        window.appView.out(xhr.statusText);
                     }
                 });
             },
@@ -348,14 +348,14 @@ window.appView = new Vue({
                 this.positionBarCanUpdate = true;
             },
             positionShow: function () {
-                out(secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBarVal, this.positionBarMax)));
+                this.out(secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBarVal, this.positionBarMax)));
                 this.positionBarCanUpdate = false;
             },
             get: function (url) {
                 $.get(url, out);
             },
             rate: function (ratex) {
-                out(ratex + "X");
+                this.out(ratex + "X");
                 this.$refs.video.playbackRate = ratex;
             },
             videosave: function () {
@@ -370,23 +370,23 @@ window.appView = new Vue({
                         timeout: 999,
                         type: "POST",
                         error: function (xhr) {
-                            out("save: " + xhr.statusText);
+                            this.out("save: " + xhr.statusText);
                         }
                     });
                 }
             },
             videoload: function () {
                 this.videoAdapt();
-                out('adpat');
+                this.out('adpat');
                 this.$refs.video.currentTime = Math.max(this.wpPosition - 0.5, 0);
                 this.output.smallText = "Play from";
             },
             videoseek: function () { //show position when changed
-                out(secondToTime(this.$refs.video.currentTime) + '/' + secondToTime(this.$refs.video.duration));
+                this.out(secondToTime(this.$refs.video.currentTime) + '/' + secondToTime(this.$refs.video.duration));
                 this.output.smallText = "";
             },
             videoerror: function () {
-                out("error");
+                this.out("error");
             },
             videoprogress: function () { //show buffered when hanged
                 var str = "";
@@ -397,7 +397,7 @@ window.appView = new Vue({
                             break;
                         }
                     }
-                    out(str + "buffering...");
+                    this.out(str + "buffering...");
                 }
             },
         },
