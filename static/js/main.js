@@ -355,9 +355,9 @@ window.appView = new Vue({
             get: function (url) {
                 $.get(url, out);
             },
-            rate: function (x) {
-                out(x + "X");
-                this.$refs.video.playbackRate = x;
+            rate: function (ratex) {
+                out(ratex + "X");
+                this.$refs.video.playbackRate = ratex;
             },
             videosave: function () {
                 this.video.lastplaytime = new Date().getTime(); //to detect if video is playing
@@ -380,8 +380,7 @@ window.appView = new Vue({
                 this.videoAdapt();
                 out('adpat');
                 this.$refs.video.currentTime = Math.max(this.wpPosition - 0.5, 0);
-                // this.$refs.video.currentTime = Math.max(this.video.position - 0.5, 0);
-                this.video.extraText = "<small>Play from</small><br>";
+                this.video.extraText = "Play from";
             },
             videoseek: function () { //show position when changed
                 out(this.video.extraText + secondToTime(this.$refs.video.currentTime) + '/' + secondToTime(this.$refs.video.duration));
@@ -399,7 +398,7 @@ window.appView = new Vue({
                             break;
                         }
                     }
-                    out(str + "<small>buffering...</small>");
+                    out(str + "buffering...");
                 }
             },
         },
@@ -416,7 +415,6 @@ window.appView = new Vue({
             })
         },
         created: function () {
-            console.log('created')
             if (typeof(localStorage.mode) !== "undefined")
                 this.mode = localStorage.mode;
             window.onresize = this.videoAdapt;

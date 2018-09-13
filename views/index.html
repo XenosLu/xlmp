@@ -20,7 +20,10 @@
       <!-- output box -->
       <transition @enter="outFadeIn"
                   @leave="outFadeOut">
-        <div v-if="outputShow" ref="output" class="output position-fixed z-index-1051">${ output }</div>
+        <div v-if="outputShow" ref="output" class="output position-fixed z-index-1051">
+          <small class="d-block">${ video.extraText }</small>
+          ${ output }
+        </div>
       </transition>
       <!-- output box end -->
       <div class="container">
