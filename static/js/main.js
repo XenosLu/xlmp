@@ -117,14 +117,14 @@ function modalTouch() {
     // press.requireFailure(new Hammer.Tap());
     // hammertimeModal.add(press);
     hammertimeModal.on("press", function (ev) {
-        console.log(ev)
+        // console.log(ev)
         var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
         if (target.hasAttribute("data-target"))
             window.appView.open(target.getAttribute('data-target'), 'folder');
         console.log(target.getAttribute('data-target'));
     });
     hammertimeModal.on("tap", function (ev) {
-        console.log(ev)
+        // console.log(ev)
         var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
         if (target.hasAttribute("data-type"))
             window.appView.open(target.getAttribute('data-path'), target.getAttribute('data-type'));
@@ -207,7 +207,7 @@ window.appView = new Vue({
             },
             out: function (str) {
                 if (str !== "") {
-                    var _this = this;
+                    // var _this = this;
                     if (this.output.timerId) {
                         clearTimeout(this.output.timerId);
                         this.output.timerId = null;
@@ -223,8 +223,7 @@ window.appView = new Vue({
                     this.output.text = str;
                     this.output.show = true;
                     this.output.timerId = setTimeout(function () {
-                            _this.output.show = false;
-                            console.log('output hide');
+                            window.appView.output.show = false;
                         }, 2100);
                 }
             },
