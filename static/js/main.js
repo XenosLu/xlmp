@@ -328,9 +328,7 @@ window.appView = new Vue({
                         get("/dlna/load/" + obj);
                     else {
                         // window.location.href = "/wp/play/" + obj;
-                        this.video.src = obj;
-                        this.mode = "WebPlayer";
-                        this.uiState.modalShow = false;
+                        this.playInWeb(obj)
                     }
                     break;
                 case "video":
@@ -339,6 +337,23 @@ window.appView = new Vue({
                     break;
                 default:
                 }
+            },
+            checkFileExist: function (obj) {
+                for (var item in this.history) {
+                    if (this.history[item].filename == obj)
+                        return this.history[item].exist;
+                }
+                return false;
+            },
+            playInWeb: function (obj) {
+                console.log(obj);
+                if (!this.checkFileExist(obj)) {
+                    this.out(obj + ' not exist');
+                    return;
+                }
+                this.video.src = obj;
+                this.mode = "WebPlayer";
+                this.uiState.modalShow = false;
             },
             setDmr: function (dmr) {
                 $.get("/dlna/setdmr/" + dmr);
