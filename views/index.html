@@ -16,23 +16,8 @@
     <title>Light Media Player</title>
   </head>
   <body>
-  <!-- alert box -->
-  <div id="v-alert" class="fixed-top z-index-1051">
-    <b-container>
-      <b-alert :show="dismissCountDown"
-               :variant="class_style"
-               @dismissed="dismissCountDown=0"
-               @dismiss-count-down="countDownChanged"
-               dismissible>
-         <strong>${ title }</strong> ${ content }
-      </b-alert>
-  </b-container>
-  </div>
-  <!-- alert box end -->
-    
     <div id="v-common">
       <!-- output box -->
-      <!-- <transition @before-enter="beforeEnter" -->
       <transition @enter="outFadeIn"
                   @leave="outFadeOut">
         <div v-if="outputShow" ref="output" class="output position-fixed z-index-1051">${ output }</div>

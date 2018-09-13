@@ -26,10 +26,6 @@ function get(url) {
     $.get(url, out);
 }
 
-function out2(str) {
-    window.alertBox.show("success", str);
-}
-
 /**
  * Render history list box from ajax
  *
@@ -430,41 +426,6 @@ window.appView = new Vue({
                 $(document).mousemove(showSidebar);
             }
         },
-    });
-
-window.alertBox = new Vue({
-        delimiters: ['${', '}'],
-        el: "#v-alert",
-        data() {
-            return {
-                dismissCountDown: 0,
-                content: '',
-                title: '',
-                class_style: 'success'
-            }
-        },
-        methods: {
-            countDownChanged(dismissCountDown) {
-                this.dismissCountDown = dismissCountDown
-            },
-            show(type, content) {
-                var title_map = {
-                    "info": "Info",
-                    "danger": "Error!",
-                    "success": "Success!",
-                    "warning": "dealing...",
-                };
-                this.class_style = type;
-                this.title = title_map[type];
-                this.content = content;
-                if (type === "warning")
-                    this.dismissCountDown = 999;
-                else if (type === 'danger')
-                    this.dismissCountDown = 9;
-                else
-                    this.dismissCountDown = 3;
-            }
-        }
     });
 
 var ws_link = dlnalink();
