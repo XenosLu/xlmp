@@ -1,17 +1,10 @@
 "use strict";
-var hide_sidebar = 0;
 var icon = {
     "folder": "oi-folder",
     "mp4": "oi-video",
     "video": "oi-video",
     "other": "oi-file"
 };
-
-function showSidebar() {
-    window.appView.uiState.fixBarShow = true;
-    clearTimeout(hide_sidebar);
-    hide_sidebar = setTimeout('window.appView.uiState.fixBarShow = false;', 3000);
-}
 
 //window.appView.showModal();  // show modal at start
 
@@ -56,11 +49,6 @@ function getHistory(str) {
  */
 function out(str) {
     window.appView.out(str);
-    // if (str != "") {
-        // $("#output").remove();
-        // $(document.body).append('<div id="output">' + JSON.stringify(str) + "</div>");
-        // $("#output").fadeTo(250, 0.7).delay(1800).fadeOut(625);
-    // };
 }
 
 function dlnaTouch() {
@@ -161,7 +149,7 @@ window.appView = new Vue({
             uiState: {
                 modalShow: false, // true if the modal is show
                 historyShow: true, // ture if modal is history, false if modal content is file list
-                fixBarShow: true,
+                // fixBarShow: true,
             },
             history: [], // updated by ajax
             filelist: [], // updated by ajax
@@ -171,6 +159,10 @@ window.appView = new Vue({
                 CurrentDMR: 'no DMR',
                 CurrentTransportState: '',
                 TrackURI: '',
+            },
+            fixBar: {
+                show: true,
+                timerId: null,
             },
             output: {
                 text: '',
@@ -206,6 +198,16 @@ window.appView = new Vue({
             test: function (obj) {
                 console.log("test " + obj);
                 this.out('test');
+            },
+            showFixBar: function () {
+                this.fixBar.show = true;
+                if (this.fixBar.timerId) {
+                    clearTimeout(this.fixBar.timerId);
+                    this.fixBar.timerId = null;
+                }
+                this.fixBar.timerId = setTimeout(function () {
+                        window.appView.fixBar.show = false;
+                    }, 3000);
             },
             out: function (str) {
                 if (str !== "") {
@@ -419,8 +421,8 @@ window.appView = new Vue({
             window.onresize = this.videoAdapt;
             var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
             if (!isiOS) {
-                this.uiState.fixBarShow = false;
-                $(document).mousemove(showSidebar);
+                this.fixBar.show = false;
+                document.onmousemove = this.showFixBar;
             }
         },
     });
