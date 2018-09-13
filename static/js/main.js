@@ -68,12 +68,12 @@ function dlnaTouch() {
     hammertimeDlna.on("panleft panright swipeleft swiperight", function (ev) {
         var newtime = window.appView.positionBarVal + ev.deltaX / 4;
         newtime = Math.max(newtime, 0);
-        newtime = Math.min(newtime, window.appView.positionBar.max);
-        out(secondToTime(newtime));
+        newtime = Math.min(newtime, window.appView.positionBarMax);
+        window.appView.out(secondToTime(newtime));
         if (ev.type.indexOf("swipe") != -1)
             $.get("/dlna/seek/" + secondToTime(newtime));
-        console.log(ev);
-        console.log(ev.type);
+        // console.log(ev);
+        // console.log(ev.type);
     });
 }
 
@@ -82,7 +82,7 @@ function dlnalink() {
     ws.onmessage = function (e) {
         var data = JSON.parse(e.data);
         console.log(data);
-        if (window.appView.positionBarCanUpdate) {
+        if (window.appView.positionBarCanUpdate && data.hasOwnProperty('RelTime')) {
             window.appView.positionBarVal = timeToSecond(data.RelTime);
         }
         window.appView.dlnaInfo = data;
@@ -190,7 +190,9 @@ window.appView = new Vue({
                 return this.mode === 'WebPlayer';
             },
             positionBarMax: function () {
-                return timeToSecond(this.dlnaInfo.TrackDuration);
+                if(this.dlnaInfo.hasOwnProperty('TrackDuration'))
+                    return timeToSecond(this.dlnaInfo.TrackDuration);
+                return 0;
             },
             wpPosition: function () {
                 for (var item in this.history) {
@@ -207,7 +209,6 @@ window.appView = new Vue({
             },
             out: function (str) {
                 if (str !== "") {
-                    // var _this = this;
                     if (this.output.timerId) {
                         clearTimeout(this.output.timerId);
                         this.output.timerId = null;
@@ -225,6 +226,7 @@ window.appView = new Vue({
                     this.output.timerId = setTimeout(function () {
                             window.appView.output.show = false;
                         }, 2100);
+                    console.log(this.output.show);
                 }
             },
             outFadeIn: function (el, done) {
