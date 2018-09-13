@@ -148,7 +148,6 @@ window.appView = new Vue({
             uiState: {
                 modalShow: false, // true if the modal is show
                 historyShow: true, // ture if modal is history, false if modal content is file list
-                // fixBarShow: true,
             },
             history: [], // updated by ajax
             filelist: [], // updated by ajax
