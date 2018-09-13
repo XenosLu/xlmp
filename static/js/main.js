@@ -151,7 +151,7 @@ window.appView = new Vue({
         data: {
             video: {
                 lastplaytime: 0,
-                extraText: '',
+                // extraText: '',
                 sizeBtnText: 'origin',
                 src: '', // web player source
             },
@@ -172,13 +172,11 @@ window.appView = new Vue({
                 CurrentTransportState: '',
                 TrackURI: '',
             },
-            output: '',
-            outputShow: false,
-            outputTimerId: null,
-        },
-        watch: {
-            outputCountDown: function() {
-                this.startOutputCountDown();
+            output: {
+                text: '',
+                smallText: '',
+                show: false,
+                timerId: null,
             }
         },
         computed: {
@@ -210,11 +208,11 @@ window.appView = new Vue({
             out: function (str) {
                 if (str !== "") {
                     var _this = this;
-                    if (this.outputTimerId) {
-                        clearTimeout(this.outputTimerId);
-                        this.outputTimerId = null;
+                    if (this.output.timerId) {
+                        clearTimeout(this.output.timerId);
+                        this.output.timerId = null;
                     }
-                    if (this.outputShow === true) {
+                    if (this.output.show === true) {
                         var el = this.$refs.output;
                         Velocity(el, 'stop');
                         Velocity(el, {translateY: -30}, {duration: 25});
@@ -222,10 +220,10 @@ window.appView = new Vue({
                         Velocity(el, {translateY: -15}, {duration: 125});
                         Velocity(el, {translateY: 0}, {duration: 25});
                     }
-                    this.output = str;
-                    this.outputShow = true;
-                    this.outputTimerId = setTimeout(function () {
-                            _this.outputShow = false;
+                    this.output.text = str;
+                    this.output.show = true;
+                    this.output.timerId = setTimeout(function () {
+                            _this.output.show = false;
                             console.log('output hide');
                         }, 2100);
                 }
@@ -241,7 +239,7 @@ window.appView = new Vue({
             },
             out_old: function (str) {
                 if (str !== "") {
-                    this.output = str;
+                    this.output.text = str;
                     var el = this.$refs.output;
                     Velocity(el, 'stop');
                 Velocity(el, {translateX: '-50%', translateY: '-50%'}, {duration: 0});
@@ -380,11 +378,11 @@ window.appView = new Vue({
                 this.videoAdapt();
                 out('adpat');
                 this.$refs.video.currentTime = Math.max(this.wpPosition - 0.5, 0);
-                this.video.extraText = "Play from";
+                this.output.smallText = "Play from";
             },
             videoseek: function () { //show position when changed
-                out(this.video.extraText + secondToTime(this.$refs.video.currentTime) + '/' + secondToTime(this.$refs.video.duration));
-                this.video.extraText = "";
+                out(secondToTime(this.$refs.video.currentTime) + '/' + secondToTime(this.$refs.video.duration));
+                this.output.smallText = "";
             },
             videoerror: function () {
                 out("error");
