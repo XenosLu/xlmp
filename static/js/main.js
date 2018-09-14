@@ -15,8 +15,11 @@ var icon = {
  * @param {String} url
  */
 function get(url) {
-    console.log('get');
-    $.get(url, out);
+    // console.log('get');
+    // $.get(url, out);
+    axios.get(url).then(function (response) {
+        window.appView.out(response);
+    })
 }
 
 /**
@@ -47,9 +50,9 @@ function getHistory(str) {
  * @method out
  * @param {String} str
  */
-function out(str) {
-    window.appView.out(str);
-}
+// function out(str) {
+    // window.appView.out(str);
+// }
 
 function dlnaTouch() {
     var hammertimeDlna = new Hammer(document.getElementById("DlnaTouch"));
@@ -59,7 +62,8 @@ function dlnaTouch() {
         newtime = Math.min(newtime, window.appView.positionBarMax);
         window.appView.out(secondToTime(newtime));
         if (ev.type.indexOf("swipe") != -1)
-            $.get("/dlna/seek/" + secondToTime(newtime));
+            window.appView.get("/dlna/seek/" + secondToTime(newtime));
+
         // console.log(ev);
         // console.log(ev.type);
     });
@@ -348,10 +352,10 @@ window.appView = new Vue({
                 this.uiState.modalShow = false;
             },
             setDmr: function (dmr) {
-                $.get("/dlna/setdmr/" + dmr);
+                this.get("/dlna/setdmr/" + dmr);
             },
             positionSeek: function () {
-                $.get("/dlna/seek/" + secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBarVal, this.positionBarMax)));
+                this.get("/dlna/seek/" + secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBarVal, this.positionBarMax)));
                 this.positionBarCanUpdate = true;
             },
             positionShow: function () {
@@ -359,7 +363,10 @@ window.appView = new Vue({
                 this.positionBarCanUpdate = false;
             },
             get: function (url) {
-                $.get(url, out);
+                // $.get(url, out);
+                axios.get(url).then(function (response) {
+                    this.out(response);
+                })
             },
             rate: function (ratex) {
                 this.out(ratex + "X");
