@@ -14,13 +14,12 @@ var icon = {
  * @method get
  * @param {String} url
  */
-function get(url) {
-    // console.log('get');
-    // $.get(url, out);
-    axios.get(url).then(function (response) {
-        window.appView.out(response.data);
-    })
-}
+// function get(url) {
+    // // $.get(url, out);
+    // axios.get(url).then(function (response) {
+        // window.appView.out(response.data);
+    // })
+// }
 
 /**
  * Render history list box from ajax
@@ -337,13 +336,16 @@ window.appView = new Vue({
                     this.showFs("/fs/ls/" + obj + "/");
                     break;
                 case "mp4":
-                    if (this.dlnaMode)
-                        this.get("/dlna/load/" + obj);
-                    else {
-                        // window.location.href = "/wp/play/" + obj;
-                        this.playInWeb(obj)
+                    // if (this.dlnaMode)
+                        // this.get("/dlna/load/" + obj);
+                    // else {
+                        // // window.location.href = "/wp/play/" + obj;
+                        // this.playInWeb(obj);
+                    // }
+                    if (!this.dlnaMode) {
+                        this.playInWeb(obj);
                     }
-                    break;
+                    // break;
                 case "video":
                     if (this.dlnaMode)
                         this.get("/dlna/load/" + obj);
@@ -394,8 +396,7 @@ window.appView = new Vue({
                     axios.post('/wp/save/' + this.video.src, {
                         position: this.$refs.video.currentTime,
                         duration: this.$refs.video.duration
-                    })
-                    .catch(function (error) {
+                    }).catch(function (error) {
                         window.appView.out(error);
                     });
                     // $.ajax({
