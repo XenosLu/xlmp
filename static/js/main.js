@@ -229,7 +229,6 @@ window.appView = new Vue({
                     this.output.timerId = setTimeout(function () {
                             window.appView.output.show = false;
                         }, 2100);
-                    console.log(this.output.show);
                 }
             },
             outFadeIn: function (el, done) {
