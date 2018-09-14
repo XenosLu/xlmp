@@ -427,7 +427,7 @@ class SaveHandler(tornado.web.RequestHandler):
 
     @tornado.concurrent.run_on_executor
     def post(self, *args, **kwargs):
-        arguments = json.loads(self.request.body)
+        arguments = json.loads(self.request.body.decode())
         # position = arguments.get('position', 0)
         # duration = arguments.get('duration', 0)
         # position = self.get_argument('position', 0)
