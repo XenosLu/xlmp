@@ -430,11 +430,11 @@ window.appView = new Vue({
                 if (new Date().getTime() - this.video.lastplaytime > 1000) {
                     for (var i = 0, t = this.$refs.video.buffered.length; i < t; i++) {
                         if (this.$refs.video.currentTime >= this.$refs.video.buffered.start(i) && this.$refs.video.currentTime <= this.$refs.video.buffered.end(i)) {
-                            str = secondToTime(this.$refs.video.buffered.start(i)) + "-" + secondToTime(this.$refs.video.buffered.end(i)) + "<br>";
+                            str = secondToTime(this.$refs.video.buffered.start(i)) + "-" + secondToTime(this.$refs.video.buffered.end(i));
                             break;
                         }
                     }
-                    this.out(str + "buffering...");
+                    this.out(str + " buffering...");
                 }
             },
         },
