@@ -78,9 +78,9 @@ function dlnalink() {
     ws.onmessage = function (e) {
         var data = JSON.parse(e.data);
         console.log(data);
-        if (window.appView.positionBarCanUpdate && data.hasOwnProperty('RelTime')) {
-            window.appView.positionBarVal = timeToSecond(data.RelTime);
-        }
+        // if (window.appView.positionBarCanUpdate && data.hasOwnProperty('RelTime')) {
+            // window.appView.positionBarVal = timeToSecond(data.RelTime);
+        // }
         window.appView.dlnaInfo = data;
     }
     ws.onclose = function () {
@@ -175,6 +175,14 @@ window.appView = new Vue({
                 smallText: '',
                 show: false,
                 timerId: null,
+            }
+        },
+        watch: {
+            'dlnaInfo.RelTime': function () {
+                console.log('reltime update');
+                if (this.positionBarCanUpdate)
+                    this.positionBarVal = timeToSecond(this.dlnaInfo.RelTime);
+                console.log(this.positionBarVal);
             }
         },
         computed: {
