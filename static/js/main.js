@@ -18,7 +18,7 @@ function get(url) {
     // console.log('get');
     // $.get(url, out);
     axios.get(url).then(function (response) {
-        window.appView.out(response);
+        window.appView.out(response.data);
     })
 }
 
@@ -29,18 +29,26 @@ function get(url) {
  * @param {String} str
  */
 function getHistory(str) {
-    $.ajax({
-        url: encodeURI(str),
-        dataType: "json",
-        timeout: 1999,
-        type: "get",
-        success: function (data) {
-            window.appView.uiState.historyShow = true;
-            window.appView.history = data.history;
-        },
-        error: function (xhr) {
-            window.appView.out(xhr.statusText);
-        }
+    // $.ajax({
+        // url: encodeURI(str),
+        // dataType: "json",
+        // timeout: 1999,
+        // type: "get",
+        // success: function (data) {
+            // window.appView.uiState.historyShow = true;
+            // window.appView.history = data.history;
+        // },
+        // error: function (xhr) {
+            // window.appView.out(xhr.statusText);
+        // }
+    // });
+    axios.get(encodeURI(str))
+    .then(function (response) {
+        window.appView.uiState.historyShow = true;
+        window.appView.history = response.data.history;
+    })
+    .catch(function (error) {
+        window.appView.out(error);
     });
 }
 
@@ -284,19 +292,28 @@ window.appView = new Vue({
                 getHistory("/hist/ls");
             },
             showFs: function (path) {
-                $.ajax({
-                    url: encodeURI(path),
-                    dataType: "json",
-                    timeout: 1999,
-                    type: "get",
-                    success: function (data) {
+                axios.get(encodeURI(path))
+                .then(function (response) {
                         window.appView.uiState.historyShow = false;
-                        window.appView.filelist = data.filesystem;
-                    },
-                    error: function (xhr) {
-                        window.appView.out(xhr.statusText);
-                    }
+                        window.appView.filelist = response.data.filesystem;
+                })
+                .catch(function (error) {
+                    window.appView.out(error);
                 });
+                
+                // $.ajax({
+                    // url: encodeURI(path),
+                    // dataType: "json",
+                    // timeout: 1999,
+                    // type: "get",
+                    // success: function (data) {
+                        // window.appView.uiState.historyShow = false;
+                        // window.appView.filelist = data.filesystem;
+                    // },
+                    // error: function (xhr) {
+                        // window.appView.out(xhr.statusText);
+                    // }
+                // });
             },
             clearHistory: function () { // clear history button
                 if (confirm("Clear all history?"))
@@ -321,7 +338,7 @@ window.appView = new Vue({
                     break;
                 case "mp4":
                     if (this.dlnaMode)
-                        get("/dlna/load/" + obj);
+                        this.get("/dlna/load/" + obj);
                     else {
                         // window.location.href = "/wp/play/" + obj;
                         this.playInWeb(obj)
@@ -329,7 +346,7 @@ window.appView = new Vue({
                     break;
                 case "video":
                     if (this.dlnaMode)
-                        get("/dlna/load/" + obj);
+                        this.get("/dlna/load/" + obj);
                     break;
                 default:
                 }
@@ -339,7 +356,7 @@ window.appView = new Vue({
                     if (this.history[item].filename == obj)
                         return this.history[item].exist;
                 }
-                return false;
+                return true;
             },
             playInWeb: function (obj) {
                 console.log(obj);
@@ -363,30 +380,36 @@ window.appView = new Vue({
                 this.positionBarCanUpdate = false;
             },
             get: function (url) {
-                // $.get(url, out);
                 axios.get(url).then(function (response) {
-                    this.out(response);
+                    window.appView.out(response.data);
                 })
             },
             rate: function (ratex) {
-                this.out(ratex + "X");
+                this.out(ratex + 'X');
                 this.$refs.video.playbackRate = ratex;
             },
             videosave: function () {
                 this.video.lastplaytime = new Date().getTime(); //to detect if video is playing
                 if (this.$refs.video.readyState == 4 && Math.floor(Math.random() * 99) > 70) { //randomly save play position
-                    $.ajax({
-                        url: "/wp/save/" + window.appView.video.src,
-                        data: {
-                            position: this.$refs.video.currentTime,
-                            duration: this.$refs.video.duration
-                        },
-                        timeout: 999,
-                        type: "POST",
-                        error: function (xhr) {
-                            this.out("save: " + xhr.statusText);
-                        }
+                    axios.post('/wp/save/' + this.video.src, {
+                        position: this.$refs.video.currentTime,
+                        duration: this.$refs.video.duration
+                    })
+                    .catch(function (error) {
+                        window.appView.out(error);
                     });
+                    // $.ajax({
+                        // url: "/wp/save/" + this.video.src,
+                        // data: {
+                            // position: this.$refs.video.currentTime,
+                            // duration: this.$refs.video.duration
+                        // },
+                        // timeout: 999,
+                        // type: "POST",
+                        // error: function (xhr) {
+                            // this.out("save: " + xhr.statusText);
+                        // }
+                    // });
                 }
             },
             videoload: function () {
@@ -436,6 +459,7 @@ window.appView = new Vue({
                 this.fixBar.show = false;
                 document.onmousemove = this.showFixBar;
             }
+            axios.defaults.timeout =  1999;
         },
     });
 

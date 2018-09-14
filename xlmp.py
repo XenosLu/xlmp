@@ -9,6 +9,7 @@ import sqlite3
 import sys
 import logging
 import asyncio
+import json
 from threading import Thread, Event
 from urllib.parse import quote, unquote
 from time import sleep, time
@@ -426,9 +427,13 @@ class SaveHandler(tornado.web.RequestHandler):
 
     @tornado.concurrent.run_on_executor
     def post(self, *args, **kwargs):
-        position = self.get_argument('position', 0)
-        duration = self.get_argument('duration', 0)
-        save_history(kwargs.get('src'), position, duration)
+        arguments = json.loads(self.request.body)
+        # position = arguments.get('position', 0)
+        # duration = arguments.get('duration', 0)
+        # position = self.get_argument('position', 0)
+        # duration = self.get_argument('duration', 0)
+        # save_history(kwargs.get('src'), position, duration)
+        save_history(kwargs.get('src'), **arguments)
 
 
 class DlnaLoadHandler(tornado.web.RequestHandler):
