@@ -16,9 +16,6 @@ var icon = {
  */
 // function get(url) {
     // // $.get(url, out);
-    // axios.get(url).then(function (response) {
-        // window.appView.out(response.data);
-    // })
 // }
 
 /**
