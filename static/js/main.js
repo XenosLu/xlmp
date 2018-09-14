@@ -213,17 +213,9 @@ window.appView = new Vue({
                         clearTimeout(this.output.timerId);
                         this.output.timerId = null;
                     }
-                    // if (this.output.show === true) {
-                        // var el = this.$refs.output;
-                        // Velocity(el, {translateY: -30}, {duration: 25});
-                        // Velocity(el, {translateY: 0}, {duration: 125});
-                        // Velocity(el, {translateY: -15}, {duration: 125});
-                        // Velocity(el, {translateY: 0}, {duration: 25});
-                    // }
                     this.output.text = str;
                     this.output.show = true;
                     this.output.timerId = setTimeout(function () {
-                            // Velocity(window.appView.$refs.output, 'stop');
                             window.appView.output.show = false;
                         }, 2100);
                     console.log(this.output.show);
