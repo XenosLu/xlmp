@@ -109,13 +109,12 @@
         </b-btn-toolbar>
 
         <!-- Modal Component -->
-        
         <!-- <b-modal modal-class="['card', 'col-sm-11']" -->
-        <b-modal modal-class="col-sm-11"
-                 v-model="uiState.modalShow"
+        <!-- <b-modal modal-class="col-sm-11" -->
+        <b-modal v-model="uiState.modalShow"
                  size="lg"
                  centered hide-footer hide-header>
-          <div class="card-header bg-C3E6CB">
+          <div class="card-header bg-D9EDF7">
             <b-btn @click="showHistory" :pressed="uiState.historyShow" variant="outline-dark">
               <!-- <i class="oi oi-book"></i>History -->
               <i class="oi oi-clock"></i>History
