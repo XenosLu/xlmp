@@ -67,7 +67,6 @@ function dlnaTouch() {
         window.appView.out(secondToTime(newtime));
         if (ev.type.indexOf("swipe") != -1)
             window.appView.get("/dlna/seek/" + secondToTime(newtime));
-
         // console.log(ev);
         // console.log(ev.type);
     });
