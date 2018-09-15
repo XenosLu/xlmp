@@ -321,9 +321,6 @@ window.appView = new Vue({
                 if (confirm("Clear all history?"))
                     getHistory("/hist/clear");
             },
-            play: function (obj) {
-                this.open(obj, 'mp4');
-            },
             remove: function (obj) {
                 if (confirm("Clear history of " + obj + "?"))
                     getHistory("/hist/rm/" + obj.replace(/\?/g, "%3F")); //?to%3F #to%23
@@ -339,16 +336,9 @@ window.appView = new Vue({
                     this.showFs("/fs/ls/" + obj + "/");
                     break;
                 case "mp4":
-                    // if (this.dlnaMode)
-                        // this.get("/dlna/load/" + obj);
-                    // else {
-                        // // window.location.href = "/wp/play/" + obj;
-                        // this.playInWeb(obj);
-                    // }
                     if (!this.dlnaMode) {
                         this.playInWeb(obj);
                     }
-                    // break;
                 case "video":
                     if (this.dlnaMode)
                         this.get("/dlna/load/" + obj);

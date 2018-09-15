@@ -135,7 +135,7 @@
                   </b-btn>
                 </td>
                 <td class="iconOnly"><i class="oi oi-video"></i></td>
-                <td @click="play(item.filename)" :data-target="item.path" class="break-all">
+                <td @click="open(item.filename, 'mp4')" :data-target="item.path" class="break-all">
                   <span :class="item.exist ? 'mp4' : 'other'">${ item.filename }</span>
                   <br>
                   <small class="text-muted">
