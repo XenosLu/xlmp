@@ -233,7 +233,7 @@ window.appView = new Vue({
                     this.output.show = true;
                     this.output.timerId = setTimeout(function () {
                             window.appView.output.show = false;
-                        }, 2100);
+                        }, 112100);
                 }
             },
             outFadeIn: function (el, done) {
@@ -301,7 +301,9 @@ window.appView = new Vue({
                         window.appView.filelist = response.data.filesystem;
                 })
                 .catch(function (error) {
-                    window.appView.out(error);
+                    // console.log(error);
+                    // console.log(error.response);
+                    window.appView.out(error.response.statusText);
                 });
                 
                 // $.ajax({
