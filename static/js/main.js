@@ -44,7 +44,7 @@ function getHistory(str) {
         window.appView.history = response.data.history;
     })
     .catch(function (error) {
-        window.appView.out(error);
+        window.appView.out(error.response.statusText);
     });
 }
 
@@ -403,7 +403,7 @@ window.appView = new Vue({
                         position: this.$refs.video.currentTime,
                         duration: this.$refs.video.duration
                     }).catch(function (error) {
-                        window.appView.out(error);
+                        window.appView.out(error.response.statusText);
                     });
                     // $.ajax({
                         // url: "/wp/save/" + this.video.src,
