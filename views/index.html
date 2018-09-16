@@ -27,7 +27,8 @@
       </transition>
       <!-- output box end -->
       <div class="container">
-        <video v-if="wpMode"
+        <video class="mb-4"
+               v-if="wpMode"
                ref="video"
                @timeupdate="videosave"
                @seeking="videoseek"

@@ -439,8 +439,8 @@ window.appView = new Vue({
                     dlnaTouch();
                 } else if (this.wpMode) {
                     window.document.title = this.video.src + " - Light Media Player";
-                    if (this.isIos)
-                        touchWebPlayer();
+                    // if (this.isIos)
+                    touchWebPlayer();
                 } else
                     window.document.title = "Light Media Player";
             })
