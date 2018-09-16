@@ -172,7 +172,8 @@ window.appView = new Vue({
                 smallText: '',
                 show: false,
                 timerId: null,
-            }
+            },
+            isIos: null,
         },
         watch: {
             'dlnaInfo.RelTime': function () {
@@ -438,7 +439,8 @@ window.appView = new Vue({
                     dlnaTouch();
                 } else if (this.wpMode) {
                     window.document.title = this.video.src + " - Light Media Player";
-                    touchWebPlayer();
+                    if (this.isIos)
+                        touchWebPlayer();
                 } else
                     window.document.title = "Light Media Player";
             })
@@ -447,12 +449,12 @@ window.appView = new Vue({
             if (typeof(localStorage.mode) !== "undefined")
                 this.mode = localStorage.mode;
             window.onresize = this.videoAdapt;
-            var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-            if (!isiOS) {
+            this.isIos = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+            if (!this.isIos) {
                 this.fixBar.show = false;
                 document.onmousemove = this.showFixBar;
             }
-            axios.defaults.timeout =  1999;
+            axios.defaults.timeout = 1999;
         },
     });
 
