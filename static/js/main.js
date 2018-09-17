@@ -25,19 +25,6 @@ var icon = {
  * @param {String} str
  */
 function getHistory(str) {
-    // $.ajax({
-        // url: encodeURI(str),
-        // dataType: "json",
-        // timeout: 1999,
-        // type: "get",
-        // success: function (data) {
-            // window.appView.uiState.historyShow = true;
-            // window.appView.history = data.history;
-        // },
-        // error: function (xhr) {
-            // window.appView.out(xhr.statusText);
-        // }
-    // });
     axios.get(encodeURI(str))
     .then(function (response) {
         window.appView.uiState.historyShow = true;
