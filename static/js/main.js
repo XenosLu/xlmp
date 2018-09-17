@@ -129,6 +129,7 @@ window.appView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-common',
         data: {
+            editMode: false,
             video: {
                 lastplaytime: 0,
                 sizeBtnText: 'origin',
