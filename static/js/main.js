@@ -310,13 +310,12 @@ window.appView = new Vue({
                     getHistory("/hist/clear");
             },
             remove: function (obj) {
-                if (confirm("Clear history of " + obj + "?"))
+                // if (confirm("Clear history of " + obj + "?"))
                     getHistory("/hist/rm/" + obj.replace(/\?/g, "%3F")); //?to%3F #to%23
             },
             move: function (obj) {
-                if (confirm("Move " + obj + " to .old?")) {
+                // if (confirm("Move " + obj + " to .old?")) 
                     this.showFs("/fs/move/" + obj);
-                }
             },
             open: function (obj, type) {
                 switch (type) {
