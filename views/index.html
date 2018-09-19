@@ -41,8 +41,8 @@
                poster controls preload="meta">
           No video support!
         </video>
-        <b-btn-toolbar v-show="fixBar.show" class="fixed-top opacity-08">
-          <b-container>
+        <b-container class="fixed-top opacity-08">
+          <b-btn-toolbar v-show="fixBar.show">
             <b-btn-group>
               <b-btn v-show="false" @click="test" variant="outline-dark">
                 test
@@ -106,9 +106,8 @@
               </b-dropdown>
             </b-btn-group>
             <!-- dlna dmr menu end -->
-          </b-container>
-        </b-btn-toolbar>
-
+          </b-btn-toolbar>
+        </b-container>
         <!-- Modal Component -->
         <!-- <b-modal modal-class="['card', 'col-sm-11']" -->
         <!-- <b-modal modal-class="col-sm-11" -->
@@ -201,8 +200,8 @@
                     id="DlnaTouch">
             </b-card>
           </div>
-          
-          <div class="container fixed-bottom text-center">
+
+          <b-container class="fixed-bottom text-center">
             <div class="card-footer col-sm-12 col-md-8 col-lg-6 col-xl-5">
               <h6 class="card-subtitle text-muted">${ dlnaInfo.CurrentTransportState }</h6>
               <h6 v-show="dlnaInfo.RelTime" class="card-title mt-3">
@@ -242,7 +241,7 @@
                 </b-btn-group>
                </b-btn-toolbar>
               </div>
-          </div>
+          </b-container>
         </div>
       </div>
     </div>
