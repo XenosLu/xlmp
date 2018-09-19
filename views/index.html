@@ -109,7 +109,71 @@
           </b-btn-toolbar>
         </b-container>
         <!-- Modal Component -->
-        <b-modal v-model="uiState.modalShow"
+        <!-- <b-modal v-model="uiState.modalShow" -->
+                 <!-- size="lg" -->
+                 <!-- centered hide-footer hide-header> -->
+          <!-- <div class="card-header bg-D9EDF7"> -->
+            <!-- <b-btn @click="showHistory" :pressed="uiState.historyShow" variant="outline-secondary"> -->
+              <!-- <i class="oi oi-clock"></i>History -->
+            <!-- </b-btn> -->
+            <!-- <b-btn @click="showFs('/fs/ls/')" :pressed="!uiState.historyShow" variant="outline-secondary"> -->
+              <!-- <i class="oi oi-home"></i>Home dir -->
+            <!-- </b-btn> -->
+            <!-- <b-btn variant="outline-light" :pressed="editMode" @click="editMode=!editMode"> -->
+              <!-- edit -->
+            <!-- </b-btn> -->
+            <!-- <b-btn @click="uiState.modalShow=false" class="close">&times;</b-btn> -->
+          <!-- </div> -->
+          <!-- <div id="ModalTouch" class="table-responsive-sm text-center"> -->
+            <!-- <table v-show="uiState.historyShow" class="table table-striped table-sm"> -->
+              <!-- <tr v-for="item in history"> -->
+                <!-- <td v-show="editMode"> -->
+                  <!-- <b-btn variant="danger" @click="remove(item.filename)"> -->
+                    <!-- <i class="oi oi-circle-x"></i> -->
+                  <!-- </b-btn> -->
+                <!-- </td> -->
+                <!-- <td class="icon d-sm-table-cell d-none"> -->
+                  <!-- <b-btn variant="info" @click="open(item.path, 'folder')"> -->
+                    <!-- <i class="oi oi-folder"></i> -->
+                    <!-- <br> -->
+                    <!-- <small>go Dir</small> -->
+                  <!-- </b-btn> -->
+                <!-- </td> -->
+                <!-- <td class="iconOnly"><i class="oi oi-video"></i></td> -->
+                <!-- <td @click="open(item.filename, 'mp4')" :data-target="item.path" class="break-all"> -->
+                  <!-- <span :class="item.exist ? 'mp4' : 'other'">${ item.filename }</span> -->
+                  <!-- <br> -->
+                  <!-- <small class="text-muted"> -->
+                    <!-- ${ item.latest_date } | -->
+                    <!-- ${ secondToTime(item.position) } / -->
+                    <!-- ${ secondToTime(item.duration) } -->
+                  <!-- </small> -->
+                <!-- </td> -->
+              <!-- </tr> -->
+            <!-- </table> -->
+            <!-- <table v-show="!uiState.historyShow" class="table table-striped table-sm"> -->
+              <!-- <tr v-for="item in filelist"> -->
+                <!-- <td v-show="editMode"> -->
+                  <!-- <b-btn variant="danger" @click="move(item.path)"> -->
+                    <!-- <i class="oi oi-circle-x"></i> -->
+                  <!-- </b-btn> -->
+                <!-- </td> -->
+                <!-- <td class="iconOnly"><i :class="icon[item.type]" class="oi"></i></td> -->
+                <!-- <td :class="item.type" :data-type="item.type" :data-path="item.path" class="break-all"> -->
+                  <!-- ${ item.filename } -->
+                  <!-- <br> -->
+                  <!-- <small class="text-muted">${ item.size }</small> -->
+                <!-- </td> -->
+              <!-- </tr> -->
+            <!-- </table> -->
+          <!-- </div> -->
+          <!-- <div v-show="uiState.historyShow" class="card-footer text-center"> -->
+            <!-- <b-btn @click="clearHistory" variant="outline-dark"> -->
+              <!-- Clear -->
+            <!-- </b-btn> -->
+          <!-- </div> -->
+        <!-- </b-modal> -->
+        <div v-show="uiState.modalShow" class="card" style="position:absolute;z-index:1050;"
                  size="lg"
                  centered hide-footer hide-header>
           <div class="card-header bg-D9EDF7">
@@ -172,8 +236,7 @@
               Clear
             </b-btn>
           </div>
-        </b-modal>
-
+        </div>
         <!-- dlna interface -->
         <div v-if="dlnaMode">
           <div class="text-center col-sm-12 col-md-8 col-lg-6 col-xl-5">
