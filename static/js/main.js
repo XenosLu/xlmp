@@ -85,19 +85,16 @@ function dlnalink() {
 function modalTouch() {
     var hammertimeModal = new Hammer(document.getElementById("ModalTouch"));
 
-    hammertimeModal.on("swipeleft", function (ev) {
-        window.appView.swipeState -= 1;
-        if (window.appView.swipeState < -1)
-            window.appView.swipeState = -1;
-    });
-    hammertimeModal.on("swiperight", function (ev) {
-        window.appView.swipeState += 1;
-        if (window.appView.swipeState > 0)
-            window.appView.swipeState = 0;
-    });
-    // var press = new Hammer.Press({time: 500});
-    // press.requireFailure(new Hammer.Tap());
-    // hammertimeModal.add(press);
+    // hammertimeModal.on("swipeleft", function (ev) {
+        // window.appView.swipeState -= 1;
+        // if (window.appView.swipeState < -1)
+            // window.appView.swipeState = -1;
+    // });
+    // hammertimeModal.on("swiperight", function (ev) {
+        // window.appView.swipeState += 1;
+        // if (window.appView.swipeState > 0)
+            // window.appView.swipeState = 0;
+    // });
     hammertimeModal.on("press", function (ev) {
         var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
         if (target.hasAttribute("data-target"))
@@ -136,7 +133,7 @@ window.appView = new Vue({
                 src: '', // web player source
             },
             icon: icon,
-            swipeState: 0, // modal touch state
+            // swipeState: 0, // modal touch state
             mode: '', // mode of player, switch between empty/DLNA/WebPlayer
             uiState: {
                 modalShow: false, // true if the modal is show
@@ -287,7 +284,6 @@ window.appView = new Vue({
                         window.appView.filelist = response.data.filesystem;
                 })
                 .catch(function (error) {
-                    // console.log(error.response);
                     window.appView.out(error.response.statusText);
                 });
                 
