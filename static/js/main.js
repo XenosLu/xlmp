@@ -286,7 +286,6 @@ window.appView = new Vue({
                 .catch(function (error) {
                     window.appView.out(error.response.statusText);
                 });
-                
                 // $.ajax({
                     // url: encodeURI(path),
                     // dataType: "json",

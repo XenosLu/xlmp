@@ -352,17 +352,17 @@ class DlnaPlayerHandler(tornado.web.RequestHandler):
         self.render('index.html')
 
 
-class WebPlayerHandler(tornado.web.RequestHandler):
-    """Video play page"""
-    def data_received(self, chunk):
-        pass
+# class WebPlayerHandler(tornado.web.RequestHandler):
+    # """Video play page"""
+    # def data_received(self, chunk):
+        # pass
 
-    def get(self, *args, **kwargs):
-        src = kwargs.get('src')
-        if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
-            self.redirect('/')
-            return
-        self.render('player.html', src=src, position=hist_load(src))
+    # def get(self, *args, **kwargs):
+        # src = kwargs.get('src')
+        # if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
+            # self.redirect('/')
+            # return
+        # self.render('player.html', src=src, position=hist_load(src))
 
 
 class HistoryHandler(tornado.web.RequestHandler):
@@ -628,7 +628,7 @@ HANDLERS = [
     (r'/dlna/load/(?P<src>.*)', DlnaLoadHandler),
     (r'/dlna/(?P<opt>\w*)/?(?P<progress>.*)', DlnaHandler),
     (r'/wp/save/(?P<src>.*)', SaveHandler),
-    (r'/wp/play/(?P<src>.*)', WebPlayerHandler),  # no longer needed
+    # (r'/wp/play/(?P<src>.*)', WebPlayerHandler),  # no longer needed
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
 ]
 
