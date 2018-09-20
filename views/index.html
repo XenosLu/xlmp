@@ -112,7 +112,7 @@
         <b-modal v-model="uiState.modalShow"
                  size="lg"
                  centered hide-footer hide-header>
-          <!-- <div style="max-height:80vh;display:flex;flex-direction: column;"> -->
+          <div style="max-height:80vh;display:flex;flex-direction: column;">
           <div class="card-header bg-D9EDF7">
             <b-btn @click="showHistory" :pressed="uiState.historyShow" variant="outline-secondary">
               <i class="oi oi-clock"></i>History
@@ -173,7 +173,7 @@
               Clear
             </b-btn>
           </div>
-          <!-- </div> -->
+          </div>
         </b-modal>
         <!-- <div v-show="uiState.modalShow" style="z-index:1080;max-height: calc(100vh - 80px)!important;" -->
         <div v-if="false"
