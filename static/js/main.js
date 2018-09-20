@@ -314,18 +314,6 @@ window.appView = new Vue({
                     }).catch(function (error) {
                         window.appView.out(error.response.statusText);
                     });
-                    // $.ajax({
-                        // url: "/wp/save/" + this.video.src,
-                        // data: {
-                            // position: this.$refs.video.currentTime,
-                            // duration: this.$refs.video.duration
-                        // },
-                        // timeout: 999,
-                        // type: "POST",
-                        // error: function (xhr) {
-                            // this.out("save: " + xhr.statusText);
-                        // }
-                    // });
                 }
             },
             videoload: function () {
