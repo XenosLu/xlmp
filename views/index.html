@@ -18,15 +18,17 @@
   <body>
     <div id="v-common">
       <!-- output box -->
-      <div class="output-box position-fixed">
+      <!-- <div class="output-box"> -->
       <transition @enter="outFadeIn"
-                  @leave="outFadeOut">
-        <div v-if="output.show" :key="Math.random()" ref="output" class="output">
+                  @leave="outFadeOut"
+                  @css="false">
+        <!-- <div v-if="output.show" :key="Math.random()" ref="output" class="output"> -->
+        <div v-if="output.show" :key="output.text" ref="output" class="output position-fixed">
           <small class="d-block">${ output.smallText }</small>
           ${ output.text }
         </div>
       </transition>
-      </div>
+      <!-- </div> -->
       <!-- output box end -->
       <div class="container">
         <video class="mb-4"

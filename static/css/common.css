@@ -129,8 +129,6 @@ input[type=range]::-moz-range-thumb {
     border: 1px solid #777777;
     box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
     text-shadow: 0.1em 0.1em 0.4em #666;
-}
-.output-box {
     max-width: 100%;
     top: 50%;
     left: 50%;
@@ -138,6 +136,7 @@ input[type=range]::-moz-range-thumb {
     -webkit-transform: translate(-50%, -50%);
     z-index: 1051;
 }
+
 button {
     opacity: 0.85;
     box-shadow: inset 0px 0px 9px 0px #F1F2F6;
