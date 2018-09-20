@@ -162,3 +162,13 @@ button {
     /* min-width: 6em; */
     font-size: 1.2em;
 }
+.box {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    overflow: hidden;
+    outline: 0;
+}
