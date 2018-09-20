@@ -132,10 +132,12 @@ input[type=range]::-moz-range-thumb {
     border: 1px solid #777777;
     box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
     text-shadow: 0.1em 0.1em 0.4em #666;
+}
+.translate {
     top: 50%;
     left: 50%;
-    /* transform: translate(-50%, -50%); */
-    /* -webkit-transform: translate(-50%, -50%); */
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
 }
 button {
     opacity: 0.85;

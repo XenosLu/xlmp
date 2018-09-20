@@ -18,13 +18,15 @@
   <body>
     <div id="v-common">
       <!-- output box -->
+      <div class="translate position-fixed z-index-1051">
       <transition @enter="outFadeIn"
                   @leave="outFadeOut">
-        <div v-if="output.show" :key="output.text" ref="output" class="output position-fixed z-index-1051">
+        <div v-if="output.show" :key="output.text" ref="output" class="output">
           <small class="d-block">${ output.smallText }</small>
           ${ output.text }
         </div>
       </transition>
+      </div>
       <!-- output box end -->
       <div class="container">
         <video class="mb-4"
