@@ -112,6 +112,7 @@
         <b-modal v-model="uiState.modalShow"
                  size="lg"
                  centered hide-footer hide-header>
+          <div style="max-height:80vh;display:flex;flex-direction: column;">
           <div class="card-header bg-D9EDF7">
             <b-btn @click="showHistory" :pressed="uiState.historyShow" variant="outline-secondary">
               <i class="oi oi-clock"></i>History
@@ -124,7 +125,7 @@
             </b-btn>
             <b-btn @click="uiState.modalShow=false" class="close">&times;</b-btn>
           </div>
-          <div id="ModalTouch" class="table-responsive-sm text-center" style="max-height:50vh;overflow:auto;">
+          <div id="ModalTouch" class="table-responsive-sm text-center" style="height:100%;overflow:auto;">
             <table v-show="uiState.historyShow" class="table table-striped table-sm">
               <tr v-for="item in history">
                 <td v-show="editMode">
@@ -171,6 +172,7 @@
             <b-btn @click="clearHistory" variant="outline-dark">
               Clear
             </b-btn>
+          </div>
           </div>
         </b-modal>
         <!-- <div v-show="uiState.modalShow" class="card fixed" style="z-index:1080;max-height: calc(100vh - 80px)!important;" -->
