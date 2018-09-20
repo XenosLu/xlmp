@@ -9,16 +9,6 @@ var icon = {
 //window.appView.showModal();  // show modal at start
 
 /**
- * Ajax get and out result
- *
- * @method get
- * @param {String} url
- */
-// function get(url) {
-    // // $.get(url, out);
-// }
-
-/**
  * Render history list box from ajax
  *
  * @method history
@@ -34,16 +24,6 @@ function getHistory(str) {
         window.appView.out(error.response.statusText);
     });
 }
-
-/**
- * Made an output box to show some text notification
- *
- * @method out
- * @param {String} str
- */
-// function out(str) {
-    // window.appView.out(str);
-// }
 
 function dlnaTouch() {
     var hammertimeDlna = new Hammer(document.getElementById("DlnaTouch"));
@@ -64,9 +44,6 @@ function dlnalink() {
     ws.onmessage = function (e) {
         var data = JSON.parse(e.data);
         console.log(data);
-        // if (window.appView.positionBarCanUpdate && data.hasOwnProperty('RelTime')) {
-            // window.appView.positionBarVal = timeToSecond(data.RelTime);
-        // }
         window.appView.dlnaInfo = data;
     }
     ws.onclose = function () {
@@ -84,17 +61,6 @@ function dlnalink() {
 
 function modalTouch() {
     var hammertimeModal = new Hammer(document.getElementById("ModalTouch"));
-
-    // hammertimeModal.on("swipeleft", function (ev) {
-        // window.appView.swipeState -= 1;
-        // if (window.appView.swipeState < -1)
-            // window.appView.swipeState = -1;
-    // });
-    // hammertimeModal.on("swiperight", function (ev) {
-        // window.appView.swipeState += 1;
-        // if (window.appView.swipeState > 0)
-            // window.appView.swipeState = 0;
-    // });
     hammertimeModal.on("press", function (ev) {
         var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
         if (target.hasAttribute("data-target"))
@@ -133,7 +99,6 @@ window.appView = new Vue({
                 src: '', // web player source
             },
             icon: icon,
-            // swipeState: 0, // modal touch state
             mode: '', // mode of player, switch between empty/DLNA/WebPlayer
             uiState: {
                 modalShow: false, // true if the modal is show
@@ -276,31 +241,16 @@ window.appView = new Vue({
                 .catch(function (error) {
                     window.appView.out(error.response.statusText);
                 });
-                // $.ajax({
-                    // url: encodeURI(path),
-                    // dataType: "json",
-                    // timeout: 1999,
-                    // type: "get",
-                    // success: function (data) {
-                        // window.appView.uiState.historyShow = false;
-                        // window.appView.filelist = data.filesystem;
-                    // },
-                    // error: function (xhr) {
-                        // window.appView.out(xhr.statusText);
-                    // }
-                // });
             },
             clearHistory: function () { // clear history button
                 if (confirm("Clear all history?"))
                     getHistory("/hist/clear");
             },
             remove: function (obj) {
-                // if (confirm("Clear history of " + obj + "?"))
-                    getHistory("/hist/rm/" + obj.replace(/\?/g, "%3F")); //?to%3F #to%23
+                getHistory("/hist/rm/" + obj.replace(/\?/g, "%3F")); //?to%3F #to%23
             },
             move: function (obj) {
-                // if (confirm("Move " + obj + " to .old?")) 
-                    this.showFs("/fs/move/" + obj);
+                this.showFs("/fs/move/" + obj);
             },
             open: function (obj, type) {
                 switch (type) {
