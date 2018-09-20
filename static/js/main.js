@@ -228,16 +228,6 @@ window.appView = new Vue({
                 Velocity(el, 'stop');
                 Velocity(el, {opacity: 0}, {duration: 600});
             },
-            out_old: function (str) {
-                if (str !== "") {
-                    this.output.text = str;
-                    var el = this.$refs.output;
-                    Velocity(el, 'stop');
-                Velocity(el, {translateX: '-50%', translateY: '-50%'}, {duration: 0});
-                    Velocity(el, {opacity: 0.8}, {duration: 250});
-                    Velocity(el, {opacity: 0}, {delay: 1800, duration: 625});
-                }
-            },
             dlnaToogle: function () {
                 this.mode = this.mode !== '' ? '' : 'DLNA';
                 localStorage.mode = this.mode;
