@@ -21,7 +21,7 @@
       <div class="output-box position-fixed">
       <transition @enter="outFadeIn"
                   @leave="outFadeOut">
-        <div v-if="output.show" :key="output.text" ref="output" class="output">
+        <div v-if="output.show" ref="output" class="output">
           <small class="d-block">${ output.smallText }</small>
           ${ output.text }
         </div>
