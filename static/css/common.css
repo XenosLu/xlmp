@@ -15,6 +15,9 @@
 .bg-D9EDF7 {
     background-color: #D9EDF7;
 }
+.auto-overflow {
+    overflow:auto;
+}
 body {
     background-color: #F1F2F6;
     -webkit-user-select: none;
@@ -89,7 +92,6 @@ td:hover {
 input[type=range]{
     box-shadow: inset 0px 0px 9px 0px #F1F2F6;
     -webkit-appearance: none;
-    /* margin: auto; */
 }
 input[type=range]::-moz-range-track {
     height: 0;
@@ -148,15 +150,4 @@ button {
     opacity: 0.9;
     /* min-width: 6em; */
     font-size: 1.2em;
-}
-/* test */
-.box {
-    display: flex;
-    /* justify-content: space-between; */
-    align-items: center;
-    /* align-items: stretch; */
-}
-
-.auto-overflow {
-    overflow:auto;
 }
