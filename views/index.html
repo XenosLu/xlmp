@@ -125,7 +125,7 @@
             </b-btn>
             <b-btn @click="uiState.modalShow=false" class="close">&times;</b-btn>
           </div>
-          <div id="ModalTouch" class="table-responsive-sm text-center" style="height:100%;overflow:auto;">
+          <div id="ModalTouch" class="table-responsive-sm text-center" style="overflow:auto;">
             <table v-show="uiState.historyShow" class="table table-striped table-sm">
               <tr v-for="item in history">
                 <td v-show="editMode">
