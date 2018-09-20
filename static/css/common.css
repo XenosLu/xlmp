@@ -134,6 +134,7 @@ input[type=range]::-moz-range-thumb {
     text-shadow: 0.1em 0.1em 0.4em #666;
 }
 .translate {
+    max-width: 100%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
