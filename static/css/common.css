@@ -156,3 +156,7 @@ button {
     align-items: center;
     /* align-items: stretch; */
 }
+
+.auto-overflow {
+    overflow:auto;
+}
