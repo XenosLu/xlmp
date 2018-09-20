@@ -121,20 +121,33 @@ input[type=range]::-moz-range-thumb {
     /* box-shadow: 2px 2px 5px #333333; */
 /* } */
 .output {
-    font-size: 1.5em;
+    opacity: 0;
     pointer-events: none;
+
+
+    /* top: 50%; */
+    /* left: 50%; */
+    /* transform: translate(-50%, -50%); */
+    /* -webkit-transform: translate(-50%, -50%); */
+    z-index: 1051;
+    
+    
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+.output-box {
+    font-size: 1.5em;
     border-radius: 0.2em;
     padding: 0.2em;
-    opacity: 0;
     border: 1px solid #777777;
     box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
     text-shadow: 0.1em 0.1em 0.4em #666;
     max-width: 100%;
-    top: 50%;
-    left: 50%;
-    /* transform: translate(-50%, -50%); */
-    /* -webkit-transform: translate(-50%, -50%); */
-    z-index: 1051;
 }
 
 button {
