@@ -26,9 +26,6 @@ body {
     font-family: AppleSDGothicNeo-Regular;
     margin-bottom: 2em; /* Margin bottom by footer height */
 }
-.z-index-1051 {
-    z-index: 1051;
-}
 html {
   position: relative;
   min-height: 100%;
@@ -133,12 +130,13 @@ input[type=range]::-moz-range-thumb {
     box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
     text-shadow: 0.1em 0.1em 0.4em #666;
 }
-.translate {
+.output-box {
     max-width: 100%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
+    z-index: 1051;
 }
 button {
     opacity: 0.85;
