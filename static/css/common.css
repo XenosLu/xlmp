@@ -67,11 +67,11 @@ td:hover {
 .position-bar {
     background-color: #A0D468;
     width: 96%;
-    height: 2em;
+    height: 1.8em;
 }
 .position-bar::-webkit-slider-thumb{
     -webkit-appearance: none;
-    height: 5.2em;
+    height: 4.8em;
     width: 3.3em;
     padding: 1.5em;
     background-clip: content-box;
@@ -92,7 +92,7 @@ input[type=range]::-moz-range-thumb {
     border: None;
 }
 .position-bar::-moz-range-thumb {
-    height: 2.4em;
+    height: 2.2em;
     width: 0.9em;
     box-shadow: inset 0px 0px 5px 2px #A0D468;
 }
