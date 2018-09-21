@@ -11,19 +11,22 @@ function vueTouch(el, type, binding) {
     this.type = type;
     this.binding = binding;
     var hammertime = new Hammer(this.el);
+    console.log(binding);
+    console.log(binding.value);
     hammertime.on(this.type, this.binding.value);
 };
+
 Vue.directive("tap", {
     bind: function (el, binding) {
         new vueTouch(el, "tap", binding);
     }
 });
 
-// Vue.directive("press", {
-    // bind: function (el, binding) {
-        // new vueTouch(el, "press", binding);
-    // }
-// });
+Vue.directive("press", {
+    bind: function (el, binding) {
+        new vueTouch(el, "press", binding);
+    }
+});
 
 
 //window.appView.showModal();  // show modal at start
@@ -43,7 +46,7 @@ function getHistory(str) {
     .catch(function (error) {
         window.appView.out(error.response.statusText);
     });
-}
+};
 
 function dlnaTouch() {
     var hammertimeDlna = new Hammer(document.getElementById("DlnaTouch"));
@@ -177,7 +180,9 @@ window.appView = new Vue({
             }
         },
         methods: {
-            test: function (obj) {
+            test: function (obj, obj2) {
+                console.log(obj);
+                // console.log(obj2);
                 console.log("test " + obj);
                 this.out('test' + obj);
             },
