@@ -46,7 +46,7 @@
         <b-container class="fixed-top opacity-08">
           <b-btn-toolbar v-show="fixBar.show">
             <b-btn-group>
-              <b-btn v-show="false" @click="test" variant="outline-dark">
+              <b-btn v-show="true" @click="test" v-tap="test" variant="outline-dark">
                 test
               </b-btn>
               <b-btn variant="outline-dark" title="browser" @click="showModal">
