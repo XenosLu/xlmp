@@ -169,6 +169,7 @@ button {
     overflow: hidden;
     outline: 0;
 
+    pointer-events: none;
     display:flex;
     flex-wrap: wrap;
     justify-content: center;

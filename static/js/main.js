@@ -256,8 +256,8 @@ window.appView = new Vue({
                 }
             },
             showModal: function () {
-                this.uiState.modalShow = true;
-                if (this.uiState.historyShow)
+                this.uiState.modalShow = !this.uiState.modalShow;
+                if (this.uiState.modalShow && this.uiState.historyShow)
                     this.showHistory();
             },
             showHistory: function () {
