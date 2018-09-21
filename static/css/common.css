@@ -71,7 +71,7 @@ td:hover {
 }
 .position-bar::-webkit-slider-thumb{
     -webkit-appearance: none;
-    height: 5.2em;
+    height: 4.8em;
     width: 3.3em;
     padding: 1.5em;
     background-clip: content-box;
