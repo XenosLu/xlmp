@@ -187,6 +187,9 @@ window.appView = new Vue({
             volUp: function (obj) {
                 this.get('/dlna/vol/up');
             },
+            volDown: function (obj) {
+                this.get('/dlna/vol/down');
+            },
             pressOpen: function (obj) {
                 var target = obj.target.tagName == 'TD' ? obj.target : obj.target.parentNode;
                 this.open(target.getAttribute('data-target'), 'folder');
