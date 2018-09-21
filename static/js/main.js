@@ -19,6 +19,12 @@ Vue.directive("tap",{
     }
 });
 
+Vue.directive("doubletap",{
+    bind:function(el,binding){
+        new vueTouch(el,"doubletap",binding);
+    }
+});
+
 
 //window.appView.showModal();  // show modal at start
 
