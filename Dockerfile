@@ -18,7 +18,6 @@ COPY docker/xlmp.conf /etc/nginx/conf.d/
 
 # deploy script
 COPY docker/deploy /usr/local/bin
-# RUN chmod +x /usr/local/bin/deploy
 
 # git clone
 RUN git clone https://github.com/XenosLu/xlmp.git /xlmp
@@ -28,7 +27,6 @@ EXPOSE 80
 # media folder:
 VOLUME /xlmp/media
 
-# RUN chmod -R +x /xlmp/docker/s6
 # ENTRYPOINT ["/bin/sh", "/xlmp/docker/docker-entrypoint.sh"]
 # CMD ["/usr/bin/supervisord", "-c", "/xlmp/docker/supervisord.conf"]
 CMD ["/bin/s6-svscan", "/xlmp/docker/s6/"]
