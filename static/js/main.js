@@ -364,9 +364,6 @@ window.appView = new Vue({
                 this.fixBar.show = false;
                 document.onmousemove = this.showFixBar;
             }
-            document.addEventListener('gesturestart', function (event) {
-                event.preventDefault();
-            });
             axios.defaults.timeout = 1999;
         },
     });
@@ -374,3 +371,19 @@ window.appView = new Vue({
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
 modalTouch();
+
+window.onload=function () {
+    document.addEventListener('touchstart',function (event) {
+        if(event.touches.length>1){
+            event.preventDefault();
+        }
+    })
+    var lastTouchEnd=0;
+    document.addEventListener('touchend',function (event) {
+        var now=(new Date()).getTime();
+        if(now-lastTouchEnd<=300){
+            event.preventDefault();
+        }
+        lastTouchEnd=now;
+    },false)
+}
