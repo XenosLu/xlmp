@@ -63,11 +63,11 @@
                   Close
               </b-btn>
               <b-dropdown variant="outline-dark" right text="Maintain">
-                <b-dropdown-item @click="get('/sys/update')">update</b-dropdown-item>
-                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-item v-if="devMode" @click="get('/sys/update')">update</b-dropdown-item>
+                <b-dropdown-divider v-if="devMode"></b-dropdown-divider>
                 <b-dropdown-item @click="get('/sys/backup')">backup</b-dropdown-item>
                 <b-dropdown-item @click="get('/sys/restore')">restore</b-dropdown-item>
-                <b-dropdown-item @click="get('/test')">test</b-dropdown-item>
+                <b-dropdown-item v-if="devMode" @click="get('/test')">test</b-dropdown-item>
               </b-dropdown>
             </b-btn-group>  
             <!-- dlna seek menu -->
