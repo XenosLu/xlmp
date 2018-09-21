@@ -187,6 +187,9 @@ window.appView = new Vue({
             pressOpen: function (obj) {
                 this.open(obj.target.getAttribute('data-target'), 'folder');
             },
+            tapOpen: function (obj) {
+                this.open(obj.getAttribute('data-path'), obj.getAttribute('data-type'));
+            },
             showFixBar: function () {
                 this.fixBar.show = true;
                 if (this.fixBar.timerId) {
@@ -396,7 +399,7 @@ window.appView = new Vue({
 
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
-modalTouch();
+// modalTouch();
 
 // window.onload=function () {
     // document.addEventListener('touchstart',function (event) {
