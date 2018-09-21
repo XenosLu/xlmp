@@ -80,22 +80,6 @@ function dlnalink() {
     return ws;
 }
 
-function modalTouch() {
-    var hammertimeModal = new Hammer(document.getElementById("ModalTouch"));
-    // hammertimeModal.on("press", function (ev) {
-        // var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
-        // if (target.hasAttribute("data-target"))
-            // window.appView.open(target.getAttribute('data-target'), 'folder');
-        // console.log(target.getAttribute('data-target'));
-    // });
-    // hammertimeModal.on("tap", function (ev) {
-        // var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
-        // if (target.hasAttribute("data-type"))
-            // window.appView.open(target.getAttribute('data-path'), target.getAttribute('data-type'));
-        // console.log(target.getAttribute('data-target'));
-    // });
-}
-
 function touchWebPlayer() {
     var hammertimeVideo = new Hammer(document);
     hammertimeVideo.on("panleft panright swipeleft swiperight", function (ev) {
@@ -407,7 +391,6 @@ window.appView = new Vue({
 
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
-// modalTouch();
 
 window.onload=function () {
     document.addEventListener('touchstart',function (event) {
