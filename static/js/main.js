@@ -81,12 +81,12 @@ function dlnalink() {
 
 function modalTouch() {
     var hammertimeModal = new Hammer(document.getElementById("ModalTouch"));
-    hammertimeModal.on("press", function (ev) {
-        var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
-        if (target.hasAttribute("data-target"))
-            window.appView.open(target.getAttribute('data-target'), 'folder');
-        console.log(target.getAttribute('data-target'));
-    });
+    // hammertimeModal.on("press", function (ev) {
+        // var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
+        // if (target.hasAttribute("data-target"))
+            // window.appView.open(target.getAttribute('data-target'), 'folder');
+        // console.log(target.getAttribute('data-target'));
+    // });
     hammertimeModal.on("tap", function (ev) {
         var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
         if (target.hasAttribute("data-type"))

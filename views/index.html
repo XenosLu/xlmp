@@ -46,7 +46,7 @@
         <b-container class="fixed-top opacity-08">
           <b-btn-toolbar v-show="fixBar.show">
             <b-btn-group>
-              <b-btn v-show="true" v-tap="test" v-doubletap="" variant="outline-dark">
+              <b-btn v-show="false" variant="outline-dark">
                 test
               </b-btn>
               <b-btn variant="outline-dark" title="browser" @click="showModal">
@@ -64,8 +64,8 @@
               </b-btn>
               <b-dropdown variant="outline-dark" right text="Maintain">
                 <b-dropdown-item @click="get('/sys/update')">update</b-dropdown-item>
-                <b-dropdown-item @click="get('/sys/backup')">backup</b-dropdown-item>
                 <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-item @click="get('/sys/backup')">backup</b-dropdown-item>
                 <b-dropdown-item @click="get('/sys/restore')">restore</b-dropdown-item>
                 <b-dropdown-item @click="get('/test')">test</b-dropdown-item>
               </b-dropdown>
@@ -141,7 +141,10 @@
                     </b-btn>
                   </td>
                   <td class="iconOnly"><i class="oi oi-video"></i></td>
-                  <td @click="open(item.filename, 'mp4')" :data-target="item.path" class="break-all">
+                  <td @click="open(item.filename, 'mp4')"
+                      :data-target="item.path"
+                      v-press="open(item.path, 'folder')"
+                      class="break-all">
                     <span :class="item.exist ? 'mp4' : 'other'">${ item.filename }</span>
                     <br>
                     <small class="text-muted">
