@@ -111,9 +111,8 @@
           </b-btn-toolbar>
         </b-container>
         <!-- fix window -->
-        <div v-show="uiState.modalShow"
-             class="box container-fluid flex-row justify-content-center align-items-center">
-          <div class="card box-shadow" style="max-height: 83vh;z-index: 1050;font-size: 0.8em; pointer-events: auto">
+        <div v-show="uiState.modalShow" class="window-container container-fluid flex-row justify-content-center align-items-center">
+          <div class="card window">
             <div class="card-header bg-D9EDF7">
               <b-btn @click="showHistory" size="sm" :pressed="uiState.historyShow" variant="outline-secondary">
                 <i class="oi oi-clock"></i>History

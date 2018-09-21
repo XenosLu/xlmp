@@ -148,18 +148,13 @@ button {
     opacity: 0.85;
     box-shadow: inset 0px 0px 9px 0px #F1F2F6;
 }
-
-.box-shadow {
-    /* opacity: 0.78; */
-    box-shadow: 2px 2px 5px #333333;
-}
 /* .dropdown-menu { */
 .dropdown-item {
     opacity: 0.9;
     /* min-width: 6em; */
     /* font-size: 1.2em; */
 }
-.box {
+.window-container {
     position: fixed;
     top: 0;
     right: 0;
@@ -172,4 +167,12 @@ button {
     pointer-events: none;
     display:flex;
     flex-wrap: wrap;
+}
+.window {
+    max-height: 83vh;
+    z-index: 1050;
+    font-size: 0.8em;
+    pointer-events: auto;
+    min-width: 40%;
+    box-shadow: 2px 2px 5px #333333;
 }
