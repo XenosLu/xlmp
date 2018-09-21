@@ -185,10 +185,12 @@ window.appView = new Vue({
                 this.out('test' + obj);
             },
             pressOpen: function (obj) {
-                this.open(obj.target.getAttribute('data-target'), 'folder');
+                var target = obj.target.tagName == 'TD' ? obj.target : obj.target.parentNode;
+                this.open(target.getAttribute('data-target'), 'folder');
             },
             tapOpen: function (obj) {
-                this.open(obj.getAttribute('data-path'), obj.getAttribute('data-type'));
+                var target = obj.target.tagName == 'TD' ? obj.target : obj.target.parentNode;
+                this.open(target.getAttribute('data-path'), target.getAttribute('data-type'));
             },
             showFixBar: function () {
                 this.fixBar.show = true;
