@@ -67,11 +67,11 @@ td:hover {
 .position-bar {
     background-color: #A0D468;
     width: 96%;
-    height: 2.2em;
+    height: 2em;
 }
 .position-bar::-webkit-slider-thumb{
     -webkit-appearance: none;
-    height: 4.8em;
+    height: 5.2em;
     width: 3.3em;
     padding: 1.5em;
     background-clip: content-box;
