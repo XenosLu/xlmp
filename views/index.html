@@ -113,7 +113,7 @@
         <!-- fix window -->
         <div v-show="uiState.modalShow"
              class="box opacity-08 container-fluid flex-row justify-content-center align-items-center">
-          <div class="card" style="max-height: 83vh;z-index: 1050;font-size: 0.8em; pointer-events: auto">
+          <div class="card box-shadow" style="max-height: 83vh;z-index: 1050;font-size: 0.8em; pointer-events: auto">
             <div class="card-header bg-D9EDF7">
               <b-btn @click="showHistory" size="sm" :pressed="uiState.historyShow" variant="outline-secondary">
                 <i class="oi oi-clock"></i>History
@@ -126,7 +126,7 @@
               </b-btn>
               <b-btn @click="uiState.modalShow=false" class="close">&times;</b-btn>
             </div>
-            <div id="ModalTouch" class="table-responsive-sm text-center auto-overflow">
+            <div class="table-responsive-sm text-center auto-overflow">
               <table v-show="uiState.historyShow" class="table table-striped table-sm">
                 <tr v-for="item in history">
                   <!-- <td v-tap="test(item.filename)">test</td> -->
