@@ -110,7 +110,7 @@ function touchWebPlayer() {
 
 window.appView = new Vue({
         delimiters: ['${', '}'],
-        el: '#v-common',
+        el: '#v-main',
         data: {
             editMode: false,
             video: {
@@ -179,7 +179,7 @@ window.appView = new Vue({
         methods: {
             test: function (obj) {
                 console.log("test " + obj);
-                this.out('test');
+                this.out('test' + obj);
             },
             showFixBar: function () {
                 this.fixBar.show = true;
