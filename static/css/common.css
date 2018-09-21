@@ -164,7 +164,7 @@ button {
     
     overflow: hidden;
     outline: 0;
-
+    z-index: 1050;
     pointer-events: none;
     display:flex;
     flex-wrap: wrap;
