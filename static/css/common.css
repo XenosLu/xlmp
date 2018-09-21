@@ -9,14 +9,11 @@
 .opacity-08 {
     opacity: 0.8;
 }
-.bg-C3E6CB { /* no longer used */
-    background-color: #C3E6CB;
-}
 .bg-D9EDF7 {
     background-color: #D9EDF7;
 }
 .auto-overflow {
-    overflow:auto;
+    overflow: auto;
 }
 body {
     background-color: #F1F2F6;
