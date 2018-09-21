@@ -19,11 +19,11 @@ Vue.directive("tap", {
     }
 });
 
-Vue.directive("press", {
-    bind: function (el, binding) {
-        new vueTouch(el, "press", binding);
-    }
-});
+// Vue.directive("press", {
+    // bind: function (el, binding) {
+        // new vueTouch(el, "press", binding);
+    // }
+// });
 
 
 //window.appView.showModal();  // show modal at start
@@ -81,18 +81,18 @@ function dlnalink() {
 
 function modalTouch() {
     var hammertimeModal = new Hammer(document.getElementById("ModalTouch"));
-    // hammertimeModal.on("press", function (ev) {
-        // var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
-        // if (target.hasAttribute("data-target"))
-            // window.appView.open(target.getAttribute('data-target'), 'folder');
-        // console.log(target.getAttribute('data-target'));
-    // });
-    hammertimeModal.on("tap", function (ev) {
+    hammertimeModal.on("press", function (ev) {
         var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
-        if (target.hasAttribute("data-type"))
-            window.appView.open(target.getAttribute('data-path'), target.getAttribute('data-type'));
+        if (target.hasAttribute("data-target"))
+            window.appView.open(target.getAttribute('data-target'), 'folder');
         console.log(target.getAttribute('data-target'));
     });
+    // hammertimeModal.on("tap", function (ev) {
+        // var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
+        // if (target.hasAttribute("data-type"))
+            // window.appView.open(target.getAttribute('data-path'), target.getAttribute('data-type'));
+        // console.log(target.getAttribute('data-target'));
+    // });
 }
 
 function touchWebPlayer() {
