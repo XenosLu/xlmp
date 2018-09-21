@@ -87,12 +87,12 @@ function modalTouch() {
             window.appView.open(target.getAttribute('data-target'), 'folder');
         console.log(target.getAttribute('data-target'));
     });
-    // hammertimeModal.on("tap", function (ev) {
-        // var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
-        // if (target.hasAttribute("data-type"))
-            // window.appView.open(target.getAttribute('data-path'), target.getAttribute('data-type'));
-        // console.log(target.getAttribute('data-target'));
-    // });
+    hammertimeModal.on("tap", function (ev) {
+        var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
+        if (target.hasAttribute("data-type"))
+            window.appView.open(target.getAttribute('data-path'), target.getAttribute('data-type'));
+        console.log(target.getAttribute('data-target'));
+    });
 }
 
 function touchWebPlayer() {
