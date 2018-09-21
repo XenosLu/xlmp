@@ -14,10 +14,10 @@ RUN apk add --no-cache \
     rm -f /etc/nginx/conf.d/default.conf
 
 # copy nginx config file
-COPY xlmp.conf /etc/nginx/conf.d/
+COPY docker/xlmp.conf /etc/nginx/conf.d/
 
 # deploy script
-COPY deploy /usr/local/bin
+COPY docker/deploy /usr/local/bin
 # RUN chmod +x /usr/local/bin/deploy
 
 # git clone
