@@ -364,6 +364,9 @@ window.appView = new Vue({
                 this.fixBar.show = false;
                 document.onmousemove = this.showFixBar;
             }
+            document.addEventListener('gesturestart', function (event) {
+                event.preventDefault();
+            });
             axios.defaults.timeout = 1999;
         },
     });
