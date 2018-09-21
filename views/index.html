@@ -114,13 +114,13 @@
         <div v-show="uiState.modalShow" class="box opacity-08 container-fluid flex-row">
           <div class="card" style="max-height: 83vh;z-index: 1050;font-size: 0.8em; pointer-events: auto">
             <div class="card-header bg-D9EDF7">
-              <b-btn @click="showHistory" :pressed="uiState.historyShow" variant="outline-secondary">
+              <b-btn @click="showHistory" size="sm" :pressed="uiState.historyShow" variant="outline-secondary">
                 <i class="oi oi-clock"></i>History
               </b-btn>
-              <b-btn @click="showFs('/fs/ls/')" :pressed="!uiState.historyShow" variant="outline-secondary">
+              <b-btn @click="showFs('/fs/ls/')" size="sm" :pressed="!uiState.historyShow" variant="outline-secondary">
                 <i class="oi oi-home"></i>Home dir
               </b-btn>
-              <b-btn variant="outline-light" :pressed="editMode" @click="editMode=!editMode">
+              <b-btn @click="editMode=!editMode" size="sm" variant="outline-light" :pressed="editMode">
                 edit
               </b-btn>
               <b-btn @click="uiState.modalShow=false" class="close">&times;</b-btn>
