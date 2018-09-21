@@ -13,11 +13,11 @@ function vueTouch(el, type, binding) {
     var hammertime = new Hammer(this.el);
     hammertime.on(this.type, this.binding.value);
 };
-// Vue.directive("tap", {
-    // bind: function (el, binding) {
-        // new vueTouch(el, "tap", binding);
-    // }
-// });
+Vue.directive("tap", {
+    bind: function (el, binding) {
+        new vueTouch(el, "tap", binding);
+    }
+});
 
 // Vue.directive("press", {
     // bind: function (el, binding) {
