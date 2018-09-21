@@ -142,8 +142,8 @@
                     </b-btn>
                   </td>
                   <td class="iconOnly"><i class="oi oi-video"></i></td>
-                  <!-- v-press="open(item.path, 'folder')" -->
                   <td @click="open(item.filename, 'mp4')"
+                      v-press="pressOpen"
                       :data-target="item.path"
                       class="break-all">
                     <span :class="item.exist ? 'mp4' : 'other'">${ item.filename }</span>
@@ -165,7 +165,7 @@
                   </td>
                   <td class="iconOnly"><i :class="icon[item.type]" class="oi"></i></td>
                    <!-- @click="open(item.path, item.type)" -->
-                  <td :class="item.type" :data-type="item.type" :data-path="item.path" class="break-all">
+                  <td :class="item.type" @click="open(item.path, item.type)" :data-type="item.type" :data-path="item.path" class="break-all">
                     ${ item.filename }
                     <br>
                     <small class="text-muted">${ item.size }</small>

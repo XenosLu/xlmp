@@ -11,8 +11,6 @@ function vueTouch(el, type, binding) {
     this.type = type;
     this.binding = binding;
     var hammertime = new Hammer(this.el);
-    console.log(binding);
-    console.log(binding.value);
     hammertime.on(this.type, this.binding.value);
 };
 
@@ -84,18 +82,18 @@ function dlnalink() {
 
 function modalTouch() {
     var hammertimeModal = new Hammer(document.getElementById("ModalTouch"));
-    hammertimeModal.on("press", function (ev) {
-        var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
-        if (target.hasAttribute("data-target"))
-            window.appView.open(target.getAttribute('data-target'), 'folder');
-        console.log(target.getAttribute('data-target'));
-    });
-    hammertimeModal.on("tap", function (ev) {
-        var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
-        if (target.hasAttribute("data-type"))
-            window.appView.open(target.getAttribute('data-path'), target.getAttribute('data-type'));
-        console.log(target.getAttribute('data-target'));
-    });
+    // hammertimeModal.on("press", function (ev) {
+        // var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
+        // if (target.hasAttribute("data-target"))
+            // window.appView.open(target.getAttribute('data-target'), 'folder');
+        // console.log(target.getAttribute('data-target'));
+    // });
+    // hammertimeModal.on("tap", function (ev) {
+        // var target = ev.target.tagName == 'TD' ? ev.target : ev.target.parentNode;
+        // if (target.hasAttribute("data-type"))
+            // window.appView.open(target.getAttribute('data-path'), target.getAttribute('data-type'));
+        // console.log(target.getAttribute('data-target'));
+    // });
 }
 
 function touchWebPlayer() {
@@ -185,6 +183,9 @@ window.appView = new Vue({
                 // console.log(obj2);
                 console.log("test " + obj);
                 this.out('test' + obj);
+            },
+            pressOpen: function (obj) {
+                this.open(obj.target.getAttribute('data-target'), 'folder');
             },
             showFixBar: function () {
                 this.fixBar.show = true;
