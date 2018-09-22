@@ -383,6 +383,7 @@ window.appView = new Vue({
                 this.mode = localStorage.mode;
             window.onresize = this.videoAdapt;
             this.isIos = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+            this.isIos = true;
             if (!this.isIos) {
                 this.fixBar.show = false;
                 document.onmousemove = this.showFixBar;
