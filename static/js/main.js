@@ -196,7 +196,7 @@ window.appView = new Vue({
                 var target = obj.target.tagName == 'TD' ? obj.target : obj.target.parentNode;
                 this.open(target.getAttribute('data-path'), target.getAttribute('data-type'));
             },
-            showFixBar: function () {  // show fix bar and then hide
+            showFixBar: function () { // show fix bar and then hide
                 this.fixBar.show = true;
                 if (this.fixBar.timerId) {
                     clearTimeout(this.fixBar.timerId);
