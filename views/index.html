@@ -48,11 +48,11 @@
             </b-btn>
           </b-btn-group>
           <b-btn-group v-show="browserShow" class="mx-1">
-            <b-btn @click="showHistory" :pressed="uiState.historyShow" variant="outline-secondary">
+            <b-btn @click="showHistory" :pressed="historyShow" variant="outline-secondary">
               <i class="oi oi-clock"></i>
               <small class="d-sm-inline d-none">History</small>
             </b-btn>
-            <b-btn @click="showFs('/fs/ls/')" :pressed="!uiState.historyShow" variant="outline-secondary">
+            <b-btn @click="showFs('/fs/ls/')" :pressed="!historyShow" variant="outline-secondary">
               <i class="oi oi-home"></i>
               <small class="d-sm-inline d-none">Home dir</small>
             </b-btn>
@@ -126,10 +126,10 @@
             <div class="card-header"></div>
             <!-- <div class="card-header bg-D9EDF7"> -->
               <!-- <b-btn-group> -->
-                <!-- <b-btn @click="showHistory" size="sm" :pressed="uiState.historyShow" variant="outline-secondary"> -->
+                <!-- <b-btn @click="showHistory" size="sm" :pressed="historyShow" variant="outline-secondary"> -->
                   <!-- <i class="oi oi-clock"></i>History -->
                 <!-- </b-btn> -->
-                <!-- <b-btn @click="showFs('/fs/ls/')" size="sm" :pressed="!uiState.historyShow" variant="outline-secondary"> -->
+                <!-- <b-btn @click="showFs('/fs/ls/')" size="sm" :pressed="!historyShow" variant="outline-secondary"> -->
                   <!-- <i class="oi oi-home"></i>Home dir -->
                 <!-- </b-btn> -->
               <!-- </b-btn-group> -->
@@ -139,7 +139,7 @@
               <!-- <b-button-close @click="browserShow=false"></b-button-close> -->
             <!-- </div> -->
             <div class="table-responsive-sm text-center auto-overflow">
-              <table v-show="uiState.historyShow" class="table table-striped table-sm">
+              <table v-show="historyShow" class="table table-striped table-sm">
                 <tr v-for="item in history">
                   <!-- <td v-tap="test(item.filename)">test</td> -->
                   <td v-show="editMode">
@@ -170,7 +170,7 @@
                   </td>
                 </tr>
               </table>
-              <table v-show="!uiState.historyShow" class="table table-striped table-sm">
+              <table v-show="!historyShow" class="table table-striped table-sm">
                 <tr v-for="item in filelist">
                   <td v-show="editMode">
                     <b-btn variant="danger" @click="move(item.path)">
@@ -187,7 +187,7 @@
                 </tr>
               </table>
             </div>
-            <div v-show="uiState.historyShow" class="card-footer text-center">
+            <div v-show="historyShow" class="card-footer text-center">
               <b-btn @click="clearHistory" size="sm" variant="outline-dark">
                 Clear
               </b-btn>

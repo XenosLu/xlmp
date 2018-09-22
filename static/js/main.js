@@ -38,7 +38,7 @@ Vue.directive("press", {
 function getHistory(str) {
     axios.get(encodeURI(str))
     .then(function (response) {
-        window.appView.uiState.historyShow = true;
+        window.appView.historyShow = true;
         window.appView.history = response.data.history;
     })
     .catch(function (error) {
@@ -109,9 +109,9 @@ window.appView = new Vue({
             icon: icon,
             mode: '', // mode of player, switch between empty/DLNA/WebPlayer
             uiState: {
-                modalShow: false, // true if the modal is show
                 historyShow: true, // ture if modal is history, false if modal content is file list
             },
+            historyShow: true, // ture if modal is history, false if modal content is file list
             history: [], // updated by ajax
             filelist: [], // updated by ajax
             positionBarCanUpdate: true, //dlna position bar
@@ -256,7 +256,7 @@ window.appView = new Vue({
             },
             showModal: function () {
                 this.browserShow = !this.browserShow;
-                if (this.browserShow && this.uiState.historyShow)
+                if (this.browserShow && this.historyShow)
                     this.showHistory();
             },
             showHistory: function () {
@@ -265,7 +265,7 @@ window.appView = new Vue({
             showFs: function (path) {
                 axios.get(encodeURI(path))
                 .then(function (response) {
-                        window.appView.uiState.historyShow = false;
+                        window.appView.historyShow = false;
                         window.appView.filelist = response.data.filesystem;
                 })
                 .catch(function (error) {
