@@ -158,25 +158,10 @@ button {
     /* min-width: 6em; */
     /* font-size: 1.2em; */
 }
-.window-container {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-
-    overflow: hidden;
-    outline: 0;
-    z-index: 1050;
-    pointer-events: none;
-    flex-wrap: wrap;
-}
 .window {
     max-height: 74vh;
-    /* z-index: 1050; */
     font-size: 0.8em;
     pointer-events: auto;
-    /* min-width: 40%; */
     width: calc(100% - 30px);
     box-shadow: 2px 2px 5px #333333;
 }
