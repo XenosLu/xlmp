@@ -27,8 +27,6 @@ Vue.directive("press", {
 });
 
 
-//window.appView.showModal();  // show modal at start
-
 /**
  * Render history list box from ajax
  *
@@ -256,8 +254,8 @@ window.appView = new Vue({
             },
             showModal: function () {
                 this.browserShow = !this.browserShow;
-                if (this.browserShow && this.historyShow)
-                    this.showHistory();
+                // if (this.browserShow && this.historyShow)
+                    // this.showHistory();
             },
             showHistory: function () {
                 getHistory("/hist/ls");
@@ -383,7 +381,8 @@ window.appView = new Vue({
                     touchWebPlayer();
                 } else
                     window.document.title = "Light Media Player";
-            })
+                
+            });
         },
         created: function () {
             if (typeof(localStorage.mode) !== "undefined")
@@ -394,14 +393,14 @@ window.appView = new Vue({
             if (!this.isIos) {
                 this.fixBar.show = false;
                 document.onmousemove = this.showFixBar;
-            }
+            };
             axios.defaults.timeout = 1999;
             // prevent double click for IOS
             document.addEventListener('touchstart', function (event) {
                 if (event.touches.length > 1) {
                     event.preventDefault();
                 }
-            })
+            });
             var lastTouchEnd = 0;
             document.addEventListener('touchend', function (event) {
                 var now = (new Date()).getTime();
@@ -409,7 +408,8 @@ window.appView = new Vue({
                     event.preventDefault();
                 }
                 lastTouchEnd = now;
-            }, false)
+            }, false);
+            this.showHistory();
         },
     });
 
