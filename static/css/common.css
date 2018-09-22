@@ -1,22 +1,3 @@
-.iconOnly {
-    font-size: 1.6em;
-    width: 1.4em;
-}
-.opacity-08 {
-    opacity: 0.8;
-}
-.bg-D9EDF7 {
-    background-color: #D9EDF7;
-}
-.auto-overflow {
-    overflow: auto;
-}
-.close {
-    font-size: 1.8rem;
-}
-.default-bg {
-    background-color: #F1F2F6;
-}
 body {
     background-color: #F1F2F6;
     -webkit-user-select: none;
@@ -36,7 +17,6 @@ footer {
   /* height: 2em; */
   line-height: 2em;
 }
-
 video {
     clear: both;
     display: block;
@@ -46,6 +26,25 @@ video {
     bottom: 0;
     left: 0;
     right: 0;
+}
+.iconOnly {
+    font-size: 1.6em;
+    width: 1.4em;
+}
+.opacity-08 {
+    opacity: 0.8;
+}
+.bg-D9EDF7 {
+    background-color: #D9EDF7;
+}
+.auto-overflow {
+    overflow: auto;
+}
+.close {
+    font-size: 1.8rem;
+}
+.default-bg {
+    background-color: #F1F2F6;
 }
 .break-all {
     word-break:break-all;
