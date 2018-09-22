@@ -173,7 +173,7 @@ button {
 }
 .window {
     max-height: 83vh;
-    z-index: 1050;
+    /* z-index: 1050; */
     font-size: 0.8em;
     pointer-events: auto;
     min-width: 40%;
