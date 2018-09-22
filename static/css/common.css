@@ -35,7 +35,7 @@ video {
 .opacity-08 {
     opacity: 0.8;
 }
-.bg-D9EDF7 {
+.bg-D9EDF7 { /* light blue background no longer used */
     background-color: #D9EDF7;
 }
 .auto-overflow {
