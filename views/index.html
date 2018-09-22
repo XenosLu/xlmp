@@ -292,17 +292,17 @@
         <div v-show="dlnaMode" class="fixed-bottom text-center default-bg flex-center">
           <div class="card-body col-sm-12 col-md-8 col-lg-6 col-xl-4">
             <h6 class="card-subtitle text-muted">${ dlnaInfo.CurrentTransportState }</h6>
-            <h6 v-show="dlnaInfo.RelTime" class="card-title mt-3">
+            <h6 v-show="dlnaInfo.RelTime" class="card-title my-2">
               ${ dlnaInfo.RelTime} / ${ dlnaInfo.TrackDuration }
             </h6>
-            <input class="position-bar my-3"
+            <input class="position-bar mb-3"
                    v-model.number="positionBarVal"
                    type="range"
                    min="0"
                    :max="positionBarMax"
                    @change="positionSeek"
                    @input="positionShow">
-            <b-btn-toolbar justify class="my-3 text-center">
+            <b-btn-toolbar justify class="my-2 text-center">
               <b-btn-group>
                 <b-btn class="mx-1" variant="outline-warning" v-tap="volDown">
                     <i class="oi oi-volume-low"></i>

@@ -160,8 +160,8 @@ button {
 }
 .window {
     max-height: 74vh;
-    font-size: 0.8em;
-    pointer-events: auto;
+    font-size: 0.9em;
+    /* pointer-events: auto; */
     width: calc(100% - 30px);
     box-shadow: 2px 2px 5px #333333;
 }
