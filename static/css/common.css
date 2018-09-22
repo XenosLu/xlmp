@@ -176,3 +176,6 @@ button {
     min-width: 40%;
     box-shadow: 2px 2px 5px #333333;
 }
+.z-index-900 {
+    z-index: 900;
+}

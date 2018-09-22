@@ -29,6 +29,7 @@
       </transition>
       <!-- output box end -->
       <div class="container">
+        <!-- video -->
         <video class="mb-4"
                v-if="wpMode"
                ref="video"
@@ -43,7 +44,84 @@
                poster controls preload="meta">
           No video support!
         </video>
-        <b-container class="fixed-top opacity-08">
+        <!-- video end-->
+        <!-- nav bar -->
+        <b-navbar v-show="fixBar.show" fixed toggleable="md" type="light" variant="light">
+          <b-btn-group>
+            <b-btn variant="outline-dark" title="browser" @click="showModal">
+              <i class="oi oi-list"></i>
+            </b-btn>
+            <b-btn v-if="!wpMode"
+                   variant="outline-success"
+                   title="switch DLNA mode"
+                   :pressed="dlnaMode"
+                   @click="dlnaToogle">
+              DLNA <i v-show="dlnaOn" class="oi oi-monitor"></i>
+            </b-btn>
+            <b-btn v-if="wpMode" variant="outline-warning" @click="dlnaToogle">
+              Close
+            </b-btn>
+          </b-btn-group>
+          <b-navbar-brand class="mx-2">XLMP</b-navbar-brand>
+          <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+          <b-collapse is-nav id="nav_collapse">
+            <b-navbar-nav>
+              <b-nav-item  v-if="false">test</b-nav-item>
+            </b-navbar-nav>
+            <!-- Right aligned nav items -->
+            <b-navbar-nav class="ml-auto">
+              <b-nav-item-dropdown  right>
+                <template slot="button-content">
+                  Maintain
+                </template>
+                <b-dropdown-item v-if="devMode" @click="get('/sys/update')">update</b-dropdown-item>
+                <b-dropdown-divider v-if="devMode"></b-dropdown-divider>
+                <b-dropdown-item @click="get('/sys/backup')">backup</b-dropdown-item>
+                <b-dropdown-item @click="get('/sys/restore')">restore</b-dropdown-item>
+                <b-dropdown-item v-if="devMode" @click="get('/test')">test</b-dropdown-item>
+              </b-nav-item-dropdown>
+            <!-- dlna dmr menu -->
+              <b-nav-item-dropdown v-show="dlnaMode" right :text="dlnaInfo.CurrentDMR">
+                <b-dropdown-item @click="get('/dlna/searchdmr');">Search DMR</b-dropdown-item>
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-item v-for="item in dlnaInfo.DMRs" @click="setDmr(item)">
+                  ${ item }
+                </b-dropdown-item>
+              </b-nav-item-dropdown>
+            <!-- dlna dmr menu end -->
+            <!-- dlna seek menu -->
+              <b-nav-item-dropdown v-show="dlnaMode" right>
+                <template slot="button-content">
+                  Seek
+                </template>
+                <b-dropdown-item @click="get('/dlna/seek/00:00:15')">00:15</b-dropdown-item>
+                <b-dropdown-item @click="get('/dlna/seek/00:00:29')">00:30</b-dropdown-item>
+                <b-dropdown-item @click="get('/dlna/seek/00:01:00')">01:00</b-dropdown-item>
+                <b-dropdown-item @click="get('/dlna/seek/00:01:30')">01:30</b-dropdown-item>
+              </b-nav-item-dropdown>
+            <!-- dlna seek menu end -->
+
+              <b-nav-item-dropdown v-show="wpMode" right>
+                <template slot="button-content">
+                  Rate
+                </template>
+                <b-dropdown-item @click="rate(0.5)">0.5X</b-dropdown-item>
+                <b-dropdown-item @click="rate(0.75)">0.75X</b-dropdown-item>
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-item @click="rate(1)">1X</b-dropdown-item>
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-item @click="rate(1.5)">1.5X</b-dropdown-item>
+                <b-dropdown-item @click="rate(1.75)">1.75X</b-dropdown-item>
+                <b-dropdown-item @click="rate(2)">2X</b-dropdown-item>
+                <b-dropdown-item @click="rate(2.5)">2.5X</b-dropdown-item>
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-item @click="videoSizeToggle">${ video.sizeBtnText }</b-dropdown-item>
+              </b-nav-item-dropdown>
+            </b-navbar-nav>
+          </b-collapse>
+        </b-navbar>
+        <!-- nav bar end -->
+        <b-container class="fixed-top opacity-08" style="top:15%;display:none">
           <b-btn-toolbar v-show="fixBar.show">
             <b-btn-group>
               <b-btn v-show="false" v-tap="test" variant="outline-dark">
@@ -185,7 +263,7 @@
         <!-- dlna interface -->
         <div v-if="dlnaMode">
           <div class="text-center col-sm-12 col-md-8 col-lg-6 col-xl-5">
-            <div class="my-1 py-3"></div>
+            <!-- <div class="my-1 py-3"></div> -->
             <b-card bg-variant="light"
                     :title="dlnaInfo.TrackURI ? decodeURI(dlnaInfo.TrackURI) : ''"
                     class="title break-all my-5"
@@ -193,8 +271,8 @@
             </b-card>
           </div>
 
-          <b-container class="fixed-bottom text-center">
-            <div class="card-footer col-sm-12 col-md-8 col-lg-6 col-xl-5">
+          <b-container class="fixed-bottom text-center z-index-900">
+            <div class="card-body col-sm-12 col-md-8 col-lg-6 col-xl-5">
               <h6 class="card-subtitle text-muted">${ dlnaInfo.CurrentTransportState }</h6>
               <h6 v-show="dlnaInfo.RelTime" class="card-title mt-3">
                 ${ dlnaInfo.RelTime} / ${ dlnaInfo.TrackDuration }
