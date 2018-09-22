@@ -114,11 +114,6 @@ input[type=range]::-moz-range-thumb {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
-/* #panel { */
-    /* opacity: 0.88; */
-    /* box-shadow: 2px 2px 5px #333333; */
-/* } */
 .output-container {
     opacity: 0;
     pointer-events: none;
@@ -135,13 +130,11 @@ input[type=range]::-moz-range-thumb {
     text-shadow: 0.1em 0.1em 0.4em #666;
     max-width: 100%;
 }
-
 button {
     opacity: 0.8;
     box-shadow: inset 0px 0px 4px 0px #F1F2F6;
     /* box-shadow: inset 0px 0px 9px 0px #F1F2F6; */
 }
-/* .dropdown-menu { */
 .dropdown-item {
     opacity: 0.9;
     /* min-width: 6em; */
