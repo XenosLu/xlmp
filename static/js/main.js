@@ -97,6 +97,7 @@ window.appView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-main',
         data: {
+            navCollapse: false,
             devMode: true, // develop mode
             editMode: false,
             browserShow: false,
@@ -134,6 +135,7 @@ window.appView = new Vue({
         },
         watch: {
             browserShow: function (){
+                this.navCollapse = false;
                 if(!this.browserShow)
                     this.editMode = false;
             },
