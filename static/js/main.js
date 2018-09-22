@@ -263,7 +263,6 @@ window.appView = new Vue({
             showModal: function () {
                 this.browserShow = !this.browserShow;
                 // if (this.browserShow && this.historyShow)
-                    // this.showHistory();
             },
             showHistory: function () {
                 getHistory("/hist/ls");
@@ -271,8 +270,8 @@ window.appView = new Vue({
             showFs: function (path) {
                 axios.get(encodeURI(path))
                 .then(function (response) {
-                        window.appView.historyShow = false;
-                        window.appView.filelist = response.data.filesystem;
+                    window.appView.historyShow = false;
+                    window.appView.filelist = response.data.filesystem;
                 })
                 .catch(function (error) {
                     window.appView.out(error.response.statusText);
@@ -378,8 +377,7 @@ window.appView = new Vue({
                 }
             },
         },
-        updated: function () {
-        },
+        updated: function () {},
         created: function () {
             if (typeof(localStorage.mode) !== "undefined")
                 this.mode = localStorage.mode;
@@ -411,5 +409,3 @@ window.appView = new Vue({
 
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
-
-
