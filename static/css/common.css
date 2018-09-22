@@ -99,7 +99,7 @@ input[type=range]::-moz-range-thumb {
 }
 .position-bar::-moz-range-thumb {
     height: 2.2em;
-    width: 0.9em;
+    width: 0.8em;
     box-shadow: inset 0px 0px 5px 2px #A0D468;
 }
 .volume-bar::-moz-range-thumb {
@@ -148,8 +148,9 @@ input[type=range]::-moz-range-thumb {
 }
 
 button {
-    opacity: 0.85;
-    box-shadow: inset 0px 0px 9px 0px #F1F2F6;
+    opacity: 0.8;
+    box-shadow: inset 0px 0px 4px 0px #F1F2F6;
+    /* box-shadow: inset 0px 0px 9px 0px #F1F2F6; */
 }
 /* .dropdown-menu { */
 .dropdown-item {

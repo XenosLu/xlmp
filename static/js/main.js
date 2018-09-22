@@ -183,7 +183,7 @@ window.appView = new Vue({
                 var target = obj.target.tagName == 'TD' ? obj.target : obj.target.parentNode;
                 this.open(target.getAttribute('data-path'), target.getAttribute('data-type'));
             },
-            showFixBar: function () {
+            showFixBar: function () {  // show fix bar and then hide
                 this.fixBar.show = true;
                 if (this.fixBar.timerId) {
                     clearTimeout(this.fixBar.timerId);
@@ -191,7 +191,7 @@ window.appView = new Vue({
                 }
                 this.fixBar.timerId = setTimeout(function () {
                         window.appView.fixBar.show = false;
-                    }, 3000);
+                    }, 3500);
             },
             out: function (str) {
                 if (str !== "") {
@@ -209,7 +209,7 @@ window.appView = new Vue({
             outFadeIn: function (el, done) {
                 Velocity(el, 'stop');
                 // Velocity(el, {translateX: '-50%', translateY: '-50%'}, {duration: 0});
-                Velocity(el, {opacity: 0.8}, {duration: 200});
+                Velocity(el, {opacity: 0.8}, {duration: 180});
             },
             outFadeOut: function (el, done) {
                 Velocity(el, 'stop');
