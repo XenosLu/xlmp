@@ -26,6 +26,7 @@ video {
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: 1;
 }
 .iconOnly {
     font-size: 1.6em;
