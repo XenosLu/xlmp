@@ -221,15 +221,16 @@ window.appView = new Vue({
             },
             videoAdapt: function () {
                 if (this.wpMode) {
+                    var wHeight = window.innerHeight - 10;
                     this.video.sizeBtnText = "orign";
                     var video_ratio = this.$refs.video.videoWidth / this.$refs.video.videoHeight;
-                    var page_ratio = window.innerWidth / window.innerHeight;
+                    var page_ratio = window.innerWidth / wHeight;
                     if (page_ratio < video_ratio) {
                         var width = window.innerWidth + "px";
                         var height = Math.floor(window.innerWidth / video_ratio) + "px";
                     } else {
-                        var width = Math.floor(window.innerHeight * video_ratio) + "px";
-                        var height = window.innerHeight + "px";
+                        var width = Math.floor(wHeight * video_ratio) + "px";
+                        var height = wHeight + "px";
                     }
                     this.$refs.video.style.width = width;
                     this.$refs.video.style.height = height;

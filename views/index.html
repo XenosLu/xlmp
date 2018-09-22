@@ -28,22 +28,6 @@
         </div>
       </transition>
       <!-- output box end -->
-        <!-- video -->
-        <video
-               v-if="wpMode"
-               ref="video"
-               @timeupdate="videosave"
-               @seeking="videoseek"
-               @error="videoerror"
-               @loadedmetadata  ="videoAdapt"
-               @loadeddata="videoload"
-               @progress="videoprogress"
-               :key="video.src"
-               :src="'/video/' + video.src"
-               poster controls preload="meta">
-          No video support!
-        </video>
-        <!-- video end-->
         <!-- nav bar -->
         <b-navbar v-show="fixBar.show" fixed toggleable="md" type="light" class="default-bg z-index-1040 col-md-11 col-lg-8 col-xl-7">
           <b-btn-group>
@@ -120,6 +104,22 @@
           </b-collapse>
         </b-navbar>
         <!-- nav bar end -->
+        <!-- video -->
+        <video
+               v-if="wpMode"
+               ref="video"
+               @timeupdate="videosave"
+               @seeking="videoseek"
+               @error="videoerror"
+               @loadedmetadata  ="videoAdapt"
+               @loadeddata="videoload"
+               @progress="videoprogress"
+               :key="video.src"
+               :src="'/video/' + video.src"
+               poster controls preload="meta">
+          No video support!
+        </video>
+        <!-- video end-->
         <b-container class="fixed-top opacity-08" style="top:15%;display:none">
           <b-btn-toolbar v-show="fixBar.show">
             <b-btn-group>
