@@ -28,7 +28,7 @@
         </div>
       </transition>
       <!-- output box end -->
-      <div class="container">
+      <div class="container d-flex flex-column align-items-center">
         <!-- video -->
         <video class="mb-4"
                v-if="wpMode"
@@ -46,7 +46,7 @@
         </video>
         <!-- video end-->
         <!-- nav bar -->
-        <b-navbar v-show="fixBar.show" fixed toggleable="md" type="light" class="default-bg z-index-1040">
+        <b-navbar v-show="fixBar.show" fixed toggleable="md" type="light" class="default-bg z-index-1040 col-sm-12 col-md-8 col-lg-6 col-xl-7">
           <b-btn-group>
             <b-btn variant="outline-dark" title="browser" @click="showModal">
               <i class="oi oi-list"></i>
@@ -262,7 +262,7 @@
         <!-- fix window end -->
         <!-- dlna interface -->
         
-        <div v-if="dlnaMode" class="text-center col-sm-12 col-md-8 col-lg-6 col-xl-5">
+        <div v-if="dlnaMode" class="text-center col-sm-12 col-md-8 col-lg-6 col-xl-6">
           <!-- <div class="my-1 py-3"></div> -->
           <b-card bg-variant="light"
                   :title="dlnaInfo.TrackURI ? decodeURI(dlnaInfo.TrackURI) : ''"
@@ -270,8 +270,8 @@
                   id="DlnaTouch">
           </b-card>
         </div>
-        <b-container v-show="dlnaMode" class="fixed-bottom text-center default-bg">
-          <div class="card-body col-sm-12 col-md-8 col-lg-6 col-xl-5">
+        <b-container v-show="dlnaMode" class="fixed-bottom text-center default-bg d-flex flex-column align-items-center">
+          <div class="card-body col-sm-12 col-md-8 col-lg-6 col-xl-6">
             <h6 class="card-subtitle text-muted">${ dlnaInfo.CurrentTransportState }</h6>
             <h6 v-show="dlnaInfo.RelTime" class="card-title mt-3">
               ${ dlnaInfo.RelTime} / ${ dlnaInfo.TrackDuration }
