@@ -163,12 +163,11 @@ button {
     right: 0;
     bottom: 0;
     left: 0;
-    
+
     overflow: hidden;
     outline: 0;
     z-index: 1050;
     pointer-events: none;
-    display:flex;
     flex-wrap: wrap;
 }
 .window {
@@ -185,3 +184,13 @@ button {
 .z-index-1040 {
     z-index: 1040;
 }
+.flex-center {
+    display: flex;
+    display: -ms-flexbox;
+    -ms-flex-align: center !important;
+    align-items: center !important;
+    -ms-flex-direction: column !important;
+    flex-direction: column !important;
+}
+
+

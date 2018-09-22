@@ -16,7 +16,7 @@
     <title>Light Media Player</title>
   </head>
   <body>
-    <div id="v-main" class="container d-flex flex-column align-items-center">
+    <div id="v-main" class="container flex-center">
       <!-- output box -->
       <transition @enter="outFadeIn"
                   @leave="outFadeOut">
@@ -45,7 +45,7 @@
         </video>
         <!-- video end-->
         <!-- nav bar -->
-        <b-navbar v-show="fixBar.show" fixed toggleable="md" type="light" class="default-bg z-index-1040 col-sm-12 col-md-8 col-lg-6 col-xl-7">
+        <b-navbar v-show="fixBar.show" fixed toggleable="md" type="light" class="default-bg z-index-1040 col-md-11 col-lg-8 col-xl-7">
           <b-btn-group>
             <b-btn variant="outline-dark" title="browser" @click="showModal">
               <i class="oi oi-list"></i>
@@ -188,7 +188,7 @@
           </b-btn-toolbar>
         </b-container>
         <!-- fix window -->
-        <div v-show="uiState.modalShow" class="window-container container-fluid flex-row justify-content-center align-items-center">
+        <div v-show="uiState.modalShow" class="window-container container-fluid justify-content-center flex-center">
           <div class="card window">
             <div class="card-header bg-D9EDF7">
               <b-btn @click="showHistory" size="sm" :pressed="uiState.historyShow" variant="outline-secondary">
@@ -269,7 +269,7 @@
                   id="DlnaTouch">
           </b-card>
         </div>
-        <b-container v-show="dlnaMode" class="fixed-bottom text-center default-bg d-flex flex-column align-items-center">
+        <b-container v-show="dlnaMode" class="fixed-bottom text-center default-bg flex-center">
           <div class="card-body col-sm-12 col-md-8 col-lg-6 col-xl-6">
             <h6 class="card-subtitle text-muted">${ dlnaInfo.CurrentTransportState }</h6>
             <h6 v-show="dlnaInfo.RelTime" class="card-title mt-3">
