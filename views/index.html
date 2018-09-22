@@ -43,7 +43,8 @@
               DLNA <i v-show="dlnaOn" class="oi oi-monitor"></i>
             </b-btn>
             <b-btn v-if="wpMode" variant="outline-warning" @click="dlnaToogle">
-              Close
+              <i class="oi oi-x"></i>
+              <small class="d-sm-inline d-none">Close</small>
             </b-btn>
           </b-btn-group>
           <b-btn-group v-show="browserShow" class="mx-1">
@@ -56,12 +57,10 @@
               <small class="d-sm-inline d-none">Home dir</small>
             </b-btn>
           </b-btn-group>
-          <b-btn v-show="browserShow" @click="editMode=!editMode" variant="outline-light" :pressed="editMode">
+          <b-btn v-show="browserShow" @click="editMode=!editMode" variant="outline-dark" :pressed="editMode">
             <i class="oi oi-circle-check"></i>
             <small class="d-sm-inline d-none">edit</small>
-            
           </b-btn>
-          
           <!-- <b-navbar-brand class="mx-2">XLMP</b-navbar-brand> -->
           <b-navbar-toggle v-show="!browserShow" target="nav_collapse"></b-navbar-toggle>
           <b-collapse is-nav id="nav_collapse">
@@ -124,6 +123,8 @@
         <!-- fix window -->
         <div v-show="browserShow" class="col-sm-12 col-md-10 col-lg-8 col-xl-6" style="z-index:1031;">
           <div class="card window" style="position:absolute;">
+            <div class="card-header">
+            </div>
             <!-- <div class="card-header bg-D9EDF7"> -->
               <!-- <b-btn-group> -->
                 <!-- <b-btn @click="showHistory" size="sm" :pressed="uiState.historyShow" variant="outline-secondary"> -->
