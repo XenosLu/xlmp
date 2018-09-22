@@ -100,30 +100,29 @@ window.appView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-main',
         data: {
-            navCollapse: false,
+            mode: '', // mode of player, switch between empty/DLNA/WebPlayer
+            navCollapse: false, // navbar is collapse
             devMode: true, // develop mode
             editMode: false,
             browserShow: false,
-            video: {
-                lastplaytime: 0,
-                sizeBtnText: 'origin',
-                src: '', // web player source
-            },
-            icon: icon,
-            mode: '', // mode of player, switch between empty/DLNA/WebPlayer
-            historyShow: true, // ture if modal is history, false if modal content is file list
+            historyShow: true, // ture if browser window is history, false if browser window is file list
             history: [], // updated by ajax
             filelist: [], // updated by ajax
-            positionBarCanUpdate: true, //dlna position bar
-            positionBarVal: 0,
             dlnaInfo: { // updated by websocket
                 CurrentDMR: 'no DMR',
                 CurrentTransportState: '',
                 TrackURI: '',
             },
+            positionBarCanUpdate: true, //dlna position bar
+            positionBarVal: 0,
             fixBar: {
                 show: true,
                 timerId: null,
+            },
+            video: {
+                lastplaytime: 0,
+                sizeBtnText: 'origin',
+                src: '', // web player source
             },
             output: {
                 text: '',
@@ -132,6 +131,7 @@ window.appView = new Vue({
                 timerId: null,
             },
             isIos: null,
+            icon: icon,
         },
         watch: {
             browserShow: function (){
