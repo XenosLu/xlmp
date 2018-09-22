@@ -26,8 +26,8 @@ Updated in 2018.02.08
 ### /home/user/meida should be replace by your own media folder
 
 
+Python3 + tornado + vue.js + bootstrap4 + bootstrap-vue + hammer.js + velocity.js + axios.js
 
-First developed in PHP, rewrote in Python3.
 ## Filelist:
 + LICENSE         license file 	
 + README.md       readme
