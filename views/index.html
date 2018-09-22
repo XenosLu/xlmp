@@ -44,22 +44,22 @@
             </b-btn>
             <b-btn v-if="wpMode" variant="outline-warning" @click="dlnaToogle">
               <i class="oi oi-x"></i>
-              <small class="d-sm-inline d-none">Close</small>
+              <small class="d-xs-inline d-none">Close</small>
             </b-btn>
           </b-btn-group>
           <b-btn-group v-show="browserShow" class="mx-1">
             <b-btn @click="showHistory" :pressed="historyShow" variant="outline-secondary">
               <i class="oi oi-clock"></i>
-              <small class="d-sm-inline d-none">History</small>
+              <small class="d-xs-inline d-none">History</small>
             </b-btn>
             <b-btn @click="showFs('/fs/ls/')" :pressed="!historyShow" variant="outline-secondary">
               <i class="oi oi-home"></i>
-              <small class="d-sm-inline d-none">Home dir</small>
+              <small class="d-xs-inline d-none">Home dir</small>
             </b-btn>
           </b-btn-group>
           <b-btn v-show="browserShow" @click="editMode=!editMode" variant="outline-dark" :pressed="editMode">
             <i class="oi oi-circle-check"></i>
-            <small class="d-sm-inline d-none">edit</small>
+            <small class="d-xs-inline d-none">edit</small>
           </b-btn>
           <!-- <b-navbar-brand class="mx-2">XLMP</b-navbar-brand> -->
           <b-navbar-toggle v-show="!browserShow" target="nav_collapse"></b-navbar-toggle>
@@ -121,7 +121,7 @@
         </b-navbar>
         <!-- nav bar end -->
         <!-- dropdown window -->
-        <div v-show="browserShow" class="col-sm-12 col-md-10 col-lg-8 col-xl-6 z-index-1040">
+        <div v-show="browserShow" class="col-xs-12 col-sm-12 col-md-10 col-lg-8 col-xl-6 z-index-1040">
           <div class="card window">
             <div class="card-header"></div>
             <div class="table-responsive-sm text-center auto-overflow">
@@ -133,8 +133,8 @@
                       <i class="oi oi-circle-x"></i>
                     </b-btn>
                   </td>
-                  <!-- <td class="icon d-sm-table-cell d-none"> -->
-                  <td class="d-sm-table-cell d-none">
+                  <!-- <td class="icon d-xs-table-cell d-none"> -->
+                  <td class="d-xs-table-cell d-none">
                     <b-btn variant="info" @click="open(item.path, 'folder')">
                       <i class="oi oi-folder"></i>
                       <!-- <br> -->
