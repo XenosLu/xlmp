@@ -16,7 +16,7 @@
     <title>Light Media Player</title>
   </head>
   <body>
-    <div id="v-main">
+    <div id="v-main" class="container d-flex flex-column align-items-center">
       <!-- output box -->
       <transition @enter="outFadeIn"
                   @leave="outFadeOut">
@@ -28,7 +28,6 @@
         </div>
       </transition>
       <!-- output box end -->
-      <div class="container d-flex flex-column align-items-center">
         <!-- video -->
         <video class="mb-4"
                v-if="wpMode"
@@ -312,7 +311,6 @@
             </div>
         </b-container>
         <!-- dlna interface end -->
-      </div>
     </div>
     {% block footer %}
     <footer class="text-center">
