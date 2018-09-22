@@ -51,13 +51,11 @@ function dlnaTouch() {
         newtime = Math.max(newtime, 0);
         newtime = Math.min(newtime, window.appView.positionBarMax);
         window.appView.out(secondToTime(newtime));
-        if (ev.type.indexOf("swipe") != -1)
-        {
+        if (ev.type.indexOf("swipe") != -1) {
             window.appView.get("/dlna/seek/" + secondToTime(newtime));
             console.log(ev.type);
         }
         // console.log(ev);
-        
     });
 }
 
