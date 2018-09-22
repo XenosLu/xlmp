@@ -377,7 +377,6 @@ window.appView = new Vue({
                 }
             },
         },
-        updated: function () {},
         created: function () {
             if (typeof(localStorage.mode) !== "undefined")
                 this.mode = localStorage.mode;
