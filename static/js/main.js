@@ -99,6 +99,7 @@ window.appView = new Vue({
         data: {
             devMode: true, // develop mode
             editMode: false,
+            browserShow: false,
             video: {
                 lastplaytime: 0,
                 sizeBtnText: 'origin',
@@ -132,6 +133,10 @@ window.appView = new Vue({
             isIos: null,
         },
         watch: {
+            browserShow: function (){
+                if(!this.browserShow)
+                    this.editMode = false;
+            },
             'dlnaInfo.RelTime': function () {
                 console.log('reltime update');
                 if (this.positionBarCanUpdate)
@@ -248,8 +253,8 @@ window.appView = new Vue({
                 }
             },
             showModal: function () {
-                this.uiState.modalShow = !this.uiState.modalShow;
-                if (this.uiState.modalShow && this.uiState.historyShow)
+                this.browserShow = !this.browserShow;
+                if (this.browserShow && this.uiState.historyShow)
                     this.showHistory();
             },
             showHistory: function () {
@@ -306,7 +311,7 @@ window.appView = new Vue({
                 }
                 this.video.src = obj;
                 this.mode = "WebPlayer";
-                this.uiState.modalShow = false;
+                this.browserShow = false;
             },
             setDmr: function (dmr) {
                 this.get("/dlna/setdmr/" + dmr);

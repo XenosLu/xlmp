@@ -32,8 +32,8 @@
         <b-navbar v-show="fixBar.show" fixed toggleable="md" type="light" class="default-bg z-index-1040 col-md-10 col-lg-8 col-xl-6">
           <b-btn-group>
             <b-btn variant="outline-dark" title="browser" @click="showModal">
-              <i v-show="!uiState.modalShow" class="oi oi-list"></i>
-              <i v-show="uiState.modalShow" class="oi oi-x"></i>
+              <i v-show="!browserShow" class="oi oi-list"></i>
+              <i v-show="browserShow" class="oi oi-x"></i>
             </b-btn>
             <b-btn v-if="!wpMode"
                    variant="outline-success"
@@ -46,7 +46,7 @@
               Close
             </b-btn>
           </b-btn-group>
-          <b-btn-group v-show="uiState.modalShow" class="mx-1">
+          <b-btn-group v-show="browserShow" class="mx-1">
             <b-btn @click="showHistory" :pressed="uiState.historyShow" variant="outline-secondary">
               <i class="oi oi-clock"></i>
               <small class="d-sm-inline d-none">History</small>
@@ -56,14 +56,14 @@
               <small class="d-sm-inline d-none">Home dir</small>
             </b-btn>
           </b-btn-group>
-          <b-btn v-show="uiState.modalShow" @click="editMode=!editMode" variant="outline-light" :pressed="editMode">
+          <b-btn v-show="browserShow" @click="editMode=!editMode" variant="outline-light" :pressed="editMode">
             <i class="oi oi-circle-check"></i>
             <small class="d-sm-inline d-none">edit</small>
             
           </b-btn>
           
           <!-- <b-navbar-brand class="mx-2">XLMP</b-navbar-brand> -->
-          <b-navbar-toggle v-show="!uiState.modalShow" target="nav_collapse"></b-navbar-toggle>
+          <b-navbar-toggle v-show="!browserShow" target="nav_collapse"></b-navbar-toggle>
           <b-collapse is-nav id="nav_collapse">
             <b-navbar-nav>
               <b-nav-item  v-if="false">test</b-nav-item>
@@ -122,23 +122,22 @@
         </b-navbar>
         <!-- nav bar end -->
         <!-- fix window -->
-        <div v-show="uiState.modalShow" class="col-sm-12 col-md-10 col-lg-8 col-xl-6" style="z-index:1031;">
+        <div v-show="browserShow" class="col-sm-12 col-md-10 col-lg-8 col-xl-6" style="z-index:1031;">
           <div class="card window" style="position:absolute;">
-            <div class="card-header bg-D9EDF7">
-              <b-btn-group>
-                <b-btn @click="showHistory" size="sm" :pressed="uiState.historyShow" variant="outline-secondary">
-                  <i class="oi oi-clock"></i>History
-                </b-btn>
-                <b-btn @click="showFs('/fs/ls/')" size="sm" :pressed="!uiState.historyShow" variant="outline-secondary">
-                  <i class="oi oi-home"></i>Home dir
-                </b-btn>
-              </b-btn-group>
-              <b-btn @click="editMode=!editMode" size="sm" variant="outline-light" :pressed="editMode">
-                edit
-              </b-btn>
-              <b-button-close @click="uiState.modalShow=false"></b-button-close>
-              <!-- <b-btn @click="uiState.modalShow=false" class="close">&times;</b-btn> -->
-            </div>
+            <!-- <div class="card-header bg-D9EDF7"> -->
+              <!-- <b-btn-group> -->
+                <!-- <b-btn @click="showHistory" size="sm" :pressed="uiState.historyShow" variant="outline-secondary"> -->
+                  <!-- <i class="oi oi-clock"></i>History -->
+                <!-- </b-btn> -->
+                <!-- <b-btn @click="showFs('/fs/ls/')" size="sm" :pressed="!uiState.historyShow" variant="outline-secondary"> -->
+                  <!-- <i class="oi oi-home"></i>Home dir -->
+                <!-- </b-btn> -->
+              <!-- </b-btn-group> -->
+              <!-- <b-btn @click="editMode=!editMode" size="sm" variant="outline-light" :pressed="editMode"> -->
+                <!-- edit -->
+              <!-- </b-btn> -->
+              <!-- <b-button-close @click="browserShow=false"></b-button-close> -->
+            <!-- </div> -->
             <div class="table-responsive-sm text-center auto-overflow">
               <table v-show="uiState.historyShow" class="table table-striped table-sm">
                 <tr v-for="item in history">
