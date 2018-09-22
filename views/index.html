@@ -117,7 +117,8 @@
               <b-btn @click="editMode=!editMode" size="sm" variant="outline-light" :pressed="editMode">
                 edit
               </b-btn>
-              <b-btn @click="uiState.modalShow=false" class="close">&times;</b-btn>
+              <b-button-close @click="uiState.modalShow=false"></b-button-close>
+              <!-- <b-btn @click="uiState.modalShow=false" class="close">&times;</b-btn> -->
             </div>
             <div class="table-responsive-sm text-center auto-overflow">
               <table v-show="uiState.historyShow" class="table table-striped table-sm">

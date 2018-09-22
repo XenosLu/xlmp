@@ -3,7 +3,7 @@ body {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
-    font-family: AppleSDGothicNeo-Regular;
+    font-family: AppleSDGothicNeo-Regular, "Microsoft YaHei"; 
     margin-bottom: 2em; /* Margin bottom by footer height */
 }
 html {
