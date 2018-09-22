@@ -221,7 +221,7 @@ window.appView = new Vue({
             },
             videoAdapt: function () {
                 if (this.wpMode) {
-                    var wHeight = window.innerHeight - 10;
+                    var wHeight = window.innerHeight;
                     this.video.sizeBtnText = "orign";
                     var video_ratio = this.$refs.video.videoWidth / this.$refs.video.videoHeight;
                     var page_ratio = window.innerWidth / wHeight;
