@@ -172,11 +172,12 @@ button {
     flex-wrap: wrap;
 }
 .window {
-    max-height: 83vh;
+    max-height: 74vh;
     /* z-index: 1050; */
     font-size: 0.8em;
     pointer-events: auto;
-    min-width: 40%;
+    /* min-width: 40%; */
+    width: calc(100% - 30px);
     box-shadow: 2px 2px 5px #333333;
 }
 .z-index-900 {

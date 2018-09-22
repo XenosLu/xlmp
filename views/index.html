@@ -105,8 +105,8 @@
         </b-navbar>
         <!-- nav bar end -->
         <!-- fix window -->
-        <div v-show="uiState.modalShow" class="window-container container-fluid justify-content-center flex-center">
-          <div class="card window">
+        <div v-show="uiState.modalShow" class="col-sm-12 col-md-10 col-lg-8 col-xl-6" style="z-index:1031;">
+          <div class="card window" style="position:absolute;">
             <div class="card-header bg-D9EDF7">
               <b-btn @click="showHistory" size="sm" :pressed="uiState.historyShow" variant="outline-secondary">
                 <i class="oi oi-clock"></i>History
