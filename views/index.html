@@ -16,7 +16,7 @@
     <title>Light Media Player</title>
   </head>
   <body>
-    <div id="v-main" class="container flex-center">
+    <div id="v-main" class="flex-center">
       <!-- output box -->
       <transition @enter="outFadeIn"
                   @leave="outFadeOut">
@@ -29,7 +29,7 @@
       </transition>
       <!-- output box end -->
         <!-- nav bar -->
-        <b-navbar v-show="fixBar.show" fixed toggleable="md" type="light" class="default-bg z-index-1040 col-md-11 col-lg-8 col-xl-7">
+        <b-navbar v-show="fixBar.show" fixed toggleable="md" type="light" class="default-bg z-index-1040 col-md-10 col-lg-8 col-xl-6">
           <b-btn-group>
             <b-btn variant="outline-dark" title="browser" @click="showModal">
               <i class="oi oi-list"></i>
@@ -261,7 +261,7 @@
         <!-- fix window end -->
         <!-- dlna interface -->
         
-        <div v-if="dlnaMode" class="text-center col-sm-12 col-md-8 col-lg-6 col-xl-6">
+        <div v-if="dlnaMode" class="text-center col-sm-12 col-md-8 col-lg-6 col-xl-4">
           <!-- <div class="my-1 py-3"></div> -->
           <b-card bg-variant="light"
                   :title="dlnaInfo.TrackURI ? decodeURI(dlnaInfo.TrackURI) : ''"
@@ -269,8 +269,8 @@
                   id="DlnaTouch">
           </b-card>
         </div>
-        <b-container v-show="dlnaMode" class="fixed-bottom text-center default-bg flex-center">
-          <div class="card-body col-sm-12 col-md-8 col-lg-6 col-xl-6">
+        <div v-show="dlnaMode" class="fixed-bottom text-center default-bg flex-center">
+          <div class="card-body col-sm-12 col-md-8 col-lg-6 col-xl-4">
             <h6 class="card-subtitle text-muted">${ dlnaInfo.CurrentTransportState }</h6>
             <h6 v-show="dlnaInfo.RelTime" class="card-title mt-3">
               ${ dlnaInfo.RelTime} / ${ dlnaInfo.TrackDuration }
@@ -309,7 +309,7 @@
               </b-btn-group>
              </b-btn-toolbar>
             </div>
-        </b-container>
+        </div>
         <!-- dlna interface end -->
     </div>
     {% block footer %}
