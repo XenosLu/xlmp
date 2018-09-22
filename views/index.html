@@ -46,7 +46,7 @@
         </video>
         <!-- video end-->
         <!-- nav bar -->
-        <b-navbar v-show="fixBar.show" fixed toggleable="md" type="light" variant="light" class="z-index-1040">
+        <b-navbar v-show="fixBar.show" fixed toggleable="md" type="light" class="default-bg z-index-1040">
           <b-btn-group>
             <b-btn variant="outline-dark" title="browser" @click="showModal">
               <i class="oi oi-list"></i>
@@ -100,7 +100,7 @@
                 <b-dropdown-item @click="get('/dlna/seek/00:01:30')">01:30</b-dropdown-item>
               </b-nav-item-dropdown>
             <!-- dlna seek menu end -->
-
+              <b-nav-item v-show="wpMode" @click="videoSizeToggle">${ video.sizeBtnText }</b-nav-item>
               <b-nav-item-dropdown v-show="wpMode" right>
                 <template slot="button-content">
                   Rate
@@ -114,8 +114,8 @@
                 <b-dropdown-item @click="rate(1.75)">1.75X</b-dropdown-item>
                 <b-dropdown-item @click="rate(2)">2X</b-dropdown-item>
                 <b-dropdown-item @click="rate(2.5)">2.5X</b-dropdown-item>
-                <b-dropdown-divider></b-dropdown-divider>
-                <b-dropdown-item @click="videoSizeToggle">${ video.sizeBtnText }</b-dropdown-item>
+                <!-- <b-dropdown-divider></b-dropdown-divider> -->
+                <!-- <b-dropdown-item @click="videoSizeToggle">${ video.sizeBtnText }</b-dropdown-item> -->
               </b-nav-item-dropdown>
             </b-navbar-nav>
           </b-collapse>
