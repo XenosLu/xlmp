@@ -14,6 +14,9 @@
 .close {
     font-size: 1.8rem;
 }
+.default-bg {
+    background-color: #F1F2F6;
+}
 body {
     background-color: #F1F2F6;
     -webkit-user-select: none;
