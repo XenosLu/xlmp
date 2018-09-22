@@ -29,7 +29,7 @@
       </transition>
       <!-- output box end -->
         <!-- nav bar -->
-        <b-navbar v-show="fixBar.show" fixed toggleable="md" type="light" class="default-bg z-index-1040 col-md-10 col-lg-8 col-xl-6">
+        <b-navbar v-show="fixBar.show" fixed toggleable="md" type="light" class="default-bg z-index-1040 col-md-10 col-lg-9 col-xl-7">
           <b-btn-group>
             <b-btn variant="outline-dark" title="browser" @click="showModal">
               <i v-show="!browserShow" class="oi oi-list"></i>
@@ -120,24 +120,10 @@
           </b-collapse>
         </b-navbar>
         <!-- nav bar end -->
-        <!-- fix window -->
-        <div v-show="browserShow" class="col-sm-12 col-md-10 col-lg-8 col-xl-6" style="z-index:1031;">
-          <div class="card window" style="position:absolute;">
+        <!-- dropdown window -->
+        <div v-show="browserShow" class="col-sm-12 col-md-10 col-lg-8 col-xl-6 z-index-1040">
+          <div class="card window">
             <div class="card-header"></div>
-            <!-- <div class="card-header bg-D9EDF7"> -->
-              <!-- <b-btn-group> -->
-                <!-- <b-btn @click="showHistory" size="sm" :pressed="historyShow" variant="outline-secondary"> -->
-                  <!-- <i class="oi oi-clock"></i>History -->
-                <!-- </b-btn> -->
-                <!-- <b-btn @click="showFs('/fs/ls/')" size="sm" :pressed="!historyShow" variant="outline-secondary"> -->
-                  <!-- <i class="oi oi-home"></i>Home dir -->
-                <!-- </b-btn> -->
-              <!-- </b-btn-group> -->
-              <!-- <b-btn @click="editMode=!editMode" size="sm" variant="outline-light" :pressed="editMode"> -->
-                <!-- edit -->
-              <!-- </b-btn> -->
-              <!-- <b-button-close @click="browserShow=false"></b-button-close> -->
-            <!-- </div> -->
             <div class="table-responsive-sm text-center auto-overflow">
               <table v-show="historyShow" class="table table-striped table-sm">
                 <tr v-for="item in history">
@@ -195,7 +181,7 @@
             </div>
           </div>
         </div>
-        <!-- fix window end -->
+        <!-- dropdown window end -->
         <!-- video -->
         <video webkit-playsinline="true"
                playsinline=""
