@@ -54,9 +54,12 @@ function dlnaTouch() {
         newtime = Math.min(newtime, window.appView.positionBarMax);
         window.appView.out(secondToTime(newtime));
         if (ev.type.indexOf("swipe") != -1)
-            window.appView.get("/dlna/seek/" + secondToTime(newtime));
+        {
+            // window.appView.get("/dlna/seek/" + secondToTime(newtime));
+            console.log(ev.type);
+        }
         // console.log(ev);
-        // console.log(ev.type);
+        
     });
 }
 
@@ -108,9 +111,6 @@ window.appView = new Vue({
             },
             icon: icon,
             mode: '', // mode of player, switch between empty/DLNA/WebPlayer
-            uiState: {
-                historyShow: true, // ture if modal is history, false if modal content is file list
-            },
             historyShow: true, // ture if modal is history, false if modal content is file list
             history: [], // updated by ajax
             filelist: [], // updated by ajax
