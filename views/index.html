@@ -62,7 +62,7 @@
               Close
             </b-btn>
           </b-btn-group>
-          <b-navbar-brand class="mx-2">XLMP</b-navbar-brand>
+          <!-- <b-navbar-brand class="mx-2">XLMP</b-navbar-brand> -->
           <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
           <b-collapse is-nav id="nav_collapse">
             <b-navbar-nav>
@@ -261,58 +261,56 @@
         </div>
         <!-- fix window end -->
         <!-- dlna interface -->
-        <div v-if="dlnaMode">
-          <div class="text-center col-sm-12 col-md-8 col-lg-6 col-xl-5">
-            <!-- <div class="my-1 py-3"></div> -->
-            <b-card bg-variant="light"
-                    :title="dlnaInfo.TrackURI ? decodeURI(dlnaInfo.TrackURI) : ''"
-                    class="title break-all my-5"
-                    id="DlnaTouch">
-            </b-card>
-          </div>
-
-          <b-container class="fixed-bottom text-center">
-            <div class="card-body col-sm-12 col-md-8 col-lg-6 col-xl-5">
-              <h6 class="card-subtitle text-muted">${ dlnaInfo.CurrentTransportState }</h6>
-              <h6 v-show="dlnaInfo.RelTime" class="card-title mt-3">
-                ${ dlnaInfo.RelTime} / ${ dlnaInfo.TrackDuration }
-              </h6>
-              <input class="position-bar my-3"
-                     v-model.number="positionBarVal"
-                     type="range"
-                     min="0"
-                     :max="positionBarMax"
-                     @change="positionSeek"
-                     @input="positionShow">
-              <b-btn-toolbar justify class="my-3 text-center">
-                <b-btn-group>
-                  <b-btn class="mx-1" variant="outline-warning" v-tap="volDown">
-                      <i class="oi oi-volume-low"></i>
-                  </b-btn>
-                </b-btn-group>
-                <b-btn-group>
-                  <b-btn class="" variant="outline-success" @click="get('/dlna/play')">
-                      <i class="oi oi-media-play"></i>
-                  </b-btn>
-                  <b-btn class="" variant="outline-danger" @click="get('/dlna/pause')">
-                      <i class="oi oi-media-pause"></i>
-                  </b-btn>
-                  <b-btn class="" variant="outline-danger" @click="get('/dlna/stop')">
-                      <i class="oi oi-media-stop"></i>
-                  </b-btn>
-                  <b-btn class="" variant="outline-success" @click="get('/dlna/next')">
-                      <i class="oi oi-media-step-forward"></i>
-                  </b-btn>
-                </b-btn-group>
-                <b-btn-group>
-                  <b-btn class="mx-1" variant="outline-warning" v-tap="volUp">
-                    <i class="oi oi-volume-high"></i>
-                  </b-btn>
-                </b-btn-group>
-               </b-btn-toolbar>
-              </div>
-          </b-container>
+        
+        <div v-if="dlnaMode" class="text-center col-sm-12 col-md-8 col-lg-6 col-xl-5">
+          <!-- <div class="my-1 py-3"></div> -->
+          <b-card bg-variant="light"
+                  :title="dlnaInfo.TrackURI ? decodeURI(dlnaInfo.TrackURI) : ''"
+                  class="title break-all my-3"
+                  id="DlnaTouch">
+          </b-card>
         </div>
+        <b-container v-show="dlnaMode" class="fixed-bottom text-center">
+          <div class="card-body col-sm-12 col-md-8 col-lg-6 col-xl-5">
+            <h6 class="card-subtitle text-muted">${ dlnaInfo.CurrentTransportState }</h6>
+            <h6 v-show="dlnaInfo.RelTime" class="card-title mt-3">
+              ${ dlnaInfo.RelTime} / ${ dlnaInfo.TrackDuration }
+            </h6>
+            <input class="position-bar my-3"
+                   v-model.number="positionBarVal"
+                   type="range"
+                   min="0"
+                   :max="positionBarMax"
+                   @change="positionSeek"
+                   @input="positionShow">
+            <b-btn-toolbar justify class="my-3 text-center">
+              <b-btn-group>
+                <b-btn class="mx-1" variant="outline-warning" v-tap="volDown">
+                    <i class="oi oi-volume-low"></i>
+                </b-btn>
+              </b-btn-group>
+              <b-btn-group>
+                <b-btn class="" variant="outline-success" @click="get('/dlna/play')">
+                    <i class="oi oi-media-play"></i>
+                </b-btn>
+                <b-btn class="" variant="outline-danger" @click="get('/dlna/pause')">
+                    <i class="oi oi-media-pause"></i>
+                </b-btn>
+                <b-btn class="" variant="outline-danger" @click="get('/dlna/stop')">
+                    <i class="oi oi-media-stop"></i>
+                </b-btn>
+                <b-btn class="" variant="outline-success" @click="get('/dlna/next')">
+                    <i class="oi oi-media-step-forward"></i>
+                </b-btn>
+              </b-btn-group>
+              <b-btn-group>
+                <b-btn class="mx-1" variant="outline-warning" v-tap="volUp">
+                  <i class="oi oi-volume-high"></i>
+                </b-btn>
+              </b-btn-group>
+             </b-btn-toolbar>
+            </div>
+        </b-container>
         <!-- dlna interface end -->
       </div>
     </div>
