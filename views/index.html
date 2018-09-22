@@ -196,7 +196,8 @@
         </div>
         <!-- fix window end -->
         <!-- video -->
-        <video
+        <video webkit-playsinline="true"
+               playsinline=""
                v-if="wpMode"
                ref="video"
                @timeupdate="videosave"
