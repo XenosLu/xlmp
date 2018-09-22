@@ -20,7 +20,7 @@
       <!-- output box -->
       <transition @enter="outFadeIn"
                   @leave="outFadeOut">
-        <div v-if="output.show" :key="output.text+Math.random()" class="output-container position-fixed">
+        <div v-if="output.show" :key="output.text+Math.random()" class="output-container justify-content-center flex-center position-fixed">
           <div class="output">
             <small class="d-block">${ output.smallText }</small>
             ${ output.text }
