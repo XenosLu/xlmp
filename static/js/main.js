@@ -26,7 +26,6 @@ Vue.directive("press", {
     }
 });
 
-
 /**
  * Render history list box from ajax
  *
@@ -130,9 +129,9 @@ window.appView = new Vue({
             icon: icon,
         },
         watch: {
-            browserShow: function (){
+            browserShow: function () {
                 this.navCollapse = false;
-                if(!this.browserShow)
+                if (!this.browserShow)
                     this.editMode = false;
             },
             'dlnaInfo.RelTime': function () {
@@ -164,7 +163,7 @@ window.appView = new Vue({
                 return this.mode === 'WebPlayer';
             },
             positionBarMax: function () {
-                if(this.dlnaInfo.hasOwnProperty('TrackDuration'))
+                if (this.dlnaInfo.hasOwnProperty('TrackDuration'))
                     return timeToSecond(this.dlnaInfo.TrackDuration);
                 return 0;
             },
