@@ -46,7 +46,7 @@
         </video>
         <!-- video end-->
         <!-- nav bar -->
-        <b-navbar v-show="fixBar.show" fixed toggleable="md" type="light" variant="light">
+        <b-navbar v-show="fixBar.show" fixed toggleable="md" type="light" variant="light" class="z-index-1040">
           <b-btn-group>
             <b-btn variant="outline-dark" title="browser" @click="showModal">
               <i class="oi oi-list"></i>
@@ -271,7 +271,7 @@
             </b-card>
           </div>
 
-          <b-container class="fixed-bottom text-center z-index-900">
+          <b-container class="fixed-bottom text-center">
             <div class="card-body col-sm-12 col-md-8 col-lg-6 col-xl-5">
               <h6 class="card-subtitle text-muted">${ dlnaInfo.CurrentTransportState }</h6>
               <h6 v-show="dlnaInfo.RelTime" class="card-title mt-3">
