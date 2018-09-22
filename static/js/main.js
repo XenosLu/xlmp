@@ -53,7 +53,7 @@ function dlnaTouch() {
         window.appView.out(secondToTime(newtime));
         if (ev.type.indexOf("swipe") != -1)
         {
-            // window.appView.get("/dlna/seek/" + secondToTime(newtime));
+            window.appView.get("/dlna/seek/" + secondToTime(newtime));
             console.log(ev.type);
         }
         // console.log(ev);
@@ -142,7 +142,18 @@ window.appView = new Vue({
                 if (this.positionBarCanUpdate)
                     this.positionBarVal = timeToSecond(this.dlnaInfo.RelTime);
                 console.log(this.positionBarVal);
-            }
+            },
+            mode: function () {
+                if (this.dlnaMode) {
+                    window.document.title = "DMC - Light Media Player";
+                    dlnaTouch();
+                } else if (this.wpMode) {
+                    window.document.title = this.video.src + " - Light Media Player";
+                    // if (this.isIos)
+                    touchWebPlayer();
+                } else
+                    window.document.title = "Light Media Player";
+            },
         },
         computed: {
             dlnaOn: function () { // check if dlna dmr is exist
@@ -371,18 +382,6 @@ window.appView = new Vue({
             },
         },
         updated: function () {
-            this.$nextTick(function () {
-                if (this.dlnaMode) {
-                    window.document.title = "DMC - Light Media Player";
-                    dlnaTouch();
-                } else if (this.wpMode) {
-                    window.document.title = this.video.src + " - Light Media Player";
-                    // if (this.isIos)
-                    touchWebPlayer();
-                } else
-                    window.document.title = "Light Media Player";
-                
-            });
         },
         created: function () {
             if (typeof(localStorage.mode) !== "undefined")
