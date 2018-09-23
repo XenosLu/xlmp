@@ -105,8 +105,10 @@ class DMRTracker(Thread):
                 transport_state = self._get_transport_state()
                 if transport_state:
                     sleep(0.1)
-                    if transport_state == 'STOPPED' and self.loop_playback.isSet() and not self.loadnext():
-                        self.loop_playback.clear()
+                    if transport_state == 'STOPPED' and self.loop_playback.isSet():
+                        yield from asyncio.sleep(0.5)
+                        if not self.loadnext():
+                            self.loop_playback.clear()
                     yield
                     if self._get_position_info():
                         sleep(0.1)
