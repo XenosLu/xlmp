@@ -12,6 +12,9 @@ function vueTouch(el, type, binding) {
     this.binding = binding;
     var hammertime = new Hammer(this.el);
     hammertime.on(this.type, this.binding.value);
+    hammertime.get('swipe').set({
+        velocity: 0.01
+    });
 };
 
 Vue.directive("tap", {
