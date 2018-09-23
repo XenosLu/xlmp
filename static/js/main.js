@@ -26,6 +26,18 @@ Vue.directive("press", {
     }
 });
 
+Vue.directive("pan", {
+    bind: function (el, binding) {
+        new vueTouch(el, "panleft panright", binding);
+    }
+});
+
+Vue.directive("swipe", {
+    bind: function (el, binding) {
+        new vueTouch(el, "swipeleft swiperight", binding);
+    }
+});
+
 /**
  * Render history list box from ajax
  *
@@ -121,7 +133,7 @@ window.appView = new Vue({
             },
             output: {
                 text: '',
-                smallText: '',
+                smallText: '', // consider to declared
                 show: false,
                 timerId: null,
             },
@@ -143,7 +155,7 @@ window.appView = new Vue({
             mode: function () {
                 if (this.dlnaMode) {
                     window.document.title = "DMC - Light Media Player";
-                    dlnaTouch();
+                    // dlnaTouch();
                 } else if (this.wpMode) {
                     window.document.title = this.video.src + " - Light Media Player";
                     // if (this.isIos)
@@ -374,6 +386,20 @@ window.appView = new Vue({
                     this.out(str + " buffering...");
                 }
             },
+            dlnaPan: function (obj) {
+                var newtime = this.positionBarVal + obj.deltaX / 4;
+                newtime = Math.max(newtime, 0);
+                newtime = Math.min(newtime, this.positionBarMax);
+                this.out(secondToTime(newtime));
+                console.log('pan');
+            },
+            dlnaSwipe: function (obj) {
+                var newtime = this.positionBarVal + obj.deltaX / 4;
+                newtime = Math.max(newtime, 0);
+                newtime = Math.min(newtime, this.positionBarMax);
+                console.log('swipe');
+                this.get("/dlna/seek/" + secondToTime(newtime));
+            },
         },
         created: function () {
             if (typeof(localStorage.mode) !== "undefined")
@@ -403,6 +429,8 @@ window.appView = new Vue({
             this.showHistory();
         },
     });
+
+    
 
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
