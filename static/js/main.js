@@ -23,20 +23,6 @@ function getHistory(str) {
     });
 };
 
-// function dlnaTouch() {
-    // var hammertimeDlna = new Hammer(document.getElementById("DlnaTouch"));
-    // hammertimeDlna.on("panleft panright swipeleft swiperight", function (ev) {
-        // var newtime = window.appView.positionBarVal + ev.deltaX / 4;
-        // newtime = Math.max(newtime, 0);
-        // newtime = Math.min(newtime, window.appView.positionBarMax);
-        // window.appView.out(secondToTime(newtime));
-        // if (ev.type.indexOf("swipe") != -1) {
-            // window.appView.get("/dlna/seek/" + secondToTime(newtime));
-            // console.log(ev.type);
-        // }
-    // });
-// }
-
 function dlnalink() {
     var ws = new WebSocket("ws://" + window.location.host + "/link");
     ws.onmessage = function (e) {
