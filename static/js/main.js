@@ -274,7 +274,8 @@ window.appView = new Vue({
             },
             showModal: function () {
                 this.browserShow = !this.browserShow;
-                // if (this.browserShow && this.historyShow)
+                if (this.browserShow && this.historyShow)
+                    this.showHistory();
             },
             showHistory: function () {
                 getHistory("/hist/ls");
