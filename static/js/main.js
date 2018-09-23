@@ -386,20 +386,25 @@ window.appView = new Vue({
                     this.out(str + " buffering...");
                 }
             },
-            dlnaPan: function (obj) {
+            dlnaTouch: function (obj) {
                 var newtime = this.positionBarVal + obj.deltaX / 4;
                 newtime = Math.max(newtime, 0);
                 newtime = Math.min(newtime, this.positionBarMax);
                 this.out(secondToTime(newtime));
-                console.log('pan');
+                if (obj.type.indexOf("swipe") != -1) {
+                    this.get("/dlna/seek/" + secondToTime(newtime));
+                    console.log('swipe');
+                }
+                else
+                    console.log('pan');
             },
-            dlnaSwipe: function (obj) {
-                var newtime = this.positionBarVal + obj.deltaX / 4;
-                newtime = Math.max(newtime, 0);
-                newtime = Math.min(newtime, this.positionBarMax);
-                console.log('swipe');
-                this.get("/dlna/seek/" + secondToTime(newtime));
-            },
+            // dlnaSwipe: function (obj) {
+                // var newtime = this.positionBarVal + obj.deltaX / 4;
+                // newtime = Math.max(newtime, 0);
+                // newtime = Math.min(newtime, this.positionBarMax);
+                // console.log('swipe');
+                // this.get("/dlna/seek/" + secondToTime(newtime));
+            // },
         },
         created: function () {
             if (typeof(localStorage.mode) !== "undefined")

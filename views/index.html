@@ -201,8 +201,8 @@
         <!-- video end-->
         <!-- dlna interface -->
         <div v-if="dlnaMode" class="text-center col-sm-10 col-md-8 col-lg-6 col-xl-4">
-          <b-card v-pan="dlnaPan"
-                  v-swipe="dlnaSwipe"
+          <b-card v-pan="dlnaTouch"
+                  v-swipe="dlnaTouch"
                   bg-variant="light"
                   :title="dlnaInfo.TrackURI ? decodeURI(dlnaInfo.TrackURI) : ''"
                   class="title break-all my-3"
