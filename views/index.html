@@ -31,7 +31,7 @@
       <!-- nav bar -->
       <b-navbar v-show="fixBar.show" fixed toggleable="lg" type="light" class="default-bg z-index-1050 col-md-8 col-lg-11 col-xl-7">
         <b-btn-group>
-          <b-btn variant="outline-dark" title="browser" @click="showModal">
+          <b-btn variant="outline-secondary" title="browser" @click="showModal">
             <i v-show="!browserShow" class="oi oi-list"></i>
             <i v-show="browserShow" class="oi oi-x"></i>
           </b-btn>
@@ -48,11 +48,11 @@
           </b-btn>
         </b-btn-group>
         <b-btn-group v-show="browserShow" class="mx-1">
-          <b-btn @click="showHistory" :pressed="historyShow" variant="outline-secondary">
+          <b-btn @click="showHistory" :pressed="historyShow" variant="outline-dark">
             <i class="oi oi-clock"></i>
             <small class="d-sm-inline d-none">History</small>
           </b-btn>
-          <b-btn @click="showFs('/fs/ls/')" :pressed="!historyShow" variant="outline-secondary">
+          <b-btn @click="showFs('/fs/ls/')" :pressed="!historyShow" variant="outline-dark">
             <i class="oi oi-home"></i>
             <small class="d-sm-inline d-none">Home dir</small>
           </b-btn>
