@@ -178,7 +178,6 @@ window.appView = new Vue({
         methods: {
             test: function (obj, obj2) {
                 console.log(obj);
-                // console.log(obj2);
                 console.log("test " + obj);
                 this.out('test' + obj);
             },
@@ -221,7 +220,6 @@ window.appView = new Vue({
             },
             outFadeIn: function (el, done) {
                 Velocity(el, 'stop');
-                // Velocity(el, {translateX: '-50%', translateY: '-50%'}, {duration: 0});
                 Velocity(el, {opacity: 0.8}, {duration: 180});
             },
             outFadeOut: function (el, done) {
