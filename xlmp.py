@@ -546,23 +546,6 @@ class SearchDmrHandler(tornado.web.RequestHandler):
         TRACKER.discover_dmr()
 
 
-class TestHandler(tornado.web.RequestHandler):
-    executor = ThreadPoolExecutor(99)
-    """test only"""
-    def data_received(self, chunk):
-        pass
-
-    def test(self):
-        sleep(1)
-        return 'test sleep 1'
-
-    @tornado.concurrent.run_on_executor
-    def get(self, *args, **kwargs):
-        x = TRACKER.async_run(self.test)
-        logging.info(x)
-        self.write(x)
-
-
 class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
     """DLNA info retriever use web socket"""
     users = set()
@@ -589,6 +572,38 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
         logging.info('ws close: %s', self.request.remote_ip)
         self.users.remove(self)
 
+
+class TestHandler(tornado.web.RequestHandler):
+    executor = ThreadPoolExecutor(99)
+    """test only"""
+    def data_received(self, chunk):
+        pass
+
+    def test(self):
+        sleep(1)
+        return 'test sleep 1'
+
+    @tornado.concurrent.run_on_executor
+    def get(self, *args, **kwargs):
+        x = TRACKER.async_run(self.test)
+        logging.info(x)
+        self.write(x)
+
+
+class Jsonrpc():
+    """RPC commands for javascript"""
+    @classmethod
+    def run(cls, jsonrpc="2.0", method, params=None, id=None):
+        # {"jsonrpc": "2.0", "method": "subtract", "params": [42, 23], "id": 1}
+        # return {"jsonrpc": "2.0", "result"/"error": "subtract", "id": 1}
+        """run RPC command"""
+        args = [args[i] for i in sorted(args.keys())]
+        logging.info('running method: %s with args: %s', method, args)
+        try:
+            return getattr(cls, method)(*args)
+        except Exception as exc:
+            logging.info(exc, exc_info=True)
+            return {'result': 'danger', 'content': str(exc)}
 
 HANDLERS = [
     (r'/', IndexHandler),
