@@ -6,17 +6,40 @@ var icon = {
     "other": "oi-file"
 };
 
-function test() {
+function jsonRPC(method, params, callback) {
     axios.post('/api', {
         jsonrpc: '2.0',
-        method: 'test',
+        method: method,
+        params: params,
         id: 1
     }).then(function (response) {
-        console.log(response.data);
+        console.log(response.data.hasOwnProperty('result'));
+        callback(response.data);
     }).catch(function (error) {
         window.appView.out(error.response.statusText);
     });
 }
+
+function test() {
+    jsonRPC('test', null, function (data) {
+        console.log(data.result);
+    })
+}
+
+// var server = {};
+// var rpc_cmds = ["test"];
+
+// rpc_cmds.forEach(function (cmd) {
+    // server[cmd] = function () {
+        // window.alertBox.show("warning", "");
+        // var kwargs = {
+            // method: cmd,
+            // args: arguments,
+        // };
+        // console.log("RPC command: " + JSON.stringify(kwargs));
+        // ws_link.send(JSON.stringify(kwargs));
+    // };
+// });
 
 function dlnalink() {
     var ws = new WebSocket("ws://" + window.location.host + "/link");

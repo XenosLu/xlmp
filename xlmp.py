@@ -600,25 +600,30 @@ class ApiHandler(tornado.web.RequestHandler):
     def post(self, *args, **kwargs):
         arguments = json.loads(self.request.body.decode())
         logging.info(arguments)
-        self.write({"jsonrpc": "2.0", "result": "test", "id": 1})
-        # print(args)
-        # print(kwargs)
+        result = JsonRpc.run(**arguments)
+        logging.info(result)
+        self.write(result)
 
 
-class Jsonrpc():
-    """RPC commands for javascript"""
+class JsonRpc():
+    """Json RPC class"""
     @classmethod
     def run(cls=None, jsonrpc="2.0", method=None, params=None, id=None):
-        # {"jsonrpc": "2.0", "method": "subtract", "params": [42, 23], "id": 1}
-        # return {"jsonrpc": "2.0", "result"/"error": "subtract", "id": 1}
-        """run RPC command"""
-        args = [args[i] for i in sorted(args.keys())]
-        logging.info('running method: %s with args: %s', method, args)
+        """run RPC method"""
+        args = params if isinstance(params, list) else []
+        kwargs = params if isinstance(params, dict) else {}
+        logging.info('running method: %s with params: %s', method, params)
+        val = {'jsonrpc': '2.0', 'id': id}
         try:
-            return getattr(cls, method)(*args)
+            val['result'] = getattr(cls, method)(*args, **kwargs)
         except Exception as exc:
             logging.info(exc, exc_info=True)
-            return {'result': 'danger', 'content': str(exc)}
+            val['error'] = {"code": -1, "message": str(exc)}
+        return val
+
+    @classmethod
+    def test(cls):
+        return 'test'
 
 HANDLERS = [
     (r'/', IndexHandler),
