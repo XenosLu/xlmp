@@ -77,7 +77,7 @@
               <b-dropdown-divider v-if="devMode"></b-dropdown-divider>
               <b-dropdown-item @click="get('/sys/backup')">backup</b-dropdown-item>
               <b-dropdown-item @click="get('/sys/restore')">restore</b-dropdown-item>
-              <b-dropdown-item v-if="devMode" @click="get('/test')">test</b-dropdown-item>
+              <b-dropdown-item v-if="devMode" @click="test">test</b-dropdown-item>
             </b-nav-item-dropdown>
           <!-- dlna dmr menu -->
             <b-nav-item-dropdown v-show="dlnaMode" right :text="dlnaInfo.CurrentDMR">

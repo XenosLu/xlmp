@@ -590,10 +590,25 @@ class TestHandler(tornado.web.RequestHandler):
         self.write(x)
 
 
+class ApiHandler(tornado.web.RequestHandler):
+    # executor = ThreadPoolExecutor(99)
+    """api test"""
+    def data_received(self, chunk):
+        pass
+
+    # @tornado.concurrent.run_on_executor
+    def post(self, *args, **kwargs):
+        arguments = json.loads(self.request.body.decode())
+        logging.info(arguments)
+        self.write({"jsonrpc": "2.0", "result": "test", "id": 1})
+        # print(args)
+        # print(kwargs)
+
+
 class Jsonrpc():
     """RPC commands for javascript"""
     @classmethod
-    def run(cls, jsonrpc="2.0", method, params=None, id=None):
+    def run(cls=None, jsonrpc="2.0", method=None, params=None, id=None):
         # {"jsonrpc": "2.0", "method": "subtract", "params": [42, 23], "id": 1}
         # return {"jsonrpc": "2.0", "result"/"error": "subtract", "id": 1}
         """run RPC command"""
@@ -607,11 +622,12 @@ class Jsonrpc():
 
 HANDLERS = [
     (r'/', IndexHandler),
+    (r'/test', TestHandler),  # test
+    (r'/api', ApiHandler),
     (r'/fs/ls/(?P<path>.*)', FileSystemListHandler),
     (r'/fs/move/(?P<src>.*)', FileSystemMoveHandler),
     (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
     (r'/sys/(?P<opt>\w*)', SystemCommandHandler),
-    (r'/test', TestHandler),  # test
     (r'/link', DlnaWebSocketHandler),
     (r'/dlna/setdmr/(?P<dmr>.*)', SetDmrHandler),
     (r'/dlna/searchdmr', SearchDmrHandler),

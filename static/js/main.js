@@ -6,22 +6,17 @@ var icon = {
     "other": "oi-file"
 };
 
-/**
- * Render history list box from ajax
- *
- * @method history
- * @param {String} str
- */
-// function getHistory(str) {
-    // axios.get(encodeURI(str))
-    // .then(function (response) {
-        // window.appView.historyShow = true;
-        // window.appView.history = response.data.history;
-    // })
-    // .catch(function (error) {
-        // window.appView.out(error.response.statusText);
-    // });
-// };
+function test() {
+    axios.post('/api', {
+        jsonrpc: '2.0',
+        method: 'test',
+        id: 1
+    }).then(function (response) {
+        console.log(response.data);
+    }).catch(function (error) {
+        window.appView.out(error.response.statusText);
+    });
+}
 
 function dlnalink() {
     var ws = new WebSocket("ws://" + window.location.host + "/link");
@@ -142,9 +137,10 @@ window.appView = new Vue({
         },
         methods: {
             test: function (obj, obj2) {
-                console.log(obj);
-                console.log("test " + obj);
-                this.out('test' + obj);
+                test();
+                // console.log(obj);
+                // console.log("test " + obj);
+                // this.out('test' + obj);
             },
             volUp: function (obj) {
                 this.get('/dlna/vol/up');
