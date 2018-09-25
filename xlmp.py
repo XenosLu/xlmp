@@ -636,7 +636,7 @@ class JsonRpc():
     @classmethod
     def test(cls):
         """test method"""
-        return
+        return 'test message'
 
     @classmethod
     @check_dmr_exist_new

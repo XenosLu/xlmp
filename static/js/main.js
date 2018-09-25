@@ -148,8 +148,7 @@ window.appView = new Vue({
         },
         methods: {
             test: function (obj, obj2) {
-                // server.test(null, this.out);
-                server.dlna_vol(['up'], this.out);
+                server.test(null, this.out);
                 // console.log(obj);
                 // console.log("test " + obj);
                 // this.out('test' + obj);
