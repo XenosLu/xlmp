@@ -31,7 +31,7 @@ var server = new Proxy(function () {}, {
     });
 
 function test() {
-    server.test({x:1}, window.appView.out);
+    server.test(null, window.appView.out);
 }
 
 function dlnalink() {
