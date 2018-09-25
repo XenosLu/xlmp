@@ -625,7 +625,12 @@ class JsonRpc():
         kwargs = params if isinstance(params, dict) else {}
         logging.info('running method: %s with params: %s', method, params)
         try:
-            val['result'] = getattr(cls, method)(*args, **kwargs)
+            result = getattr(cls, method)(*args, **kwargs)
+            if result is True:
+                result = 'Success'
+            elif result is False:
+                result = 'Failed'
+            val['result'] = result
         except AttributeError as exc:
             val['error'] = {"code": -32601, 'message': 'Method not found'}
         except TypeError as exc:

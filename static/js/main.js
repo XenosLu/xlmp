@@ -9,10 +9,9 @@ var icon = {
 var server = new Proxy(function () {}, {
         get: function (target, method, receiver) {
             var errorCallback = window.appView.out;
+            console.log('loading method: ' + method);
             return function (params, callback) {
-                console.log(method);
                 console.log(params);
-                console.log(callback);
                 axios.post('/api', {
                     jsonrpc: '2.0',
                     method: method,
@@ -20,9 +19,9 @@ var server = new Proxy(function () {}, {
                     id: Math.floor(Math.random() * 9999),
                 }).then(function (response) {
                     console.log(response.data);
-                    if (response.data.hasOwnProperty('result')) {
-                        callback(response.data);
-                    } else
+                    if (response.data.hasOwnProperty('result'))
+                        callback(response.data.result);
+                    else
                         errorCallback(response.data.error);
                 }).catch(function (error) {
                     errorCallback(error.response.statusText);
@@ -32,7 +31,7 @@ var server = new Proxy(function () {}, {
     });
 
 function test() {
-    server.test(null);
+    server.test({x:1}, window.appView.out);
 }
 
 function dlnalink() {
