@@ -396,7 +396,7 @@ window.appView = new Vue({
                 var now = (new Date()).getTime();
                 if (now - lastTouchEnd <= 300) {
                     event.preventDefault();
-                }
+                };
                 lastTouchEnd = now;
             }, false);
             this.showHistory();
