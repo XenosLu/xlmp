@@ -610,20 +610,30 @@ class JsonRpc():
     def run(cls, json_obj):
         """run RPC method"""
         logging.info(json_obj)
-        obj = json.loads(json_obj)
+        val = {'jsonrpc': '2.0'}
+        try:
+            obj = json.loads(json_obj)
+        except json.decoder.JSONDecodeError as exc:
+            logging.info(exc, exc_info=True)
+            val['error'] = {"code": -32700, 'message': 'Parse error'}
+            return val
         logging.info(obj)
         method = obj.get('method')
         params = obj.get('params')
+        val['id'] = obj.get('id')
+        # (-32602 	Invalid params)
+        params=['tt']
         args = params if isinstance(params, list) else []
         kwargs = params if isinstance(params, dict) else {}
         logging.info('running method: %s with params: %s', method, params)
-        val = {'jsonrpc': '2.0', 'id': obj.get('id')}
         try:
             val['result'] = getattr(cls, method)(*args, **kwargs)
         except AttributeError as exc:
             val['error'] = {"code": -32601, 'message': 'Method not found'}
+        except TypeError as exc:
+            val['error'] = {"code": -32602, 'message': 'Invalid params'}
         except Exception as exc:
-            logging.info(exc, exc_info=True)
+            logging.warning(exc, exc_info=True)
             val['error'] = {"code": -1, 'message': str(exc)}
         return val
 

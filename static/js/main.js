@@ -8,29 +8,47 @@ var icon = {
 
 var server = new Proxy(function () {}, {
         get: function (target, method, receiver) {
+            // errorCallback
             return function (params, callback) {
-                jsonRPC(method, params, callback);
+                console.log(method);
+                console.log(params);
+                console.log(callback);
+                axios.post('/api', {
+                    jsonrpc: '2.0',
+                    method: method,
+                    params: params,
+                    id: Math.floor(Math.random() * 9999),
+                }).then(function (response) {
+                    console.log(response.data);
+                    if (response.data.hasOwnProperty('result')) {
+                        callback(response.data);
+                    } else
+                        window.appView.out(response.data.error);
+                }).catch(function (error) {
+                    window.appView.out(error.response.statusText);
+                });
             };
         }
     });
-
-function jsonRPC(method, params, callback) {
-    console.log(method);
-    console.log(params);
-    console.log(callback);
-    axios.post('/api', {
-        jsonrpc: '2.0',
-        method: method,
-        params: params,
-        id: Math.floor(Math.random() * 9999),
-    }).then(function (response) {
-        console.log(response.data.hasOwnProperty('result'));
-        console.log(response.data);
-        callback(response.data);
-    }).catch(function (error) {
-        window.appView.out(error.response.statusText);
-    });
-}
+// function jsonRPC(method, params, callback) {
+    // console.log(method);
+    // console.log(params);
+    // console.log(callback);
+    // axios.post('/api', {
+        // jsonrpc: '2.0',
+        // method: method,
+        // params: params,
+        // id: Math.floor(Math.random() * 9999),
+    // }).then(function (response) {
+        // console.log(response.data);
+        // if (response.data.hasOwnProperty('result')) {
+            // callback(response.data);
+        // } else
+            // window.appView.out(response.data.error);
+    // }).catch(function (error) {
+        // window.appView.out(error.response.statusText);
+    // });
+// }
 
 function test() {
     server.test(null);
