@@ -487,25 +487,25 @@ class DlnaHandler(tornado.web.RequestHandler):
             self.finish({'error': 'Failed!'})
 
 
-class DlnaVolumeControlHandler(tornado.web.RequestHandler):
-    """Tune volume through DLNA web interface"""
-    def data_received(self, chunk):
-        pass
+# class DlnaVolumeControlHandler(tornado.web.RequestHandler):
+    # """Tune volume through DLNA web interface"""
+    # def data_received(self, chunk):
+        # pass
 
-    @check_dmr_exist
-    def get(self, *args, **kwargs):
-        opt = kwargs.get('opt')
-        vol = int(TRACKER.dmr.get_volume())
-        if opt == 'up':
-            vol += 1
-        elif opt == 'down':
-            vol -= 1
-        if not 0 <= vol <= 100:
-            self.finish({'warning':'volume range exceeded'})
-        elif TRACKER.dmr.volume(vol):
-            self.finish(str(vol))
-        else:
-            self.finish({'error': 'failed'})
+    # @check_dmr_exist
+    # def get(self, *args, **kwargs):
+        # opt = kwargs.get('opt')
+        # vol = int(TRACKER.dmr.get_volume())
+        # if opt == 'up':
+            # vol += 1
+        # elif opt == 'down':
+            # vol -= 1
+        # if not 0 <= vol <= 100:
+            # self.finish({'warning':'volume range exceeded'})
+        # elif TRACKER.dmr.volume(vol):
+            # self.finish(str(vol))
+        # else:
+            # self.finish({'error': 'failed'})
 
 
 class SystemCommandHandler(tornado.web.RequestHandler):
@@ -665,7 +665,7 @@ HANDLERS = [
     (r'/link', DlnaWebSocketHandler),
     (r'/dlna/setdmr/(?P<dmr>.*)', SetDmrHandler),
     (r'/dlna/searchdmr', SearchDmrHandler),
-    (r'/dlna/vol/(?P<opt>\w*)', DlnaVolumeControlHandler),
+    # (r'/dlna/vol/(?P<opt>\w*)', DlnaVolumeControlHandler),
     (r'/dlna/next', DlnaNextHandler),
     (r'/dlna/load/(?P<src>.*)', DlnaLoadHandler),
     (r'/dlna/(?P<opt>\w*)/?(?P<progress>.*)', DlnaHandler),
