@@ -30,10 +30,6 @@ var server = new Proxy(function () {}, {
         }
     });
 
-function test() {
-    server.test(null, window.appView.out);
-}
-
 function dlnalink() {
     var ws = new WebSocket("ws://" + window.location.host + "/link");
     ws.onmessage = function (e) {
@@ -152,7 +148,7 @@ window.appView = new Vue({
         },
         methods: {
             test: function (obj, obj2) {
-                test();
+                server.test(null, this.out);
                 // console.log(obj);
                 // console.log("test " + obj);
                 // this.out('test' + obj);
