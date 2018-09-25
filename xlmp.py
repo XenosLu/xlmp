@@ -654,6 +654,11 @@ class JsonRpc():
         else:
             return False
 
+    @classmethod
+    @check_dmr_exist_new
+    def dlna_next(cls):
+        return TRACKER.loadnext()
+
 
 HANDLERS = [
     (r'/', IndexHandler),
