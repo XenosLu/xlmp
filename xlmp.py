@@ -621,7 +621,6 @@ class JsonRpc():
         try:
             val['result'] = getattr(cls, method)(*args, **kwargs)
         except AttributeError as exc:
-            logging.info(exc)
             val['error'] = {"code": -32601, 'message': 'Method not found'}
         except Exception as exc:
             logging.info(exc, exc_info=True)
