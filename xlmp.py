@@ -622,7 +622,6 @@ class JsonRpc():
         params = obj.get('params')
         val['id'] = obj.get('id')
         # (-32602 	Invalid params)
-        params=['tt']
         args = params if isinstance(params, list) else []
         kwargs = params if isinstance(params, dict) else {}
         logging.info('running method: %s with params: %s', method, params)

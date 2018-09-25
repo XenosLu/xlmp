@@ -8,7 +8,7 @@ var icon = {
 
 var server = new Proxy(function () {}, {
         get: function (target, method, receiver) {
-            // errorCallback
+            var errorCallback = window.appView.out;
             return function (params, callback) {
                 console.log(method);
                 console.log(params);
@@ -23,9 +23,9 @@ var server = new Proxy(function () {}, {
                     if (response.data.hasOwnProperty('result')) {
                         callback(response.data);
                     } else
-                        window.appView.out(response.data.error);
+                        errorCallback(response.data.error);
                 }).catch(function (error) {
-                    window.appView.out(error.response.statusText);
+                    errorCallback(error.response.statusText);
                 });
             };
         }
