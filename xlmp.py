@@ -425,27 +425,27 @@ class SaveHandler(tornado.web.RequestHandler):
         save_history(kwargs.get('src'), **arguments)
 
 
-class DlnaLoadHandler(tornado.web.RequestHandler):
-    """DLNA load file web interface"""
-    def data_received(self, chunk):
-        pass
+# class DlnaLoadHandler(tornado.web.RequestHandler):
+    # """DLNA load file web interface"""
+    # def data_received(self, chunk):
+        # pass
 
-    @check_dmr_exist
-    def get(self, *args, **kwargs):
-        src = kwargs.get('src')
-        srv_host = self.request.headers['Host']
-        if srv_host.startswith('127.0.0.1'):
-            self.finish('should not use 127.0.0.1 as host to load throuh DLNA')
-            return
-        if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
-            logging.warning('File not found: %s', src)
-            self.finish('Error: File not found.')
-            return
-        logging.info('start loading...tracker state:%s', TRACKER.state.get('CurrentTransportState'))
-        TRACKER.url_prefix = 'http://%s/video/' % srv_host
-        url = 'http://%s/video/%s' % (srv_host, quote(src))
-        TRACKER.load(url)
-        self.finish('loading %s' % src)
+    # @check_dmr_exist
+    # def get(self, *args, **kwargs):
+        # src = kwargs.get('src')
+        # srv_host = self.request.headers['Host']
+        # if srv_host.startswith('127.0.0.1'):
+            # self.finish('should not use 127.0.0.1 as host to load throuh DLNA')
+            # return
+        # if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
+            # logging.warning('File not found: %s', src)
+            # self.finish('Error: File not found.')
+            # return
+        # logging.info('start loading...tracker state:%s', TRACKER.state.get('CurrentTransportState'))
+        # TRACKER.url_prefix = 'http://%s/video/' % srv_host
+        # url = 'http://%s/video/%s' % (srv_host, quote(src))
+        # TRACKER.load(url)
+        # self.finish('loading %s' % src)
 
 
 class DlnaNextHandler(tornado.web.RequestHandler):
@@ -624,9 +624,9 @@ class JsonRpc():
                 result = 'Failed'
             val['result'] = result
         except AttributeError as exc:
-            logging.info(exc, exc_info=True)
             val['error'] = {"code": -32601, 'message': 'Method not found'}
         except TypeError as exc:
+            logging.warning(exc, exc_info=True)
             val['error'] = {"code": -32602, 'message': 'Invalid params'}
         except Exception as exc:
             logging.warning(exc, exc_info=True)
@@ -661,6 +661,17 @@ class JsonRpc():
 
     @classmethod
     @check_dmr_exist_new
+    def dlna(cls, opt, progress=None):
+        if opt in ('play', 'pause', 'stop'):
+            if opt == 'stop':
+                TRACKER.loop_playback.clear()
+            method = getattr(TRACKER.dmr, opt)
+            return method()
+        elif opt == 'seek':
+            return TRACKER.dmr.seek(progress)
+
+    @classmethod
+    @check_dmr_exist_new
     def dlna_load(cls, src, host):
         if host.startswith('127.0.0.1'):
             return 'should not use 127.0.0.1 as host to load throuh DLNA'
@@ -685,8 +696,8 @@ HANDLERS = [
     (r'/dlna/searchdmr', SearchDmrHandler),
     # (r'/dlna/vol/(?P<opt>\w*)', DlnaVolumeControlHandler),
     # (r'/dlna/next', DlnaNextHandler),
-    (r'/dlna/load/(?P<src>.*)', DlnaLoadHandler),
-    (r'/dlna/(?P<opt>\w*)/?(?P<progress>.*)', DlnaHandler),
+    # (r'/dlna/load/(?P<src>.*)', DlnaLoadHandler),
+    (r'/dlna/(?P<opt>\w*)/?(?P<progress>.*)', DlnaHandler),  # can't be replaced for toggle
     (r'/wp/save/(?P<src>.*)', SaveHandler),
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
 ]
