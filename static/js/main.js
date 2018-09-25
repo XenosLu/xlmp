@@ -374,13 +374,6 @@ window.appView = new Vue({
                 else
                     console.log('pan');
             },
-            // dlnaSwipe: function (obj) {
-                // var newtime = this.positionBarVal + obj.deltaX / 4;
-                // newtime = Math.max(newtime, 0);
-                // newtime = Math.min(newtime, this.positionBarMax);
-                // console.log('swipe');
-                // this.get("/dlna/seek/" + secondToTime(newtime));
-            // },
         },
         created: function () {
             if (typeof(localStorage.mode) !== "undefined")
@@ -410,8 +403,6 @@ window.appView = new Vue({
             this.showHistory();
         },
     });
-
-    
 
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
