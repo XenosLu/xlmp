@@ -6,14 +6,26 @@ var icon = {
     "other": "oi-file"
 };
 
+var server = new Proxy(function () {}, {
+        get: function (target, method, receiver) {
+            return function (params, callback) {
+                jsonRPC(method, params, callback);
+            };
+        }
+    });
+
 function jsonRPC(method, params, callback) {
+    console.log(method);
+    console.log(params);
+    console.log(callback);
     axios.post('/api', {
         jsonrpc: '2.0',
         method: method,
         params: params,
-        id: 1
+        id: Math.floor(Math.random() * 9999),
     }).then(function (response) {
         console.log(response.data.hasOwnProperty('result'));
+        console.log(response.data);
         callback(response.data);
     }).catch(function (error) {
         window.appView.out(error.response.statusText);
@@ -21,9 +33,10 @@ function jsonRPC(method, params, callback) {
 }
 
 function test() {
-    jsonRPC('test', null, function (data) {
-        console.log(data.result);
-    })
+    // jsonRPC('test', null, function (data) {
+        // console.log(data.result);
+    // })
+    server.test(null);
 }
 
 // var server = {};

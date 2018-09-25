@@ -598,9 +598,11 @@ class ApiHandler(tornado.web.RequestHandler):
 
     # @tornado.concurrent.run_on_executor
     def post(self, *args, **kwargs):
-        arguments = json.loads(self.request.body.decode())
-        logging.info(arguments)
-        result = JsonRpc.run(**arguments)
+        json_obj = self.request.body.decode()
+        # arguments = json.loads(self.request.body.decode())
+        # logging.info(arguments)
+        result = JsonRpc.run(json_obj=json_obj)
+        # result = JsonRpc.run(**arguments)
         logging.info(result)
         self.write(result)
 
@@ -608,8 +610,10 @@ class ApiHandler(tornado.web.RequestHandler):
 class JsonRpc():
     """Json RPC class"""
     @classmethod
-    def run(cls=None, jsonrpc="2.0", method=None, params=None, id=None):
+    def run(cls=None, jsonrpc="2.0", method=None, params=None, id=None, json_obj=None):
         """run RPC method"""
+        obj = json.loads(json_obj)
+        params = obj.get('params')
         args = params if isinstance(params, list) else []
         kwargs = params if isinstance(params, dict) else {}
         logging.info('running method: %s with params: %s', method, params)
