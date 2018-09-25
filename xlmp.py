@@ -599,25 +599,25 @@ class ApiHandler(tornado.web.RequestHandler):
     # @tornado.concurrent.run_on_executor
     def post(self, *args, **kwargs):
         json_obj = self.request.body.decode()
-        # arguments = json.loads(self.request.body.decode())
-        # logging.info(arguments)
-        result = JsonRpc.run(json_obj=json_obj)
-        # result = JsonRpc.run(**arguments)
-        logging.info(result)
+        result = JsonRpc.run(json_obj)
+        logging.info('result: %s', result)
         self.write(result)
 
 
 class JsonRpc():
     """Json RPC class"""
     @classmethod
-    def run(cls=None, jsonrpc="2.0", method=None, params=None, id=None, json_obj=None):
+    def run(cls, json_obj):
         """run RPC method"""
+        logging.info(json_obj)
         obj = json.loads(json_obj)
+        logging.info(obj)
+        method = obj.get('method')
         params = obj.get('params')
         args = params if isinstance(params, list) else []
         kwargs = params if isinstance(params, dict) else {}
         logging.info('running method: %s with params: %s', method, params)
-        val = {'jsonrpc': '2.0', 'id': id}
+        val = {'jsonrpc': '2.0', 'id': obj.get('id')}
         try:
             val['result'] = getattr(cls, method)(*args, **kwargs)
         except Exception as exc:
