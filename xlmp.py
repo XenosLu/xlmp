@@ -38,6 +38,7 @@ class DMRTracker(Thread):
         self.dmr = None  # DMR device object
         self.all_devices = []  # DMR device list
         self.url_prefix = None
+        self._url = ''
         logging.info('DMR Tracker thread initialized.')
 
     def discover_dmr(self):
@@ -79,7 +80,6 @@ class DMRTracker(Thread):
             if position_info['TrackURI']:
                 self.state['TrackURI'] = unquote(
                     re.sub('http://.*/video/', '', position_info['TrackURI']))
-                # self.url_prefix = re.sub('(http://.*/video/).*', '\\1', position_info['TrackURI'])
                 save_history(self.state['TrackURI'],
                              time_to_second(self.state['RelTime']),
                              time_to_second(self.state['TrackDuration']))
@@ -97,6 +97,7 @@ class DMRTracker(Thread):
 
     @asyncio.coroutine
     def main_loop(self):
+        """main async loop"""
         failure = 0
         while True:
             if self.dmr:
@@ -144,6 +145,7 @@ class DMRTracker(Thread):
 
     @asyncio.coroutine
     def load_coroutine(self, url):
+        """load videdo in coroutine"""
         failure = 0
         while failure < 3:
             sleep(0.4)
@@ -163,9 +165,8 @@ class DMRTracker(Thread):
                 if time_to_second(self.state.get('TrackDuration')) <= 600:
                     self.loop_playback.set()
                 return
-            else:
-                failure += 1
-                logging.info('load failure count: %s', failure)
+            failure += 1
+            logging.info('load failure count: %s', failure)
 
     def loadnext(self):
         """load next video"""
@@ -206,7 +207,6 @@ class DMRTracker(Thread):
             sleep(0.5)
             time0 = time()
             logging.info('checking duration to make sure loaded...')
-            # while self.dmr.position_info().get('TrackDuration') == '00:00:00':
             while self._get_position_info() == '00:00:00':
                 sleep(0.5)
                 logging.info('Waiting for duration to be recognized correctly, url=%s', unquote(url))
@@ -217,7 +217,6 @@ class DMRTracker(Thread):
         except Exception as exc:
             logging.warning('DLNA load exception: %s', exc, exc_info=True)
             return False
-            
         return True
 
 
@@ -582,23 +581,6 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
         self.users.remove(self)
 
 
-class TestHandler(tornado.web.RequestHandler):
-    executor = ThreadPoolExecutor(99)
-    """test only"""
-    def data_received(self, chunk):
-        pass
-
-    def test(self):
-        sleep(1)
-        return 'test sleep 1'
-
-    @tornado.concurrent.run_on_executor
-    def get(self, *args, **kwargs):
-        x = TRACKER.async_run(self.test)
-        logging.info(x)
-        self.write(x)
-
-
 class ApiHandler(tornado.web.RequestHandler):
     # executor = ThreadPoolExecutor(99)
     """api test"""
@@ -653,11 +635,11 @@ class JsonRpc():
     @classmethod
     @check_dmr_exist_new
     def test(cls):
+        """test method"""
         return 'test'
 
 HANDLERS = [
     (r'/', IndexHandler),
-    (r'/test', TestHandler),  # test
     (r'/api', ApiHandler),
     (r'/fs/ls/(?P<path>.*)', FileSystemListHandler),
     (r'/fs/move/(?P<src>.*)', FileSystemMoveHandler),
