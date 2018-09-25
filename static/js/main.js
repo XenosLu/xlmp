@@ -8,6 +8,7 @@ var icon = {
 
 var server = new Proxy(function () {}, {
         get: function (target, method, receiver) {
+            console.log(receiver);
             var errorCallback = window.appView.out;
             console.log('loading method: ' + method);
             return function (params, callback) {
@@ -30,6 +31,17 @@ var server = new Proxy(function () {}, {
         }
     });
 
+function testClass() {
+    var obj = new Object;
+    obj.onerror=function (callback) {
+        obj.callback=callback;
+    }
+    return obj
+}
+console.log(axios.post);
+var x=testClass()
+x.onerror(console.log);
+    
 function dlnalink() {
     var ws = new WebSocket("ws://" + window.location.host + "/link");
     ws.onmessage = function (e) {
