@@ -30,25 +30,6 @@ var server = new Proxy(function () {}, {
             };
         }
     });
-// function jsonRPC(method, params, callback) {
-    // console.log(method);
-    // console.log(params);
-    // console.log(callback);
-    // axios.post('/api', {
-        // jsonrpc: '2.0',
-        // method: method,
-        // params: params,
-        // id: Math.floor(Math.random() * 9999),
-    // }).then(function (response) {
-        // console.log(response.data);
-        // if (response.data.hasOwnProperty('result')) {
-            // callback(response.data);
-        // } else
-            // window.appView.out(response.data.error);
-    // }).catch(function (error) {
-        // window.appView.out(error.response.statusText);
-    // });
-// }
 
 function test() {
     server.test(null);
@@ -139,7 +120,6 @@ window.appView = new Vue({
             mode: function () {
                 if (this.dlnaMode) {
                     window.document.title = "DMC - Light Media Player";
-                    // dlnaTouch();
                 } else if (this.wpMode) {
                     window.document.title = this.video.src + " - Light Media Player";
                     // if (this.isIos)
