@@ -370,8 +370,7 @@ window.appView = new Vue({
                 if (obj.type.indexOf("swipe") != -1) {
                     this.get("/dlna/seek/" + secondToTime(newtime));
                     console.log('swipe');
-                }
-                else
+                } else
                     console.log('pan');
             },
         },
