@@ -33,26 +33,8 @@ function jsonRPC(method, params, callback) {
 }
 
 function test() {
-    // jsonRPC('test', null, function (data) {
-        // console.log(data.result);
-    // })
     server.test(null);
 }
-
-// var server = {};
-// var rpc_cmds = ["test"];
-
-// rpc_cmds.forEach(function (cmd) {
-    // server[cmd] = function () {
-        // window.alertBox.show("warning", "");
-        // var kwargs = {
-            // method: cmd,
-            // args: arguments,
-        // };
-        // console.log("RPC command: " + JSON.stringify(kwargs));
-        // ws_link.send(JSON.stringify(kwargs));
-    // };
-// });
 
 function dlnalink() {
     var ws = new WebSocket("ws://" + window.location.host + "/link");
