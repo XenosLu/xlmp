@@ -659,6 +659,19 @@ class JsonRpc():
     def dlna_next(cls):
         return TRACKER.loadnext()
 
+    @classmethod
+    @check_dmr_exist_new
+    def dlna_load(cls, src, host):
+        if host.startswith('127.0.0.1'):
+            return 'should not use 127.0.0.1 as host to load throuh DLNA'
+        if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
+            logging.warning('File not found: %s', src)
+            return 'Error: File not found.'
+        logging.info('start loading...tracker state:%s', TRACKER.state.get('CurrentTransportState'))
+        TRACKER.url_prefix = 'http://%s/video/' % host
+        url = 'http://%s/video/%s' % (host, quote(src))
+        TRACKER.load(url)
+        return 'loading %s' % src
 
 HANDLERS = [
     (r'/', IndexHandler),
@@ -671,7 +684,7 @@ HANDLERS = [
     (r'/dlna/setdmr/(?P<dmr>.*)', SetDmrHandler),
     (r'/dlna/searchdmr', SearchDmrHandler),
     # (r'/dlna/vol/(?P<opt>\w*)', DlnaVolumeControlHandler),
-    (r'/dlna/next', DlnaNextHandler),
+    # (r'/dlna/next', DlnaNextHandler),
     (r'/dlna/load/(?P<src>.*)', DlnaLoadHandler),
     (r'/dlna/(?P<opt>\w*)/?(?P<progress>.*)', DlnaHandler),
     (r'/wp/save/(?P<src>.*)', SaveHandler),

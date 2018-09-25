@@ -293,7 +293,8 @@ window.appView = new Vue({
                     }
                 case "video":
                     if (this.dlnaMode)
-                        this.get("/dlna/load/" + obj);
+                        server.dlna_load({src: obj, host: window.location.host}, this.out);
+                    // this.get("/dlna/load/" + obj);
                     break;
                 default:
                 }
