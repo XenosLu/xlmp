@@ -319,6 +319,15 @@ def check_dmr_exist(func):
         return func(self, *args, **kwargs)
     return no_dmr
 
+def check_dmr_exist_new(func):
+    """Decorator: check DMR is available before do something relate to DLNA"""
+    def no_dmr(*args, **kwargs):
+        """check if DMR exist"""
+        if not TRACKER.dmr:
+            return 'No DMR.'
+        return func(*args, **kwargs)
+    return no_dmr
+
 
 def get_next_file(src):  # not strict enough
     """get next related video file"""
@@ -632,6 +641,7 @@ class JsonRpc():
                 result = 'Failed'
             val['result'] = result
         except AttributeError as exc:
+            logging.info(exc, exc_info=True)
             val['error'] = {"code": -32601, 'message': 'Method not found'}
         except TypeError as exc:
             val['error'] = {"code": -32602, 'message': 'Invalid params'}
@@ -640,7 +650,9 @@ class JsonRpc():
             val['error'] = {"code": -1, 'message': str(exc)}
         return val
 
+    
     @classmethod
+    @check_dmr_exist_new
     def test(cls):
         return 'test'
 
