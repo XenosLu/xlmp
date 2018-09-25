@@ -650,7 +650,6 @@ class JsonRpc():
             val['error'] = {"code": -1, 'message': str(exc)}
         return val
 
-    
     @classmethod
     @check_dmr_exist_new
     def test(cls):
