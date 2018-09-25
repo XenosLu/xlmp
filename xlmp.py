@@ -209,7 +209,8 @@ class DMRTracker(Thread):
             logging.info('checking duration to make sure loaded...')
             while self._get_position_info() == '00:00:00':
                 sleep(0.5)
-                logging.info('Waiting for duration to be recognized correctly, url=%s', unquote(url))
+                logging.info('Waiting for duration to be recognized correctly, url=%s',
+                             unquote(url))
                 if (time() - time0) > 15:
                     logging.info('Load duration timeout')
                     return False
@@ -633,10 +634,26 @@ class JsonRpc():
         return val
 
     @classmethod
-    @check_dmr_exist_new
     def test(cls):
         """test method"""
-        return 'test'
+        return
+
+    @classmethod
+    @check_dmr_exist_new
+    def dlna_vol(cls, opt):
+        """dlna volume adjuster"""
+        vol = int(TRACKER.dmr.get_volume())
+        if opt == 'up':
+            vol += 1
+        elif opt == 'down':
+            vol -= 1
+        if not 0 <= vol <= 100:
+            return 'Volume range exceeded'
+        elif TRACKER.dmr.volume(vol):
+            return (str(vol))
+        else:
+            return False
+
 
 HANDLERS = [
     (r'/', IndexHandler),

@@ -148,16 +148,19 @@ window.appView = new Vue({
         },
         methods: {
             test: function (obj, obj2) {
-                server.test(null, this.out);
+                // server.test(null, this.out);
+                server.dlna_vol(['up'], this.out);
                 // console.log(obj);
                 // console.log("test " + obj);
                 // this.out('test' + obj);
             },
             volUp: function (obj) {
-                this.get('/dlna/vol/up');
+                server.dlna_vol(['up'], this.out);
+                // this.get('/dlna/vol/up');
             },
             volDown: function (obj) {
-                this.get('/dlna/vol/down');
+                server.dlna_vol(['down'], this.out);
+                // this.get('/dlna/vol/down');
             },
             pressOpen: function (obj) {
                 var target = obj.target.tagName == 'TD' ? obj.target : obj.target.parentNode;
