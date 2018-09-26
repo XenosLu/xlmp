@@ -601,11 +601,11 @@ class JsonRpc():
     @classmethod
     def run(cls, json_obj):
         """run RPC method"""
-        logging.info(json_obj)
         val = {'jsonrpc': '2.0'}
         try:
             obj = json.loads(json_obj)
         except json.decoder.JSONDecodeError as exc:
+            logging.info(json_obj)
             logging.info(exc, exc_info=True)
             val['error'] = {"code": -32700, 'message': 'Parse error'}
             return val
