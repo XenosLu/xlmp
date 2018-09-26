@@ -616,6 +616,10 @@ class JsonRpc():
         return TRACKER.set_dmr(dmr)
 
     @classmethod
+    def save(cls, *args, **kwargs):
+        return save_history(*args, **kwargs)
+
+    @classmethod
     @check_dmr_exist_new
     def dlna_load(cls, src, host):
         if host.startswith('127.0.0.1'):

@@ -333,14 +333,20 @@ window.appView = new Vue({
             },
             videosave: function () {
                 this.video.lastplaytime = new Date().getTime(); //to detect if video is playing
-                if (this.$refs.video.readyState == 4 && Math.floor(Math.random() * 99) > 70) { //randomly save play position
-                    axios.post('/wp/save/' + this.video.src, {
+                // if (this.$refs.video.readyState == 4 && Math.floor(Math.random() * 99) > 70) { //randomly save play position
+                    // axios.post('/wp/save/' + this.video.src, {
+                        // position: this.$refs.video.currentTime,
+                        // duration: this.$refs.video.duration
+                    // }).catch(function (error) {
+                        // window.appView.out(error.response.statusText);
+                    // });
+                // }
+                if (this.$refs.video.readyState == 4 && Math.floor(Math.random() * 99) > 70)
+                    server.save({
+                        src: this.video.src,
                         position: this.$refs.video.currentTime,
-                        duration: this.$refs.video.duration
-                    }).catch(function (error) {
-                        window.appView.out(error.response.statusText);
-                    });
-                }
+                        duration: this.$refs.video.duration,
+                    }, null);
             },
             videoload: function () {
                 this.videoAdapt();
