@@ -309,7 +309,8 @@ window.appView = new Vue({
                 this.browserShow = false;
             },
             setDmr: function (dmr) {
-                this.get("/dlna/setdmr/" + dmr);
+                // this.get("/dlna/setdmr/" + dmr);
+                server.dlna_set_dmr({dmr: dmr});
             },
             positionSeek: function () {
                 var position = secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBarVal, this.positionBarMax));

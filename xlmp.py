@@ -468,25 +468,25 @@ class SystemCommandHandler(tornado.web.RequestHandler):
             raise tornado.web.HTTPError(403, reason='no such operation')
 
 
-class SetDmrHandler(tornado.web.RequestHandler):
-    """set dmr web interface"""
-    def data_received(self, chunk):
-        pass
+# class SetDmrHandler(tornado.web.RequestHandler):
+    # """set dmr web interface"""
+    # def data_received(self, chunk):
+        # pass
 
-    def get(self, *args, **kwargs):
-        if TRACKER.set_dmr(kwargs.get('dmr')):
-            self.finish('Done.')
-        else:
-            self.finish('Error: Failed!')
+    # def get(self, *args, **kwargs):
+        # if TRACKER.set_dmr(kwargs.get('dmr')):
+            # self.finish('Done.')
+        # else:
+            # self.finish('Error: Failed!')
 
 
-class SearchDmrHandler(tornado.web.RequestHandler):
-    """Mannually search DMR web interface"""
-    def data_received(self, chunk):
-        pass
+# class SearchDmrHandler(tornado.web.RequestHandler):
+    # """Mannually search DMR web interface"""
+    # def data_received(self, chunk):
+        # pass
 
-    def get(self, *args, **kwargs):
-        TRACKER.discover_dmr()
+    # def get(self, *args, **kwargs):
+        # TRACKER.discover_dmr()
 
 
 class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
@@ -608,6 +608,14 @@ class JsonRpc():
         return TRACKER.dmr.seek(position)
 
     @classmethod
+    def dlna_search(cls):
+        return TRACKER.discover_dmr()
+
+    @classmethod
+    def dlna_set_dmr(cls, dmr):
+        return TRACKER.set_dmr(dmr)
+
+    @classmethod
     @check_dmr_exist_new
     def dlna_load(cls, src, host):
         if host.startswith('127.0.0.1'):
@@ -629,8 +637,8 @@ HANDLERS = [
     (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
     (r'/sys/(?P<opt>\w*)', SystemCommandHandler),
     (r'/link', DlnaWebSocketHandler),
-    (r'/dlna/setdmr/(?P<dmr>.*)', SetDmrHandler),
-    (r'/dlna/searchdmr', SearchDmrHandler),
+    # (r'/dlna/setdmr/(?P<dmr>.*)', SetDmrHandler),
+    # (r'/dlna/searchdmr', SearchDmrHandler),
     (r'/dlna/playtoggle', DlnaPlayToggleHandler),  # can't be replaced for toggle
     (r'/wp/save/(?P<src>.*)', SaveHandler),
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
