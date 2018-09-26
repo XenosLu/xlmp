@@ -472,8 +472,6 @@ class DlnaHandler(tornado.web.RequestHandler):
                 TRACKER.loop_playback.clear()
             method = getattr(TRACKER.dmr, opt)
             ret = method()
-        elif opt == 'seek':
-            ret = TRACKER.dmr.seek(kwargs.get('progress'))
         elif opt == 'playtoggle':
             if TRACKER.state.get('CurrentTransportState') == 'PLAYING':
                 ret = TRACKER.dmr.pause()
@@ -700,7 +698,7 @@ HANDLERS = [
     # (r'/dlna/vol/(?P<opt>\w*)', DlnaVolumeControlHandler),
     # (r'/dlna/next', DlnaNextHandler),
     # (r'/dlna/load/(?P<src>.*)', DlnaLoadHandler),
-    (r'/dlna/(?P<opt>\w*)/?(?P<progress>.*)', DlnaHandler),  # can't be replaced for toggle
+    (r'/dlna/(?P<opt>\w*)', DlnaHandler),  # can't be replaced for toggle
     (r'/wp/save/(?P<src>.*)', SaveHandler),
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
 ]
