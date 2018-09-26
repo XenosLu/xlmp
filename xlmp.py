@@ -354,26 +354,26 @@ class IndexHandler(tornado.web.RequestHandler):
         self.render('index.html')
 
 
-class HistoryHandler(tornado.web.RequestHandler):
-    """Return play history list"""
-    def data_received(self, chunk):
-        pass
+# class HistoryHandler(tornado.web.RequestHandler):
+    # """Return play history list"""
+    # def data_received(self, chunk):
+        # pass
 
-    def get(self, *args, **kwargs):
-        opt = kwargs.get('opt')
-        if opt == 'ls':
-            pass
-        elif opt == 'clear':
-            run_sql('delete from history')
-        elif opt == 'rm':
-            run_sql('delete from history where FILENAME=?', unquote(kwargs.get('src')))
-        else:
-            raise tornado.web.HTTPError(404, reason='illegal operation')
-        self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
-                                  'latest_date': s[3], 'path': os.path.dirname(s[0]),
-                                  'exist': os.path.exists('%s/%s' % (VIDEO_PATH, s[0]))}
-                                 for s in run_sql('select * from history order by LATEST_DATE desc'
-                                                 )]})
+    # def get(self, *args, **kwargs):
+        # opt = kwargs.get('opt')
+        # if opt == 'ls':
+            # pass
+        # elif opt == 'clear':
+            # run_sql('delete from history')
+        # elif opt == 'rm':
+            # run_sql('delete from history where FILENAME=?', unquote(kwargs.get('src')))
+        # else:
+            # raise tornado.web.HTTPError(404, reason='illegal operation')
+        # self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
+                                  # 'latest_date': s[3], 'path': os.path.dirname(s[0]),
+                                  # 'exist': os.path.exists('%s/%s' % (VIDEO_PATH, s[0]))}
+                                 # for s in run_sql('select * from history order by LATEST_DATE desc'
+                                                 # )]})
 
 
 class FileSystemListHandler(tornado.web.RequestHandler):
@@ -615,6 +615,25 @@ class JsonRpc():
         return save_history(*args, **kwargs)
 
     @classmethod
+    def list_history(cls):
+        return {'history': [{
+            'filename': s[0], 'position': s[1], 'duration': s[2],
+            'latest_date': s[3], 'path': os.path.dirname(s[0]),
+            'exist': os.path.exists('%s/%s' % (VIDEO_PATH, s[0]))}
+            for s in run_sql('select * from history order by LATEST_DATE desc')]}
+
+    @classmethod
+    def clear_history(cls):
+        run_sql('delete from history')
+        return cls.list_history()
+
+    @classmethod
+    def remove_history(cls, src):
+        logging.info(src)
+        run_sql('delete from history where FILENAME=?', unquote(src))
+        return cls.list_history()
+
+    @classmethod
     @check_dmr_exist_new
     def dlna_load(cls, src, host):
         if host.startswith('127.0.0.1'):
@@ -633,7 +652,7 @@ HANDLERS = [
     (r'/api', ApiHandler),
     (r'/fs/ls/(?P<path>.*)', FileSystemListHandler),
     (r'/fs/move/(?P<src>.*)', FileSystemMoveHandler),
-    (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
+    # (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
     (r'/sys/(?P<opt>\w*)', SystemCommandHandler),
     (r'/link', DlnaWebSocketHandler),
     # (r'/dlna/setdmr/(?P<dmr>.*)', SetDmrHandler),

@@ -241,6 +241,10 @@ window.appView = new Vue({
                 if (this.browserShow && this.historyShow)
                     this.showHistory();
             },
+            historyCallBack: function (data) {
+                this.historyShow = true;
+                this.history = data.history;
+            },
             getHistory: function getHistory(str) {
                 axios.get(encodeURI(str))
                 .then(function (response) {
@@ -252,7 +256,8 @@ window.appView = new Vue({
                 });
             },
             showHistory: function () {
-                this.getHistory("/hist/ls");
+                // this.getHistory("/hist/ls");
+                server.list_history(null, this.historyCallBack);
             },
             showFs: function (path) {
                 axios.get(encodeURI(path))
@@ -266,10 +271,12 @@ window.appView = new Vue({
             },
             clearHistory: function () { // clear history button
                 if (confirm("Clear all history?"))
-                    this.getHistory("/hist/clear");
+                    server.clear_history(null, this.historyCallBack);
+                    // this.getHistory("/hist/clear");
             },
             remove: function (obj) {
-                this.getHistory("/hist/rm/" + obj.replace(/\?/g, "%3F")); //?to%3F #to%23
+                server.remove_history({src: obj}, this.historyCallBack);
+                // this.getHistory("/hist/rm/" + obj.replace(/\?/g, "%3F")); //?to%3F #to%23
             },
             move: function (obj) {
                 this.showFs("/fs/move/" + obj);
@@ -411,7 +418,7 @@ window.appView = new Vue({
                 };
                 lastTouchEnd = now;
             }, false);
-            this.showHistory();
+            // this.showHistory();
         },
     });
 
