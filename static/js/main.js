@@ -13,6 +13,8 @@ var server = new Proxy(function () {}, {
             console.log('loading method: ' + method);
             return function (params, callback) {
                 console.log(params);
+                if (typeof(callback) == "undefined")
+                    callback = errorCallback;
                 axios.post('/api', {
                     jsonrpc: '2.0',
                     method: method,
@@ -31,16 +33,6 @@ var server = new Proxy(function () {}, {
         }
     });
 
-function testClass() {
-    var obj = new Object;
-    obj.onerror=function (callback) {
-        obj.callback=callback;
-    }
-    return obj
-}
-console.log(axios.post);
-var x=testClass()
-x.onerror(console.log);
     
 function dlnalink() {
     var ws = new WebSocket("ws://" + window.location.host + "/link");
@@ -160,17 +152,17 @@ window.appView = new Vue({
         },
         methods: {
             test: function (obj, obj2) {
-                server.test(null, this.out);
+                server.test(null);
                 // console.log(obj);
                 // console.log("test " + obj);
                 // this.out('test' + obj);
             },
             volUp: function (obj) {
-                server.dlna_vol(['up'], this.out);
+                server.dlna_vol(['up']);
                 // this.get('/dlna/vol/up');
             },
             volDown: function (obj) {
-                server.dlna_vol(['down'], this.out);
+                server.dlna_vol(['down']);
                 // this.get('/dlna/vol/down');
             },
             pressOpen: function (obj) {
@@ -293,7 +285,7 @@ window.appView = new Vue({
                     }
                 case "video":
                     if (this.dlnaMode)
-                        server.dlna_load({src: obj, host: window.location.host}, this.out);
+                        server.dlna_load({src: obj, host: window.location.host});
                     // this.get("/dlna/load/" + obj);
                     break;
                 default:
