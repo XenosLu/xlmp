@@ -312,7 +312,9 @@ window.appView = new Vue({
                 this.get("/dlna/setdmr/" + dmr);
             },
             positionSeek: function () {
-                this.get("/dlna/seek/" + secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBarVal, this.positionBarMax)));
+                var position = secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBarVal, this.positionBarMax));
+                server.dlna_seek({position: position});
+                // this.get("/dlna/seek/" + position);
                 this.positionBarCanUpdate = true;
             },
             positionShow: function () {
@@ -370,7 +372,8 @@ window.appView = new Vue({
                 newtime = Math.min(newtime, this.positionBarMax);
                 this.out(secondToTime(newtime));
                 if (obj.type.indexOf("swipe") != -1) {
-                    this.get("/dlna/seek/" + secondToTime(newtime));
+                    // this.get("/dlna/seek/" + secondToTime(newtime));
+                    server.dlna_seek({position: secondToTime(newtime)});
                     console.log('swipe');
                 } else
                     console.log('pan');

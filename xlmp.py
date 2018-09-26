@@ -661,14 +661,17 @@ class JsonRpc():
 
     @classmethod
     @check_dmr_exist_new
-    def dlna(cls, opt, progress=None):
+    def dlna(cls, opt):
         if opt in ('play', 'pause', 'stop'):
             if opt == 'stop':
                 TRACKER.loop_playback.clear()
             method = getattr(TRACKER.dmr, opt)
             return method()
-        elif opt == 'seek':
-            return TRACKER.dmr.seek(progress)
+
+    @classmethod
+    @check_dmr_exist_new
+    def dlna_seek(cls, position):
+        return TRACKER.dmr.seek(position)
 
     @classmethod
     @check_dmr_exist_new
