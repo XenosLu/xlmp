@@ -407,22 +407,17 @@ class FileSystemMoveHandler(tornado.web.RequestHandler):
         self.finish(ls_dir('%s/' % os.path.dirname(src)))
 
 
-class SaveHandler(tornado.web.RequestHandler):
-    """Save play history"""
-    executor = ThreadPoolExecutor(5)
+# class SaveHandler(tornado.web.RequestHandler):
+    # """Save play history"""
+    # executor = ThreadPoolExecutor(5)
 
-    def data_received(self, chunk):
-        pass
+    # def data_received(self, chunk):
+        # pass
 
-    @tornado.concurrent.run_on_executor
-    def post(self, *args, **kwargs):
-        arguments = json.loads(self.request.body.decode())
-        # position = arguments.get('position', 0)
-        # duration = arguments.get('duration', 0)
-        # position = self.get_argument('position', 0)
-        # duration = self.get_argument('duration', 0)
-        # save_history(kwargs.get('src'), position, duration)
-        save_history(kwargs.get('src'), **arguments)
+    # @tornado.concurrent.run_on_executor
+    # def post(self, *args, **kwargs):
+        # arguments = json.loads(self.request.body.decode())
+        # save_history(kwargs.get('src'), **arguments)
 
 
 class DlnaPlayToggleHandler(tornado.web.RequestHandler):
@@ -644,7 +639,7 @@ HANDLERS = [
     # (r'/dlna/setdmr/(?P<dmr>.*)', SetDmrHandler),
     # (r'/dlna/searchdmr', SearchDmrHandler),
     (r'/dlna/playtoggle', DlnaPlayToggleHandler),  # can't be replaced for toggle
-    (r'/wp/save/(?P<src>.*)', SaveHandler),
+    # (r'/wp/save/(?P<src>.*)', SaveHandler),
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
 ]
 
