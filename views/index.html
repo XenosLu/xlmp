@@ -52,7 +52,7 @@
             <i class="oi oi-clock"></i>
             <small class="d-sm-inline d-none">History</small>
           </b-btn>
-          <b-btn @click="showFs('/fs/ls/')" :pressed="!historyShow" variant="outline-dark">
+          <b-btn @click="server.file_list({path: '/'}, fileSystemCallBack)" :pressed="!historyShow" variant="outline-dark">
             <i class="oi oi-home"></i>
             <small class="d-sm-inline d-none">Home dir</small>
           </b-btn>
@@ -163,7 +163,7 @@
             </table>
             <table v-show="!historyShow" class="table table-striped table-sm">
               <tr v-for="item in filelist">
-                <td v-show="editMode">
+                <td v-show="editMode" class="iconOnly">
                   <b-btn variant="danger" @click="move(item.path)">
                     <i class="oi oi-circle-x"></i>
                   </b-btn>

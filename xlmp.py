@@ -376,35 +376,35 @@ class IndexHandler(tornado.web.RequestHandler):
                                                  # )]})
 
 
-class FileSystemListHandler(tornado.web.RequestHandler):
-    """Get static folder list in json"""
-    def data_received(self, chunk):
-        pass
+# class FileSystemListHandler(tornado.web.RequestHandler):
+    # """Get static folder list in json"""
+    # def data_received(self, chunk):
+        # pass
 
-    def get(self, *args, **kwargs):
-        try:
-            self.finish(ls_dir(kwargs.get('path')))
-        except Exception as exc:
-            raise tornado.web.HTTPError(404, reason=str(exc))
+    # def get(self, *args, **kwargs):
+        # try:
+            # self.finish(ls_dir(kwargs.get('path')))
+        # except Exception as exc:
+            # raise tornado.web.HTTPError(404, reason=str(exc))
 
 
-class FileSystemMoveHandler(tornado.web.RequestHandler):
-    """Move file to '.old' folder"""
-    def data_received(self, chunk):
-        pass
+# class FileSystemMoveHandler(tornado.web.RequestHandler):
+    # """Move file to '.old' folder"""
+    # def data_received(self, chunk):
+        # pass
 
-    def get(self, *args, **kwargs):
-        src = kwargs.get('src')
-        filename = '%s/%s' % (VIDEO_PATH, src)
-        dir_old = '%s/%s/.old' % (VIDEO_PATH, os.path.dirname(src))
-        if not os.path.exists(dir_old):
-            os.mkdir(dir_old)
-        try:
-            shutil.move(filename, dir_old)  # gonna do something when file is occupied
-        except Exception as exc:
-            logging.warning('move file failed: %s', exc)
-            raise tornado.web.HTTPError(404, reason=str(exc))
-        self.finish(ls_dir('%s/' % os.path.dirname(src)))
+    # def get(self, *args, **kwargs):
+        # src = kwargs.get('src')
+        # filename = '%s/%s' % (VIDEO_PATH, src)
+        # dir_old = '%s/%s/.old' % (VIDEO_PATH, os.path.dirname(src))
+        # if not os.path.exists(dir_old):
+            # os.mkdir(dir_old)
+        # try:
+            # shutil.move(filename, dir_old)  # gonna do something when file is occupied
+        # except Exception as exc:
+            # logging.warning('move file failed: %s', exc)
+            # raise tornado.web.HTTPError(404, reason=str(exc))
+        # self.finish(ls_dir('%s/' % os.path.dirname(src)))
 
 
 # class SaveHandler(tornado.web.RequestHandler):
@@ -647,11 +647,29 @@ class JsonRpc():
         TRACKER.load(url)
         return 'loading %s' % src
 
+    @classmethod
+    def file_list(cls, path):
+        return ls_dir(path)
+
+    @classmethod
+    def file_move(cls, src):
+        filename = '%s/%s' % (VIDEO_PATH, src)
+        dir_old = '%s/%s/.old' % (VIDEO_PATH, os.path.dirname(src))
+        if not os.path.exists(dir_old):
+            os.mkdir(dir_old)
+        try:
+            shutil.move(filename, dir_old)  # gonna do something when file is occupied
+        except Exception as exc:
+            logging.warning('move file failed: %s', exc)
+            return False
+        return ls_dir('%s/' % os.path.dirname(src))
+
+
 HANDLERS = [
     (r'/', IndexHandler),
     (r'/api', ApiHandler),
-    (r'/fs/ls/(?P<path>.*)', FileSystemListHandler),
-    (r'/fs/move/(?P<src>.*)', FileSystemMoveHandler),
+    # (r'/fs/ls/(?P<path>.*)', FileSystemListHandler),
+    # (r'/fs/move/(?P<src>.*)', FileSystemMoveHandler),
     # (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
     (r'/sys/(?P<opt>\w*)', SystemCommandHandler),
     (r'/link', DlnaWebSocketHandler),

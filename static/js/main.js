@@ -259,6 +259,10 @@ window.appView = new Vue({
                 // this.getHistory("/hist/ls");
                 server.list_history(null, this.historyCallBack);
             },
+            fileSystemCallBack: function (data) {
+                this.historyShow = false;
+                this.filelist = data.filesystem;
+            },
             showFs: function (path) {
                 axios.get(encodeURI(path))
                 .then(function (response) {
@@ -279,12 +283,14 @@ window.appView = new Vue({
                 // this.getHistory("/hist/rm/" + obj.replace(/\?/g, "%3F")); //?to%3F #to%23
             },
             move: function (obj) {
-                this.showFs("/fs/move/" + obj);
+                // this.showFs("/fs/move/" + obj);
+                server.file_move({src: obj}, this.fileSystemCallBack);
             },
             open: function (obj, type) {
                 switch (type) {
                 case "folder":
-                    this.showFs("/fs/ls/" + obj + "/");
+                    server.file_list({path: obj}, this.fileSystemCallBack);
+                    // this.showFs("/fs/ls/" + obj + "/");
                     break;
                 case "mp4":
                     if (!this.dlnaMode) {
