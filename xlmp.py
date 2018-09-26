@@ -580,8 +580,7 @@ class JsonRpc():
             return 'Volume range exceeded'
         elif TRACKER.dmr.volume(vol):
             return (str(vol))
-        else:
-            return False
+        return False
 
     @classmethod
     @check_dmr_exist_new
@@ -591,6 +590,7 @@ class JsonRpc():
     @classmethod
     @check_dmr_exist_new
     def dlna(cls, opt):
+        """dlna commands"""
         if opt in ('play', 'pause', 'stop'):
             if opt == 'stop':
                 TRACKER.loop_playback.clear()
