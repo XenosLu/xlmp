@@ -425,85 +425,21 @@ class SaveHandler(tornado.web.RequestHandler):
         save_history(kwargs.get('src'), **arguments)
 
 
-# class DlnaLoadHandler(tornado.web.RequestHandler):
-    # """DLNA load file web interface"""
-    # def data_received(self, chunk):
-        # pass
-
-    # @check_dmr_exist
-    # def get(self, *args, **kwargs):
-        # src = kwargs.get('src')
-        # srv_host = self.request.headers['Host']
-        # if srv_host.startswith('127.0.0.1'):
-            # self.finish('should not use 127.0.0.1 as host to load throuh DLNA')
-            # return
-        # if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
-            # logging.warning('File not found: %s', src)
-            # self.finish('Error: File not found.')
-            # return
-        # logging.info('start loading...tracker state:%s', TRACKER.state.get('CurrentTransportState'))
-        # TRACKER.url_prefix = 'http://%s/video/' % srv_host
-        # url = 'http://%s/video/%s' % (srv_host, quote(src))
-        # TRACKER.load(url)
-        # self.finish('loading %s' % src)
-
-
-class DlnaNextHandler(tornado.web.RequestHandler):
-    """DLNA jump to next video file web interface"""
-    def data_received(self, chunk):
-        pass
-
-    @check_dmr_exist
-    def get(self, *args, **kwargs):
-        if not TRACKER.loadnext():
-            self.finish({'warning': "Can't get next file"})
-
-
-class DlnaHandler(tornado.web.RequestHandler):
+class DlnaPlayToggleHandler(tornado.web.RequestHandler):
     """DLNA operation web interface"""
     def data_received(self, chunk):
         pass
 
     @check_dmr_exist
     def get(self, *args, **kwargs):
-        opt = kwargs.get('opt')
-        if opt in ('play', 'pause', 'stop'):
-            if opt == 'stop':
-                TRACKER.loop_playback.clear()
-            method = getattr(TRACKER.dmr, opt)
-            ret = method()
-        elif opt == 'playtoggle':
-            if TRACKER.state.get('CurrentTransportState') == 'PLAYING':
-                ret = TRACKER.dmr.pause()
-            else:
-                ret = TRACKER.dmr.play()
+        if TRACKER.state.get('CurrentTransportState') == 'PLAYING':
+            ret = TRACKER.dmr.pause()
         else:
-            return
+            ret = TRACKER.dmr.play()
         if ret:
             self.finish({'success': 'opt: %s ' % opt})
         if not ret:
             self.finish({'error': 'Failed!'})
-
-
-# class DlnaVolumeControlHandler(tornado.web.RequestHandler):
-    # """Tune volume through DLNA web interface"""
-    # def data_received(self, chunk):
-        # pass
-
-    # @check_dmr_exist
-    # def get(self, *args, **kwargs):
-        # opt = kwargs.get('opt')
-        # vol = int(TRACKER.dmr.get_volume())
-        # if opt == 'up':
-            # vol += 1
-        # elif opt == 'down':
-            # vol -= 1
-        # if not 0 <= vol <= 100:
-            # self.finish({'warning':'volume range exceeded'})
-        # elif TRACKER.dmr.volume(vol):
-            # self.finish(str(vol))
-        # else:
-            # self.finish({'error': 'failed'})
 
 
 class SystemCommandHandler(tornado.web.RequestHandler):
@@ -695,10 +631,7 @@ HANDLERS = [
     (r'/link', DlnaWebSocketHandler),
     (r'/dlna/setdmr/(?P<dmr>.*)', SetDmrHandler),
     (r'/dlna/searchdmr', SearchDmrHandler),
-    # (r'/dlna/vol/(?P<opt>\w*)', DlnaVolumeControlHandler),
-    # (r'/dlna/next', DlnaNextHandler),
-    # (r'/dlna/load/(?P<src>.*)', DlnaLoadHandler),
-    (r'/dlna/(?P<opt>\w*)', DlnaHandler),  # can't be replaced for toggle
+    (r'/dlna/playtoggle', DlnaPlayToggleHandler),  # can't be replaced for toggle
     (r'/wp/save/(?P<src>.*)', SaveHandler),
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
 ]
