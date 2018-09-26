@@ -45,7 +45,7 @@ function dlnalink() {
         window.appView.dlnaInfo.CurrentTransportState = 'disconnected';
     };
     ws.onerror = function () {
-        console.log('error');
+        console.log('connection lost');
     };
     ws.check = function () {
         if (this.readyState == 3)
