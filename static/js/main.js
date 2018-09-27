@@ -242,18 +242,7 @@ window.appView = new Vue({
                 this.historyShow = true;
                 this.history = data.history;
             },
-            getHistory: function getHistory(str) {
-                axios.get(encodeURI(str))
-                .then(function (response) {
-                    window.appView.historyShow = true;
-                    window.appView.history = response.data.history;
-                })
-                .catch(function (error) {
-                    window.appView.out(error.response.statusText);
-                });
-            },
             showHistory: function () {
-                // this.getHistory("/hist/ls");
                 server.list_history(null, this.historyCallBack);
             },
             fileSystemCallBack: function (data) {
@@ -273,11 +262,9 @@ window.appView = new Vue({
             clearHistory: function () { // clear history button
                 if (confirm("Clear all history?"))
                     server.clear_history(null, this.historyCallBack);
-                    // this.getHistory("/hist/clear");
             },
             remove: function (obj) {
                 server.remove_history({src: obj}, this.historyCallBack);
-                // this.getHistory("/hist/rm/" + obj.replace(/\?/g, "%3F")); //?to%3F #to%23
             },
             move: function (obj) {
                 // this.showFs("/fs/move/" + obj);
