@@ -354,59 +354,6 @@ class IndexHandler(tornado.web.RequestHandler):
         self.render('index.html')
 
 
-# class HistoryHandler(tornado.web.RequestHandler):
-    # """Return play history list"""
-    # def data_received(self, chunk):
-        # pass
-
-    # def get(self, *args, **kwargs):
-        # opt = kwargs.get('opt')
-        # if opt == 'ls':
-            # pass
-        # elif opt == 'clear':
-            # run_sql('delete from history')
-        # elif opt == 'rm':
-            # run_sql('delete from history where FILENAME=?', unquote(kwargs.get('src')))
-        # else:
-            # raise tornado.web.HTTPError(404, reason='illegal operation')
-        # self.finish({'history': [{'filename': s[0], 'position': s[1], 'duration': s[2],
-                                  # 'latest_date': s[3], 'path': os.path.dirname(s[0]),
-                                  # 'exist': os.path.exists('%s/%s' % (VIDEO_PATH, s[0]))}
-                                 # for s in run_sql('select * from history order by LATEST_DATE desc'
-                                                 # )]})
-
-
-# class FileSystemListHandler(tornado.web.RequestHandler):
-    # """Get static folder list in json"""
-    # def data_received(self, chunk):
-        # pass
-
-    # def get(self, *args, **kwargs):
-        # try:
-            # self.finish(ls_dir(kwargs.get('path')))
-        # except Exception as exc:
-            # raise tornado.web.HTTPError(404, reason=str(exc))
-
-
-# class FileSystemMoveHandler(tornado.web.RequestHandler):
-    # """Move file to '.old' folder"""
-    # def data_received(self, chunk):
-        # pass
-
-    # def get(self, *args, **kwargs):
-        # src = kwargs.get('src')
-        # filename = '%s/%s' % (VIDEO_PATH, src)
-        # dir_old = '%s/%s/.old' % (VIDEO_PATH, os.path.dirname(src))
-        # if not os.path.exists(dir_old):
-            # os.mkdir(dir_old)
-        # try:
-            # shutil.move(filename, dir_old)  # gonna do something when file is occupied
-        # except Exception as exc:
-            # logging.warning('move file failed: %s', exc)
-            # raise tornado.web.HTTPError(404, reason=str(exc))
-        # self.finish(ls_dir('%s/' % os.path.dirname(src)))
-
-
 class DlnaPlayToggleHandler(tornado.web.RequestHandler):
     """DLNA operation web interface"""
     def data_received(self, chunk):
@@ -448,27 +395,6 @@ class SystemCommandHandler(tornado.web.RequestHandler):
             self.finish(shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE))
         else:
             raise tornado.web.HTTPError(403, reason='no such operation')
-
-
-# class SetDmrHandler(tornado.web.RequestHandler):
-    # """set dmr web interface"""
-    # def data_received(self, chunk):
-        # pass
-
-    # def get(self, *args, **kwargs):
-        # if TRACKER.set_dmr(kwargs.get('dmr')):
-            # self.finish('Done.')
-        # else:
-            # self.finish('Error: Failed!')
-
-
-# class SearchDmrHandler(tornado.web.RequestHandler):
-    # """Mannually search DMR web interface"""
-    # def data_received(self, chunk):
-        # pass
-
-    # def get(self, *args, **kwargs):
-        # TRACKER.discover_dmr()
 
 
 class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
@@ -656,13 +582,8 @@ class JsonRpc():
 HANDLERS = [
     (r'/', IndexHandler),
     (r'/api', ApiHandler),
-    # (r'/fs/ls/(?P<path>.*)', FileSystemListHandler),
-    # (r'/fs/move/(?P<src>.*)', FileSystemMoveHandler),
-    # (r'/hist/(?P<opt>\w*)/?(?P<src>.*)', HistoryHandler),
     (r'/sys/(?P<opt>\w*)', SystemCommandHandler),
     (r'/link', DlnaWebSocketHandler),
-    # (r'/dlna/setdmr/(?P<dmr>.*)', SetDmrHandler),
-    # (r'/dlna/searchdmr', SearchDmrHandler),
     (r'/dlna/playtoggle', DlnaPlayToggleHandler),  # can't be replaced for toggle
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
 ]
