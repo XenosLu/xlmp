@@ -13,7 +13,7 @@ import json
 from threading import Thread, Event
 from urllib.parse import quote, unquote
 from time import sleep, time
-from concurrent.futures import ThreadPoolExecutor
+# from concurrent.futures import ThreadPoolExecutor
 
 import tornado.web
 import tornado.websocket
@@ -536,10 +536,10 @@ class JsonRpc():
     @classmethod
     def list_history(cls):
         """get play history"""
-        return {'history': [{
-            'filename': s[0], 'position': s[1], 'duration': s[2],
-            'latest_date': s[3], 'path': os.path.dirname(s[0]),
-            'exist': os.path.exists('%s/%s' % (VIDEO_PATH, s[0]))}
+        return {'history': [
+            {'filename': s[0], 'position': s[1], 'duration': s[2],
+             'latest_date': s[3], 'path': os.path.dirname(s[0]),
+             'exist': os.path.exists('%s/%s' % (VIDEO_PATH, s[0]))}
             for s in run_sql('select * from history order by LATEST_DATE desc')]}
 
     @classmethod
