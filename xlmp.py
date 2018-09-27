@@ -241,33 +241,6 @@ def run_sql(sql, *args):
     return ret
 
 
-def ls_dir(path):
-    """list dir files in dict/json"""
-    if path == '/':
-        path = ''
-    parent, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
-    if path:
-        path = re.sub('([^/])$', '\\1/', path)  # make sure path end with '/'
-        parent = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]
-    dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))
-    for filename in dir_list:
-        if filename.startswith('.'):
-            continue
-        if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
-            list_folder.append({'filename': filename, 'type': 'folder',
-                                'path': '%s%s' % (path, filename)})
-        elif re.match('.*\\.((?i)mp)4$', filename):
-            list_mp4.append({'filename': filename, 'type': 'mp4',
-                             'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-        elif re.match('.*\\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
-            list_video.append({'filename': filename, 'type': 'video',
-                               'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
-        else:
-            list_other.append({'filename': filename, 'type': 'other',
-                               'path': '%s%s' % (path, filename)})
-    return {'filesystem': (parent + list_folder + list_mp4 + list_video + list_other)}
-
-
 def second_to_time(second):
     """ Turn time in seconds into "hh:mm:ss" format
 
@@ -304,14 +277,6 @@ def hist_load(name):
     if position:
         return position[0][0]
     return 0
-
-
-def save_history(src, position, duration):
-    """save play history to database"""
-    if float(position) < 10:
-        return
-    run_sql('''replace into history (FILENAME, POSITION, DURATION, LATEST_DATE)
-               values(? , ?, ?, DateTime('now', 'localtime'));''', src, position, duration)
 
 
 def check_dmr_exist(func):
@@ -544,10 +509,20 @@ def dlna_set_dmr(dmr):
     """dlna set a DMR as current"""
     return TRACKER.set_dmr(dmr)
 
+
 @JsonRpc.method
-def save(*args, **kwargs):
-    """Save play history"""
-    return save_history(*args, **kwargs)
+def save_history(src, position, duration):
+    """save play history to database"""
+    if float(position) < 10:
+        return
+    run_sql('''replace into history (FILENAME, POSITION, DURATION, LATEST_DATE)
+               values(? , ?, ?, DateTime('now', 'localtime'));''', src, position, duration)
+
+
+# @JsonRpc.method
+# def save(*args, **kwargs):
+    # """Save play history"""
+    # return save_history(*args, **kwargs)
 
 
 @JsonRpc.method
@@ -590,6 +565,7 @@ def dlna_load(src, host):
     TRACKER.load(url)
     return 'loading %s' % src
 
+
 @JsonRpc.method
 def file_move(src):
     """move file to .old folder and hide it"""
@@ -602,12 +578,42 @@ def file_move(src):
     except Exception as exc:
         logging.warning('move file failed: %s', exc)
         return False
-    return ls_dir('%s/' % os.path.dirname(src))
+    return file_list('%s/' % os.path.dirname(src))
+
 
 @JsonRpc.method
 def file_list(path):
-    """list file"""
-    return ls_dir(path)
+    """list dir files in dict/json"""
+    if path == '/':
+        path = ''
+    parent, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
+    if path:
+        path = re.sub('([^/])$', '\\1/', path)  # make sure path end with '/'
+        parent = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]
+    dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))
+    for filename in dir_list:
+        if filename.startswith('.'):
+            continue
+        if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
+            list_folder.append({'filename': filename, 'type': 'folder',
+                                'path': '%s%s' % (path, filename)})
+        elif re.match('.*\\.((?i)mp)4$', filename):
+            list_mp4.append({'filename': filename, 'type': 'mp4',
+                             'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+        elif re.match('.*\\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
+            list_video.append({'filename': filename, 'type': 'video',
+                               'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+        else:
+            list_other.append({'filename': filename, 'type': 'other',
+                               'path': '%s%s' % (path, filename)})
+    return {'filesystem': (parent + list_folder + list_mp4 + list_video + list_other)}
+
+
+# @JsonRpc.method
+# def file_list(path):
+    # """list file"""
+    # return ls_dir(path)
+
 
 @JsonRpc.method
 def test():
