@@ -326,12 +326,13 @@ def check_dmr_exist(func):
 
 def check_dmr_exist_new(func):
     """Decorator: check DMR is available before do something relate to DLNA"""
-    def no_dmr(*args, **kwargs):
+    def wrapper(*args, **kwargs):
         """check if DMR exist"""
-        if not TRACKER.dmr:
-            return 'No DMR.'
-        return func(*args, **kwargs)
-    return no_dmr
+        if TRACKER.dmr:
+            return func(*args, **kwargs)
+        return 'No DMR.'
+    wrapper.__name__ = func.__name__
+    return wrapper
 
 
 def get_next_file(src):  # not strict enough
@@ -487,111 +488,116 @@ class JsonRpc():
             logging.warning('method name "%s" has been occupied in JsonRpc', func.__name__)
         else:
             setattr(cls, func.__name__, func)
+            logging.info('%s has been registered as JsonRpc method', func.__name__)
         return func
 
-    @classmethod
-    @check_dmr_exist_new
-    def dlna_vol(cls, opt):
-        """dlna volume adjuster"""
-        vol = int(TRACKER.dmr.get_volume())
-        if opt == 'up':
-            vol += 1
-        elif opt == 'down':
-            vol -= 1
-        if not 0 <= vol <= 100:
-            return 'Volume range exceeded'
-        if TRACKER.dmr.volume(vol):
-            return str(vol)
+@JsonRpc.method
+@check_dmr_exist_new
+def dlna_vol(opt):
+    """dlna volume adjuster"""
+    vol = int(TRACKER.dmr.get_volume())
+    if opt == 'up':
+        vol += 1
+    elif opt == 'down':
+        vol -= 1
+    if not 0 <= vol <= 100:
+        return 'Volume range exceeded'
+    if TRACKER.dmr.volume(vol):
+        return str(vol)
+    return False
+
+@JsonRpc.method
+@check_dmr_exist_new
+def dlna_next():
+    """dlna load next media"""
+    return TRACKER.loadnext()
+
+@JsonRpc.method
+@check_dmr_exist_new
+def dlna(opt):
+    """dlna commands"""
+    if opt in ('play', 'pause', 'stop'):
+        if opt == 'stop':
+            TRACKER.loop_playback.clear()
+        method = getattr(TRACKER.dmr, opt)
+        return method()
+    return 'wrong option'
+
+@JsonRpc.method
+@check_dmr_exist_new
+def dlna_seek(position):
+    """dlna seek to new position"""
+    return TRACKER.dmr.seek(position)
+
+@JsonRpc.method
+def dlna_search():
+    """search dlna DMR"""
+    return TRACKER.discover_dmr()
+
+@JsonRpc.method
+def dlna_set_dmr(dmr):
+    """dlna set a DMR as current"""
+    return TRACKER.set_dmr(dmr)
+
+@JsonRpc.method
+def save(*args, **kwargs):
+    """Save play history"""
+    return save_history(*args, **kwargs)
+
+
+@JsonRpc.method
+def list_history():
+    """get play history"""
+    return {'history': [
+        {'filename': s[0], 'position': s[1], 'duration': s[2],
+         'latest_date': s[3], 'path': os.path.dirname(s[0]),
+         'exist': os.path.exists('%s/%s' % (VIDEO_PATH, s[0]))}
+        for s in run_sql('select * from history order by LATEST_DATE desc')]}
+
+
+@JsonRpc.method
+def clear_history():
+    """clear all history"""
+    run_sql('delete from history')
+    return list_history()
+
+
+@JsonRpc.method
+def remove_history(src):
+    """remove an item from history"""
+    logging.info(src)
+    run_sql('delete from history where FILENAME=?', unquote(src))
+    return list_history()
+
+
+@JsonRpc.method
+@check_dmr_exist_new
+def dlna_load(src, host):
+    """load a video through DMR"""
+    if host.startswith('127.0.0.1'):
+        return 'should not use 127.0.0.1 as host to load throuh DLNA'
+    if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
+        logging.warning('File not found: %s', src)
+        return 'Error: File not found.'
+    logging.info('start loading...tracker state:%s', TRACKER.state.get('CurrentTransportState'))
+    TRACKER.url_prefix = 'http://%s/video/' % host
+    url = 'http://%s/video/%s' % (host, quote(src))
+    TRACKER.load(url)
+    return 'loading %s' % src
+
+@JsonRpc.method
+def file_move(src):
+    """move file to .old folder and hide it"""
+    filename = '%s/%s' % (VIDEO_PATH, src)
+    dir_old = '%s/%s/.old' % (VIDEO_PATH, os.path.dirname(src))
+    if not os.path.exists(dir_old):
+        os.mkdir(dir_old)
+    try:
+        shutil.move(filename, dir_old)  # gonna do something when file is occupied
+    except Exception as exc:
+        logging.warning('move file failed: %s', exc)
         return False
-
-    @classmethod
-    @check_dmr_exist_new
-    def dlna_next(cls):
-        """dlna load next media"""
-        return TRACKER.loadnext()
-
-    @classmethod
-    @check_dmr_exist_new
-    def dlna(cls, opt):
-        """dlna commands"""
-        if opt in ('play', 'pause', 'stop'):
-            if opt == 'stop':
-                TRACKER.loop_playback.clear()
-            method = getattr(TRACKER.dmr, opt)
-            return method()
-        return 'wrong option'
-
-    @classmethod
-    @check_dmr_exist_new
-    def dlna_seek(cls, position):
-        """dlna seek to new position"""
-        return TRACKER.dmr.seek(position)
-
-    @classmethod
-    def dlna_search(cls):
-        """search dlna DMR"""
-        return TRACKER.discover_dmr()
-
-    @classmethod
-    def dlna_set_dmr(cls, dmr):
-        """dlna set a DMR as current"""
-        return TRACKER.set_dmr(dmr)
-
-    @classmethod
-    def save(cls, *args, **kwargs):
-        """Save play history"""
-        return save_history(*args, **kwargs)
-
-    @classmethod
-    def list_history(cls):
-        """get play history"""
-        return {'history': [
-            {'filename': s[0], 'position': s[1], 'duration': s[2],
-             'latest_date': s[3], 'path': os.path.dirname(s[0]),
-             'exist': os.path.exists('%s/%s' % (VIDEO_PATH, s[0]))}
-            for s in run_sql('select * from history order by LATEST_DATE desc')]}
-
-    @classmethod
-    def clear_history(cls):
-        """clear all history"""
-        run_sql('delete from history')
-        return cls.list_history()
-
-    @classmethod
-    def remove_history(cls, src):
-        """remove an item from history"""
-        logging.info(src)
-        run_sql('delete from history where FILENAME=?', unquote(src))
-        return cls.list_history()
-
-    @classmethod
-    @check_dmr_exist_new
-    def dlna_load(cls, src, host):
-        """load a video through DMR"""
-        if host.startswith('127.0.0.1'):
-            return 'should not use 127.0.0.1 as host to load throuh DLNA'
-        if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
-            logging.warning('File not found: %s', src)
-            return 'Error: File not found.'
-        logging.info('start loading...tracker state:%s', TRACKER.state.get('CurrentTransportState'))
-        TRACKER.url_prefix = 'http://%s/video/' % host
-        url = 'http://%s/video/%s' % (host, quote(src))
-        TRACKER.load(url)
-        return 'loading %s' % src
-
-    @classmethod
-    def file_move(cls, src):
-        """move file to .old folder and hide it"""
-        filename = '%s/%s' % (VIDEO_PATH, src)
-        dir_old = '%s/%s/.old' % (VIDEO_PATH, os.path.dirname(src))
-        if not os.path.exists(dir_old):
-            os.mkdir(dir_old)
-        try:
-            shutil.move(filename, dir_old)  # gonna do something when file is occupied
-        except Exception as exc:
-            logging.warning('move file failed: %s', exc)
-            return False
-        return ls_dir('%s/' % os.path.dirname(src))
+    return ls_dir('%s/' % os.path.dirname(src))
 
 @JsonRpc.method
 def file_list(path):
