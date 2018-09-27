@@ -45,12 +45,10 @@ function touchWebPlayer() {
         console.log(ev);
         console.log(ev.type);
     });
-
-hammertimeVideo.get('swipe').set({
+    hammertimeVideo.get('swipe').set({
         velocity: 0.01
     });
 }
-
 window.appView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-main',
