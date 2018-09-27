@@ -81,7 +81,6 @@
             </b-nav-item-dropdown>
           <!-- dlna dmr menu -->
             <b-nav-item-dropdown v-show="dlnaMode" right :text="dlnaInfo.CurrentDMR">
-              <!-- <b-dropdown-item @click="get('/dlna/searchdmr');">Search DMR</b-dropdown-item> -->
               <b-dropdown-item @click="server.dlna_search()">Search DMR</b-dropdown-item>
               <b-dropdown-divider></b-dropdown-divider>
               <b-dropdown-item v-for="item in dlnaInfo.DMRs" @click="setDmr(item)">
@@ -94,10 +93,6 @@
               <template slot="button-content">
                 Seek
               </template>
-              <!-- <b-dropdown-item @click="get('/dlna/seek/00:00:15')">00:15</b-dropdown-item> -->
-              <!-- <b-dropdown-item @click="get('/dlna/seek/00:00:29')">00:30</b-dropdown-item> -->
-              <!-- <b-dropdown-item @click="get('/dlna/seek/00:01:00')">01:00</b-dropdown-item> -->
-              <!-- <b-dropdown-item @click="get('/dlna/seek/00:01:30')">01:30</b-dropdown-item> -->
               <b-dropdown-item @click="server.dlna_seek({position: '00:00:15'})">00:15</b-dropdown-item>
               <b-dropdown-item @click="server.dlna_seek({position: '00:00:29'})">00:30</b-dropdown-item>
               <b-dropdown-item @click="server.dlna_seek({position: '00:01:00'})">01:00</b-dropdown-item>
