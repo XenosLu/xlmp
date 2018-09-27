@@ -127,6 +127,7 @@ input[type=range]::-moz-range-thumb {
     padding: 0.2em;
     border: 1px solid #777777;
     /* box-shadow: 0.5em 0.5em 6em #AAAAAA inset; */
+    background-color: #999999;
     box-shadow: 0.5em 0.5em 6em #777777 inset;
     text-shadow: 0.1em 0.1em 0.4em #666666;
     max-width: 100%;
