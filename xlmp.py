@@ -491,13 +491,14 @@ class JsonRpc():
             vol -= 1
         if not 0 <= vol <= 100:
             return 'Volume range exceeded'
-        elif TRACKER.dmr.volume(vol):
+        if TRACKER.dmr.volume(vol):
             return str(vol)
         return False
 
     @classmethod
     @check_dmr_exist_new
     def dlna_next(cls):
+        """dlna load next media"""
         return TRACKER.loadnext()
 
     @classmethod
@@ -509,18 +510,22 @@ class JsonRpc():
                 TRACKER.loop_playback.clear()
             method = getattr(TRACKER.dmr, opt)
             return method()
+        return 'wrong option'
 
     @classmethod
     @check_dmr_exist_new
     def dlna_seek(cls, position):
+        """dlna seek to new position"""
         return TRACKER.dmr.seek(position)
 
     @classmethod
     def dlna_search(cls):
+        """search dlna DMR"""
         return TRACKER.discover_dmr()
 
     @classmethod
     def dlna_set_dmr(cls, dmr):
+        """dlna set a DMR as current"""
         return TRACKER.set_dmr(dmr)
 
     @classmethod
@@ -530,6 +535,7 @@ class JsonRpc():
 
     @classmethod
     def list_history(cls):
+        """get play history"""
         return {'history': [{
             'filename': s[0], 'position': s[1], 'duration': s[2],
             'latest_date': s[3], 'path': os.path.dirname(s[0]),
@@ -538,11 +544,13 @@ class JsonRpc():
 
     @classmethod
     def clear_history(cls):
+        """clear all history"""
         run_sql('delete from history')
         return cls.list_history()
 
     @classmethod
     def remove_history(cls, src):
+        """remove an item from history"""
         logging.info(src)
         run_sql('delete from history where FILENAME=?', unquote(src))
         return cls.list_history()
@@ -550,6 +558,7 @@ class JsonRpc():
     @classmethod
     @check_dmr_exist_new
     def dlna_load(cls, src, host):
+        """load a video through DMR"""
         if host.startswith('127.0.0.1'):
             return 'should not use 127.0.0.1 as host to load throuh DLNA'
         if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
