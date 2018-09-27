@@ -445,7 +445,12 @@ class ApiHandler(tornado.web.RequestHandler):
 
 
 class JsonRpc():
-    """Json RPC class"""
+    """Json RPC class follow JSON-RPC 2.0 Specification
+    Usage: JsonRpc.run(json_obj)
+    @JsonRpc.method
+    def test():
+        pass
+    """
     @classmethod
     def run(cls, json_obj):
         """run RPC method"""
@@ -483,7 +488,7 @@ class JsonRpc():
 
     @classmethod
     def method(cls, func):
-        """Decorator: set a function as json rpc method"""
+        """Decorator: register a function as json rpc method"""
         if hasattr(cls, func.__name__):
             logging.warning('method name "%s" has been occupied in JsonRpc', func.__name__)
         else:
