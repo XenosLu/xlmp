@@ -488,7 +488,7 @@ class JsonRpc():
             logging.warning('method name "%s" has been occupied in JsonRpc', func.__name__)
         else:
             setattr(cls, func.__name__, func)
-            logging.info('%s has been registered as JsonRpc method', func.__name__)
+            logging.debug('JsonRpc method registered: %s', func.__name__)
         return func
 
 @JsonRpc.method
