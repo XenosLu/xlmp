@@ -283,11 +283,11 @@ window.appView = new Vue({
                 this.out(secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBarVal, this.positionBarMax)));
                 this.positionBarCanUpdate = false;
             },
-            get: function (url) {
-                axios.get(url).then(function (response) {
-                    window.appView.out(response.data);
-                })
-            },
+            // get: function (url) {
+                // axios.get(url).then(function (response) {
+                    // window.appView.out(response.data);
+                // })
+            // },
             rate: function (ratex) {
                 this.out(ratex + 'X');
                 this.$refs.video.playbackRate = ratex;
