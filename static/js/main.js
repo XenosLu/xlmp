@@ -33,7 +33,6 @@ var server = new Proxy(function () {}, {
         }
     });
 
-
 function touchWebPlayer() {
     var hammertimeVideo = new Hammer(document);
     hammertimeVideo.on("panleft panright swipeleft swiperight", function (ev) {
@@ -49,6 +48,7 @@ function touchWebPlayer() {
         velocity: 0.01
     });
 }
+
 window.appView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-main',
