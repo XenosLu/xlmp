@@ -22,6 +22,11 @@ from lib.dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopho
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 
+# initialize logging
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
+
 VIDEO_PATH = 'media'  # media file path
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
 
@@ -476,9 +481,13 @@ class JsonRpc():
         return val
 
     @classmethod
-    def test(cls):
-        """test method"""
-        return 'test message'
+    def method(cls, func):
+        """Decorator: set a function as json rpc method"""
+        if hasattr(cls, func.__name__):
+            logging.warning('method name "%s" has been occupied in JsonRpc', func.__name__)
+        else:
+            setattr(cls, func.__name__, func)
+        return func
 
     @classmethod
     @check_dmr_exist_new
@@ -571,11 +580,6 @@ class JsonRpc():
         return 'loading %s' % src
 
     @classmethod
-    def file_list(cls, path):
-        """list file"""
-        return ls_dir(path)
-
-    @classmethod
     def file_move(cls, src):
         """move file to .old folder and hide it"""
         filename = '%s/%s' % (VIDEO_PATH, src)
@@ -589,6 +593,14 @@ class JsonRpc():
             return False
         return ls_dir('%s/' % os.path.dirname(src))
 
+@JsonRpc.method
+def file_list(path):
+    """list file"""
+    return ls_dir(path)
+
+@JsonRpc.method
+def test():
+    return 'test message new'
 
 HANDLERS = [
     (r'/', IndexHandler),
@@ -607,10 +619,6 @@ SETTINGS = {
     'websocket_ping_interval': 0.2,
 }
 
-# initialize logging
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s %(filename)s %(levelname)s [line:%(lineno)d] %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S')
 APP = tornado.web.Application(HANDLERS, **SETTINGS)
 
 # initialize dlna threader
