@@ -407,19 +407,6 @@ class IndexHandler(tornado.web.RequestHandler):
         # self.finish(ls_dir('%s/' % os.path.dirname(src)))
 
 
-# class SaveHandler(tornado.web.RequestHandler):
-    # """Save play history"""
-    # executor = ThreadPoolExecutor(5)
-
-    # def data_received(self, chunk):
-        # pass
-
-    # @tornado.concurrent.run_on_executor
-    # def post(self, *args, **kwargs):
-        # arguments = json.loads(self.request.body.decode())
-        # save_history(kwargs.get('src'), **arguments)
-
-
 class DlnaPlayToggleHandler(tornado.web.RequestHandler):
     """DLNA operation web interface"""
     def data_received(self, chunk):
@@ -612,6 +599,7 @@ class JsonRpc():
 
     @classmethod
     def save(cls, *args, **kwargs):
+        """Save play history"""
         return save_history(*args, **kwargs)
 
     @classmethod
@@ -676,7 +664,6 @@ HANDLERS = [
     # (r'/dlna/setdmr/(?P<dmr>.*)', SetDmrHandler),
     # (r'/dlna/searchdmr', SearchDmrHandler),
     (r'/dlna/playtoggle', DlnaPlayToggleHandler),  # can't be replaced for toggle
-    # (r'/wp/save/(?P<src>.*)', SaveHandler),
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
 ]
 

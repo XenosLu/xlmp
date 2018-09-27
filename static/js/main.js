@@ -317,13 +317,11 @@ window.appView = new Vue({
                 this.browserShow = false;
             },
             setDmr: function (dmr) {
-                // this.get("/dlna/setdmr/" + dmr);
                 server.dlna_set_dmr({dmr: dmr});
             },
             positionSeek: function () {
                 var position = secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBarVal, this.positionBarMax));
                 server.dlna_seek({position: position});
-                // this.get("/dlna/seek/" + position);
                 this.positionBarCanUpdate = true;
             },
             positionShow: function () {
@@ -341,15 +339,7 @@ window.appView = new Vue({
             },
             videosave: function () {
                 this.video.lastplaytime = new Date().getTime(); //to detect if video is playing
-                // if (this.$refs.video.readyState == 4 && Math.floor(Math.random() * 99) > 70) { //randomly save play position
-                    // axios.post('/wp/save/' + this.video.src, {
-                        // position: this.$refs.video.currentTime,
-                        // duration: this.$refs.video.duration
-                    // }).catch(function (error) {
-                        // window.appView.out(error.response.statusText);
-                    // });
-                // }
-                if (this.$refs.video.readyState == 4 && Math.floor(Math.random() * 99) > 70)
+                if (this.$refs.video.readyState == 4 && Math.floor(Math.random() * 99) > 70) //randomly save play position
                     server.save({
                         src: this.video.src,
                         position: this.$refs.video.currentTime,
@@ -387,7 +377,6 @@ window.appView = new Vue({
                 newtime = Math.min(newtime, this.positionBarMax);
                 this.out(secondToTime(newtime));
                 if (obj.type.indexOf("swipe") != -1) {
-                    // this.get("/dlna/seek/" + secondToTime(newtime));
                     server.dlna_seek({position: secondToTime(newtime)});
                     console.log('swipe');
                 } else
