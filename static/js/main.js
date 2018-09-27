@@ -249,16 +249,6 @@ window.appView = new Vue({
                 this.historyShow = false;
                 this.filelist = data.filesystem;
             },
-            showFs: function (path) {
-                axios.get(encodeURI(path))
-                .then(function (response) {
-                    window.appView.historyShow = false;
-                    window.appView.filelist = response.data.filesystem;
-                })
-                .catch(function (error) {
-                    window.appView.out(error.response.statusText);
-                });
-            },
             clearHistory: function () { // clear history button
                 if (confirm("Clear all history?"))
                     server.clear_history(null, this.historyCallBack);
@@ -267,14 +257,12 @@ window.appView = new Vue({
                 server.remove_history({src: obj}, this.historyCallBack);
             },
             move: function (obj) {
-                // this.showFs("/fs/move/" + obj);
                 server.file_move({src: obj}, this.fileSystemCallBack);
             },
             open: function (obj, type) {
                 switch (type) {
                 case "folder":
                     server.file_list({path: obj}, this.fileSystemCallBack);
-                    // this.showFs("/fs/ls/" + obj + "/");
                     break;
                 case "mp4":
                     if (!this.dlnaMode) 
