@@ -366,7 +366,7 @@ class DlnaPlayToggleHandler(tornado.web.RequestHandler):
         else:
             ret = TRACKER.dmr.play()
         if ret:
-            self.finish({'success': 'opt: %s ' % opt})
+            self.finish({'result': 'success'})
         if not ret:
             self.finish({'error': 'Failed!'})
 
@@ -492,7 +492,7 @@ class JsonRpc():
         if not 0 <= vol <= 100:
             return 'Volume range exceeded'
         elif TRACKER.dmr.volume(vol):
-            return (str(vol))
+            return str(vol)
         return False
 
     @classmethod
@@ -563,10 +563,12 @@ class JsonRpc():
 
     @classmethod
     def file_list(cls, path):
+        """list file"""
         return ls_dir(path)
 
     @classmethod
     def file_move(cls, src):
+        """move file to .old folder and hide it"""
         filename = '%s/%s' % (VIDEO_PATH, src)
         dir_old = '%s/%s/.old' % (VIDEO_PATH, os.path.dirname(src))
         if not os.path.exists(dir_old):
