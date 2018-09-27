@@ -295,7 +295,7 @@ window.appView = new Vue({
             videosave: function () {
                 this.video.lastplaytime = new Date().getTime(); //to detect if video is playing
                 if (this.$refs.video.readyState == 4 && Math.floor(Math.random() * 99) > 70) //randomly save play position
-                    server.save({
+                    server.save_history({
                         src: this.video.src,
                         position: this.$refs.video.currentTime,
                         duration: this.$refs.video.duration,
