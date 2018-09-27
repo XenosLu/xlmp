@@ -153,17 +153,14 @@ window.appView = new Vue({
         methods: {
             test: function (obj, obj2) {
                 server.test(null);
-                // console.log(obj);
                 // console.log("test " + obj);
                 // this.out('test' + obj);
             },
             volUp: function (obj) {
                 server.dlna_vol(['up']);
-                // this.get('/dlna/vol/up');
             },
             volDown: function (obj) {
                 server.dlna_vol(['down']);
-                // this.get('/dlna/vol/down');
             },
             pressOpen: function (obj) {
                 var target = obj.target.tagName == 'TD' ? obj.target : obj.target.parentNode;
@@ -293,13 +290,11 @@ window.appView = new Vue({
                     // this.showFs("/fs/ls/" + obj + "/");
                     break;
                 case "mp4":
-                    if (!this.dlnaMode) {
+                    if (!this.dlnaMode) 
                         this.playInWeb(obj);
-                    }
                 case "video":
                     if (this.dlnaMode)
                         server.dlna_load({src: obj, host: window.location.host});
-                    // this.get("/dlna/load/" + obj);
                     break;
                 default:
                 }
