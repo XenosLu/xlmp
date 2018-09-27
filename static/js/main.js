@@ -384,8 +384,33 @@ window.appView = new Vue({
                 lastTouchEnd = now;
             }, false);
         },
+        mounted: function () {
+            this.$nextTick(function () {
+                console.log('mounted');
+                window.appView.showHistory();
+            });
+        },
     });
 
-window.appView.showHistory();
+function dlnalink() {
+    var ws = new WebSocket("ws://" + window.location.host + "/link");
+    ws.onmessage = function (e) {
+        var data = JSON.parse(e.data);
+        console.log(data);
+        window.appView.dlnaInfo = data;
+    }
+    ws.onclose = function () {
+        window.appView.dlnaInfo.CurrentTransportState = 'disconnected';
+    };
+    ws.onerror = function () {
+        console.log('connection lost');
+    };
+    ws.check = function () {
+        if (this.readyState == 3)
+            ws_link = dlnalink();
+    };
+    return ws;
+}
+
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
