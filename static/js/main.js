@@ -383,9 +383,9 @@ window.appView = new Vue({
                 };
                 lastTouchEnd = now;
             }, false);
-            // this.showHistory();
         },
     });
 
+window.appView.showHistory();
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
