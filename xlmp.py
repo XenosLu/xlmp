@@ -281,16 +281,6 @@ def hist_load(name):
 
 def check_dmr_exist(func):
     """Decorator: check DMR is available before do something relate to DLNA"""
-    def no_dmr(self, *args, **kwargs):
-        """check if DMR exist"""
-        if not TRACKER.dmr:
-            self.finish({'error': 'No DMR.'})
-            return None
-        return func(self, *args, **kwargs)
-    return no_dmr
-
-def check_dmr_exist_new(func):
-    """Decorator: check DMR is available before do something relate to DLNA"""
     def wrapper(*args, **kwargs):
         """check if DMR exist"""
         if TRACKER.dmr:
@@ -330,8 +320,10 @@ class DlnaPlayToggleHandler(tornado.web.RequestHandler):
     def data_received(self, chunk):
         pass
 
-    @check_dmr_exist
     def get(self, *args, **kwargs):
+        if not TRACKER.dmr:
+            self.finish({'error': 'No DMR.'})
+            return
         if TRACKER.state.get('CurrentTransportState') == 'PLAYING':
             ret = TRACKER.dmr.pause()
         else:
@@ -436,7 +428,7 @@ class JsonRpc():
         return func
 
 @JsonRpc.method
-@check_dmr_exist_new
+@check_dmr_exist
 def dlna_vol(opt):
     """dlna volume adjuster"""
     vol = int(TRACKER.dmr.get_volume())
@@ -451,13 +443,13 @@ def dlna_vol(opt):
     return False
 
 @JsonRpc.method
-@check_dmr_exist_new
+@check_dmr_exist
 def dlna_next():
     """dlna load next media"""
     return TRACKER.loadnext()
 
 @JsonRpc.method
-@check_dmr_exist_new
+@check_dmr_exist
 def dlna(opt):
     """dlna commands"""
     if opt in ('play', 'pause', 'stop'):
@@ -468,7 +460,7 @@ def dlna(opt):
     return 'wrong option'
 
 @JsonRpc.method
-@check_dmr_exist_new
+@check_dmr_exist
 def dlna_seek(position):
     """dlna seek to new position"""
     return TRACKER.dmr.seek(position)
@@ -525,7 +517,7 @@ def remove_history(src):
 
 
 @JsonRpc.method
-@check_dmr_exist_new
+@check_dmr_exist
 def dlna_load(src, host):
     """load a video through DMR"""
     if host.startswith('127.0.0.1'):
