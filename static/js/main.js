@@ -33,26 +33,6 @@ var server = new Proxy(function () {}, {
         }
     });
 
-    
-function dlnalink() {
-    var ws = new WebSocket("ws://" + window.location.host + "/link");
-    ws.onmessage = function (e) {
-        var data = JSON.parse(e.data);
-        console.log(data);
-        window.appView.dlnaInfo = data;
-    }
-    ws.onclose = function () {
-        window.appView.dlnaInfo.CurrentTransportState = 'disconnected';
-    };
-    ws.onerror = function () {
-        console.log('connection lost');
-    };
-    ws.check = function () {
-        if (this.readyState == 3)
-            ws_link = dlnalink();
-    };
-    return ws;
-}
 
 function touchWebPlayer() {
     var hammertimeVideo = new Hammer(document);
