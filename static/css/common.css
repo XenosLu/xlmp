@@ -126,9 +126,11 @@ input[type=range]::-moz-range-thumb {
     border-radius: 0.2em;
     padding: 0.2em;
     border: 1px solid #777777;
-    box-shadow: 0.5em 0.5em 6em #AAAAAA inset;
-    text-shadow: 0.1em 0.1em 0.4em #666;
+    /* box-shadow: 0.5em 0.5em 6em #AAAAAA inset; */
+    box-shadow: 0.5em 0.5em 6em #777777 inset;
+    text-shadow: 0.1em 0.1em 0.4em #666666;
     max-width: 100%;
+    color: #DDDDDD;
 }
 button {
     opacity: 0.8;

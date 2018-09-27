@@ -177,7 +177,8 @@ window.appView = new Vue({
             },
             outFadeIn: function (el, done) {
                 Velocity(el, 'stop');
-                Velocity(el, {opacity: 0.8}, {duration: 180});
+                // Velocity(el, {opacity: 0.8}, {duration: 180});
+                Velocity(el, {opacity: 0.75}, {duration: 170});
             },
             outFadeOut: function (el, done) {
                 Velocity(el, 'stop');
