@@ -583,30 +583,30 @@ def file_list(path):
     return {'filesystem': (parent + list_folder + list_mp4 + list_video + list_other)}
 
 
-class SystemCommandHandler(tornado.web.RequestHandler):
-    """some system maintainence command web interface"""
-    def data_received(self, chunk):
-        pass
+# class SystemCommandHandler(tornado.web.RequestHandler):
+    # """some system maintainence command web interface"""
+    # def data_received(self, chunk):
+        # pass
 
-    def get(self, *args, **kwargs):
-        opt = kwargs.get('opt')
-        if opt == 'update':
-            if sys.platform == 'linux':
-                if os.system('git pull') == 0:
-                    self.finish('git pull done, waiting for restart')
-                    python = sys.executable
-                    os.execl(python, python, *sys.argv)
-                    # os._exit(1)
-                else:
-                    self.finish('execute git pull failed')
-            else:
-                self.finish('not supported')
-        elif opt == 'backup':  # backup history
-            self.finish(shutil.copyfile(HISTORY_DB_FILE, '%s.bak' % HISTORY_DB_FILE))
-        elif opt == 'restore':  # restore history
-            self.finish(shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE))
-        else:
-            raise tornado.web.HTTPError(403, reason='no such operation')
+    # def get(self, *args, **kwargs):
+        # opt = kwargs.get('opt')
+        # if opt == 'update':
+            # if sys.platform == 'linux':
+                # if os.system('git pull') == 0:
+                    # self.finish('git pull done, waiting for restart')
+                    # python = sys.executable
+                    # os.execl(python, python, *sys.argv)
+                    # # os._exit(1)
+                # else:
+                    # self.finish('execute git pull failed')
+            # else:
+                # self.finish('not supported')
+        # elif opt == 'backup':  # backup history
+            # self.finish(shutil.copyfile(HISTORY_DB_FILE, '%s.bak' % HISTORY_DB_FILE))
+        # elif opt == 'restore':  # restore history
+            # self.finish(shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE))
+        # else:
+            # raise tornado.web.HTTPError(403, reason='no such operation')
 
 @JsonRpc.method
 def self_update():
@@ -619,6 +619,13 @@ def self_update():
         return 'execute git pull failed'
     return 'OS not supported'
 
+@JsonRpc.method
+def db_backup():
+    return shutil.copyfile(HISTORY_DB_FILE, '%s.bak' % HISTORY_DB_FILE)
+
+@JsonRpc.method
+def db_restore():
+    return shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE)
 
 
 @JsonRpc.method
@@ -628,7 +635,7 @@ def test():
 HANDLERS = [
     (r'/', IndexHandler),
     (r'/api', ApiHandler),
-    (r'/sys/(?P<opt>\w*)', SystemCommandHandler),
+    # (r'/sys/(?P<opt>\w*)', SystemCommandHandler),
     (r'/link', DlnaWebSocketHandler),
     (r'/dlna/playtoggle', DlnaPlayToggleHandler),  # can't be replaced for toggle
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
