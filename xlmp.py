@@ -293,22 +293,6 @@ def check_dmr_exist(func):
     return wrapper
 
 
-def get_next_file(src):  # not strict enough
-    """get next related video file"""
-    logging.info(src)
-    fullname = '%s/%s' % (VIDEO_PATH, src)
-    filepath = os.path.dirname(fullname)
-    dirs = sorted([i for i in os.listdir(filepath)
-                   if not i.startswith('.') and os.path.isfile('%s/%s' % (filepath, i))])
-    if os.path.basename(fullname) in dirs:
-        next_index = dirs.index(os.path.basename(fullname)) + 1
-    else:
-        next_index = 0
-    if next_index < len(dirs):
-        return '%s/%s' % (os.path.dirname(src), dirs[next_index])
-    return None
-
-
 class IndexHandler(tornado.web.RequestHandler):
     """index web page"""
     def data_received(self, chunk):
@@ -430,6 +414,7 @@ class JsonRpc():
             logging.debug('JsonRpc method registered: %s', func.__name__)
         return func
 
+
 @JsonRpc.method
 @check_dmr_exist
 def dlna_vol(opt):
@@ -445,11 +430,13 @@ def dlna_vol(opt):
         return str(vol)
     return False
 
+
 @JsonRpc.method
 @check_dmr_exist
 def dlna_next():
     """dlna load next media"""
     return TRACKER.loadnext()
+
 
 @JsonRpc.method
 @check_dmr_exist
@@ -462,16 +449,19 @@ def dlna(opt):
         return method()
     return 'wrong option'
 
+
 @JsonRpc.method
 @check_dmr_exist
 def dlna_seek(position):
     """dlna seek to new position"""
     return TRACKER.dmr.seek(position)
 
+
 @JsonRpc.method
 def dlna_search():
     """search dlna DMR"""
     return TRACKER.discover_dmr()
+
 
 @JsonRpc.method
 def dlna_set_dmr(dmr):
@@ -583,9 +573,11 @@ def self_update():
         return 'execute git pull failed'
     return 'OS not supported'
 
+
 @JsonRpc.method
 def db_backup():
     return shutil.copyfile(HISTORY_DB_FILE, '%s.bak' % HISTORY_DB_FILE)
+
 
 @JsonRpc.method
 def db_restore():
@@ -595,6 +587,23 @@ def db_restore():
 @JsonRpc.method
 def test():
     return 'test message new'
+
+
+def get_next_file(src):  # not strict enough
+    """get next related video file"""
+    logging.info(src)
+    fullname = '%s/%s' % (VIDEO_PATH, src)
+    filepath = os.path.dirname(fullname)
+    dirs = sorted([i for i in os.listdir(filepath)
+                   if not i.startswith('.') and os.path.isfile('%s/%s' % (filepath, i))])
+    if os.path.basename(fullname) in dirs:
+        next_index = dirs.index(os.path.basename(fullname)) + 1
+    else:
+        next_index = 0
+    if next_index < len(dirs):
+        return '%s/%s' % (os.path.dirname(src), dirs[next_index])
+    return None
+
 
 HANDLERS = [
     (r'/', IndexHandler),
