@@ -13,7 +13,7 @@ import json
 from threading import Thread, Event
 from urllib.parse import quote, unquote
 from time import sleep, time
-# from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 
 import tornado.web
 import tornado.websocket
@@ -568,7 +568,10 @@ def self_update():
     if sys.platform == 'linux':
         if os.system('git pull') == 0:
             python = sys.executable
-            os.execl(python, python, *sys.argv)
+            executor = ThreadPoolExecutor(1)
+            executor.submit(os.execl, python, python)
+            # executor.submit(os.execl,
+            # os.execl(python, python, *sys.argv)
             return 'git pull done, waiting for restart'
         return 'execute git pull failed'
     return 'OS not supported'
@@ -584,8 +587,14 @@ def db_restore():
     return shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE)
 
 
+def test2():
+    print(2)
+    logging.info('test2')
+    
 @JsonRpc.method
 def test():
+    executor = ThreadPoolExecutor(99)
+    executor.submit(test2)
     return 'test message new'
 
 
