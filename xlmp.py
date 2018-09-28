@@ -567,11 +567,13 @@ def self_update():
     """develop method: self update"""
     if sys.platform == 'linux':
         if os.system('git pull') == 0:
-            python = sys.executable
+            
             executor = ThreadPoolExecutor(1)
-            executor.submit(os.execl, python, python)
-            # executor.submit(os.execl,
-            # os.execl(python, python, *sys.argv)
+            def restart():
+                sleep(0.5)
+                python = sys.executable
+                os.execl(python, python, *sys.argv)
+            executor.submit(restart)
             return 'git pull done, waiting for restart'
         return 'execute git pull failed'
     return 'OS not supported'
