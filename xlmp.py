@@ -140,9 +140,12 @@ class DMRTracker(Thread):
         task = self._loop.create_task(self.main_loop())
         self._loop.run_until_complete(task)
 
-    def load(self, url):
+    def load(self, src):
         """Load video through DLNA from URL """
         logging.info('start loading')
+        if not self.url_prefix:
+            return False
+        url = '%s%s' % (self.url_prefix, quote(src))
         self._url = url
         self._load_inprogess.set()
         asyncio.run_coroutine_threadsafe(self.load_coroutine(url), self._loop)
@@ -179,9 +182,9 @@ class DMRTracker(Thread):
             return False
         next_file = get_next_file(self.state['TrackURI'])
         logging.info('next file recognized: %s', next_file)
-        if next_file and self.url_prefix:
-            url = '%s%s' % (self.url_prefix, quote(next_file))
-            self.load(url)
+        if next_file:
+            # url = '%s%s' % (self.url_prefix, quote(next_file))
+            self.load(next_file)
             return True
         return False
 
@@ -521,8 +524,8 @@ def dlna_load(src, host):
         return 'Error: File not found.'
     logging.info('start loading...tracker state:%s', TRACKER.state.get('CurrentTransportState'))
     TRACKER.url_prefix = 'http://%s/video/' % host
-    url = 'http://%s/video/%s' % (host, quote(src))
-    TRACKER.load(url)
+    # url = 'http://%s/video/%s' % (host, quote(src))
+    TRACKER.load(src)
     return 'loading %s' % src
 
 
