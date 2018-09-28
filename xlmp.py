@@ -567,12 +567,11 @@ def self_update():
     """develop method: self update"""
     if sys.platform == 'linux':
         if os.system('git pull') == 0:
-            
-            executor = ThreadPoolExecutor(1)
             def restart():
                 sleep(0.5)
                 python = sys.executable
                 os.execl(python, python, *sys.argv)
+            executor = ThreadPoolExecutor(1)
             executor.submit(restart)
             return 'git pull done, waiting for restart'
         return 'execute git pull failed'
