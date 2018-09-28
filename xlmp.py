@@ -568,7 +568,7 @@ def self_update():
     if sys.platform == 'linux':
         if os.system('git pull') == 0:
             def restart():
-                sleep(0.5)
+                sleep(1)
                 python = sys.executable
                 os.execl(python, python, *sys.argv)
             executor = ThreadPoolExecutor(1)
@@ -588,14 +588,8 @@ def db_restore():
     return shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE)
 
 
-def test2():
-    print(2)
-    logging.info('test2')
-    
 @JsonRpc.method
 def test():
-    executor = ThreadPoolExecutor(99)
-    executor.submit(test2)
     return 'test message new'
 
 
