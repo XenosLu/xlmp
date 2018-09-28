@@ -73,11 +73,8 @@
               <template slot="button-content">
                 <i class="oi oi-cog"></i>Maintainance
               </template>
-              <!-- <b-dropdown-item v-if="devMode" @click="get('/sys/update')">update</b-dropdown-item> -->
               <b-dropdown-item v-if="devMode" @click="server.self_update()">update</b-dropdown-item>
               <b-dropdown-divider v-if="devMode"></b-dropdown-divider>
-              <!-- <b-dropdown-item @click="get('/sys/backup')">backup</b-dropdown-item> -->
-              <!-- <b-dropdown-item @click="get('/sys/restore')">restore</b-dropdown-item> -->
               <b-dropdown-item @click="server.db_backup()">backup</b-dropdown-item>
               <b-dropdown-item @click="server.db_restore()">restore</b-dropdown-item>
               <b-dropdown-item v-if="devMode" @click="server.test()">test</b-dropdown-item>

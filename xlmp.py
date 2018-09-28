@@ -485,12 +485,6 @@ def save_history(src, position, duration):
                values(? , ?, ?, DateTime('now', 'localtime'));''', src, position, duration)
 
 
-# @JsonRpc.method
-# def save(*args, **kwargs):
-    # """Save play history"""
-    # return save_history(*args, **kwargs)
-
-
 @JsonRpc.method
 def list_history():
     """get play history"""
@@ -575,31 +569,6 @@ def file_list(path):
     return {'filesystem': (parent + list_folder + list_mp4 + list_video + list_other)}
 
 
-# class SystemCommandHandler(tornado.web.RequestHandler):
-    # """some system maintainence command web interface"""
-    # def data_received(self, chunk):
-        # pass
-
-    # def get(self, *args, **kwargs):
-        # opt = kwargs.get('opt')
-        # if opt == 'update':
-            # if sys.platform == 'linux':
-                # if os.system('git pull') == 0:
-                    # self.finish('git pull done, waiting for restart')
-                    # python = sys.executable
-                    # os.execl(python, python, *sys.argv)
-                    # # os._exit(1)
-                # else:
-                    # self.finish('execute git pull failed')
-            # else:
-                # self.finish('not supported')
-        # elif opt == 'backup':  # backup history
-            # self.finish(shutil.copyfile(HISTORY_DB_FILE, '%s.bak' % HISTORY_DB_FILE))
-        # elif opt == 'restore':  # restore history
-            # self.finish(shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE))
-        # else:
-            # raise tornado.web.HTTPError(403, reason='no such operation')
-
 @JsonRpc.method
 def self_update():
     """develop method: self update"""
@@ -627,7 +596,6 @@ def test():
 HANDLERS = [
     (r'/', IndexHandler),
     (r'/api', ApiHandler),
-    # (r'/sys/(?P<opt>\w*)', SystemCommandHandler),
     (r'/link', DlnaWebSocketHandler),
     (r'/dlna/playtoggle', DlnaPlayToggleHandler),  # can't be replaced for toggle
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
