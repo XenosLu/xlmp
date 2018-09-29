@@ -223,7 +223,8 @@ window.appView = new Vue({
             },
             historyCallBack: function (data) {
                 this.historyShow = true;
-                this.history = data.history;
+                this.history = data;
+                // this.history = data.history;
             },
             showHistory: function () {
                 server.list_history(null, this.historyCallBack);

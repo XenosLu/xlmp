@@ -498,11 +498,16 @@ def save_history(src, position, duration):
 @JsonRpc.method
 def list_history():
     """get play history"""
-    return {'history': [
+    return [
         {'filename': s[0], 'position': s[1], 'duration': s[2],
          'latest_date': s[3], 'path': os.path.dirname(s[0]),
          'exist': os.path.exists('%s/%s' % (VIDEO_PATH, s[0]))}
-        for s in run_sql('select * from history order by LATEST_DATE desc')]}
+        for s in run_sql('select * from history order by LATEST_DATE desc')]
+    # return {'history': [
+        # {'filename': s[0], 'position': s[1], 'duration': s[2],
+         # 'latest_date': s[3], 'path': os.path.dirname(s[0]),
+         # 'exist': os.path.exists('%s/%s' % (VIDEO_PATH, s[0]))}
+        # for s in run_sql('select * from history order by LATEST_DATE desc')]}
 
 
 @JsonRpc.method
