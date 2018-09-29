@@ -370,6 +370,21 @@ class JsonRpc():
         pass
     """
     @classmethod
+    def run_new(cls, json_obj):
+        """test method"""
+        val = {'jsonrpc': '2.0'}
+        try:
+            obj = json.loads(json_obj)
+        except json.decoder.JSONDecodeError as exc:
+            logging.info(json_obj)
+            logging.info(exc, exc_info=True)
+            val['error'] = {"code": -32700, 'message': 'Parse error'}
+            val['id'] = None
+            return val
+        # if isinstance(obj, list)
+        # if isinstance(obj, dict)
+
+    @classmethod
     def run(cls, json_obj):
         """run RPC method"""
         val = {'jsonrpc': '2.0'}
@@ -379,6 +394,7 @@ class JsonRpc():
             logging.info(json_obj)
             logging.info(exc, exc_info=True)
             val['error'] = {"code": -32700, 'message': 'Parse error'}
+            val['id'] = None
             return val
         logging.info(obj)
         method = obj.get('method')
@@ -389,6 +405,8 @@ class JsonRpc():
         logging.info('running method: %s with params: %s', method, params)
         try:
             result = getattr(cls, method)(*args, **kwargs)
+            if val['id'] is None:
+                return ''
             if result is True:
                 result = 'Success'
             elif result is False:
