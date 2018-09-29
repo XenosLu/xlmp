@@ -359,7 +359,7 @@ class ApiHandler(tornado.web.RequestHandler):
         json_data = self.request.body.decode()
         result = JsonRpc.run(json_data)
         logging.info('result: %s', result)
-        self.write(result)
+        self.finish(result)
 
 
 class JsonRpc():
@@ -398,7 +398,7 @@ class JsonRpc():
         args = params if isinstance(params, list) else []
         kwargs = params if isinstance(params, dict) else {}
         logging.info('running method: %s with params: %s', method, params)
-        if not method or hasattr(cls, method):
+        if not method or not hasattr(cls, method):
             val['error'] = {"code": -32601, 'message': 'Method not found'}
             return val
         try:

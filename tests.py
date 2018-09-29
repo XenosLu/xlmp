@@ -31,8 +31,13 @@ class TestMain(AsyncHTTPTestCase):
         self.assertEqual(response.code, 200)
         self.assertEqual(json.loads(response.body)['error']['code'], -32601)  # Invalid params
 
-# id	8512
-# jsonrpc	2.0
-# method	test
+        response = self.fetch('/api', method="POST", body='{"jsonrpc":"2.0", "method":"test"}')
+        self.assertEqual(response.code, 200)
+        self.assertEqual(response.body, b'')  # Notification
+
+        response = self.fetch('/api', method="POST", body='{"jsonrpc":"2.0", "method":"test", "id": 1}')
+        self.assertEqual(response.code, 200)
+        self.assertEqual(json.loads(response.body)['result'], 'test message new')  # Success
+
 if __name__ == '__main__':
     unittest.main()
