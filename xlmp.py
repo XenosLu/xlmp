@@ -367,16 +367,17 @@ class JsonRpc():
     """Json RPC class follow JSON-RPC 2.0 Specification
     Usage: JsonRpc.run(json_data)
     @JsonRpc.method
-    def test():
+    def foo():
         pass
     """
+    methods = {}
     @classmethod
     def run(cls, json_data):
         """test method"""
         val = {'jsonrpc': '2.0', 'id': None}
         try:
             obj = json.loads(json_data)
-        except json.decoder.JSONDecodeError as exc:
+        except json.decoder.JSONDecodeError:
             logging.debug(json_data)
             # logging.info(exc, exc_info=True)
             val['error'] = {"code": -32700, 'message': 'Parse error'}
@@ -603,16 +604,19 @@ def self_update():
 
 @JsonRpc.method
 def db_backup():
+    """backup database file"""
     return shutil.copyfile(HISTORY_DB_FILE, '%s.bak' % HISTORY_DB_FILE)
 
 
 @JsonRpc.method
 def db_restore():
+    """restore from database backup file"""
     return shutil.copyfile('%s.bak' % HISTORY_DB_FILE, HISTORY_DB_FILE)
 
 
 @JsonRpc.method
 def test():
+    """test function"""
     return 'test message new'
 
 
