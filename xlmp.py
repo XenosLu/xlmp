@@ -148,11 +148,11 @@ class DMRTracker(Thread):
         url = '%s%s' % (self.url_prefix, quote(src))
         self._url = url
         self._load_inprogess.set()
-        asyncio.run_coroutine_threadsafe(self.load_coroutine(url), self._loop)
+        asyncio.run_coroutine_threadsafe(self._load_coroutine(url), self._loop)
         logging.info('coroutine loaded')
 
     @asyncio.coroutine
-    def load_coroutine(self, url):
+    def _load_coroutine(self, url):
         """load videdo in coroutine"""
         failure = 0
         while failure < 3:
@@ -621,14 +621,14 @@ def get_next_file(src):  # not strict enough
     logging.info(src)
     fullname = '%s/%s' % (VIDEO_PATH, src)
     filepath = os.path.dirname(fullname)
-    dirs = sorted([i for i in os.listdir(filepath)
+    files = sorted([i for i in os.listdir(filepath)
                    if not i.startswith('.') and os.path.isfile('%s/%s' % (filepath, i))])
-    if os.path.basename(fullname) in dirs:
-        next_index = dirs.index(os.path.basename(fullname)) + 1
+    if os.path.basename(fullname) in files:
+        next_index = files.index(os.path.basename(fullname)) + 1
     else:
         next_index = 0
-    if next_index < len(dirs):
-        return '%s/%s' % (os.path.dirname(src), dirs[next_index])
+    if next_index < len(files):
+        return '%s/%s' % (os.path.dirname(src), files[next_index])
     return None
 
 
