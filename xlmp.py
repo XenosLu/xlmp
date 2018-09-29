@@ -382,7 +382,7 @@ class JsonRpc():
             return val
         if isinstance(obj, dict):
             return cls._run(obj)
-        if isinstance(obj, list)
+        if isinstance(obj, list):
             return [cls._run(item) for item in obj]
         val['error'] = {"code": -32600, 'message': 'Invalid Request'}
         return val
