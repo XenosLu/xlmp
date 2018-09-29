@@ -399,11 +399,9 @@ class JsonRpc():
         args = params if isinstance(params, list) else []
         kwargs = params if isinstance(params, dict) else {}
         if not method in cls.methods:
-        # if not method or not hasattr(cls, method):
             val['error'] = {"code": -32601, 'message': 'Method not found'}
             return val
         try:
-            # result = getattr(cls, method)(*args, **kwargs)
             result = cls.methods[method](*args, **kwargs)
             if val['id'] is None:
                 return ''
@@ -424,14 +422,12 @@ class JsonRpc():
     def method(cls, func):
         """Decorator: register a function as json rpc method"""
         if func.__name__.startswith('rpc.'):
-            logging.warning('Method name "%s" begin with rpc. is reserved for system extension', func.__name__)
-            return func
-        if func.__name__ in cls.methods:
-        # if hasattr(cls, func.__name__):
+            logging.warning('Method name "%s" begin with rpc. is reserved for system extension',
+                            func.__name__)
+        elif func.__name__ in cls.methods:
             logging.warning('Method name "%s" has been occupied in JsonRpc', func.__name__)
         else:
             cls.methods[func.__name__] = func
-            # setattr(cls, func.__name__, func)
             logging.debug('JsonRpc method registered: %s', func.__name__)
         return func
 
@@ -592,16 +588,17 @@ def file_list(path):
 @JsonRpc.method
 def self_update():
     """develop method: self update"""
+    def restart():
+        sleep(1)
+        python = sys.executable
+        os.execl(python, python, *sys.argv)
+    executor = ThreadPoolExecutor(1)
     if sys.platform == 'linux':
         if os.system('git pull') == 0:
-            def restart():
-                sleep(1)
-                python = sys.executable
-                os.execl(python, python, *sys.argv)
-            executor = ThreadPoolExecutor(1)
             executor.submit(restart)
             return 'git pull done, waiting for restart'
         return 'execute git pull failed'
+    executor.submit(restart)
     return 'OS not supported'
 
 
@@ -620,7 +617,7 @@ def db_restore():
 @JsonRpc.method
 def test():
     """test function"""
-    return 'test message new'
+    return 'test message'
 
 
 def get_next_file(src):  # not strict enough
