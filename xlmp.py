@@ -593,13 +593,11 @@ def self_update():
         python = sys.executable
         os.execl(python, python, *sys.argv)
     executor = ThreadPoolExecutor(1)
-    if sys.platform == 'linux':
-        if os.system('git pull') == 0:
-            executor.submit(restart)
-            return 'git pull done, waiting for restart'
-        return 'execute git pull failed'
+    result = os.system('git pull')
     executor.submit(restart)
-    return 'OS not supported'
+    if result == 0:
+        return 'git pull done, waiting for restart'
+    return 'git pull failed, restart anyway'
 
 
 @JsonRpc.method
@@ -626,7 +624,7 @@ def get_next_file(src):  # not strict enough
     fullname = '%s/%s' % (VIDEO_PATH, src)
     filepath = os.path.dirname(fullname)
     files = sorted([i for i in os.listdir(filepath)
-                   if not i.startswith('.') and os.path.isfile('%s/%s' % (filepath, i))])
+                    if not i.startswith('.') and os.path.isfile('%s/%s' % (filepath, i))])
     # if os.path.basename(fullname) in files:
     if os.path.basename(src) in files:
         next_index = files.index(os.path.basename(src)) + 1
