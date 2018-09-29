@@ -425,8 +425,11 @@ class JsonRpc():
     @classmethod
     def method(cls, func):
         """Decorator: register a function as json rpc method"""
+        if func.__name__.startswith('rpc.'):
+            logging.warning('Method name "%s" begin with rpc. is reserved for system extension', func.__name__)
+            return func
         if hasattr(cls, func.__name__):
-            logging.warning('method name "%s" has been occupied in JsonRpc', func.__name__)
+            logging.warning('Method name "%s" has been occupied in JsonRpc', func.__name__)
         else:
             setattr(cls, func.__name__, func)
             logging.debug('JsonRpc method registered: %s', func.__name__)
