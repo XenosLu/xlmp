@@ -12,8 +12,15 @@ class TestMain(AsyncHTTPTestCase):
         return APP
 
     def test_main(self):
+        """test main page"""
         response = self.fetch('/')
         self.assertEqual(response.code, 200)
+
+    def test_playtoggle(self):
+        """test playtoggle interface"""
+        response = self.fetch('/dlna/playtoggle')
+        self.assertEqual(response.code, 200)
+        # self.assertEqual(response.body, 200)
 
     def test_api(self):
         response = self.fetch('/api')
