@@ -397,7 +397,6 @@ class JsonRpc():
         params = obj.get('params')
         args = params if isinstance(params, list) else []
         kwargs = params if isinstance(params, dict) else {}
-        logging.info('running method: %s with params: %s', method, params)
         if not method or not hasattr(cls, method):
             val['error'] = {"code": -32601, 'message': 'Method not found'}
             return val
