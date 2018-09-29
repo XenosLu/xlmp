@@ -230,7 +230,8 @@ window.appView = new Vue({
             },
             fileSystemCallBack: function (data) {
                 this.historyShow = false;
-                this.filelist = data.filesystem;
+                // this.filelist = data.filesystem;
+                this.filelist = data;
             },
             clearHistory: function () { // clear history button
                 if (confirm("Clear all history?"))

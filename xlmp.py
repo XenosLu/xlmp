@@ -576,7 +576,8 @@ def file_list(path):
         else:
             list_other.append({'filename': filename, 'type': 'other',
                                'path': '%s%s' % (path, filename)})
-    return {'filesystem': (parent + list_folder + list_mp4 + list_video + list_other)}
+    return parent + list_folder + list_mp4 + list_video + list_other
+    # return {'filesystem': (parent + list_folder + list_mp4 + list_video + list_other)}
 
 
 @JsonRpc.method
