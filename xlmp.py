@@ -150,6 +150,7 @@ class DMRTracker(Thread):
         self._load_inprogess.set()
         asyncio.run_coroutine_threadsafe(self._load_coroutine(url), self._loop)
         logging.info('coroutine loaded')
+        return True
 
     @asyncio.coroutine
     def _load_coroutine(self, url):
@@ -184,8 +185,8 @@ class DMRTracker(Thread):
         logging.info('next file recognized: %s', next_file)
         if next_file:
             # url = '%s%s' % (self.url_prefix, quote(next_file))
-            self.load(next_file)
-            return True
+            return self.load(next_file)
+            # return True
         return False
 
     def loadonce(self, url):
