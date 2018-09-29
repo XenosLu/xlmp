@@ -379,7 +379,6 @@ class JsonRpc():
             obj = json.loads(json_data)
         except json.decoder.JSONDecodeError:
             logging.debug(json_data)
-            # logging.info(exc, exc_info=True)
             val['error'] = {"code": -32700, 'message': 'Parse error'}
             return val
         if isinstance(obj, dict):
