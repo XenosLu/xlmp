@@ -356,42 +356,75 @@ class ApiHandler(tornado.web.RequestHandler):
 
     # @tornado.concurrent.run_on_executor
     def post(self, *args, **kwargs):
-        json_obj = self.request.body.decode()
-        result = JsonRpc.run(json_obj)
+        json_data = self.request.body.decode()
+        result = JsonRpc.run(json_data)
         logging.info('result: %s', result)
         self.write(result)
 
 
 class JsonRpc():
     """Json RPC class follow JSON-RPC 2.0 Specification
-    Usage: JsonRpc.run(json_obj)
+    Usage: JsonRpc.run(json_data)
     @JsonRpc.method
     def test():
         pass
     """
     @classmethod
-    def run_new(cls, json_obj):
+    def run(cls, json_data):
         """test method"""
-        val = {'jsonrpc': '2.0'}
+        val = {'jsonrpc': '2.0', 'id': None}
         try:
-            obj = json.loads(json_obj)
+            obj = json.loads(json_data)
         except json.decoder.JSONDecodeError as exc:
-            logging.info(json_obj)
+            logging.info(json_data)
             logging.info(exc, exc_info=True)
             val['error'] = {"code": -32700, 'message': 'Parse error'}
-            val['id'] = None
             return val
-        # if isinstance(obj, list)
-        # if isinstance(obj, dict)
+        if isinstance(obj, dict):
+            return cls._run(obj)
+        if isinstance(obj, list)
+            return [cls._run(item) for item in obj]
+        val['error'] = {"code": -32600, 'message': 'Invalid Request'}
+        return val	
 
     @classmethod
-    def run(cls, json_obj):
+    def _run(cls, obj):
+        """run RPC method"""
+        val = {'jsonrpc': '2.0'}
+        logging.info(obj)
+        method = obj.get('method')
+        params = obj.get('params')
+        val['id'] = obj.get('id')
+        args = params if isinstance(params, list) else []
+        kwargs = params if isinstance(params, dict) else {}
+        logging.info('running method: %s with params: %s', method, params)
+        try:
+            result = getattr(cls, method)(*args, **kwargs)
+            if val['id'] is None:
+                return ''
+            if result is True:
+                result = 'Success'
+            elif result is False:
+                result = 'Failed'
+            val['result'] = result
+        except AttributeError as exc:
+            val['error'] = {"code": -32601, 'message': 'Method not found'}
+        except TypeError as exc:
+            logging.warning(exc, exc_info=True)
+            val['error'] = {"code": -32602, 'message': 'Invalid params'}
+        except Exception as exc:
+            logging.warning(exc, exc_info=True)
+            val['error'] = {"code": -1, 'message': str(exc)}
+        return val
+
+    @classmethod
+    def run_old(cls, json_data):
         """run RPC method"""
         val = {'jsonrpc': '2.0'}
         try:
-            obj = json.loads(json_obj)
+            obj = json.loads(json_data)
         except json.decoder.JSONDecodeError as exc:
-            logging.info(json_obj)
+            logging.info(json_data)
             logging.info(exc, exc_info=True)
             val['error'] = {"code": -32700, 'message': 'Parse error'}
             val['id'] = None
