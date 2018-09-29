@@ -398,11 +398,13 @@ class JsonRpc():
         params = obj.get('params')
         args = params if isinstance(params, list) else []
         kwargs = params if isinstance(params, dict) else {}
-        if not method or not hasattr(cls, method):
+        if not method in cls.methods:
+        # if not method or not hasattr(cls, method):
             val['error'] = {"code": -32601, 'message': 'Method not found'}
             return val
         try:
-            result = getattr(cls, method)(*args, **kwargs)
+            # result = getattr(cls, method)(*args, **kwargs)
+            result = cls.methods[method](*args, **kwargs)
             if val['id'] is None:
                 return ''
             if result is True:
@@ -424,10 +426,12 @@ class JsonRpc():
         if func.__name__.startswith('rpc.'):
             logging.warning('Method name "%s" begin with rpc. is reserved for system extension', func.__name__)
             return func
-        if hasattr(cls, func.__name__):
+        if func.__name__ in cls.methods:
+        # if hasattr(cls, func.__name__):
             logging.warning('Method name "%s" has been occupied in JsonRpc', func.__name__)
         else:
-            setattr(cls, func.__name__, func)
+            cls.methods[func.__name__] = func
+            # setattr(cls, func.__name__, func)
             logging.debug('JsonRpc method registered: %s', func.__name__)
         return func
 
