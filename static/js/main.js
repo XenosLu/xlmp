@@ -436,4 +436,4 @@ var server = JsonRpc({
         callback: window.appView.out
     });
 
-// var server = JsonRpcWs();
+var server = JsonRpcWs();
