@@ -6,35 +6,6 @@ var icon = {
     "other": "oi-file"
 };
 
-function JsonRpc(defaultCallBack) {
-    return new Proxy(function () {}, {
-        get: function (target, method, receiver) {
-            console.log(receiver);
-            var errorCallback = defaultCallBack;
-            console.log('loading method: ' + method);
-            return function (params, callback) {
-                console.log(params);
-                if (typeof(callback) == "undefined")
-                    callback = defaultCallBack;
-                axios.post('/api', {
-                    jsonrpc: '2.0',
-                    method: method,
-                    params: params,
-                    id: Math.floor(Math.random() * 9999),
-                }).then(function (response) {
-                    console.log(response.data);
-                    if (response.data.hasOwnProperty('result'))
-                        callback(response.data.result);
-                    else
-                        errorCallback(response.data.error);
-                }).catch(function (error) {
-                    errorCallback(error.response.statusText);
-                });
-            };
-        }
-    });
-}
-
 function touchWebPlayer() {
     var hammertimeVideo = new Hammer(document);
     hammertimeVideo.on("panleft panright swipeleft swiperight", function (ev) {
@@ -136,7 +107,6 @@ window.appView = new Vue({
         },
         methods: {
             test: function (obj, obj2) {
-                server.test(null);
                 // console.log("test " + obj);
                 // this.out('test' + obj);
             },
@@ -229,7 +199,7 @@ window.appView = new Vue({
                 // this.history = data.history;
             },
             showHistory: function () {
-                server.list_history(null, this.historyCallBack);
+                server.list_history({}, this.historyCallBack);
             },
             fileSystemCallBack: function (data) {
                 this.historyShow = false;
@@ -238,7 +208,7 @@ window.appView = new Vue({
             },
             clearHistory: function () { // clear history button
                 if (confirm("Clear all history?"))
-                    server.clear_history(null, this.historyCallBack);
+                    server.clear_history({}, this.historyCallBack);
             },
             remove: function (obj) {
                 server.remove_history({src: obj}, this.historyCallBack);
@@ -368,7 +338,7 @@ window.appView = new Vue({
         },
         mounted: function () {
             this.$nextTick(function () {
-                console.log('mounted');
+                // console.log('mounted');
                 window.appView.showHistory();
             });
         },
@@ -397,5 +367,3 @@ function dlnalink() {
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
 var server = JsonRpc(window.appView.out);
-// var server = JsonRpc();
-

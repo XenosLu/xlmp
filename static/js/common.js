@@ -40,6 +40,31 @@ function offset_value(current, value, max) {
     return Math.round(current + Math.abs(Math.pow(s, 3)) * (value - current));
 }
 
+function JsonRpc(defaultCallBack) {
+    return new Proxy(function () {}, {
+        get: function (target, method, receiver) {
+            var errorCallback = defaultCallBack;
+            return function (params, callback) {
+                if (typeof(callback) == "undefined")
+                    callback = defaultCallBack;
+                axios.post('/api', {
+                    jsonrpc: '2.0',
+                    method: method,
+                    params: params,
+                    id: Math.floor(Math.random() * 9999),
+                }).then(function (response) {
+                    if (response.data.hasOwnProperty('result'))
+                        callback(response.data.result);
+                    else
+                        errorCallback(response.data.error);
+                }).catch(function (error) {
+                    errorCallback(error.response.statusText);
+                });
+            };
+        }
+    });
+}
+
 function vueTouch(el, type, binding) {
     this.el = el;
     this.type = type;
