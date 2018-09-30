@@ -339,7 +339,7 @@ window.appView = new Vue({
         mounted: function () {
             this.$nextTick(function () {
                 // console.log('mounted');
-                window.appView.showHistory();
+                // window.appView.showHistory();
             });
         },
     });
