@@ -40,6 +40,10 @@ function offset_value(current, value, max) {
     return Math.round(current + Math.abs(Math.pow(s, 3)) * (value - current));
 }
 
+/**
+ * json rpc
+ * @param options{url,callback}
+ */
 function JsonRpc(options) {
     return new Proxy(function () {}, {
         get: function (target, method, receiver) {
