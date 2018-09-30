@@ -263,9 +263,10 @@ def time_to_second(time_str):
     return sum([float(i)*60**n for n, i in enumerate(str(time_str).split(':')[::-1])])
 
 
-def get_size(*filename):
+def get_size(path):
     """get file size in human read format from file"""
-    size = os.path.getsize('%s/%s' % (VIDEO_PATH, ''.join(filename)))
+    # size = os.path.getsize('%s/%s' % (VIDEO_PATH, ''.join(filename)))
+    size = os.path.getsize(path)
     if size < 0:
         return 'Out of Range'
     if size < 1024:
@@ -336,7 +337,10 @@ class LinkWebSocketHandler(tornado.websocket.WebSocketHandler):
         self.on_pong()
 
     def on_message(self, message):
-        pass
+        logging.info('received ws message: %s', message)
+        result = JsonRpc.run(message)
+        logging.info('result: %s', result)
+        self.write_message(result)
 
     def on_pong(self, data=None):
         if self.last_message != TRACKER.state:
@@ -347,6 +351,7 @@ class LinkWebSocketHandler(tornado.websocket.WebSocketHandler):
     def on_close(self):
         logging.info('ws close: %s', self.request.remote_ip)
         self.users.remove(self)
+
 
 class ApiWebSocketHandler(tornado.websocket.WebSocketHandler):
     """Info retriever use web socket"""
@@ -641,14 +646,15 @@ def file_list(path=''):
         if filename.startswith('.'):
             continue
         rel_path = '%s%s' % (path, filename)
-        if os.path.isdir('%s/%s' % (VIDEO_PATH, rel_path)):
+        fullpath = '%s/%s' % (VIDEO_PATH, rel_path)
+        if os.path.isdir(fullpath):
             list_folder.append({'filename': filename, 'type': 'folder', 'path': rel_path})
         elif re.match('.*\\.((?i)mp)4$', filename):
             list_mp4.append({'filename': filename, 'type': 'mp4',
-                             'path': rel_path, 'size': get_size(path, filename)})
+                             'path': rel_path, 'size': get_size(fullpath)})
         elif re.match('.*\\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
             list_video.append({'filename': filename, 'type': 'video',
-                               'path': rel_path, 'size': get_size(path, filename)})
+                               'path': rel_path, 'size': get_size(fullpath)})
         else:
             list_other.append({'filename': filename, 'type': 'other', 'path': rel_path})
     return parent + list_folder + list_mp4 + list_video + list_other
