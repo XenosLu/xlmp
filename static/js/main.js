@@ -366,4 +366,7 @@ function dlnalink() {
 
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
-var server = JsonRpc(window.appView.out);
+var server = JsonRpc({
+        url: '/api',
+        callback: window.appView.out
+    });

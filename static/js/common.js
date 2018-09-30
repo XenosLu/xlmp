@@ -40,14 +40,14 @@ function offset_value(current, value, max) {
     return Math.round(current + Math.abs(Math.pow(s, 3)) * (value - current));
 }
 
-function JsonRpc(defaultCallBack) {
+function JsonRpc(options) {
     return new Proxy(function () {}, {
         get: function (target, method, receiver) {
-            var errorCallback = defaultCallBack;
+            var errorCallback = options.callback;
             return function (params, callback) {
                 if (typeof(callback) == "undefined")
-                    callback = defaultCallBack;
-                axios.post('/api', {
+                    callback = options.callback;
+                axios.post(options.url, {
                     jsonrpc: '2.0',
                     method: method,
                     params: params,
