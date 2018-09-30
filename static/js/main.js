@@ -345,31 +345,7 @@ window.appView = new Vue({
     });
 
 
-function webSocketLink_old(options) {
-    if (typeof(options.checkInterval) == "undefined")
-        options.checkInterval = 1200;
-    // console.log(options);
-    function wslink() {
-        var ws = new WebSocket(options.url);
-        ws.onmessage = function (evt) {
-            var data = JSON.parse(evt.data);
-            options.onmessage(data);
-        }
-        ws.onclose = options.onclose;
-        ws.onerror = options.onerror;
-        return ws;
-    }
-    function check() {
-        if (conn.readyState == 3)
-            conn = wslink();
-    }
-    var conn = wslink();
-    setInterval(check, options.checkInterval);
-    return conn;
-}
 function webSocketLink(options) {
-    // if (typeof(options.checkInterval) == "undefined")
-        // options.checkInterval = 1200;
     var ws = new ReconnectingWebSocket(options.url);
     ws.onmessage = function (evt) {
         var data = JSON.parse(evt.data);
