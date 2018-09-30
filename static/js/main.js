@@ -400,8 +400,6 @@ function JsonRpcWs() {
     return new Proxy(function () {}, {
         get: function (target, method, receiver) {
             return function (params, callback) {
-                // if (typeof(callback) == "undefined")
-                    // callback = options.callback;
                 var json_data = {
                     jsonrpc: '2.0',
                     method: method,
