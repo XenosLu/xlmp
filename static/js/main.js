@@ -364,8 +364,54 @@ function dlnalink() {
     return ws;
 }
 
+function dlnalink2() {
+    var ws = new WebSocket("ws://" + window.location.host + "/wsapi");
+    ws.onmessage = function (e) {
+        var data = JSON.parse(e.data);
+        console.log(data);
+        var callback = window.appView.out;
+        var errorCallback = window.appView.out;
+        if (data.hasOwnProperty('result'))
+            callback(data.result);
+        else
+            errorCallback(data.error);
+    }
+    ws.onclose = function () {
+
+    };
+    ws.onerror = function () {
+        console.log('connection lost');
+    };
+    ws.check = function () {
+        if (this.readyState == 3)
+            ws_link2 = dlnalink2();
+    };
+    return ws;
+}
+var ws_link2 = dlnalink2();
+
+function JsonRpc2() {
+    return new Proxy(function () {}, {
+        get: function (target, method, receiver) {
+            return function (params, callback) {
+                // if (typeof(callback) == "undefined")
+                    // callback = options.callback;
+                var json_data = {
+                    jsonrpc: '2.0',
+                    method: method,
+                    params: params,
+                    id: Math.floor(Math.random() * 9999)
+                };
+                ws_link2.send(JSON.stringify(json_data));
+            };
+        }
+    });
+}
+
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
+
+// var server = JsonRpc2();
 var server = JsonRpc({
         url: '/api',
         callback: window.appView.out

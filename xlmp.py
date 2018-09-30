@@ -322,7 +322,7 @@ class DlnaPlayToggleHandler(tornado.web.RequestHandler):
             self.finish({'error': 'Failed!'})
 
 
-class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
+class LinkWebSocketHandler(tornado.websocket.WebSocketHandler):
     """DLNA info retriever use web socket"""
     users = set()
     last_message = {}
@@ -343,6 +343,29 @@ class DlnaWebSocketHandler(tornado.websocket.WebSocketHandler):
             logging.debug(TRACKER.state)
             self.write_message(TRACKER.state)
             self.last_message = TRACKER.state.copy()
+
+    def on_close(self):
+        logging.info('ws close: %s', self.request.remote_ip)
+        self.users.remove(self)
+
+class ApiWebSocketHandler(tornado.websocket.WebSocketHandler):
+    """Info retriever use web socket"""
+    # executor = ThreadPoolExecutor(6)
+    users = set()
+
+    def data_received(self, chunk):
+        pass
+
+    def open(self, *args, **kwargs):
+        logging.info('Websocket connected: %s', self.request.remote_ip)
+        self.users.add(self)
+
+    # @tornado.concurrent.run_on_executor
+    def on_message(self, message):
+        logging.info('received ws message: %s', message)
+        result = JsonRpc.run(message)
+        logging.info('result: %s', result)
+        self.write_message(result)
 
     def on_close(self):
         logging.info('ws close: %s', self.request.remote_ip)
@@ -639,7 +662,8 @@ def get_next_file(src):  # not strict enough
 HANDLERS = [
     (r'/', IndexHandler),
     (r'/api', ApiHandler),
-    (r'/link', DlnaWebSocketHandler),
+    (r'/wsapi', ApiWebSocketHandler),
+    (r'/link', LinkWebSocketHandler),
     (r'/dlna/playtoggle', DlnaPlayToggleHandler),  # can't be replaced for toggle
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
 ]

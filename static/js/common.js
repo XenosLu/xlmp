@@ -51,12 +51,13 @@ function JsonRpc(options) {
             return function (params, callback) {
                 if (typeof(callback) == "undefined")
                     callback = options.callback;
-                axios.post(options.url, {
+                var json_data = {
                     jsonrpc: '2.0',
                     method: method,
                     params: params,
-                    id: Math.floor(Math.random() * 9999),
-                }).then(function (response) {
+                    id: Math.floor(Math.random() * 9999)
+                };
+                axios.post(options.url, json_data).then(function (response) {
                     if (response.data.hasOwnProperty('result'))
                         callback(response.data.result);
                     else
