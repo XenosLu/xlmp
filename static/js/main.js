@@ -345,7 +345,7 @@ window.appView = new Vue({
     });
 
 
-function webSocketLink(options) {
+function webSocketLink_old(options) {
     if (typeof(options.checkInterval) == "undefined")
         options.checkInterval = 1200;
     // console.log(options);
@@ -367,6 +367,22 @@ function webSocketLink(options) {
     setInterval(check, options.checkInterval);
     return conn;
 }
+function webSocketLink(options) {
+    // if (typeof(options.checkInterval) == "undefined")
+        // options.checkInterval = 1200;
+    function wslink() {
+        var ws = new ReconnectingWebSocket(options.url);
+        ws.onmessage = function (evt) {
+            var data = JSON.parse(evt.data);
+            options.onmessage(data);
+        }
+        ws.onclose = options.onclose;
+        ws.onerror = options.onerror;
+        return ws;
+    }
+    var conn = wslink();
+    return conn;
+}
 
 webSocketLink({
     url: 'ws://' + window.location.host + '/link',
@@ -385,13 +401,11 @@ webSocketLink({
 
 var methods = {};
 
-
 var connApi = webSocketLink({
         url: 'ws://' + window.location.host + '/wsapi',
         checkInterval: 1200,
         onmessage: function (data) {
             console.log(data);
-            
             var errorCallback = window.appView.out;
             if (data.hasOwnProperty('result'))
             {
@@ -431,9 +445,9 @@ function JsonRpcWs() {
     });
 }
 
-var server = JsonRpc({
-        url: '/api',
-        callback: window.appView.out
-    });
+// var server = JsonRpc({
+        // url: '/api',
+        // callback: window.appView.out
+    // });
 
-// var server = JsonRpcWs();
+var server = JsonRpcWs();
