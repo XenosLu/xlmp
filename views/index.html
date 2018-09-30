@@ -78,6 +78,7 @@
               <b-dropdown-item @click="server.db_backup()">backup</b-dropdown-item>
               <b-dropdown-item @click="server.db_restore()">restore</b-dropdown-item>
               <b-dropdown-item v-if="devMode" @click="server.test()">test</b-dropdown-item>
+              <!-- <b-dropdown-item v-if="devMode" @click="test">test</b-dropdown-item> -->
             </b-nav-item-dropdown>
           <!-- dlna dmr menu -->
             <b-nav-item-dropdown v-show="dlnaMode" right :text="dlnaInfo.CurrentDMR">

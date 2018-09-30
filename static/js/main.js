@@ -36,7 +36,7 @@ window.appView = new Vue({
             filelist: [], // updated by ajax
             dlnaInfo: { // updated by websocket
                 CurrentDMR: 'no DMR',
-                CurrentTransportState: '',
+                // CurrentTransportState: '',
                 TrackURI: '',
             },
             positionBarCanUpdate: true, //dlna position bar
@@ -84,7 +84,7 @@ window.appView = new Vue({
         },
         computed: {
             dlnaOn: function () { // check if dlna dmr is exist
-                return this.dlnaInfo.CurrentDMR !== 'no DMR';
+                return typeof(this.dlnaInfo.CurrentDMR) !== "undefined" && this.dlnaInfo.CurrentDMR !== 'no DMR';
             },
             dlnaMode: function () { // check if in dlna mode
                 return this.mode === 'DLNA';
@@ -345,21 +345,18 @@ window.appView = new Vue({
     });
 
 
-function dlnaInfoLink() {
+function webSocketLink(options) {
+    if (typeof(options.checkInterval) == "undefined")
+        options.checkInterval = 1200;
+    // console.log(options);
     function wslink() {
-        var ws = new WebSocket('ws://' + window.location.host + '/link');
-        ws.onmessage = function (e) {
-            var data = JSON.parse(e.data);
-            console.log(data);
-            window.appView.dlnaInfo = data;
+        var ws = new WebSocket(options.url);
+        ws.onmessage = function (evt) {
+            var data = JSON.parse(evt.data);
+            options.onmessage(data);
         }
-        ws.onclose = function () {
-            window.appView.dlnaInfo.CurrentTransportState = 'disconnected';
-            console.log('disconnected');
-        }
-        ws.onerror = function () {
-            console.log('connection error');
-        }
+        ws.onclose = options.onclose;
+        ws.onerror = options.onerror;
         return ws;
     }
     function check() {
@@ -367,39 +364,44 @@ function dlnaInfoLink() {
             conn = wslink();
     }
     var conn = wslink();
-    setInterval(check, 1200);
+    setInterval(check, options.checkInterval);
+    return conn;
 }
 
-function dlnaInfoLink2() {
-    function wslink() {
-        var ws = new WebSocket('ws://' + window.location.host + '/link');
-        ws.onmessage = function (e) {
-            var data = JSON.parse(e.data);
-            console.log(data);
+webSocketLink({
+    url: 'ws://' + window.location.host + '/link',
+    checkInterval: 1200,
+    onmessage: function (data) {
+        console.log(data);
+        window.appView.dlnaInfo = data;
+    },
+    onclose: function () {
+        window.appView.dlnaInfo = {
+            CurrentTransportState: 'disconnected'
+        };
+        console.log('disconnected');
+    },
+});
+
+var connApi = webSocketLink({
+    url: 'ws://' + window.location.host + '/wsapi',
+    checkInterval: 1200,
+    onmessage: function (data) {
+        console.log(data);
             var callback = window.appView.out;
             var errorCallback = window.appView.out;
             if (data.hasOwnProperty('result'))
                 callback(data.result);
             else
                 errorCallback(data.error);
-        }
-        ws.onclose = function () {
-            window.appView.dlnaInfo.CurrentTransportState = 'disconnected';
-            console.log('disconnected');
-        }
-        ws.onerror = function () {
-            console.log('connection error');
-        }
-        return ws;
-    }
-    function check() {
-        if (conn.readyState == 3)
-            conn = wslink();
-    }
-    var conn = wslink();
-    setInterval(check, 1200);
-}
-
+    },
+    onclose: function () {
+        window.appView.dlnaInfo = {
+            CurrentTransportState: 'disconnected'
+        };
+        console.log('disconnected');
+    },
+});
 
 function JsonRpc2() {
     return new Proxy(function () {}, {
@@ -413,13 +415,11 @@ function JsonRpc2() {
                     params: params,
                     id: Math.floor(Math.random() * 9999)
                 };
-                ws_link2.send(JSON.stringify(json_data));
+                connApi.send(JSON.stringify(json_data));
             }
         }
     });
 }
-
-dlnaInfoLink();
 
 var server = JsonRpc({
         url: '/api',
