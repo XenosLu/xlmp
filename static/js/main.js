@@ -349,6 +349,7 @@ function webSocketLink(options) {
         var data = JSON.parse(evt.data);
         options.onmessage(data);
     }
+    ws.onopen = options.onopen;
     ws.onclose = options.onclose;
     ws.onerror = options.onerror;
     return ws;
@@ -380,6 +381,9 @@ var connApi = webSocketLink({
         };
         console.log('disconnected');
     },
+    onopen: function () {
+        window.appView.out('connected');
+    }
 });
 
 
