@@ -580,7 +580,7 @@ def file_move(src):
 
 
 @JsonRpc.method
-def file_list(path):
+def file_list(path=''):
     """list dir files in dict/json"""
     if path == '/':
         path = ''
