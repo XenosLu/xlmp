@@ -659,7 +659,7 @@ HANDLERS = [
     (r'/api', ApiHandler),
     (r'/wsapi', ApiWebSocketHandler),
     (r'/link', LinkWebSocketHandler),
-    (r'/dlna/playtoggle', DlnaPlayToggleHandler),  # can't be replaced for toggle
+    (r'/playtoggle', DlnaPlayToggleHandler),
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
 ]
 
