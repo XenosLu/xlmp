@@ -382,7 +382,6 @@ function webSocketLink(options) {
 
 webSocketLink({
     url: 'ws://' + window.location.host + '/link',
-    checkInterval: 1200,
     onmessage: function (data) {
         console.log(data);
         window.appView.dlnaInfo = data;
@@ -399,7 +398,6 @@ var methods = {};
 
 var connApi = webSocketLink({
         url: 'ws://' + window.location.host + '/wsapi',
-        checkInterval: 1200,
         onmessage: function (data) {
             console.log(data);
             var errorCallback = window.appView.out;
