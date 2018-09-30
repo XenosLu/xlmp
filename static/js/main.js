@@ -99,7 +99,7 @@ window.appView = new Vue({
             },
             wpPosition: function () {
                 for (var item in this.history) {
-                    if (this.history[item].filename == window.appView.video.src)
+                    if (this.history[item].filename === window.appView.video.src)
                         return this.history[item].position;
                 }
                 return 0;
@@ -117,11 +117,11 @@ window.appView = new Vue({
                 server.dlna_vol(['down']);
             },
             pressOpen: function (obj) {
-                var target = obj.target.tagName == 'TD' ? obj.target : obj.target.parentNode;
+                var target = obj.target.tagName === 'TD' ? obj.target : obj.target.parentNode;
                 this.open(target.getAttribute('data-target'), 'folder');
             },
             tapOpen: function (obj) {
-                var target = obj.target.tagName == 'TD' ? obj.target : obj.target.parentNode;
+                var target = obj.target.tagName === 'TD' ? obj.target : obj.target.parentNode;
                 this.open(target.getAttribute('data-path'), target.getAttribute('data-type'));
             },
             showFixBar: function () { // show fix bar and then hide
@@ -135,7 +135,7 @@ window.appView = new Vue({
                     }, 3500);
             },
             out: function (str) {
-                if (str !== "") {
+                if (str !== '') {
                     if (this.output.timerId) {
                         clearTimeout(this.output.timerId);
                         this.output.timerId = null;
@@ -178,7 +178,7 @@ window.appView = new Vue({
                 }
             },
             videoSizeToggle: function () {
-                if (this.video.sizeBtnText == 'auto')
+                if (this.video.sizeBtnText === 'auto')
                     this.videoAdapt();
                 else {
                     this.video.sizeBtnText = 'auto';
@@ -231,7 +231,7 @@ window.appView = new Vue({
             },
             checkFileExist: function (obj) {
                 for (var item in this.history) {
-                    if (this.history[item].filename == obj)
+                    if (this.history[item].filename === obj)
                         return this.history[item].exist;
                 }
                 return true;
@@ -264,7 +264,7 @@ window.appView = new Vue({
             },
             videosave: function () {
                 this.video.lastplaytime = new Date().getTime(); //to detect if video is playing
-                if (this.$refs.video.readyState == 4 && Math.floor(Math.random() * 99) > 70) //randomly save play position
+                if (this.$refs.video.readyState === 4 && Math.floor(Math.random() * 99) > 70) //randomly save play position
                     server.save_history({
                         src: this.video.src,
                         position: this.$refs.video.currentTime,
