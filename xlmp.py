@@ -402,13 +402,13 @@ class JsonRpc():
             obj = json.loads(json_data)
         except json.decoder.JSONDecodeError:
             logging.debug(json_data)
-            val['error'] = {"code": -32700, 'message': 'Parse error'}
+            val['error'] = {'code': -32700, 'message': 'Parse error'}
             return val
         if isinstance(obj, dict):
             return cls._run(obj)
         if isinstance(obj, list):
             return [cls._run(item) for item in obj]
-        val['error'] = {"code": -32600, 'message': 'Invalid Request'}
+        val['error'] = {'code': -32600, 'message': 'Invalid Request'}
         return val
 
     @classmethod
@@ -422,7 +422,7 @@ class JsonRpc():
         args = params if isinstance(params, list) else []
         kwargs = params if isinstance(params, dict) else {}
         if not method in cls.methods:
-            val['error'] = {"code": -32601, 'message': 'Method not found'}
+            val['error'] = {'code': -32601, 'message': 'Method not found'}
             return val
         try:
             result = cls.methods[method](*args, **kwargs)
@@ -435,10 +435,10 @@ class JsonRpc():
             val['result'] = result
         except TypeError as exc:
             logging.warning(exc, exc_info=True)
-            val['error'] = {"code": -32602, 'message': 'Invalid params'}
+            val['error'] = {'code': -32602, 'message': 'Invalid params'}
         except Exception as exc:
             logging.warning(exc, exc_info=True)
-            val['error'] = {"code": -1, 'message': str(exc)}
+            val['error'] = {'code': -1, 'message': str(exc)}
         return val
 
     @classmethod
@@ -575,35 +575,6 @@ def file_move(src):
 
 
 @JsonRpc.method
-def file_list(path=''):
-    """list dir files in dict/json"""
-    if path == '/':
-        path = ''
-    parent, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
-    if path:
-        parent = [{'filename': '..', 'type': 'folder', 'path': os.path.dirname(path)}]
-        logging.info(path)
-        path = re.sub('([^/])$', '\\1/', path)  # make sure path end with '/'
-        # parent = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]
-    dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))
-    for filename in dir_list:
-        if filename.startswith('.'):
-            continue
-        rel_path = '%s%s' % (path, filename)
-        if os.path.isdir('%s/%s' % (VIDEO_PATH, rel_path)):
-            list_folder.append({'filename': filename, 'type': 'folder', 'path': rel_path})
-        elif re.match('.*\\.((?i)mp)4$', filename):
-            list_mp4.append({'filename': filename, 'type': 'mp4',
-                             'path': rel_path, 'size': get_size(path, filename)})
-        elif re.match('.*\\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
-            list_video.append({'filename': filename, 'type': 'video',
-                               'path': rel_path, 'size': get_size(path, filename)})
-        else:
-            list_other.append({'filename': filename, 'type': 'other', 'path': rel_path})
-    return parent + list_folder + list_mp4 + list_video + list_other
-
-
-@JsonRpc.method
 def self_update():
     """develop method: self update"""
     def restart():
@@ -652,6 +623,35 @@ def get_next_file(src):  # not strict enough
     if next_index < len(files):
         return '%s/%s' % (os.path.dirname(src), files[next_index])
     return None
+
+
+@JsonRpc.method
+def file_list(path=''):
+    """list dir files in dict/json"""
+    if path == '/':
+        path = ''
+    parent, list_folder, list_mp4, list_video, list_other = [], [], [], [], []
+    if path:
+        parent = [{'filename': '..', 'type': 'folder', 'path': os.path.dirname(path)}]
+        logging.info(path)
+        path = re.sub('([^/])$', '\\1/', path)  # make sure path end with '/'
+        # parent = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]
+    dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))
+    for filename in dir_list:
+        if filename.startswith('.'):
+            continue
+        rel_path = '%s%s' % (path, filename)
+        if os.path.isdir('%s/%s' % (VIDEO_PATH, rel_path)):
+            list_folder.append({'filename': filename, 'type': 'folder', 'path': rel_path})
+        elif re.match('.*\\.((?i)mp)4$', filename):
+            list_mp4.append({'filename': filename, 'type': 'mp4',
+                             'path': rel_path, 'size': get_size(path, filename)})
+        elif re.match('.*\\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
+            list_video.append({'filename': filename, 'type': 'video',
+                               'path': rel_path, 'size': get_size(path, filename)})
+        else:
+            list_other.append({'filename': filename, 'type': 'other', 'path': rel_path})
+    return parent + list_folder + list_mp4 + list_video + list_other
 
 
 HANDLERS = [
