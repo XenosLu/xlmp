@@ -383,27 +383,36 @@ webSocketLink({
     },
 });
 
+var methods = {};
+
+
 var connApi = webSocketLink({
-    url: 'ws://' + window.location.host + '/wsapi',
-    checkInterval: 1200,
-    onmessage: function (data) {
-        console.log(data);
-            var callback = window.appView.out;
+        url: 'ws://' + window.location.host + '/wsapi',
+        checkInterval: 1200,
+        onmessage: function (data) {
+            console.log(data);
+            
             var errorCallback = window.appView.out;
             if (data.hasOwnProperty('result'))
+            {
+                console.log(data.id);
+                var callback = methods[data.id];
+                if (typeof(callback) == "undefined")
+                    callback = window.appView.out;
                 callback(data.result);
+            }
             else
                 errorCallback(data.error);
-    },
-    onclose: function () {
-        window.appView.dlnaInfo = {
-            CurrentTransportState: 'disconnected'
-        };
-        console.log('disconnected');
-    },
-});
+        },
+        onclose: function () {
+            window.appView.dlnaInfo = {
+                CurrentTransportState: 'disconnected'
+            };
+            console.log('disconnected');
+        },
+    });
 
-function JsonRpc2() {
+function JsonRpcWs() {
     return new Proxy(function () {}, {
         get: function (target, method, receiver) {
             return function (params, callback) {
@@ -416,6 +425,7 @@ function JsonRpc2() {
                     id: Math.floor(Math.random() * 9999)
                 };
                 connApi.send(JSON.stringify(json_data));
+                methods[json_data.id] = callback;
             }
         }
     });
@@ -426,4 +436,4 @@ var server = JsonRpc({
         callback: window.appView.out
     });
 
-// var server = JsonRpc2();
+var server = JsonRpcWs();
