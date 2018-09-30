@@ -344,6 +344,7 @@ window.appView = new Vue({
         },
     });
 
+
 function dlnalink() {
     var ws = new WebSocket("ws://" + window.location.host + "/link");
     ws.onmessage = function (e) {
@@ -388,7 +389,7 @@ function dlnalink2() {
     };
     return ws;
 }
-var ws_link2 = dlnalink2();
+
 
 function JsonRpc2() {
     return new Proxy(function () {}, {
@@ -410,6 +411,8 @@ function JsonRpc2() {
 
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
+var ws_link2 = dlnalink2();
+setInterval("ws_link2.check()", 1200);
 
 // var server = JsonRpc2();
 var server = JsonRpc({
