@@ -44,7 +44,7 @@ class TestMain(AsyncHTTPTestCase):
 
         response = self.fetch('/api', method="POST", body='{"jsonrpc":"2.0", "method":"test", "id": 1}')
         self.assertEqual(response.code, 200)
-        self.assertEqual(json.loads(response.body)['result'], 'test message new')  # Success
+        self.assertEqual(json.loads(response.body)['result'], 'test message')  # Success
 
 if __name__ == '__main__':
     unittest.main()
