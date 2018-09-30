@@ -319,7 +319,7 @@ window.appView = new Vue({
             if (!this.isIos) {
                 this.fixBar.show = false;
                 document.onmousemove = this.showFixBar;
-            };
+            }
             axios.defaults.timeout = 1999;
             // prevent double click for IOS
             document.addEventListener('touchstart', function (event) {
@@ -332,7 +332,7 @@ window.appView = new Vue({
                 var now = (new Date()).getTime();
                 if (now - lastTouchEnd <= 300) {
                     event.preventDefault();
-                };
+                }
                 lastTouchEnd = now;
             }, false);
         },
@@ -345,32 +345,33 @@ window.appView = new Vue({
     });
 
 
-function dlnalink() {
-    var ws = new WebSocket('ws://' + window.location.host + '/link');
-    ws.onmessage = function (e) {
-        var data = JSON.parse(e.data);
-        console.log(data);
-        window.appView.dlnaInfo = data;
-    }
-    ws.onclose = function () {
-        window.appView.dlnaInfo.CurrentTransportState = 'disconnected';
-        console.log('disconnected');
-    };
-    ws.onerror = function () {
-        console.log('connection lost');
-    };
-    ws.check = function () {
-        console.log('ws check');
-        if (ws_link.readyState == 3) {
-            ws_link = dlnalink();
+function dlnaInfoLink() {
+    function wslink () {
+        var ws = new WebSocket('ws://' + window.location.host + '/link');
+        ws.onmessage = function (e) {
+            var data = JSON.parse(e.data);
+            console.log(data);
+            window.appView.dlnaInfo = data;
         }
-    };
-    setInterval(ws.check, 1200);
-    return ws;
+        ws.onclose = function () {
+            window.appView.dlnaInfo.CurrentTransportState = 'disconnected';
+            console.log('disconnected');
+        }
+        ws.onerror = function () {
+            console.log('connection error');
+        }
+        return ws;
+    }
+    function check() {
+        if (conn.readyState == 3)
+            conn = wslink();
+    }
+    var conn = wslink();
+    setInterval(check, 1200);
 }
 
 
-function dlnalink2() {
+function dlnaInfoLink2() {
     var ws = new WebSocket("ws://" + window.location.host + "/wsapi");
     ws.onmessage = function (e) {
         var data = JSON.parse(e.data);
@@ -384,14 +385,14 @@ function dlnalink2() {
     }
     ws.onclose = function () {
 
-    };
+    }
     ws.onerror = function () {
         console.log('connection lost');
-    };
+    }
     ws.check = function () {
         if (this.readyState == 3)
-            ws_link2 = dlnalink2();
-    };
+            ws_link2 = dlnaInfoLink2();
+    }
     return ws;
 }
 
@@ -409,16 +410,12 @@ function JsonRpc2() {
                     id: Math.floor(Math.random() * 9999)
                 };
                 ws_link2.send(JSON.stringify(json_data));
-            };
+            }
         }
     });
 }
 
-var ws_link = dlnalink();
-
-// var ws_link2 = dlnalink2();
-// setInterval("ws_link2.check()", 1200);
-
+dlnaInfoLink();
 
 var server = JsonRpc({
         url: '/api',
