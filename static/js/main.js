@@ -358,33 +358,32 @@ function webSocketLink(options) {
 var methods = {};
 
 var connApi = webSocketLink({
-    url: 'ws://' + window.location.host + '/link',
-    onmessage: function (data) {
-        console.log(data);
+        url: 'ws://' + window.location.host + '/link',
+        onmessage: function (data) {
+            console.log(data);
             var errorCallback = window.appView.out;
             if (data.hasOwnProperty('jsonrpc')) {
-            
-            if (data.hasOwnProperty('result')) {
-                var callback = methods[data.id];
-                if (typeof(callback) === 'undefined')
-                    callback = window.appView.out;
-                callback(data.result);
+                if (data.hasOwnProperty('result')) {
+                    var callback = methods[data.id];
+                    delete methods[data.id];
+                    if (typeof(callback) === 'undefined')
+                        callback = window.appView.out;
+                    callback(data.result);
+                } else
+                    errorCallback(data.error);
             } else
-                errorCallback(data.error);
-            }
-            else
                 window.appView.dlnaInfo = data;
-    },
-    onclose: function () {
-        window.appView.dlnaInfo = {
-            CurrentTransportState: 'disconnected'
-        };
-        console.log('disconnected');
-    },
-    onopen: function () {
-        window.appView.out('connected');
-    }
-});
+        },
+        onclose: function () {
+            window.appView.dlnaInfo = {
+                CurrentTransportState: 'disconnected'
+            };
+            console.log('disconnected');
+        },
+        onopen: function () {
+            window.appView.out('connected');
+        }
+    });
 
 
 // var connApi = webSocketLink({
