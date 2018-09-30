@@ -4,7 +4,7 @@
 import unittest
 import json
 from tornado.testing import AsyncHTTPTestCase
-from xlmp import APP, TRACKER
+from xlmp import APP
 
 class TestMain(AsyncHTTPTestCase):
     """test class"""
@@ -20,9 +20,9 @@ class TestMain(AsyncHTTPTestCase):
         """test dlna playtoggle interface"""
         response = self.fetch('/playtoggle')
         self.assertEqual(response.code, 200)
-        # self.assertEqual(response.body, 200)
 
     def test_api(self):
+        """test json rpc web api"""
         response = self.fetch('/api')
         self.assertEqual(response.code, 405)
 
@@ -42,7 +42,8 @@ class TestMain(AsyncHTTPTestCase):
         self.assertEqual(response.code, 200)
         self.assertEqual(response.body, b'')  # Notification
 
-        response = self.fetch('/api', method="POST", body='{"jsonrpc":"2.0", "method":"test", "id": 1}')
+        response = self.fetch(
+            '/api', method="POST", body='{"jsonrpc":"2.0", "method":"test", "id": 1}')
         self.assertEqual(response.code, 200)
         self.assertEqual(json.loads(response.body)['result'], 'test message')  # Success
 
