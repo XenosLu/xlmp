@@ -365,6 +365,7 @@ function dlnalink() {
     return ws;
 }
 
+
 function dlnalink2() {
     var ws = new WebSocket("ws://" + window.location.host + "/wsapi");
     ws.onmessage = function (e) {
