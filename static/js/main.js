@@ -1,9 +1,9 @@
 "use strict";
 var icon = {
-    "folder": "oi-folder",
-    "mp4": "oi-video",
-    "video": "oi-video",
-    "other": "oi-file"
+    folder: "oi-folder",
+    mp4: "oi-video",
+    video: "oi-video",
+    other: "oi-file"
 };
 
 function touchWebPlayer() {
@@ -346,7 +346,7 @@ window.appView = new Vue({
 
 
 function dlnalink() {
-    var ws = new WebSocket("ws://" + window.location.host + "/link");
+    var ws = new WebSocket('ws://' + window.location.host + '/link');
     ws.onmessage = function (e) {
         var data = JSON.parse(e.data);
         console.log(data);
@@ -415,8 +415,10 @@ setInterval("ws_link.check()", 1200);
 var ws_link2 = dlnalink2();
 setInterval("ws_link2.check()", 1200);
 
-// var server = JsonRpc2();
+
 var server = JsonRpc({
         url: '/api',
         callback: window.appView.out
     });
+
+// var server = JsonRpc2();
