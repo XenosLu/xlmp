@@ -6,15 +6,16 @@ var icon = {
     "other": "oi-file"
 };
 
-var server = new Proxy(function () {}, {
+function JsonRpc(defaultCallBack) {
+    return new Proxy(function () {}, {
         get: function (target, method, receiver) {
             console.log(receiver);
-            var errorCallback = window.appView.out;
+            var errorCallback = defaultCallBack;
             console.log('loading method: ' + method);
             return function (params, callback) {
                 console.log(params);
                 if (typeof(callback) == "undefined")
-                    callback = errorCallback;
+                    callback = defaultCallBack;
                 axios.post('/api', {
                     jsonrpc: '2.0',
                     method: method,
@@ -32,6 +33,7 @@ var server = new Proxy(function () {}, {
             };
         }
     });
+}
 
 function touchWebPlayer() {
     var hammertimeVideo = new Hammer(document);
@@ -394,3 +396,6 @@ function dlnalink() {
 
 var ws_link = dlnalink();
 setInterval("ws_link.check()", 1200);
+var server = JsonRpc(window.appView.out);
+// var server = JsonRpc();
+
