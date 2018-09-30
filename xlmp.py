@@ -526,11 +526,6 @@ def list_history():
          'latest_date': s[3], 'path': os.path.dirname(s[0]),
          'exist': os.path.exists('%s/%s' % (VIDEO_PATH, s[0]))}
         for s in run_sql('select * from history order by LATEST_DATE desc')]
-    # return {'history': [
-        # {'filename': s[0], 'position': s[1], 'duration': s[2],
-         # 'latest_date': s[3], 'path': os.path.dirname(s[0]),
-         # 'exist': os.path.exists('%s/%s' % (VIDEO_PATH, s[0]))}
-        # for s in run_sql('select * from history order by LATEST_DATE desc')]}
 
 
 @JsonRpc.method
@@ -606,7 +601,6 @@ def file_list(path=''):
         else:
             list_other.append({'filename': filename, 'type': 'other', 'path': rel_path})
     return parent + list_folder + list_mp4 + list_video + list_other
-    # return {'filesystem': (parent + list_folder + list_mp4 + list_video + list_other)}
 
 
 @JsonRpc.method
