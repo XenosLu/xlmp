@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 var icon = {
     folder: "oi-folder",
     mp4: "oi-video",
@@ -377,15 +377,12 @@ var connApi = webSocketLink({
         onmessage: function (data) {
             console.log(data);
             var errorCallback = window.appView.out;
-            if (data.hasOwnProperty('result'))
-            {
-                console.log(data.id);
+            if (data.hasOwnProperty('result')) {
                 var callback = methods[data.id];
                 if (typeof(callback) == "undefined")
                     callback = window.appView.out;
                 callback(data.result);
-            }
-            else
+            } else
                 errorCallback(data.error);
         },
         onclose: function () {
