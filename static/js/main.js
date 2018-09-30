@@ -346,7 +346,7 @@ window.appView = new Vue({
 
 
 function dlnaInfoLink() {
-    function wslink () {
+    function wslink() {
         var ws = new WebSocket('ws://' + window.location.host + '/link');
         ws.onmessage = function (e) {
             var data = JSON.parse(e.data);
@@ -370,30 +370,34 @@ function dlnaInfoLink() {
     setInterval(check, 1200);
 }
 
-
 function dlnaInfoLink2() {
-    var ws = new WebSocket("ws://" + window.location.host + "/wsapi");
-    ws.onmessage = function (e) {
-        var data = JSON.parse(e.data);
-        console.log(data);
-        var callback = window.appView.out;
-        var errorCallback = window.appView.out;
-        if (data.hasOwnProperty('result'))
-            callback(data.result);
-        else
-            errorCallback(data.error);
+    function wslink() {
+        var ws = new WebSocket('ws://' + window.location.host + '/link');
+        ws.onmessage = function (e) {
+            var data = JSON.parse(e.data);
+            console.log(data);
+            var callback = window.appView.out;
+            var errorCallback = window.appView.out;
+            if (data.hasOwnProperty('result'))
+                callback(data.result);
+            else
+                errorCallback(data.error);
+        }
+        ws.onclose = function () {
+            window.appView.dlnaInfo.CurrentTransportState = 'disconnected';
+            console.log('disconnected');
+        }
+        ws.onerror = function () {
+            console.log('connection error');
+        }
+        return ws;
     }
-    ws.onclose = function () {
-
+    function check() {
+        if (conn.readyState == 3)
+            conn = wslink();
     }
-    ws.onerror = function () {
-        console.log('connection lost');
-    }
-    ws.check = function () {
-        if (this.readyState == 3)
-            ws_link2 = dlnaInfoLink2();
-    }
-    return ws;
+    var conn = wslink();
+    setInterval(check, 1200);
 }
 
 
