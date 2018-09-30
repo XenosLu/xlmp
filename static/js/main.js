@@ -354,14 +354,18 @@ function dlnalink() {
     }
     ws.onclose = function () {
         window.appView.dlnaInfo.CurrentTransportState = 'disconnected';
+        console.log('disconnected');
     };
     ws.onerror = function () {
         console.log('connection lost');
     };
     ws.check = function () {
-        if (this.readyState == 3)
+        console.log('ws check');
+        if (ws_link.readyState == 3) {
             ws_link = dlnalink();
+        }
     };
+    setInterval(ws.check, 1200);
     return ws;
 }
 
@@ -411,9 +415,9 @@ function JsonRpc2() {
 }
 
 var ws_link = dlnalink();
-setInterval("ws_link.check()", 1200);
-var ws_link2 = dlnalink2();
-setInterval("ws_link2.check()", 1200);
+
+// var ws_link2 = dlnalink2();
+// setInterval("ws_link2.check()", 1200);
 
 
 var server = JsonRpc({
