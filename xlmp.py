@@ -663,7 +663,7 @@ def file_list(path=''):
 HANDLERS = [
     (r'/', IndexHandler),
     (r'/api', ApiHandler),
-    (r'/wsapi', ApiWebSocketHandler),
+    # (r'/wsapi', ApiWebSocketHandler),
     (r'/link', LinkWebSocketHandler),
     (r'/playtoggle', DlnaPlayToggleHandler),
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
