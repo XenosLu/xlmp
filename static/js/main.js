@@ -196,18 +196,16 @@ window.appView = new Vue({
             historyCallBack: function (data) {
                 this.historyShow = true;
                 this.history = data;
-                // this.history = data.history;
             },
             showHistory: function () {
                 server.list_history({}, this.historyCallBack);
             },
             fileSystemCallBack: function (data) {
                 this.historyShow = false;
-                // this.filelist = data.filesystem;
                 this.filelist = data;
             },
             clearHistory: function () { // clear history button
-                if (confirm("Clear all history?"))
+                if (confirm('Clear all history?'))
                     server.clear_history({}, this.historyCallBack);
             },
             remove: function (obj) {
@@ -379,7 +377,7 @@ var connApi = webSocketLink({
             var errorCallback = window.appView.out;
             if (data.hasOwnProperty('result')) {
                 var callback = methods[data.id];
-                if (typeof(callback) == "undefined")
+                if (typeof(callback) === 'undefined')
                     callback = window.appView.out;
                 callback(data.result);
             } else
