@@ -594,18 +594,17 @@ def file_list(path=''):
     for filename in dir_list:
         if filename.startswith('.'):
             continue
-        if os.path.isdir('%s/%s%s' % (VIDEO_PATH, path, filename)):
-            list_folder.append({'filename': filename, 'type': 'folder',
-                                'path': '%s%s' % (path, filename)})
+        rel_path = '%s%s' % (path, filename)
+        if os.path.isdir('%s/%s' % (VIDEO_PATH, rel_path)):
+            list_folder.append({'filename': filename, 'type': 'folder', 'path': rel_path})
         elif re.match('.*\\.((?i)mp)4$', filename):
             list_mp4.append({'filename': filename, 'type': 'mp4',
-                             'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+                             'path': rel_path, 'size': get_size(path, filename)})
         elif re.match('.*\\.((?i)(mkv|avi|flv|rmvb|wmv))$', filename):
             list_video.append({'filename': filename, 'type': 'video',
-                               'path': '%s%s' % (path, filename), 'size': get_size(path, filename)})
+                               'path': rel_path, 'size': get_size(path, filename)})
         else:
-            list_other.append({'filename': filename, 'type': 'other',
-                               'path': '%s%s' % (path, filename)})
+            list_other.append({'filename': filename, 'type': 'other', 'path': rel_path})
     return parent + list_folder + list_mp4 + list_video + list_other
     # return {'filesystem': (parent + list_folder + list_mp4 + list_video + list_other)}
 
