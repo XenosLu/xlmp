@@ -370,18 +370,14 @@ function webSocketLink_old(options) {
 function webSocketLink(options) {
     // if (typeof(options.checkInterval) == "undefined")
         // options.checkInterval = 1200;
-    function wslink() {
-        var ws = new ReconnectingWebSocket(options.url);
-        ws.onmessage = function (evt) {
-            var data = JSON.parse(evt.data);
-            options.onmessage(data);
-        }
-        ws.onclose = options.onclose;
-        ws.onerror = options.onerror;
-        return ws;
+    var ws = new ReconnectingWebSocket(options.url);
+    ws.onmessage = function (evt) {
+        var data = JSON.parse(evt.data);
+        options.onmessage(data);
     }
-    var conn = wslink();
-    return conn;
+    ws.onclose = options.onclose;
+    ws.onerror = options.onerror;
+    return ws;
 }
 
 webSocketLink({
