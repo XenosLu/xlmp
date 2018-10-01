@@ -147,7 +147,7 @@ class DMRTracker(Thread):
             while self.dmr.position_info().get('TrackDuration') == '00:00:00':
                 sleep(0.5)
                 logging.info('Waiting for duration to be recognized correctly, url=%s', url)
-                if (time() - time0) > 15:
+                if (time() - time0) > 50:  # was 15
                     logging.info('Load duration timeout')
                     return False
             logging.info(self.state)
@@ -429,10 +429,10 @@ class DlnaLoadHandler(tornado.web.RequestHandler):
             self.finish('should not use 127.0.0.1 as host to load throuh DLNA')
             return
         logging.info(self.request.headers)
-        if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
-            logging.warning('File not found: %s', src)
-            self.finish('Error: File not found.')
-            return
+        # if not os.path.exists('%s/%s' % (VIDEO_PATH, src)):
+            # logging.warning('File not found: %s', src)
+            # self.finish('Error: File not found.')
+            # return
         logging.info('start loading...tracker state:%s', TRACKER.state.get('CurrentTransportState'))
         url = 'http://%s/video/%s' % (srv_host, quote(src))
         LOADER.load(url)
