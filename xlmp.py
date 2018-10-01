@@ -20,7 +20,7 @@ from lib.dlnap import URN_AVTransport_Fmt, discover  # https://github.com/ttopho
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # set file path as current
 
-VIDEO_PATH = 'media'  # media file path
+VIDEO_PATH = 'video'  # media file path
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
 
 
