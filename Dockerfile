@@ -33,5 +33,4 @@ VOLUME /xlmp/media
 RUN chmod -R +x /xlmp/docker/s6
 # ENTRYPOINT ["/bin/sh", "/xlmp/docker/docker-entrypoint.sh"]
 # CMD ["/usr/bin/supervisord", "-c", "/xlmp/docker/supervisord.conf"]
-# CMD ["/usr/bin/dumb-init", "/bin/sh", "/xlmp/docker/init"]
 CMD ["/bin/s6-svscan", "/xlmp/docker/s6/"]
