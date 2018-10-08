@@ -163,8 +163,11 @@ button {
     -ms-flex-direction: column !important;
     flex-direction: column !important;
 }
-.new {
+.no-button {
     border: 0;
     background-color: transparent;
     outline: none;
+}
+.r-90 {
+    transform:rotate(90deg);
 }
