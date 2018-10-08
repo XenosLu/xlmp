@@ -625,10 +625,8 @@ def get_next_file(src):  # not strict enough
     filepath = os.path.dirname(fullname)
     files = sorted([i for i in os.listdir(filepath)
                     if not i.startswith('.') and os.path.isfile('%s/%s' % (filepath, i))])
-    # if os.path.basename(fullname) in files:
     if os.path.basename(src) in files:
         next_index = files.index(os.path.basename(src)) + 1
-        # next_index = files.index(os.path.basename(fullname)) + 1
     else:
         next_index = 0
     if next_index < len(files):
