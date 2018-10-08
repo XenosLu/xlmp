@@ -193,10 +193,25 @@
                   <small class="text-muted">${ item.size }</small>
                 </td>
                 <!-- <td class="iconOnly d-sm-table-cell d-none"> -->
-                <td class="iconOnly" v-show="!editMode">
-                  <b-btn variant="danger" @click="if(confirm('Confirm move?'))move(item.path)">
-                    <i class="oi oi-circle-x"></i>
-                  </b-btn>
+                <!-- <td class="iconOnly" v-show="!editMode"> -->
+                  <!-- <b-btn variant="danger" @click="if(confirm('Confirm move?'))move(item.path)"> -->
+                    <!-- <i class="oi oi-circle-x"></i> -->
+                  <!-- </b-btn> -->
+                <!-- </td> -->
+                <td class="iconOnly">
+                  <b-dropdown v-show="!editMode" no-caret toggle-class="text-dark" variant="link">
+                    <template slot="button-content">
+                      <i class="oi oi-ellipses rotate-90"></i>
+                    </template>
+                    <b-dropdown-header>${ item.filename }</b-dropdown-header>
+                    <b-dropdown-item @click="open(item.path, item.type)">
+                      <i class="oi oi-media-play"></i>Open
+                    </b-dropdown-item>
+                    <b-dropdown-divider></b-dropdown-divider>
+                    <b-dropdown-item @click="if(confirm('Confirm move?'))move(item.path)">
+                      <i class="oi oi-circle-x"></i>move file to .old
+                    </b-dropdown-item>
+                  </b-dropdown>
                 </td>
               </tr>
             </table>
