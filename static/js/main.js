@@ -385,33 +385,6 @@ var connApi = webSocketLink({
         }
     });
 
-
-// var connApi = webSocketLink({
-        // url: 'ws://' + window.location.host + '/wsapi',
-        // onmessage: function (data) {
-            // console.log(data);
-            // var errorCallback = window.appView.out;
-            // if (data.hasOwnProperty('jsonrpc')) {
-            
-            // if (data.hasOwnProperty('result')) {
-                // var callback = methods[data.id];
-                // if (typeof(callback) === 'undefined')
-                    // callback = window.appView.out;
-                // callback(data.result);
-            // } else
-                // errorCallback(data.error);
-            // }
-            // else
-                // window.appView.dlnaInfo = data;
-        // },
-        // onclose: function () {
-            // window.appView.dlnaInfo = {
-                // CurrentTransportState: 'disconnected'
-            // };
-            // console.log('disconnected');
-        // },
-    // });
-
 function JsonRpcWs() {
     return new Proxy(function () {}, {
         get: function (target, method, receiver) {
