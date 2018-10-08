@@ -132,11 +132,11 @@
                     <i class="oi oi-circle-x"></i>
                   </b-btn>
                 </td>
-                <td class="d-sm-table-cell d-none">
-                  <b-btn variant="info" @click="open(item.path, 'folder')">
-                    <i class="oi oi-folder"></i>
-                  </b-btn>
-                </td>
+                <!-- <td class="d-sm-table-cell d-none"> -->
+                  <!-- <b-btn variant="info" @click="open(item.path, 'folder')"> -->
+                    <!-- <i class="oi oi-folder"></i> -->
+                  <!-- </b-btn> -->
+                <!-- </td> -->
                 <td class="d-sm-table-cell d-none iconOnly"><i class="oi oi-video"></i></td>
                 <td @click="open(item.filename, 'mp4')"
                     v-press="pressOpen"
@@ -156,12 +156,16 @@
                   <!-- </b-btn> -->
                 <!-- </td> -->
                 <td class="iconOnly">
-                  <b-dropdown no-caret toggle-class="no-button">
+                  <!-- <b-dropdown no-caret toggle-class="no-button"> -->
+                  <b-dropdown no-caret variant="outline-secondary">
                     <template slot="button-content">
                       <i class="oi oi-ellipses r-90"></i>
                     </template>
                     <b-dropdown-item @click="if(confirm('Confirm remove?'))remove(item.filename)">
                       <i class="oi oi-circle-x"></i>remove history
+                    </b-dropdown-item>
+                    <b-dropdown-item @click="open(item.path, 'folder')">
+                      <i class="oi oi-folder"></i>go directory
                     </b-dropdown-item>
                   </b-dropdown>
                 </td>
@@ -181,7 +185,8 @@
                   <br>
                   <small class="text-muted">${ item.size }</small>
                 </td>
-                <td class="iconOnly d-sm-table-cell d-none">
+                <!-- <td class="iconOnly d-sm-table-cell d-none"> -->
+                <td class="iconOnly">
                   <b-btn variant="danger" @click="if(confirm('Confirm remove?'))move(item.path)">
                     <i class="oi oi-circle-x"></i>
                   </b-btn>
