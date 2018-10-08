@@ -199,7 +199,6 @@ window.appView = new Vue({
                 server.list_history({}, this.historyCallBack);
             },
             fileSystemCallBack: function (data) {
-                
                 this.filelist = data;
             },
             clearHistory: function () { // clear history button
