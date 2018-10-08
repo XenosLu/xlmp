@@ -168,8 +168,8 @@
                     <b-dropdown-item @click="if(confirm('Confirm remove?'))remove(item.fullpath)">
                       <i class="oi oi-circle-x"></i>remove from history
                     </b-dropdown-item>
-                    <b-dropdown-item @click="next(item.fullpath)" v-if="devMode">
-                      next test
+                    <b-dropdown-item @click="server.dlna_next({src: item.fullpath})" v-if="devMode">
+                      dlna next
                     </b-dropdown-item>
                   </b-dropdown>
                 </td>

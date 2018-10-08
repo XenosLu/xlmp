@@ -183,11 +183,13 @@ class DMRTracker(Thread):
             failure += 1
             logging.info('load failure count: %s', failure)
 
-    def loadnext(self):
+    def loadnext(self, src=None):
         """load next video"""
         if not self.state.get('TrackURI'):
             return False
-        next_file = get_next_file(self.state['TrackURI'])
+        if not src:
+            src = self.state['TrackURI']
+        next_file = get_next_file(src)
         logging.info('next file recognized: %s', next_file)
         if next_file:
             # url = '%s%s' % (self.url_prefix, quote(next_file))
@@ -484,9 +486,9 @@ def dlna_vol(opt):
 
 @JsonRpc.method
 @check_dmr_exist
-def dlna_next():
+def dlna_next(src=None):
     """dlna load next media"""
-    return TRACKER.loadnext()
+    return TRACKER.loadnext(src=None)
 
 
 @JsonRpc.method
