@@ -193,7 +193,7 @@
                   <small class="text-muted">${ item.size }</small>
                 </td>
                 <!-- <td class="iconOnly d-sm-table-cell d-none"> -->
-                <td class="iconOnly">
+                <td class="iconOnly" v-show="!editMode">
                   <b-btn variant="danger" @click="if(confirm('Confirm move?'))move(item.path)">
                     <i class="oi oi-circle-x"></i>
                   </b-btn>
