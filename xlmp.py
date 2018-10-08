@@ -464,7 +464,7 @@ def dlna_vol(opt):
 @check_dmr_exist
 def dlna_next(src=None):
     """dlna load next media"""
-    return TRACKER.loadnext(src=None)
+    return TRACKER.loadnext(src=src)
 
 
 @JsonRpc.method
