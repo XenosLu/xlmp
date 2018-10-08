@@ -140,6 +140,7 @@ button {
 }
 .dropdown-item {
     opacity: 0.9;
+    max-width: 20vw;
     /* min-width: 6em; */
 }
 .window {
