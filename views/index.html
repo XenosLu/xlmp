@@ -128,7 +128,7 @@
             <table v-show="historyShow" class="table table-striped table-sm">
               <tr v-for="item in history">
                 <td v-show="editMode">
-                  <b-btn variant="danger" @click="remove(item.filename)">
+                  <b-btn variant="danger" @click="remove(item.fullpath)">
                     <i class="oi oi-circle-x"></i>
                   </b-btn>
                 </td>
@@ -138,7 +138,7 @@
                   <!-- </b-btn> -->
                 <!-- </td> -->
                 <td class="d-sm-table-cell d-none iconOnly"><i class="oi oi-video"></i></td>
-                <td @click="open(item.filename, 'mp4')"
+                <td @click="open(item.fullpath, 'mp4')"
                     v-press="pressOpen"
                     :data-target="item.path"
                     class="break-all">
@@ -161,12 +161,14 @@
                     <template slot="button-content">
                       <i class="oi oi-ellipses r-90"></i>
                     </template>
-                    <b-dropdown-item @click="if(confirm('Confirm remove?'))remove(item.filename)">
-                      <i class="oi oi-circle-x"></i>remove history
-                    </b-dropdown-item>
-                    <b-dropdown-divider></b-dropdown-divider>
+                    <b-dropdown-header>${ item.fullpath }</b-dropdown-header>
+                    <!-- <b-dropdown-header>${ item.path }</b-dropdown-header> -->
                     <b-dropdown-item @click="open(item.path, 'folder')">
                       <i class="oi oi-folder"></i>go directory
+                    </b-dropdown-item>
+                    <b-dropdown-divider></b-dropdown-divider>
+                    <b-dropdown-item @click="if(confirm('Confirm remove?'))remove(item.fullpath)">
+                      <i class="oi oi-circle-x"></i>remove history
                     </b-dropdown-item>
                   </b-dropdown>
                 </td>

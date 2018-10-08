@@ -498,7 +498,7 @@ def dlna(opt):
             TRACKER.loop_playback.clear()
         method = getattr(TRACKER.dmr, opt)
         return method()
-    return 'wrong option'
+    return 'option not exist'
 
 
 @JsonRpc.method
@@ -533,7 +533,7 @@ def save_history(src, position, duration):
 def list_history():
     """get play history"""
     return [
-        {'filename': s[0], 'position': s[1], 'duration': s[2],
+        {'filename': os.path.basename(s[0]), 'fullpath': s[0], 'position': s[1], 'duration': s[2],
          'latest_date': s[3], 'path': os.path.dirname(s[0]),
          'exist': os.path.exists('%s/%s' % (VIDEO_PATH, s[0]))}
         for s in run_sql('select * from history order by LATEST_DATE desc')]
@@ -565,7 +565,6 @@ def dlna_load(src, host):
         return 'Error: File not found.'
     logging.info('start loading...tracker state:%s', TRACKER.state.get('CurrentTransportState'))
     TRACKER.url_prefix = 'http://%s/video/' % host
-    # url = 'http://%s/video/%s' % (host, quote(src))
     TRACKER.load(src)
     return 'loading %s' % src
 

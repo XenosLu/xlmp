@@ -171,3 +171,6 @@ button {
 .r-90 {
     transform:rotate(90deg);
 }
+.dropdown-header {
+    max-width: 20em;
+}
