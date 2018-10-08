@@ -646,7 +646,6 @@ def file_list(path=''):
         parent = [{'filename': '..', 'type': 'folder', 'path': os.path.dirname(path)}]
         logging.info(path)
         path = re.sub('([^/])$', '\\1/', path)  # make sure path end with '/'
-        # parent = [{'filename': '..', 'type': 'folder', 'path': '%s..' % path}]
     dir_list = sorted(os.listdir('%s/%s' % (VIDEO_PATH, path)))
     for filename in dir_list:
         if filename.startswith('.'):
