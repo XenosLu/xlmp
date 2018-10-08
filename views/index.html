@@ -155,6 +155,14 @@
                     <i class="oi oi-circle-x"></i>
                   </b-btn>
                 </td>
+                <td class="iconOnly">
+                  <b-dropdown no-caret toggle-class="new">
+                    <template slot="button-content">
+                      <i class="oi oi-ellipses" style="transform:rotate(90deg);"></i>
+                    </template>
+                    <b-dropdown-item>test</b-dropdown-item>
+                  </b-dropdown>
+                </td>
               </tr>
             </table>
             <table v-show="!historyShow" class="table table-striped table-sm">
