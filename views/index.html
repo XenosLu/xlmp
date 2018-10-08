@@ -137,7 +137,7 @@
                     <i class="oi oi-folder"></i>
                   </b-btn>
                 </td>
-                <td class="iconOnly"><i class="oi oi-video"></i></td>
+                <td class="d-sm-table-cell d-none iconOnly"><i class="oi oi-video"></i></td>
                 <td @click="open(item.filename, 'mp4')"
                     v-press="pressOpen"
                     :data-target="item.path"
@@ -160,7 +160,9 @@
                     <template slot="button-content">
                       <i class="oi oi-ellipses r-90"></i>
                     </template>
-                    <b-dropdown-item>test</b-dropdown-item>
+                    <b-dropdown-item @click="if(confirm('Confirm remove?'))remove(item.filename)">
+                      <i class="oi oi-circle-x"></i>remove history
+                    </b-dropdown-item>
                   </b-dropdown>
                 </td>
               </tr>
