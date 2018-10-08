@@ -164,11 +164,7 @@ button {
     -ms-flex-direction: column !important;
     flex-direction: column !important;
 }
-.no-button {
-    border: 0;
-    background-color: transparent;
-    outline: none;
-}
+
 .r-90 {
     transform:rotate(90deg);
 }
@@ -180,3 +176,9 @@ button {
 /* .dropdown-toggle .dropdown-toggle::after { */
   /* display: none */
 /* } */
+
+.no-button {
+    border: 0;
+    background-color: transparent;
+    outline: none;
+}
