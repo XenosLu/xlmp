@@ -163,7 +163,7 @@
                     <b-dropdown-item @click="open(item.fullpath, 'mp4')">
                       <i class="oi oi-media-play"></i>Play
                     </b-dropdown-item>
-                    <b-dropdown-item @click="server.dlna_next({src: item.fullpath})" v-if="devMode">
+                    <b-dropdown-item @click="server.dlna_next({src: item.fullpath, host: window.location.host})" v-if="devMode">
                       <i class="oi oi-media-step-forward"></i>Play next through DLNA
                     </b-dropdown-item>
                     <b-dropdown-item @click="open(item.path, 'folder')">

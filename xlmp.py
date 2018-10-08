@@ -464,8 +464,10 @@ def dlna_vol(opt):
 
 @JsonRpc.method
 @check_dmr_exist
-def dlna_next(src=None):
+def dlna_next(src=None, host=None):
     """dlna load next media"""
+    if host:
+        TRACKER.url_prefix = 'http://%s/video/' % host
     return TRACKER.loadnext(src=src)
 
 
