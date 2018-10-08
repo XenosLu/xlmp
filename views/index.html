@@ -162,11 +162,11 @@
                       <i class="oi oi-folder"></i>${ item.path }
                     </b-dropdown-item>
                     <b-dropdown-divider></b-dropdown-divider>
-                    <b-dropdown-item @click="if(confirm('Confirm remove?'))remove(item.fullpath)">
-                      <i class="oi oi-circle-x"></i>remove from history
-                    </b-dropdown-item>
                     <b-dropdown-item @click="if(confirm('Confirm move?'))move(item.fullpath)">
                       <i class="oi oi-circle-x"></i>move file to .old
+                    </b-dropdown-item>
+                    <b-dropdown-item @click="if(confirm('Confirm remove?'))remove(item.fullpath)">
+                      <i class="oi oi-circle-x"></i>remove from history
                     </b-dropdown-item>
                   </b-dropdown>
                 </td>
