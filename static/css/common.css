@@ -175,10 +175,6 @@ button {
     overflow: hidden;
 }
 
-/* .dropdown-toggle .dropdown-toggle::after { */
-  /* display: none */
-/* } */
-
 .no-button {
     border: 0;
     background-color: transparent;
