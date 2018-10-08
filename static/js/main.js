@@ -199,7 +199,7 @@ window.appView = new Vue({
                 server.list_history({}, this.historyCallBack);
             },
             fileSystemCallBack: function (data) {
-                this.historyShow = false;
+                
                 this.filelist = data;
             },
             clearHistory: function () { // clear history button
@@ -215,6 +215,7 @@ window.appView = new Vue({
             open: function (obj, type) {
                 switch (type) {
                 case "folder":
+                    this.historyShow = false;
                     server.file_list({path: obj}, this.fileSystemCallBack);
                     break;
                 case "mp4":

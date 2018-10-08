@@ -52,7 +52,8 @@
             <i class="oi oi-clock"></i>
             <small class="d-sm-inline d-none">History</small>
           </b-btn>
-          <b-btn @click="server.file_list({path: ''}, fileSystemCallBack)" :pressed="!historyShow" variant="outline-dark">
+          <!-- <b-btn @click="server.file_list({path: ''}, fileSystemCallBack)" :pressed="!historyShow" variant="outline-dark"> -->
+          <b-btn @click="open('', 'folder')" :pressed="!historyShow" variant="outline-dark">
             <i class="oi oi-home"></i>
             <small class="d-sm-inline d-none">Home dir</small>
           </b-btn>
@@ -168,7 +169,10 @@
                     </b-dropdown-item>
                     <b-dropdown-divider></b-dropdown-divider>
                     <b-dropdown-item @click="if(confirm('Confirm remove?'))remove(item.fullpath)">
-                      <i class="oi oi-circle-x"></i>remove history
+                      <i class="oi oi-circle-x"></i>remove from history
+                    </b-dropdown-item>
+                    <b-dropdown-item @click="if(confirm('Confirm move?'))move(item.fullpath)">
+                      <i class="oi oi-circle-x"></i>move file to .old
                     </b-dropdown-item>
                   </b-dropdown>
                 </td>
@@ -190,7 +194,7 @@
                 </td>
                 <!-- <td class="iconOnly d-sm-table-cell d-none"> -->
                 <td class="iconOnly">
-                  <b-btn variant="danger" @click="if(confirm('Confirm remove?'))move(item.path)">
+                  <b-btn variant="danger" @click="if(confirm('Confirm move?'))move(item.path)">
                     <i class="oi oi-circle-x"></i>
                   </b-btn>
                 </td>
