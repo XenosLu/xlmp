@@ -169,6 +169,9 @@ button {
 
 .r-90 {
     transform:rotate(90deg);
+    -moz-transform:rotate(90deg); 	/* Firefox */
+    -webkit-transform:rotate(90deg); /* Safari 和 Chrome */
+    -o-transform:rotate(90deg); 	/* Opera */
 }
 .dropdown-header {
     max-width: 80vw;
