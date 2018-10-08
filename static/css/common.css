@@ -140,7 +140,7 @@ button {
 }
 .dropdown-item {
     opacity: 0.9;
-    max-width: 20vw;
+    max-width: 80vw;
     /* min-width: 6em; */
 }
 .window {
@@ -171,6 +171,8 @@ button {
 .dropdown-header {
     max-width: 20em;
     max-width: 80vw;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 /* .dropdown-toggle .dropdown-toggle::after { */
