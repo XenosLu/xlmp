@@ -192,11 +192,11 @@ window.appView = new Vue({
                     this.showHistory();
             },
             historyCallBack: function (data) {
-                this.historyShow = true;
                 this.history = data;
             },
             showHistory: function () {
                 server.list_history({}, this.historyCallBack);
+                this.historyShow = true;
             },
             fileSystemCallBack: function (data) {
                 this.filelist = data;
