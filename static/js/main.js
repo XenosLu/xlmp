@@ -210,6 +210,8 @@ window.appView = new Vue({
             },
             move: function (obj) {
                 server.file_move({src: obj}, this.fileSystemCallBack);
+                if (this.historyShow)
+                    this.showHistory();
             },
             open: function (obj, type) {
                 switch (type) {
@@ -218,7 +220,7 @@ window.appView = new Vue({
                     server.file_list({path: obj}, this.fileSystemCallBack);
                     break;
                 case "mp4":
-                    if (!this.dlnaMode) 
+                    if (!this.dlnaMode)
                         this.playInWeb(obj);
                 case "video":
                     if (this.dlnaMode)
