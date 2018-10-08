@@ -184,3 +184,6 @@ button {
     background-color: transparent;
     outline: none;
 }
+.btn-link {
+    box-shadow: none;
+}
