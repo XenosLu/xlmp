@@ -211,9 +211,6 @@ window.appView = new Vue({
             move: function (obj) {
                 server.file_move({src: obj}, this.fileSystemCallBack);
             },
-            next: function (obj) {
-                server.get_next_file([obj]);
-            },
             open: function (obj, type) {
                 switch (type) {
                 case "folder":
