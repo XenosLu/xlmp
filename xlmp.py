@@ -185,10 +185,12 @@ class DMRTracker(Thread):
 
     def loadnext(self, src=None):
         """load next video"""
-        if not self.state.get('TrackURI'):
-            return False
+        # if not self.state.get('TrackURI'):
+            # return False
         if not src:
-            src = self.state['TrackURI']
+            src = self.state.get('TrackURI')
+        if not src:
+            return False
         next_file = get_next_file(src)
         logging.info('next file recognized: %s', next_file)
         if next_file:
