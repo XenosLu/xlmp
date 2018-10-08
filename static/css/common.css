@@ -167,7 +167,7 @@ button {
     flex-direction: column !important;
 }
 
-.r-90 {
+.rotate-90 {
     transform:rotate(90deg);
     -moz-transform:rotate(90deg); 	/* Firefox */
     -webkit-transform:rotate(90deg); /* Safari 和 Chrome */
