@@ -69,7 +69,7 @@
           </b-navbar-nav>
           <!-- Right aligned nav items -->
           <b-navbar-nav class="ml-auto">
-            <b-nav-item-dropdown  right>
+            <b-nav-item-dropdown right>
               <template slot="button-content">
                 <i class="oi oi-cog"></i>Maintainance
               </template>
@@ -133,11 +133,6 @@
                     <i class="oi oi-circle-x"></i>
                   </b-btn>
                 </td>
-                <!-- <td class="d-sm-table-cell d-none"> -->
-                  <!-- <b-btn variant="info" @click="open(item.path, 'folder')"> -->
-                    <!-- <i class="oi oi-folder"></i> -->
-                  <!-- </b-btn> -->
-                <!-- </td> -->
                 <td class="d-sm-table-cell d-none iconOnly"><i class="oi oi-video"></i></td>
                 <td @click="open(item.fullpath, 'mp4')"
                     v-press="pressOpen"
