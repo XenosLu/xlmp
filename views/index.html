@@ -167,7 +167,8 @@
                     </b-dropdown-item>
                     <b-dropdown-item @click="if(confirm('Confirm remove?'))remove(item.fullpath)">
                       <i class="oi oi-circle-x"></i>remove from history
-                    <b-dropdown-item @click="next" v-if="devMode">
+                    </b-dropdown-item>
+                    <b-dropdown-item @click="next(item.fullpath)" v-if="devMode">
                       next test
                     </b-dropdown-item>
                   </b-dropdown>
