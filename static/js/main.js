@@ -36,7 +36,6 @@ window.appView = new Vue({
             filelist: [], // updated by ajax
             dlnaInfo: { // updated by websocket
                 CurrentDMR: 'no DMR',
-                // CurrentTransportState: '',
                 TrackURI: '',
             },
             positionBarCanUpdate: true, //dlna position bar
@@ -149,7 +148,6 @@ window.appView = new Vue({
             },
             outFadeIn: function (el, done) {
                 Velocity(el, 'stop');
-                // Velocity(el, {opacity: 0.8}, {duration: 180});
                 Velocity(el, {opacity: 0.75}, {duration: 170});
             },
             outFadeOut: function (el, done) {
@@ -336,7 +334,6 @@ window.appView = new Vue({
         },
         mounted: function () {
             this.$nextTick(function () {
-                // console.log('mounted');
                 // window.appView.showHistory();
             });
         },
