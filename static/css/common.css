@@ -173,4 +173,9 @@ button {
 }
 .dropdown-header {
     max-width: 20em;
+    max-width: 80vw;
 }
+
+/* .dropdown-toggle .dropdown-toggle::after { */
+  /* display: none */
+/* } */
