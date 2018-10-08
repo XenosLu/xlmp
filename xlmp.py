@@ -361,30 +361,6 @@ class LinkWebSocketHandler(tornado.websocket.WebSocketHandler):
         self.users.remove(self)
 
 
-class ApiWebSocketHandler(tornado.websocket.WebSocketHandler):
-    """Info retriever use web socket"""
-    # executor = ThreadPoolExecutor(6)
-    users = set()
-
-    def data_received(self, chunk):
-        pass
-
-    def open(self, *args, **kwargs):
-        logging.info('Websocket connected: %s', self.request.remote_ip)
-        self.users.add(self)
-
-    # @tornado.concurrent.run_on_executor
-    def on_message(self, message):
-        logging.info('received ws message: %s', message)
-        result = JsonRpc.run(message)
-        logging.info('result: %s', result)
-        self.write_message(result)
-
-    def on_close(self):
-        logging.info('ws close: %s', self.request.remote_ip)
-        self.users.remove(self)
-
-
 class ApiHandler(tornado.web.RequestHandler):
     # executor = ThreadPoolExecutor(99)
     """api test"""
@@ -667,7 +643,6 @@ def file_list(path=''):
 HANDLERS = [
     (r'/', IndexHandler),
     (r'/api', ApiHandler),
-    # (r'/wsapi', ApiWebSocketHandler),
     (r'/link', LinkWebSocketHandler),
     (r'/playtoggle', DlnaPlayToggleHandler),
     (r'/video/(.*)', tornado.web.StaticFileHandler, {'path': VIDEO_PATH}),
