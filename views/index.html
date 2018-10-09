@@ -226,10 +226,10 @@
           <div class="card-footer text-center">
             <!-- <span>${ removeList }</span> -->
             <b-btn v-show="editMode && historyShow" @click="removeMany" size="sm" variant="outline-danger">
-              <i class="oi oi-circle-x"></i>remove
+              <i class="oi oi-circle-x"></i> Remove
             </b-btn>
             <b-btn v-show="editMode && historyShow && removeList.length" @click="removeList=[]" size="sm" variant="outline-dark">
-              clean select
+              Clean select
             </b-btn>
             <b-btn v-show="editMode && historyShow" @click="clearHistory" size="sm" variant="outline-danger">
               Clear
