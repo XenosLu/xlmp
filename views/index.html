@@ -217,15 +217,30 @@
             </table>
           </div>
           <div class="card-footer text-center">
-            <input v-show="editMode && historyShow"
-                   type='checkbox'
-                   class='input-checkbox'
-                   v-model='selectAll'
-                   @click='historySelectAll'>
-            <label v-show="editMode && historyShow">${ removeCheckboxList.length ? 'Clear Selection' : 'Select All' }</label>
-            <b-btn v-show="editMode && historyShow" @click="removeSelected" size="sm" variant="outline-danger">
-              <i class="oi oi-circle-x"></i> Remove
-            </b-btn>
+            <b-button-group>
+              <!-- <b-input-group> -->
+                      <b-form-checkbox
+ v-show="editMode && historyShow"
+                      v-model="allSelected"
+                         :indeterminate="indeterminate"
+                         aria-describedby="removeCheckboxList"
+                         aria-controls="removeCheckboxList"
+                         @change="historySelectAll">
+                         All
+                         </b-form-checkbox>
+              
+              <!-- <b-input-group size="sm" class="mx-1" append="All"> -->
+              <!-- <input v-show="editMode && historyShow" -->
+                     <!-- type='checkbox' -->
+                     <!-- class='input-checkbox' -->
+                     <!-- v-model='allSelected' -->
+                     <!-- @click='historySelectAll'> -->
+              <!-- <label v-show="editMode && historyShow">All</label> -->
+              <!-- </b-input-group> -->
+              <b-btn v-show="editMode && historyShow" @click="removeSelected" size="sm" variant="outline-danger">
+                <i class="oi oi-circle-x"></i> Remove
+              </b-btn>
+            </b-button-group>
             <!-- <b-btn v-show="editMode && historyShow" @click="clearHistory" size="sm" variant="outline-danger"> -->
               <!-- Clear -->
             <!-- </b-btn> -->

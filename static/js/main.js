@@ -26,7 +26,8 @@ window.appView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-main',
         data: {
-            selectAll: false,
+            indeterminate: false,
+            allSelected: false,
             removeCheckboxList: [],
             mode: '', // mode of player, switch between empty/DLNA/WebPlayer
             navCollapse: false, // navbar is collapse
@@ -61,6 +62,10 @@ window.appView = new Vue({
             icon: icon,
         },
         watch: {
+            // editMode: function () {
+                // this.allSelected = false;
+                // this.removeCheckboxList = [];
+            // },
             browserShow: function () {
                 this.navCollapse = false;
                 if (!this.browserShow)
@@ -118,7 +123,7 @@ window.appView = new Vue({
                 }
             },
             historySelectAll: function () {
-                if (this.selectAll)
+                if (this.allSelected)
                     this.removeCheckboxList = [];
                 else
                     this.history.forEach((item) => {
