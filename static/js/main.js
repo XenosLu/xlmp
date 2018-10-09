@@ -123,7 +123,6 @@ window.appView = new Vue({
                 }
             },
             historySelectAll: function () {
-                this.out(this.allSelected);
                 if (this.allSelected)
                     this.history.forEach((item) => {
                         this.removeCheckboxList.push(item.fullpath);
