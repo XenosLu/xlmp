@@ -223,7 +223,7 @@
                    v-model='selectAll'
                    @click='historySelectAll'>
             <label v-show="editMode && historyShow">${ removeCheckboxList.length ? 'Clear Selection' : 'Select All' }</label>
-            <b-btn v-show="editMode && historyShow" @click="removeMany" size="sm" variant="outline-danger">
+            <b-btn v-show="editMode && historyShow" @click="removeSelected" size="sm" variant="outline-danger">
               <i class="oi oi-circle-x"></i> Remove
             </b-btn>
             <!-- <b-btn v-show="editMode && historyShow" @click="clearHistory" size="sm" variant="outline-danger"> -->

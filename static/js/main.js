@@ -111,8 +111,8 @@ window.appView = new Vue({
                 // console.log("test " + obj);
                 // this.out('test' + obj);
             },
-            removeMany: function () {
-                if (confirm('remove ' + this.removeCheckboxList + '?')) {
+            removeSelected: function () {
+                if (confirm('Remove ' + this.removeCheckboxList + '?')) {
                     this.removeCheckboxList.forEach(this.remove);
                     this.removeCheckboxList = [];
                 }
