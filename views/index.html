@@ -219,10 +219,11 @@
             </table>
           </div>
           <div class="card-footer text-center">
+            <span>${ allSelected }</span>
             <b-button-group v-show="editMode && historyShow">
               <b-input-group>
                 <b-input-group-prepend is-text>
-                  <input type="checkbox" v-model="allSelected" aria-label="Checkbox for following text input" @click="historySelectAll"> All
+                  <input type="checkbox" v-model="allSelected" @click="historySelectAll"> All
                 </b-input-group-prepend>
               </b-input-group>
               <b-btn @click="removeSelected" size="sm" variant="outline-danger">
