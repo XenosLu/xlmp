@@ -521,9 +521,9 @@ def list_history():
         for s in run_sql('select * from history order by LATEST_DATE desc')]
 
 
-@JsonRpc.method
+# @JsonRpc.method
 def clear_history():
-    """clear all history"""
+    """clear all history, no longer needed"""
     run_sql('delete from history')
     return list_history()
 
