@@ -133,9 +133,9 @@
                     <i class="oi oi-circle-x"></i>
                   </b-btn>
                 </td>
-                <!-- <td v-show="editMode"> -->
-                  <!-- <input>checkbox</input> -->
-                <!-- </td> -->
+                <td v-show="editMode">
+                  <input type="checkbox" :value="item.fullpath" v-model="removeList">
+                </td>
                 <td class="d-sm-table-cell d-none iconOnly"><i class="oi oi-video"></i></td>
                 <td @click="open(item.fullpath, 'mp4')"
                     v-press="pressOpen"
@@ -224,7 +224,11 @@
             </table>
           </div>
           <div class="card-footer text-center">
-            <b-btn v-show="historyShow" @click="clearHistory" size="sm" variant="outline-dark">
+            <!-- <span>${ removeList }</span> -->
+            <b-btn v-show="editMode && historyShow" @click="removeMany" size="sm" variant="outline-danger">
+              <i class="oi oi-circle-x"></i>remove
+            </b-btn>
+            <b-btn v-show="editMode && historyShow" @click="clearHistory" size="sm" variant="outline-danger">
               Clear
             </b-btn>
             <b-button-close @click="browserShow=false"></b-button-close>

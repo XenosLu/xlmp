@@ -26,6 +26,7 @@ window.appView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-main',
         data: {
+            removeList: [],
             mode: '', // mode of player, switch between empty/DLNA/WebPlayer
             navCollapse: false, // navbar is collapse
             devMode: true, // develop mode
@@ -108,6 +109,12 @@ window.appView = new Vue({
             test: function (obj, obj2) {
                 // console.log("test " + obj);
                 // this.out('test' + obj);
+            },
+            removeMany: function () {
+                if (confirm('remove ' + this.removeList + '?')) {
+                    this.removeList.forEach(this.remove);
+                    this.removeList = [];
+                }
             },
             volUp: function (obj) {
                 server.dlna_vol(['up']);
