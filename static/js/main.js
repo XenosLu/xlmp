@@ -123,12 +123,13 @@ window.appView = new Vue({
                 }
             },
             historySelectAll: function () {
+                this.out(this.allSelected);
                 if (this.allSelected)
-                    this.removeCheckboxList = [];
-                else
                     this.history.forEach((item) => {
                         this.removeCheckboxList.push(item.fullpath);
                     });
+                else
+                    this.removeCheckboxList = [];
             },
             volUp: function (obj) {
                 server.dlna_vol(['up']);

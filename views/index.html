@@ -134,9 +134,9 @@
                   <!-- </b-btn> -->
                 <!-- </td> -->
                 <td v-show="editMode">
-                  <!-- <input type="checkbox" :value="item.fullpath" v-model="removeCheckboxList"> -->
-                  <b-form-checkbox buttons v-model="removeCheckboxList" :value="item.fullpath" button-variant="secondary">
-                  </b-form-checkbox>
+                  <b-input-group-prepend is-text>
+                    <input type="checkbox" :value="item.fullpath" v-model="removeCheckboxList">
+                  </b-input-group-prepend>
                 </td>
                 <td class="d-sm-table-cell d-none iconOnly"><i class="oi oi-video"></i></td>
                 <td @click="open(item.fullpath, 'mp4')"
@@ -219,11 +219,11 @@
             </table>
           </div>
           <div class="card-footer text-center">
-            <span>${ allSelected }</span>
+            <!-- <span>${ allSelected }</span> -->
             <b-button-group v-show="editMode && historyShow">
               <b-input-group>
                 <b-input-group-prepend is-text>
-                  <input type="checkbox" v-model="allSelected" @click="historySelectAll"> All
+                  <input type="checkbox" v-model="allSelected" @change="historySelectAll"> All
                 </b-input-group-prepend>
               </b-input-group>
               <b-btn @click="removeSelected" size="sm" variant="outline-danger">
