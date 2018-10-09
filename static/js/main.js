@@ -121,6 +121,7 @@ window.appView = new Vue({
                     this.removeCheckboxList.forEach(this.remove);
                     this.removeCheckboxList = [];
                 }
+                this.editMode = false;
             },
             historySelectAll: function () {
                 if (this.allSelected)
