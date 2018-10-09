@@ -27,7 +27,6 @@ window.appView = new Vue({
         el: '#v-main',
         data: {
             removeCheckboxList: [],
-            removeCheckboxList: [],
             mode: '', // mode of player, switch between empty/DLNA/WebPlayer
             navCollapse: false, // navbar is collapse
             devMode: true, // develop mode
@@ -214,10 +213,10 @@ window.appView = new Vue({
             fileSystemCallBack: function (data) {
                 this.filelist = data;
             },
-            clearHistory: function () { // clear history button
-                if (confirm('Clear all history?'))
-                    server.clear_history({}, this.historyCallBack);
-            },
+            // clearHistory: function () { // clear history button
+                // if (confirm('Clear all history?'))
+                    // server.clear_history({}, this.historyCallBack);
+            // },
             remove: function (obj) {
                 server.remove_history({src: obj}, this.historyCallBack);
             },
