@@ -161,21 +161,21 @@
                     </template>
                     <b-dropdown-header>${ item.filename }</b-dropdown-header>
                     <b-dropdown-item @click="open(item.fullpath, 'mp4')">
-                      <i class="oi oi-media-play"></i>Play
+                      <i class="oi oi-media-play"></i> Play
                     </b-dropdown-item>
                     <b-dropdown-item @click="server.dlna_next({src: item.fullpath, host: window.location.host})" v-if="devMode">
-                      <i class="oi oi-media-step-forward"></i>Play next through DLNA
+                      <i class="oi oi-media-step-forward"></i> Play next through DLNA
                     </b-dropdown-item>
                     <b-dropdown-item @click="open(item.path, 'folder')">
                       <!-- <i class="oi oi-folder"></i>go directory -->
-                      <i class="oi oi-folder"></i>${ item.path }
+                      <i class="oi oi-folder"></i> ${ item.path }
                     </b-dropdown-item>
                     <b-dropdown-divider></b-dropdown-divider>
                     <b-dropdown-item @click="if(confirm('Confirm move?'))move(item.fullpath)">
-                      <i class="oi oi-circle-x"></i>move file to .old
+                      <i class="oi oi-circle-x"></i> move file to .old
                     </b-dropdown-item>
                     <b-dropdown-item @click="if(confirm('Confirm remove?'))remove(item.fullpath)">
-                      <i class="oi oi-circle-x"></i>remove from history
+                      <i class="oi oi-circle-x"></i> remove from history
                     </b-dropdown-item>
                   </b-dropdown>
                 </td>
@@ -212,11 +212,11 @@
                     </template>
                     <b-dropdown-header>${ item.filename }</b-dropdown-header>
                     <b-dropdown-item @click="open(item.path, item.type)">
-                      <i class="oi oi-media-play"></i>Open
+                      <i class="oi oi-browser"></i> Open
                     </b-dropdown-item>
                     <b-dropdown-divider></b-dropdown-divider>
                     <b-dropdown-item @click="if(confirm('Confirm move?'))move(item.path)">
-                      <i class="oi oi-circle-x"></i>move file to .old
+                      <i class="oi oi-circle-x"></i> move file to .old
                     </b-dropdown-item>
                   </b-dropdown>
                 </td>
