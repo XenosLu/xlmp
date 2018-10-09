@@ -134,7 +134,9 @@
                   <!-- </b-btn> -->
                 <!-- </td> -->
                 <td v-show="editMode">
-                  <input type="checkbox" :value="item.fullpath" v-model="removeCheckboxList">
+                  <!-- <input type="checkbox" :value="item.fullpath" v-model="removeCheckboxList"> -->
+                  <b-form-checkbox buttons v-model="removeCheckboxList" :value="item.fullpath" button-variant="secondary">
+                  </b-form-checkbox>
                 </td>
                 <td class="d-sm-table-cell d-none iconOnly"><i class="oi oi-video"></i></td>
                 <td @click="open(item.fullpath, 'mp4')"
@@ -217,27 +219,13 @@
             </table>
           </div>
           <div class="card-footer text-center">
-            <b-button-group>
-              <!-- <b-input-group> -->
-                      <b-form-checkbox
- v-show="editMode && historyShow"
-                      v-model="allSelected"
-                         :indeterminate="indeterminate"
-                         aria-describedby="removeCheckboxList"
-                         aria-controls="removeCheckboxList"
-                         @change="historySelectAll">
-                         All
-                         </b-form-checkbox>
-              
-              <!-- <b-input-group size="sm" class="mx-1" append="All"> -->
-              <!-- <input v-show="editMode && historyShow" -->
-                     <!-- type='checkbox' -->
-                     <!-- class='input-checkbox' -->
-                     <!-- v-model='allSelected' -->
-                     <!-- @click='historySelectAll'> -->
-              <!-- <label v-show="editMode && historyShow">All</label> -->
-              <!-- </b-input-group> -->
-              <b-btn v-show="editMode && historyShow" @click="removeSelected" size="sm" variant="outline-danger">
+            <b-button-group v-show="editMode && historyShow">
+              <b-input-group>
+                <b-input-group-prepend is-text>
+                  <input type="checkbox" v-model="allSelected" aria-label="Checkbox for following text input" @click="historySelectAll"> All
+                </b-input-group-prepend>
+              </b-input-group>
+              <b-btn @click="removeSelected" size="sm" variant="outline-danger">
                 <i class="oi oi-circle-x"></i> Remove
               </b-btn>
             </b-button-group>
