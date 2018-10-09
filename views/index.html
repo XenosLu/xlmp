@@ -148,8 +148,8 @@
                     / ${ secondToTime(item.duration) }
                   </small>
                 </td>
-                <td class="iconOnly">
-                  <b-dropdown v-show="!editMode" no-caret toggle-class="text-dark" variant="link">
+                <td v-show="!editMode" class="iconOnly">
+                  <b-dropdown no-caret toggle-class="text-dark" variant="link">
                     <template slot="button-content">
                       <i class="oi oi-ellipses rotate-90"></i>
                     </template>
