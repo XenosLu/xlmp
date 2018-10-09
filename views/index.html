@@ -128,11 +128,11 @@
           <div class="table-responsive-sm text-center auto-overflow">
             <table v-show="historyShow" class="table table-striped table-sm">
               <tr v-for="item in history">
-                <td v-show="editMode">
-                  <b-btn variant="danger" @click="remove(item.fullpath)">
-                    <i class="oi oi-circle-x"></i>
-                  </b-btn>
-                </td>
+                <!-- <td v-show="editMode"> -->
+                  <!-- <b-btn variant="danger" @click="remove(item.fullpath)"> -->
+                    <!-- <i class="oi oi-circle-x"></i> -->
+                  <!-- </b-btn> -->
+                <!-- </td> -->
                 <td v-show="editMode">
                   <input type="checkbox" :value="item.fullpath" v-model="removeList">
                 </td>
