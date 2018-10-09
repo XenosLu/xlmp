@@ -26,7 +26,8 @@ window.appView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-main',
         data: {
-            removeList: [],
+            removeCheckboxList: [],
+            removeCheckboxList: [],
             mode: '', // mode of player, switch between empty/DLNA/WebPlayer
             navCollapse: false, // navbar is collapse
             devMode: true, // develop mode
@@ -111,10 +112,15 @@ window.appView = new Vue({
                 // this.out('test' + obj);
             },
             removeMany: function () {
-                if (confirm('remove ' + this.removeList + '?')) {
-                    this.removeList.forEach(this.remove);
-                    this.removeList = [];
+                if (confirm('remove ' + this.removeCheckboxList + '?')) {
+                    this.removeCheckboxList.forEach(this.remove);
+                    this.removeCheckboxList = [];
                 }
+            },
+            historySelectAll: function () {
+                this.history.forEach( (item) => {
+                    this.removeCheckboxList.push(item.fullpath);
+                });
             },
             volUp: function (obj) {
                 server.dlna_vol(['up']);
