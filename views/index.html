@@ -144,16 +144,10 @@
                   <span :class="item.exist ? 'mp4' : 'other'">${ item.filename }</span>
                   <br>
                   <small class="text-muted">
-                    ${ item.latest_date } |
-                    ${ secondToTime(item.position) } /
-                    ${ secondToTime(item.duration) }
+                    ${ item.latest_date } | ${ secondToTime(item.position) }
+                    / ${ secondToTime(item.duration) }
                   </small>
                 </td>
-                <!-- <td class="d-sm-table-cell d-none"> -->
-                  <!-- <b-btn variant="danger" @click="if(confirm('Confirm remove?'))remove(item.filename)"> -->
-                    <!-- <i class="oi oi-circle-x"></i> -->
-                  <!-- </b-btn> -->
-                <!-- </td> -->
                 <td class="iconOnly">
                   <b-dropdown v-show="!editMode" no-caret toggle-class="text-dark" variant="link">
                     <template slot="button-content">
@@ -167,7 +161,6 @@
                       <i class="oi oi-media-step-forward"></i> Play next through DLNA
                     </b-dropdown-item>
                     <b-dropdown-item @click="open(item.path, 'folder')">
-                      <!-- <i class="oi oi-folder"></i>go directory -->
                       <i class="oi oi-folder"></i> ${ item.path }
                     </b-dropdown-item>
                     <b-dropdown-divider></b-dropdown-divider>
@@ -224,7 +217,6 @@
             </table>
           </div>
           <div class="card-footer text-center">
-            <!-- <span>${ removeCheckboxList }</span> -->
             <b-btn v-show="editMode && historyShow" @click="historySelectAll" size="sm" variant="outline-dark">
               Select All
             </b-btn>
