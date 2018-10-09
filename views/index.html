@@ -217,12 +217,12 @@
             </table>
           </div>
           <div class="card-footer text-center">
-            <b-btn v-show="editMode && historyShow" @click="historySelectAll" size="sm" variant="outline-dark">
-              Select All
-            </b-btn>
-            <b-btn v-show="editMode && historyShow && removeCheckboxList.length" @click="removeCheckboxList=[]" size="sm" variant="outline-dark">
-              Clear Selection
-            </b-btn>
+            <input v-show="editMode && historyShow"
+                   type='checkbox'
+                   class='input-checkbox'
+                   v-model='selectAll'
+                   @click='historySelectAll'>
+            <label v-show="editMode && historyShow">${ removeCheckboxList.length ? 'Clear Selection' : 'Select All' }</label>
             <b-btn v-show="editMode && historyShow" @click="removeMany" size="sm" variant="outline-danger">
               <i class="oi oi-circle-x"></i> Remove
             </b-btn>
