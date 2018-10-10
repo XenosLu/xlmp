@@ -163,8 +163,11 @@ window.appView = new Vue({
                     }
                     this.output.text = str;
                     this.output.show = true;
-                    this.output.timerId = setTimeout(function () {
-                            window.appView.output.show = false;
+                    // this.output.timerId = setTimeout(function () {
+                    // window.appView.output.show = false;
+                    // }, 2100);
+                    this.output.timerId = setTimeout(() => {
+                            this.output.show = false;
                         }, 2100);
                 }
             },
