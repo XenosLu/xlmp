@@ -159,10 +159,10 @@
                     </b-dropdown-item>
                     <b-dropdown-divider></b-dropdown-divider>
                     <b-dropdown-item @click="if(confirm('Confirm move?'))move(item.fullpath)">
-                      <i class="oi oi-circle-x"></i> Move file to .old
+                      <i class="oi oi-trash"></i> Move file to .old
                     </b-dropdown-item>
                     <b-dropdown-item @click="if(confirm('Confirm remove?'))remove(item.fullpath)">
-                      <i class="oi oi-circle-x"></i> Remove from history
+                      <i class="oi oi-trash"></i> Remove from history
                     </b-dropdown-item>
                   </b-dropdown>
                 </td>
@@ -202,7 +202,7 @@
                     </b-dropdown-item>
                     <b-dropdown-divider></b-dropdown-divider>
                     <b-dropdown-item @click="if(confirm('Confirm move?'))move(item.path)">
-                      <i class="oi oi-circle-x"></i> move file to .old
+                      <i class="oi oi-trash"></i> move file to .old
                     </b-dropdown-item>
                   </b-dropdown>
                 </td>
@@ -217,10 +217,10 @@
                 </b-input-group-prepend>
               </b-input-group>
               <b-btn v-if="historyShow" @click="removeSelected" size="sm" variant="outline-danger">
-                <i class="oi oi-circle-x"></i> Remove
+                <i class="oi oi-trash"></i> Remove
               </b-btn>
               <b-btn v-if="!historyShow" @click="moveSelected" size="sm" variant="outline-danger">
-                <i class="oi oi-circle-x"></i> Move to .old
+                <i class="oi oi-trash"></i> Move to .old
               </b-btn>
             </b-button-group>
             <b-button-close @click="browserShow=false"></b-button-close>

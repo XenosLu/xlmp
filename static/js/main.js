@@ -123,19 +123,19 @@ window.appView = new Vue({
                 if (confirm('Remove ' + this.removeCheckboxList + '?')) {
                     this.removeCheckboxList.forEach(this.remove);
                     this.removeCheckboxList = [];
+                    this.editMode = false;
                 }
-                this.editMode = false;
             },
             moveSelected: function () {
                 if (confirm('Move ' + this.moveCheckboxList + ' to .old?')) {
-                    this.removeCheckboxList.forEach(this.move);
-                    this.removeCheckboxList = [];
+                    this.moveCheckboxList.forEach(this.move);
+                    this.moveCheckboxList = [];
+                    this.editMode = false;
                 }
-                this.editMode = false;
             },
             historySelectAll: function () {
                 if (this.allSelected) {
-                    if (historyShow)
+                    if (this.historyShow)
                         this.history.forEach((item) => {
                             this.removeCheckboxList.push(item.fullpath);
                         });
