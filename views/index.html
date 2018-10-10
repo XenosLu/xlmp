@@ -52,7 +52,6 @@
             <i class="oi oi-clock"></i>
             <small class="d-sm-inline d-none">History</small>
           </b-btn>
-          <!-- <b-btn @click="server.file_list({path: ''}, fileSystemCallBack)" :pressed="!historyShow" variant="outline-dark"> -->
           <b-btn @click="open('', 'folder')" :pressed="!historyShow" variant="outline-dark">
             <i class="oi oi-home"></i>
             <small class="d-sm-inline d-none">Home dir</small>
@@ -126,11 +125,6 @@
           <div class="table-responsive-sm text-center auto-overflow">
             <table v-show="historyShow" class="table table-striped table-sm">
               <tr v-for="item in history">
-                <!-- <td v-show="editMode"> -->
-                  <!-- <b-btn variant="danger" @click="remove(item.fullpath)"> -->
-                    <!-- <i class="oi oi-circle-x"></i> -->
-                  <!-- </b-btn> -->
-                <!-- </td> -->
                 <td v-show="editMode" class="iconOnly">
                   <b-input-group-prepend is-text>
                     <input type="checkbox" :value="item.fullpath" v-model="removeCheckboxList">
