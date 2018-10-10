@@ -26,9 +26,9 @@ window.appView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-main',
         data: {
-            indeterminate: false,
             allSelected: false,
             removeCheckboxList: [],
+            moveCheckboxList: [],
             mode: '', // mode of player, switch between empty/DLNA/WebPlayer
             navCollapse: false, // navbar is collapse
             devMode: true, // develop mode
@@ -66,6 +66,9 @@ window.appView = new Vue({
                 // this.allSelected = false;
                 // this.removeCheckboxList = [];
             // },
+            historyShow: function () {
+                this.allSelected = false;
+            },
             browserShow: function () {
                 this.navCollapse = false;
                 if (!this.browserShow)
@@ -123,12 +126,24 @@ window.appView = new Vue({
                 }
                 this.editMode = false;
             },
+            moveSelected: function () {
+                if (confirm('Move ' + this.moveCheckboxList + ' to .old?')) {
+                    this.removeCheckboxList.forEach(this.move);
+                    this.removeCheckboxList = [];
+                }
+                this.editMode = false;
+            },
             historySelectAll: function () {
-                if (this.allSelected)
-                    this.history.forEach((item) => {
-                        this.removeCheckboxList.push(item.fullpath);
-                    });
-                else
+                if (this.allSelected) {
+                    if (historyShow)
+                        this.history.forEach((item) => {
+                            this.removeCheckboxList.push(item.fullpath);
+                        });
+                    else
+                        this.filelist.forEach((item) => {
+                            this.moveCheckboxList.push(item.path);
+                        });
+                } else
                     this.removeCheckboxList = [];
             },
             volUp: function (obj) {

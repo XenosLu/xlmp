@@ -171,6 +171,11 @@
             <table v-show="!historyShow" class="table table-striped table-sm">
               <tr v-for="item in filelist">
                 <td v-show="editMode" class="iconOnly">
+                  <b-input-group-prepend is-text>
+                    <input type="checkbox" :value="item.path" v-model="moveCheckboxList">
+                  </b-input-group-prepend>
+                </td>
+                <td v-show="editMode" class="iconOnly">
                   <b-btn variant="danger" @click="move(item.path)">
                     <i class="oi oi-circle-x"></i>
                   </b-btn>
@@ -186,12 +191,6 @@
                   <br>
                   <small class="text-muted">${ item.size }</small>
                 </td>
-                <!-- <td class="iconOnly d-sm-table-cell d-none"> -->
-                <!-- <td class="iconOnly" v-show="!editMode"> -->
-                  <!-- <b-btn variant="danger" @click="if(confirm('Confirm move?'))move(item.path)"> -->
-                    <!-- <i class="oi oi-circle-x"></i> -->
-                  <!-- </b-btn> -->
-                <!-- </td> -->
                 <td class="iconOnly">
                   <b-dropdown v-show="!editMode" no-caret toggle-class="text-dark" variant="link">
                     <template slot="button-content">
@@ -211,20 +210,19 @@
             </table>
           </div>
           <div class="card-footer text-center">
-            <!-- <span>${ allSelected }</span> -->
-            <b-button-group v-show="editMode && historyShow">
+            <b-button-group v-show="editMode">
               <b-input-group>
                 <b-input-group-prepend is-text>
                   <input type="checkbox" v-model="allSelected" @change="historySelectAll"> All
                 </b-input-group-prepend>
               </b-input-group>
-              <b-btn @click="removeSelected" size="sm" variant="outline-danger">
+              <b-btn v-if="historyShow" @click="removeSelected" size="sm" variant="outline-danger">
                 <i class="oi oi-circle-x"></i> Remove
               </b-btn>
+              <b-btn v-if="!historyShow" @click="moveSelected" size="sm" variant="outline-danger">
+                <i class="oi oi-circle-x"></i> Move to .old
+              </b-btn>
             </b-button-group>
-            <!-- <b-btn v-show="editMode && historyShow" @click="clearHistory" size="sm" variant="outline-danger"> -->
-              <!-- Clear -->
-            <!-- </b-btn> -->
             <b-button-close @click="browserShow=false"></b-button-close>
           </div>
         </div>
