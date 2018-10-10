@@ -143,8 +143,10 @@ window.appView = new Vue({
                         this.filelist.forEach((item) => {
                             this.moveCheckboxList.push(item.path);
                         });
-                } else
+                } else {
                     this.removeCheckboxList = [];
+                    this.moveCheckboxList = [];
+                }
             },
             volUp: function (obj) {
                 server.dlna_vol(['up']);
