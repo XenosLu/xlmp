@@ -151,8 +151,8 @@ window.appView = new Vue({
                     clearTimeout(this.fixBar.timerId);
                     this.fixBar.timerId = null;
                 }
-                this.fixBar.timerId = setTimeout(function () {
-                        window.appView.fixBar.show = false;
+                this.fixBar.timerId = setTimeout(() => {
+                        this.fixBar.show = false;
                     }, 3500);
             },
             out: function (str) {
