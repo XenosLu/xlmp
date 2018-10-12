@@ -654,7 +654,7 @@ HANDLERS = [
 
 SETTINGS = {
     'static_path': 'static',
-    'template_path': 'views',
+    'template_path': '',
     'gzip': True,
     'debug': True,
     'websocket_ping_interval': 0.2,
