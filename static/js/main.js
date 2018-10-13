@@ -370,7 +370,8 @@ window.appView = new Vue({
             var lastTouchEnd = 0;
             document.addEventListener('touchend', function (event) {
                 var now = (new Date()).getTime();
-                if (now - lastTouchEnd <= 300) {
+                // if (now - lastTouchEnd <= 300) {
+                if (now - lastTouchEnd <= 350) {
                     event.preventDefault();
                 }
                 lastTouchEnd = now;
