@@ -187,3 +187,7 @@ button {
 .btn-link {
     box-shadow: none;
 }
+.btn-outline-dark:hover {
+    color: #343a40;
+    background-color: transparent;
+}
