@@ -221,10 +221,10 @@
                   <input type="checkbox" v-model="allSelected" @change="historySelectAll"> All
                 </b-input-group-prepend>
               </b-input-group>
-              <b-btn v-if="historyShow" @click="removeSelected" size="sm" variant="outline-danger">
+              <b-btn v-if="historyShow" @click="removeSelected" size="sm" variant="outline-danger" :disabled="removeCheckboxList.length==0">
                 <i class="oi oi-trash"></i> Remove
               </b-btn>
-              <b-btn v-if="!historyShow" @click="moveSelected" size="sm" variant="outline-danger">
+              <b-btn v-if="!historyShow" @click="moveSelected" size="sm" variant="outline-danger" :disabled="moveCheckboxList.length==0">
                 <i class="oi oi-trash"></i> Move to .old
               </b-btn>
             </b-button-group>
