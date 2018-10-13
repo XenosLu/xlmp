@@ -57,7 +57,11 @@
             <small class="d-sm-inline d-none">Home dir</small>
           </b-btn>
         </b-btn-group>
-        <b-btn v-show="browserShow" @click="editMode=!editMode" variant="outline-dark" :pressed="editMode">
+        <!-- <b-btn v-show="browserShow" @click="editMode=!editMode" variant="outline-dark" :pressed="editMode"> -->
+          <!-- <i class="oi oi-circle-check"></i> -->
+          <!-- <small class="d-sm-inline d-none">edit</small> -->
+        <!-- </b-btn> -->
+        <b-btn v-show="browserShow" :pressed.sync="editMode" variant="outline-dark">
           <i class="oi oi-circle-check"></i>
           <small class="d-sm-inline d-none">edit</small>
         </b-btn>
