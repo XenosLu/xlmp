@@ -191,3 +191,7 @@ button {
     color: #343a40;
     background-color: transparent;
 }
+.btn-outline-success:hover {
+    color: #28a745;
+    background-color: transparent;
+}
