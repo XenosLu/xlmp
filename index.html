@@ -56,7 +56,10 @@
                 <i class="oi oi-browser"></i>
                 Web Mode
               </b-dropdown-item>
-              <b-dropdown-item v-show="devMode" @click="mode='DLNA'">DLNA Mode</b-dropdown-item>
+              <b-dropdown-item v-show="devMode" @click="mode='DLNA'">
+                <i class="oi oi-monitor"></i>
+                DLNA Mode
+              </b-dropdown-item>
               <b-dropdown-divider></b-dropdown-divider>
               <b-dropdown-item @click="server.dlna_search(null,null)">Search DMR</b-dropdown-item>
               <b-dropdown-divider></b-dropdown-divider>
