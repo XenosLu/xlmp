@@ -120,7 +120,7 @@ window.appView = new Vue({
             },
             wpPosition: function () {
                 for (var item in this.history) {
-                    if (this.history[item].filename === window.appView.video.src)
+                    if (this.history[item].fullpath === window.appView.video.src)
                         return this.history[item].position;
                 }
                 return 0;
