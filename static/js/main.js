@@ -64,8 +64,9 @@ window.appView = new Vue({
         watch: {
             'dlnaInfo.CurrentDMR': function () {
                 console.log(this.dlnaInfo.CurrentDMR);
-                if (!this.wpMode) {
-                    if (typeof(this.dlnaInfo.CurrentDMR) === "undefined" || this.dlnaInfo.CurrentDMR === 'no DMR')
+                if (!this.wpMode && typeof(this.dlnaInfo.CurrentDMR) !== "undefined") {
+                    // if (typeof(this.dlnaInfo.CurrentDMR) === "undefined" || this.dlnaInfo.CurrentDMR === 'no DMR')
+                    if (this.dlnaInfo.CurrentDMR === 'no DMR')
                         this.mode = '';
                     else
                         this.mode = 'DLNA';
