@@ -26,12 +26,12 @@ window.appView = new Vue({
         delimiters: ['${', '}'],
         el: '#v-main',
         data: {
+            devMode: true, // develop mode switch
             allSelected: false,
             removeCheckboxList: [],
             moveCheckboxList: [],
             mode: '', // mode of player, switch between empty/DLNA/WebPlayer
             navCollapse: false, // navbar is collapse
-            devMode: true, // develop mode
             editMode: false,
             browserShow: false,
             historyShow: true, // ture if browser window is history, false if browser window is file list
