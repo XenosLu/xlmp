@@ -44,7 +44,6 @@
           <!-- </b-btn> -->
           <!-- dlna dmr menu -->
             <b-dropdown v-show="!wpMode" variant="outline-dark">
-            <!-- <b-nav-item-dropdown  v-show="!wpMode" right> -->
               <template slot="button-content">
                 <i v-show="dlnaMode" class="oi oi-monitor"></i>
                 <small v-if="dlnaMode" class="d-sm-inline d-none">${ dlnaInfo.CurrentDMR }</small>
@@ -65,7 +64,6 @@
                 <i class="oi oi-monitor"></i>
                 ${ item }
               </b-dropdown-item>
-            <!-- </b-nav-item-dropdown> -->
             </b-dropdown>
           <!-- dlna dmr menu end -->
           <b-btn v-if="wpMode" variant="outline-warning" @click="mode=''">
