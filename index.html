@@ -259,15 +259,22 @@
       </video>
       <!-- video end-->
       <!-- dlna interface -->
-      <div v-if="dlnaMode" class="text-center col-sm-10 col-md-8 col-lg-6 col-xl-4">
+      <!-- <div v-if="dlnaInfo.TrackURI" class="text-center col-sm-10 col-md-8 col-lg-6 col-xl-4"> -->
+      <div v-show="dlnaInfo.TrackURI" class="text-center col-sm-10 col-md-8 col-lg-6 col-xl-4">
+        <!-- <b-card v-pan="dlnaTouch" -->
+                <!-- v-swipe="dlnaTouch" -->
+                <!-- bg-variant="light" -->
+                <!-- :title="dlnaInfo.TrackURI ? decodeURI(dlnaInfo.TrackURI) : ''" -->
+                <!-- class="title break-all my-3"> -->
         <b-card v-pan="dlnaTouch"
                 v-swipe="dlnaTouch"
                 bg-variant="light"
-                :title="dlnaInfo.TrackURI ? decodeURI(dlnaInfo.TrackURI) : ''"
+                :title="decodeURI(dlnaInfo.TrackURI)"
                 class="title break-all my-3">
         </b-card>
       </div>
-      <div v-show="dlnaMode" class="fixed-bottom text-center default-bg flex-center">
+      <!-- <div v-show="dlnaMode" class="fixed-bottom text-center default-bg flex-center"> -->
+      <div v-show="dlnaInfo.TrackURI" class="fixed-bottom text-center default-bg flex-center">
         <div class="card-body col-sm-12 col-md-8 col-lg-6 col-xl-4">
           <h6 class="card-subtitle text-muted">${ dlnaInfo.CurrentTransportState }</h6>
           <h6 v-show="dlnaInfo.RelTime" class="card-title my-2">
