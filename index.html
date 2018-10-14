@@ -272,8 +272,7 @@
                 class="title break-all my-3">
         </b-card>
       </div>
-      <!-- <div v-show="dlnaMode" class="fixed-bottom text-center default-bg flex-center"> -->
-      <div v-show="dlnaMode && dlnaInfo.TrackURI" class="fixed-bottom text-center default-bg flex-center">
+      <div v-show="dlnaMode" class="fixed-bottom text-center default-bg flex-center">
         <div class="card-body col-sm-12 col-md-8 col-lg-6 col-xl-4">
           <h6 class="card-subtitle text-muted">${ dlnaInfo.CurrentTransportState }</h6>
           <h6 v-show="dlnaInfo.RelTime" class="card-title my-2">
