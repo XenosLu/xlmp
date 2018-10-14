@@ -47,6 +47,7 @@
             <small class="d-sm-inline d-none">Close</small>
           </b-btn>
         </b-btn-group>
+        <!-- browser menu -->
         <b-btn-group v-show="browserShow" class="mx-1">
           <b-btn @click="showHistory" :pressed="historyShow" variant="outline-dark">
             <i class="oi oi-clock"></i>
@@ -57,10 +58,7 @@
             <small class="d-sm-inline d-none">Home dir</small>
           </b-btn>
         </b-btn-group>
-        <!-- <b-btn v-show="browserShow" @click="editMode=!editMode" variant="outline-dark" :pressed="editMode"> -->
-          <!-- <i class="oi oi-circle-check"></i> -->
-          <!-- <small class="d-sm-inline d-none">edit</small> -->
-        <!-- </b-btn> -->
+        <!-- browser menu end -->
         <b-btn v-show="browserShow" :pressed.sync="editMode" variant="outline-dark">
           <i class="oi oi-circle-check"></i>
           <small class="d-sm-inline d-none">edit</small>
