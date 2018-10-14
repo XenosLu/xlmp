@@ -180,11 +180,6 @@
                     <input type="checkbox" :value="item.path" v-model="moveCheckboxList">
                   </b-input-group-prepend>
                 </td>
-                <!-- <td v-show="editMode" class="iconOnly"> -->
-                  <!-- <b-btn variant="danger" @click="move(item.path)"> -->
-                    <!-- <i class="oi oi-circle-x"></i> -->
-                  <!-- </b-btn> -->
-                <!-- </td> -->
                 <td class="iconOnly"><i :class="icon[item.type]" class="oi"></i></td>
                  <!-- @click="open(item.path, item.type)" -->
                 <td :class="item.type"
