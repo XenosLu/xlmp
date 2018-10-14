@@ -68,6 +68,8 @@ window.appView = new Vue({
             // },
             historyShow: function () {
                 this.allSelected = false;
+                // this.moveCheckboxList = [];
+                // this.removeCheckboxList = [];
             },
             browserShow: function () {
                 this.navCollapse = false;
