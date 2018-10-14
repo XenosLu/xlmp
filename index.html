@@ -51,8 +51,8 @@
                 <i v-show="!dlnaMode" class="oi oi-browser"></i>
                 <small v-if="!dlnaMode" class="d-sm-inline d-none">Web Mode</small>
               </template>
-              <b-dropdown-header>${ dlnaInfo.CurrentDMR }</b-dropdown-header>
-              <b-dropdown-divider></b-dropdown-divider>
+              <b-dropdown-header v-show="dlnaMode">${ dlnaInfo.CurrentDMR }</b-dropdown-header>
+              <b-dropdown-divider v-show="dlnaMode"></b-dropdown-divider>
               <b-dropdown-item @click="mode=''">
                 <i class="oi oi-browser"></i>
                 Web Mode
