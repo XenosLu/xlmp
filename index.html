@@ -35,14 +35,36 @@
             <i v-show="!browserShow" class="oi oi-list"></i>
             <i v-show="browserShow" class="oi oi-x"></i>
           </b-btn>
-          <b-btn v-if="!wpMode"
-                 variant="outline-success"
-                 title="switch DLNA mode"
-                 :pressed="dlnaMode"
-                 @click="dlnaToogle">
-            DLNA <i v-show="dlnaOn" class="oi oi-monitor"></i>
-          </b-btn>
-          <b-btn v-if="wpMode" variant="outline-warning" @click="dlnaToogle">
+          <!-- <b-btn v-if="!wpMode" -->
+                 <!-- variant="outline-success" -->
+                 <!-- title="switch DLNA mode" -->
+                 <!-- :pressed="dlnaMode" -->
+                 <!-- @click="dlnaToogle"> -->
+            <!-- DLNA <i v-show="dlnaOn" class="oi oi-monitor"></i> -->
+          <!-- </b-btn> -->
+          <!-- dlna dmr menu -->
+            <b-dropdown v-show="!wpMode" variant="outline-dark">
+            <!-- <b-nav-item-dropdown  v-show="!wpMode" right> -->
+              <template slot="button-content">
+                <i v-show="dlnaMode" class="oi oi-monitor"></i>
+                <small v-if="dlnaMode" class="d-sm-inline d-none">${ dlnaInfo.CurrentDMR }</small>
+                <i v-show="!dlnaMode" class="oi oi-browser"></i>
+                <small v-if="!dlnaMode" class="d-sm-inline d-none">Web Mode</small>
+              </template>
+              <b-dropdown-header>${ dlnaInfo.CurrentDMR }</b-dropdown-header>
+              <b-dropdown-divider></b-dropdown-divider>
+              <b-dropdown-item @click="mode=''">Web Mode</b-dropdown-item>
+              <b-dropdown-item v-show="devMode" @click="mode='DLNA'">DLNA Mode</b-dropdown-item>
+              <b-dropdown-divider></b-dropdown-divider>
+              <b-dropdown-item @click="server.dlna_search(null,null)">Search DMR</b-dropdown-item>
+              <b-dropdown-divider></b-dropdown-divider>
+              <b-dropdown-item v-for="item in dlnaInfo.DMRs" @click="setDmr(item)">
+                ${ item }
+              </b-dropdown-item>
+            <!-- </b-nav-item-dropdown> -->
+            </b-dropdown>
+          <!-- dlna dmr menu end -->
+          <b-btn v-if="wpMode" variant="outline-warning" @click="mode=''">
             <i class="oi oi-x"></i>
             <small class="d-sm-inline d-none">Close</small>
           </b-btn>
@@ -82,15 +104,6 @@
               <b-dropdown-item v-if="devMode" @click="server.test()">test</b-dropdown-item>
               <!-- <b-dropdown-item v-if="devMode" @click="test">test</b-dropdown-item> -->
             </b-nav-item-dropdown>
-          <!-- dlna dmr menu -->
-            <b-nav-item-dropdown v-show="dlnaMode" right :text="dlnaInfo.CurrentDMR">
-              <b-dropdown-item @click="server.dlna_search()">Search DMR</b-dropdown-item>
-              <b-dropdown-divider></b-dropdown-divider>
-              <b-dropdown-item v-for="item in dlnaInfo.DMRs" @click="setDmr(item)">
-                ${ item }
-              </b-dropdown-item>
-            </b-nav-item-dropdown>
-          <!-- dlna dmr menu end -->
           <!-- dlna seek menu -->
             <b-nav-item-dropdown v-show="dlnaMode" right>
               <template slot="button-content">

@@ -62,6 +62,17 @@ window.appView = new Vue({
             icon: icon,
         },
         watch: {
+            'dlnaInfo.CurrentDMR': function () {
+                console.log(this.dlnaInfo.CurrentDMR);
+                if (!this.wpMode) {
+                    if (typeof(this.dlnaInfo.CurrentDMR) === "undefined" || this.dlnaInfo.CurrentDMR === 'no DMR')
+                        this.mode = '';
+                    else
+                        this.mode = 'DLNA';
+                }
+                // if (typeof(this.dlnaInfo.CurrentDMR) !== "undefined" && this.dlnaInfo.CurrentDMR !== 'no DMR' && this.mode == '')
+                    // this.mode = 'DLNA';
+            },
             // editMode: function () {
                 // this.allSelected = false;
                 // this.removeCheckboxList = [];
@@ -87,16 +98,15 @@ window.appView = new Vue({
                     window.document.title = "DMC - Light Media Player";
                 } else if (this.wpMode) {
                     window.document.title = this.video.src + " - Light Media Player";
-                    // if (this.isIos)
                     touchWebPlayer();
                 } else
                     window.document.title = "Light Media Player";
             },
         },
         computed: {
-            dlnaOn: function () { // check if dlna dmr is exist
-                return typeof(this.dlnaInfo.CurrentDMR) !== "undefined" && this.dlnaInfo.CurrentDMR !== 'no DMR';
-            },
+            // dlnaOn: function () { // check if dlna dmr is exist
+                // return typeof(this.dlnaInfo.CurrentDMR) !== "undefined" && this.dlnaInfo.CurrentDMR !== 'no DMR';
+            // },
             dlnaMode: function () { // check if in dlna mode
                 return this.mode === 'DLNA';
             },
@@ -291,7 +301,7 @@ window.appView = new Vue({
                 this.browserShow = false;
             },
             setDmr: function (dmr) {
-                server.dlna_set_dmr({dmr: dmr});
+                server.dlna_set_dmr({dmr: dmr}, () => {this.mode='DLNA';});
             },
             positionSeek: function () {
                 var position = secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBarVal, this.positionBarMax));
@@ -353,8 +363,9 @@ window.appView = new Vue({
             },
         },
         created: function () {
-            if (typeof(localStorage.mode) !== "undefined")
-                this.mode = localStorage.mode;
+            // if (typeof(localStorage.mode) !== "undefined")
+                // this.mode = localStorage.mode;
+            delete localStorage.mode;
             window.onresize = this.videoAdapt;
             this.isIos = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
             this.isIos = true;
@@ -412,7 +423,8 @@ var connApi = webSocketLink({
                     delete methods[data.id];
                     if (typeof(callback) === 'undefined')
                         callback = window.appView.out;
-                    callback(data.result);
+                    if (callback)
+                        callback(data.result);
                 } else
                     errorCallback(data.error);
             } else
