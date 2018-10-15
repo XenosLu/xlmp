@@ -38,8 +38,8 @@ window.appView = new Vue({
             history: [], // updated by ajax
             filelist: [], // updated by ajax
             dlnaInfo: { // updated by websocket
-                CurrentDMR: 'no DMR',
-                TrackURI: '',
+                // CurrentDMR: 'no DMR',
+                // TrackURI: '',
             },
             positionBarCanUpdate: true, //dlna position bar
             positionBarVal: 0,
