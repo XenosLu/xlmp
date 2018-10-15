@@ -477,9 +477,10 @@ var connApi = webSocketLink({
                 window.appView.dlnaInfo = data;
         },
         onclose: function () {
-            window.appView.dlnaInfo = {
-                CurrentTransportState: 'disconnected'
-            };
+            Vue.set(window.appView.dlnaInfo, 'CurrentTransportState', 'disconnected')
+            // window.appView.dlnaInfo = {
+                // CurrentTransportState: 'disconnected'
+            // };
             console.log('disconnected');
         },
         onopen: function () {
