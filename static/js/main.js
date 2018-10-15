@@ -170,7 +170,7 @@ window.appView = new Vue({
                     complete: done
                 });
             },
-            slideLeftBigIn: function (el, done) {
+            transitionSlideLeftBigIn: function (el, done) {
                 Velocity(el, 'stop');
                 Velocity(el, {
                     opacity: [1, 0],
@@ -181,7 +181,7 @@ window.appView = new Vue({
                     complete: done
                 });
             },
-            slideLeftBigOut: function (el, done) {
+            transitionSlideLeftBigOut: function (el, done) {
                 Velocity(el, 'stop');
                 Velocity(el, {
                     opacity: [0, 1],

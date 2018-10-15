@@ -82,8 +82,8 @@
           </b-btn>
         </b-btn-group>
         <!-- browser menu -->
-        <transition @enter="transitionSlideDownBigIn"
-                    @leave="transitionSlideUpBigOut">
+        <transition @enter="transitionSlideLeftBigIn"
+                    @leave="transitionSlideLeftBigOut">
           <b-btn-group v-if="browserShow" class="mx-1">
             <b-btn @click="showHistory" :pressed="historyShow" variant="outline-dark">
               <i class="oi oi-clock"></i>
@@ -96,8 +96,8 @@
           </b-btn-group>
         </transition>
         <!-- browser menu end -->
-        <transition @enter="slideLeftBigIn"
-                    @leave="slideLeftBigOut">
+        <transition @enter="transitionFadeIn"
+                    @leave="transitionFadeOut">
         <b-btn v-show="browserShow" :pressed.sync="editMode" variant="outline-dark">
           <i class="oi oi-circle-check"></i>
           <small class="d-sm-inline d-none">edit</small>
@@ -153,8 +153,8 @@
       </b-navbar>
       <!-- nav bar end -->
       <!-- dropdown window -->
-      <transition @enter="slideDownBigIn"
-                  @leave="slideUpBigOut">
+      <transition @enter="transitionSlideDownBigIn"
+                  @leave="transitionSlideUpBigOut">
       <div v-show="browserShow" class="col-xs-12 col-sm-12 col-md-10 col-lg-8 col-xl-6 z-index-1040">
         <div class="card window">
           <div class="card-header"></div>
