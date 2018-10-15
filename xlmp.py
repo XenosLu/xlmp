@@ -273,7 +273,6 @@ def time_to_second(time_str):
 
 def get_size(path):
     """get file size in human read format from file"""
-    # size = os.path.getsize('%s/%s' % (VIDEO_PATH, ''.join(filename)))
     size = os.path.getsize(path)
     if size < 0:
         return 'Out of Range'
