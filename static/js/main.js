@@ -62,15 +62,30 @@ window.appView = new Vue({
             icon: icon,
         },
         watch: {
-            'dlnaInfo.CurrentDMR': function () {
-                console.log(this.dlnaInfo.CurrentDMR);
-                if (!this.wpMode && typeof(this.dlnaInfo.CurrentDMR) !== "undefined") {
-                    if (this.dlnaInfo.CurrentDMR === 'no DMR')
+            dlnaInfo: function () {
+                console.log(this.dlnaInfo);
+                if (!this.wpMode) {
+                    if (typeof(this.dlnaInfo.CurrentDMR) === "undefined")
                         this.mode = '';
                     else
                         this.mode = 'DLNA';
                 }
             },
+            // 'dlnaInfo.CurrentDMR': function () {
+                // console.log(this.dlnaInfo.CurrentDMR);
+                // // if (!this.wpMode && typeof(this.dlnaInfo.CurrentDMR) !== "undefined") {
+                    // // if (this.dlnaInfo.CurrentDMR === 'no DMR')
+                        // // this.mode = '';
+                    // // else
+                        // // this.mode = 'DLNA';
+                // // }
+                // if (!this.wpMode) {
+                    // if (typeof(this.dlnaInfo.CurrentDMR) === "undefined")
+                        // this.mode = '';
+                    // else
+                        // this.mode = 'DLNA';
+                // }
+            // },
             // editMode: function () {
                 // this.allSelected = false;
                 // this.removeCheckboxList = [];
