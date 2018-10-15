@@ -81,9 +81,10 @@ window.appView = new Vue({
                 // this.removeCheckboxList = [];
             },
             browserShow: function () {
+                if (this.browserShow && this.historyShow)
+                    this.showHistory();
                 this.navCollapse = false;
-                if (!this.browserShow)
-                    this.editMode = false;
+                this.editMode = false;
             },
             'dlnaInfo.RelTime': function () {
                 console.log('reltime update');
@@ -128,6 +129,14 @@ window.appView = new Vue({
             test: function (obj, obj2) {
                 // console.log("test " + obj);
                 // this.out('test' + obj);
+            },
+            outFadeIn: function (el, done) {
+                Velocity(el, 'stop');
+                Velocity(el, {opacity: 0.75}, {duration: 170});
+            },
+            outFadeOut: function (el, done) {
+                Velocity(el, 'stop');
+                Velocity(el, {opacity: 0}, {duration: 600});
             },
             removeSelected: function () {
                 if (confirm('Remove ' + this.removeCheckboxList + '?')) {
@@ -195,14 +204,6 @@ window.appView = new Vue({
                         }, 2100);
                 }
             },
-            outFadeIn: function (el, done) {
-                Velocity(el, 'stop');
-                Velocity(el, {opacity: 0.75}, {duration: 170});
-            },
-            outFadeOut: function (el, done) {
-                Velocity(el, 'stop');
-                Velocity(el, {opacity: 0}, {duration: 600});
-            },
             dlnaToogle: function () {
                 this.mode = this.mode !== '' ? '' : 'DLNA';
                 localStorage.mode = this.mode;
@@ -235,11 +236,11 @@ window.appView = new Vue({
                     }
                 }
             },
-            showModal: function () {
-                this.browserShow = !this.browserShow;
-                if (this.browserShow && this.historyShow)
-                    this.showHistory();
-            },
+            // showModal: function () {
+                // this.browserShow = !this.browserShow;
+                // if (this.browserShow && this.historyShow)
+                    // this.showHistory();
+            // },
             historyCallBack: function (data) {
                 this.history = data;
             },
