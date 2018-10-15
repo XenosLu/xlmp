@@ -130,7 +130,7 @@ window.appView = new Vue({
                 // console.log("test " + obj);
                 // this.out('test' + obj);
             },
-            outFadeIn: function (el, done) {
+            transitionFadeIn: function (el, done) {
                 Velocity(el, 'stop');
                 Velocity(el, {
                     opacity: [0.75, 0]
@@ -139,7 +139,7 @@ window.appView = new Vue({
                     complete: done
                 });
             },
-            outFadeOut: function (el, done) {
+            transitionFadeOut: function (el, done) {
                 Velocity(el, 'stop');
                 Velocity(el, {
                     opacity: 0
