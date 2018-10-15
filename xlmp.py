@@ -333,7 +333,7 @@ class DlnaPlayToggleHandler(tornado.web.RequestHandler):
 class LinkWebSocketHandler(tornado.websocket.WebSocketHandler):
     """DLNA info retriever use web socket"""
     users = set()
-    last_message = {}
+    last_message = None
 
     def data_received(self, chunk):
         pass
