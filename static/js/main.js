@@ -409,9 +409,6 @@ window.appView = new Vue({
             },
         },
         created: function () {
-            // if (typeof(localStorage.mode) !== "undefined")
-                // this.mode = localStorage.mode;
-            delete localStorage.mode;
             window.onresize = this.videoAdapt;
             this.isIos = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
             this.isIos = true;
