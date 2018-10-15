@@ -196,9 +196,7 @@ class DMRTracker(Thread):
         next_file = get_next_file(src)
         logging.info('next file recognized: %s', next_file)
         if next_file:
-            # url = '%s%s' % (self.url_prefix, quote(next_file))
             return self.load(next_file)
-            # return True
         return False
 
     def loadonce(self, url):
