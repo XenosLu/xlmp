@@ -84,16 +84,16 @@
         <!-- browser menu -->
         <transition @enter="slideLeftBigIn"
                     @leave="slideLeftBigOut">
-        <b-btn-group v-if="browserShow" class="mx-1">
-          <b-btn @click="showHistory" :pressed="historyShow" variant="outline-dark">
-            <i class="oi oi-clock"></i>
-            <small class="d-sm-inline d-none">History</small>
-          </b-btn>
-          <b-btn @click="open('', 'folder')" :pressed="!historyShow" variant="outline-dark">
-            <i class="oi oi-home"></i>
-            <small class="d-sm-inline d-none">Home dir</small>
-          </b-btn>
-        </b-btn-group>
+          <b-btn-group v-if="browserShow" class="mx-1">
+            <b-btn @click="showHistory" :pressed="historyShow" variant="outline-dark">
+              <i class="oi oi-clock"></i>
+              <small class="d-sm-inline d-none">History</small>
+            </b-btn>
+            <b-btn @click="open('', 'folder')" :pressed="!historyShow" variant="outline-dark">
+              <i class="oi oi-home"></i>
+              <small class="d-sm-inline d-none">Home dir</small>
+            </b-btn>
+          </b-btn-group>
         </transition>
         <!-- browser menu end -->
         <b-btn v-show="browserShow" :pressed.sync="editMode" variant="outline-dark">
