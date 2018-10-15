@@ -138,14 +138,25 @@ window.appView = new Vue({
                 Velocity(el, 'stop');
                 Velocity(el, {opacity: 0}, {duration: 600});
             },
-            transitionScaleIn: function (el, done) {
+            slideDownBigIn: function (el, done) {
                 Velocity(el, 'stop');
-                Velocity(el, {scaleY: 0}, {duration: 0})
-                Velocity(el, {scaleY: 1}, {duration: 300});
+                Velocity(el, {
+                    opacity: [1, 0],
+                    translateY: [0, -75],
+                    translateZ: 0
+                }, {
+                    duration: 400
+                });
             },
-            transitionScaleOut: function (el, done) {
+            slideUpBigOut: function (el, done) {
                 Velocity(el, 'stop');
-                Velocity(el, {scaleY: 0}, {duration: 300});
+                Velocity(el, {
+                    opacity: [0, 1],
+                    translateY: -75,
+                    translateZ: 0
+                }, {
+                    duration: 300
+                });
             },
             transitionLeftIn: function (el, done) {
                 Velocity(el, 'stop');
