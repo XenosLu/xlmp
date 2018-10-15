@@ -138,6 +138,24 @@ window.appView = new Vue({
                 Velocity(el, 'stop');
                 Velocity(el, {opacity: 0}, {duration: 600});
             },
+            transitionScaleIn: function (el, done) {
+                Velocity(el, 'stop');
+                Velocity(el, {scaleY: 0}, {duration: 0})
+                Velocity(el, {scaleY: 1}, {duration: 300});
+            },
+            transitionScaleOut: function (el, done) {
+                Velocity(el, 'stop');
+                Velocity(el, {scaleY: 0}, {duration: 300});
+            },
+            transitionLeftIn: function (el, done) {
+                Velocity(el, 'stop');
+                Velocity(el, {translateX: '-10em'}, {duration: 0})
+                Velocity(el, {translateX: 0}, {duration: 300});
+            },
+            transitionLeftOut: function (el, done) {
+                Velocity(el, 'stop');
+                Velocity(el, {translateX: '-10em'}, {duration: 300});
+            },
             removeSelected: function () {
                 if (confirm('Remove ' + this.removeCheckboxList + '?')) {
                     this.removeCheckboxList.forEach(this.remove);
