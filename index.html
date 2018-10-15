@@ -117,7 +117,6 @@
               <b-dropdown-item v-if="devMode" disabled>Develop Options</b-dropdown-item>
               <b-dropdown-item v-if="devMode" @click="server.self_update()">update</b-dropdown-item>
               <b-dropdown-item v-if="devMode" @click="server.test()">test</b-dropdown-item>
-              <!-- <b-dropdown-item v-if="devMode" @click="test">test</b-dropdown-item> -->
             </b-nav-item-dropdown>
           <!-- dlna seek menu -->
             <b-nav-item-dropdown v-show="dlnaMode" right>
