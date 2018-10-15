@@ -65,14 +65,11 @@ window.appView = new Vue({
             'dlnaInfo.CurrentDMR': function () {
                 console.log(this.dlnaInfo.CurrentDMR);
                 if (!this.wpMode && typeof(this.dlnaInfo.CurrentDMR) !== "undefined") {
-                    // if (typeof(this.dlnaInfo.CurrentDMR) === "undefined" || this.dlnaInfo.CurrentDMR === 'no DMR')
                     if (this.dlnaInfo.CurrentDMR === 'no DMR')
                         this.mode = '';
                     else
                         this.mode = 'DLNA';
                 }
-                // if (typeof(this.dlnaInfo.CurrentDMR) !== "undefined" && this.dlnaInfo.CurrentDMR !== 'no DMR' && this.mode == '')
-                    // this.mode = 'DLNA';
             },
             // editMode: function () {
                 // this.allSelected = false;
@@ -193,9 +190,6 @@ window.appView = new Vue({
                     }
                     this.output.text = str;
                     this.output.show = true;
-                    // this.output.timerId = setTimeout(function () {
-                    // window.appView.output.show = false;
-                    // }, 2100);
                     this.output.timerId = setTimeout(() => {
                             this.output.show = false;
                         }, 2100);
