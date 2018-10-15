@@ -133,7 +133,7 @@ window.appView = new Vue({
             outFadeIn: function (el, done) {
                 Velocity(el, 'stop');
                 Velocity(el, {
-                    opacity: 0.75
+                    opacity: [0.75, 0]
                 }, {
                     duration: 170,
                     complete: done

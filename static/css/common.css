@@ -115,7 +115,7 @@ input[type=range]::-moz-range-thumb {
     text-overflow: ellipsis;
 }
 .output-container {
-    opacity: 0;
+    /* opacity: 0; */
     pointer-events: none;
     z-index: 1080;
     width: 100%;
