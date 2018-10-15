@@ -39,8 +39,8 @@ class DMRTracker(Thread):
         self._loop = asyncio.new_event_loop()
         self._load_inprogess = Event()
         self.loop_playback = Event()
-        # self.state = {'CurrentDMR': 'no DMR'}  # DMR device state
         self.state = {}  # DMR device state
+        # self.state = {'CurrentDMR': 'no DMR'}  # DMR device state
         self.dmr = None  # DMR device object
         self.all_devices = []  # DMR device list
         self.url_prefix = None
