@@ -84,7 +84,7 @@
         <!-- browser menu -->
         <transition @enter="transitionSlideLeftBigIn"
                     @leave="transitionSlideLeftBigOut">
-          <b-btn-group v-if="browserShow" class="mx-1">
+          <b-btn-group v-show="browserShow" class="mx-1">
             <b-btn @click="showHistory" :pressed="historyShow" variant="outline-dark">
               <i class="oi oi-clock"></i>
               <small class="d-sm-inline d-none">History</small>
@@ -96,12 +96,12 @@
           </b-btn-group>
         </transition>
         <!-- browser menu end -->
-        <transition @enter="transitionFadeIn"
-                    @leave="transitionFadeOut">
-        <b-btn v-show="browserShow" :pressed.sync="editMode" variant="outline-dark">
-          <i class="oi oi-circle-check"></i>
-          <small class="d-sm-inline d-none">edit</small>
-        </b-btn>
+        <transition @enter="transitionSlideLeftBigIn"
+                    @leave="transitionSlideLeftBigOut">
+          <b-btn v-show="browserShow" :pressed.sync="editMode" variant="outline-dark">
+            <i class="oi oi-circle-check"></i>
+            <small class="d-sm-inline d-none">edit</small>
+          </b-btn>
         </transition>
         <b-navbar-toggle v-show="!browserShow" target="nav_collapse"></b-navbar-toggle>
         <b-collapse is-nav id="nav_collapse" v-model="navCollapse">
