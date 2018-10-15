@@ -145,7 +145,7 @@ window.appView = new Vue({
                     translateY: [0, -75],
                     translateZ: 0
                 }, {
-                    duration: 400
+                    duration: 300
                 });
             },
             slideUpBigOut: function (el, done) {
@@ -158,14 +158,25 @@ window.appView = new Vue({
                     duration: 300
                 });
             },
-            transitionLeftIn: function (el, done) {
+            slideLeftBigIn: function (el, done) {
                 Velocity(el, 'stop');
-                Velocity(el, {translateX: '-10em'}, {duration: 0})
-                Velocity(el, {translateX: 0}, {duration: 300});
+                Velocity(el, {
+                    opacity: [1, 0],
+                    translateX: [0, -75],
+                    translateZ: 0
+                }, {
+                    duration: 300
+                });
             },
-            transitionLeftOut: function (el, done) {
+            slideLeftBigOut: function (el, done) {
                 Velocity(el, 'stop');
-                Velocity(el, {translateX: '-10em'}, {duration: 300});
+                Velocity(el, {
+                    opacity: [0, 1],
+                    translateX: -75,
+                    translateZ: 0
+                }, {
+                    duration: 300
+                });
             },
             removeSelected: function () {
                 if (confirm('Remove ' + this.removeCheckboxList + '?')) {
