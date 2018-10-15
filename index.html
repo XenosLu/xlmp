@@ -96,13 +96,10 @@
           </b-btn-group>
         </transition>
         <!-- browser menu end -->
-        <!-- <transition @enter="transitionSlideLeftBigIn" -->
-                    <!-- @leave="transitionSlideLeftBigOut"> -->
-          <b-btn v-show="browserShow" :pressed.sync="editMode" variant="outline-dark">
-            <i class="oi oi-circle-check"></i>
-            <small class="d-sm-inline d-none">edit</small>
-          </b-btn>
-        <!-- </transition> -->
+        <b-btn v-show="browserShow" :pressed.sync="editMode" variant="outline-dark">
+          <i class="oi oi-circle-check"></i>
+          <small class="d-sm-inline d-none">edit</small>
+        </b-btn>
         <b-navbar-toggle v-show="!browserShow" target="nav_collapse"></b-navbar-toggle>
         <b-collapse is-nav id="nav_collapse" v-model="navCollapse">
           <b-navbar-nav>
