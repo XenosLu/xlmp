@@ -132,11 +132,21 @@ window.appView = new Vue({
             },
             outFadeIn: function (el, done) {
                 Velocity(el, 'stop');
-                Velocity(el, {opacity: 0.75}, {duration: 170});
+                Velocity(el, {
+                    opacity: 0.75
+                }, {
+                    duration: 170,
+                    complete: done
+                });
             },
             outFadeOut: function (el, done) {
                 Velocity(el, 'stop');
-                Velocity(el, {opacity: 0}, {duration: 600});
+                Velocity(el, {
+                    opacity: 0
+                }, {
+                    duration: 600,
+                    complete: done
+                });
             },
             slideDownBigIn: function (el, done) {
                 Velocity(el, 'stop');
@@ -145,7 +155,8 @@ window.appView = new Vue({
                     translateY: [0, -75],
                     translateZ: 0
                 }, {
-                    duration: 300
+                    duration: 300,
+                    complete: done
                 });
             },
             slideUpBigOut: function (el, done) {
@@ -155,7 +166,8 @@ window.appView = new Vue({
                     translateY: -75,
                     translateZ: 0
                 }, {
-                    duration: 300
+                    duration: 300,
+                    complete: done
                 });
             },
             slideLeftBigIn: function (el, done) {
@@ -165,7 +177,8 @@ window.appView = new Vue({
                     translateX: [0, -75],
                     translateZ: 0
                 }, {
-                    duration: 300
+                    duration: 300,
+                    complete: done
                 });
             },
             slideLeftBigOut: function (el, done) {
@@ -175,7 +188,8 @@ window.appView = new Vue({
                     translateX: -75,
                     translateZ: 0
                 }, {
-                    duration: 300
+                    duration: 300,
+                    complete: done
                 });
             },
             removeSelected: function () {
