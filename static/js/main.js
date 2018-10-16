@@ -127,7 +127,7 @@ window.appView = new Vue({
                 // console.log("test " + obj);
                 // this.out('test' + obj);
             },
-            transitionSlideDownBigIn: function (el, done) { //bounceIn
+            transitionBounceIn: function (el, done) {
                 Velocity(el, 'stop');
                 Velocity(el, {
                     opacity: [1, 0],
@@ -142,7 +142,7 @@ window.appView = new Vue({
                     complete: done
                 });
             },
-            transitionSlideUpBigOut: function (el, done) { //bounceOut
+            transitionBounceOut: function (el, done) {
                 Velocity(el, 'stop');
                 Velocity(el, {
                     opacity: [0, 1],

@@ -146,8 +146,8 @@
       </b-navbar>
       <!-- nav bar end -->
       <!-- dropdown window -->
-      <transition @enter="transitionSlideDownBigIn"
-                  @leave="transitionSlideUpBigOut">
+      <transition @enter="transitionBounceIn"
+                  @leave="transitionBounceOut">
         <div v-show="browserShow" class="col-xs-12 col-sm-12 col-md-10 col-lg-8 col-xl-6 z-index-1040">
           <div class="card window">
             <div class="card-header"></div>
