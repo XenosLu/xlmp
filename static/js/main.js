@@ -193,6 +193,32 @@ window.appView = new Vue({
                     complete: done
                 });
             },
+            transitionpPerspectiveLeftIn: function (el, done) {
+                Velocity(el, 'stop');
+                Velocity(el, {
+                    opacity: [1, 0],
+                    transformPerspective: [2e3, 2e3],
+                    transformOriginX: [0, 0],
+                    transformOriginY: [0, 0],
+                    rotateY: [0, -180]
+                }, {
+                    duration: 300,
+                    complete: done
+                });
+            },
+            transitionPerspectiveLeftOut: function (el, done) {
+                Velocity(el, 'stop');
+                Velocity(el, {
+                    opacity: [0, 1],
+                    transformPerspective: [2e3, 2e3],
+                    transformOriginX: [0, 0],
+                    transformOriginY: [0, 0],
+                    rotateY: -180
+                }, {
+                    duration: 300,
+                    complete: done
+                });
+            },
             removeSelected: function () {
                 if (confirm('Remove ' + this.removeCheckboxList + '?')) {
                     this.removeCheckboxList.forEach(this.remove);

@@ -77,8 +77,10 @@
           </b-btn>
         </b-btn-group>
         <!-- browser menu -->
-        <transition @enter="transitionSlideLeftBigIn"
-                    @leave="transitionSlideLeftBigOut">
+        <!-- <transition @enter="transitionSlideLeftBigIn" -->
+                    <!-- @leave="transitionSlideLeftBigOut"> -->
+        <transition @enter="transitionpPerspectiveLeftIn"
+                    @leave="transitionPerspectiveLeftOut">
           <b-btn-group v-show="browserShow" class="mx-1">
             <b-btn @click="showHistory" :pressed="historyShow" variant="outline-dark">
               <i class="oi oi-clock"></i>
