@@ -18,15 +18,17 @@
   <body>
     <div id="v-main" class="flex-center">
       <!-- output box -->
-      <transition @enter="transitionFadeIn"
-                  @leave="transitionFadeOut">
+      <!-- <transition @enter="transitionFadeIn" -->
+                  <!-- @leave="transitionFadeOut"> -->
+      <transition-fade>
         <div v-if="output.show" :key="output.text+Math.random()" class="output-container justify-content-center flex-center position-fixed">
           <div class="output">
             <small class="d-block">${ output.smallText }</small>
             ${ output.text }
           </div>
         </div>
-      </transition>
+      </transition-fade>
+      <!-- </transition> -->
       <!-- output box end -->
       <!-- nav bar -->
       <b-navbar v-show="fixBar.show" fixed toggleable="lg" type="light" class="default-bg z-index-1050 col-md-8 col-lg-11 col-xl-7">

@@ -104,3 +104,32 @@ Vue.directive("swipe", {
         new vueTouch(el, "swipeleft swiperight", binding);
     }
 });
+
+Vue.component('transition-fade', {
+    functional: true,
+    render: function (createElement, context) {
+        var data = {
+            on: {
+                enter: function (el, done) {
+                    Velocity(el, 'stop');
+                    Velocity(el, {
+                        opacity: [0.75, 0]
+                    }, {
+                        duration: 170,
+                        complete: done
+                    });
+                },
+                leave: function (el, done) {
+                    Velocity(el, 'stop');
+                    Velocity(el, {
+                        opacity: 0
+                    }, {
+                        duration: 600,
+                        complete: done
+                    });
+                }
+            }
+        }
+        return createElement('transition', data, context.children)
+    }
+})
