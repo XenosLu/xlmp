@@ -131,7 +131,7 @@ window.appView = new Vue({
                 Velocity(el, 'stop');
                 Velocity(el, {
                     opacity: [1, 0],
-                    translateY: [0, -75],
+                    // translateY: [0, -75],
                     transformOriginX: ["50%", "50%"],
                     transformOriginY: ["50%", "50%"],
                     scaleX: [1, .625],
@@ -146,7 +146,7 @@ window.appView = new Vue({
                 Velocity(el, 'stop');
                 Velocity(el, {
                     opacity: [0, 1],
-                    translateY: -75,
+                    // translateY: -75,
                     transformOriginX: ["50%", "50%"],
                     transformOriginY: ["50%", "50%"],
                     scaleX: .5,
