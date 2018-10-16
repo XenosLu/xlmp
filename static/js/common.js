@@ -105,7 +105,7 @@ Vue.directive("swipe", {
     }
 });
 
-Vue.component('transition-fade', {
+Vue.component('x-transition-fade', {
     functional: true,
     render: function (createElement, context) {
         var data = {
