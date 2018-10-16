@@ -179,7 +179,7 @@ window.appView = new Vue({
                     complete: done
                 });
             },
-           transitionTada: function (el, done) {
+           transitionPulse: function (el, done) {
                 Velocity(el, 'stop');
                 Velocity(el, 'callout.pulse', {
                     duration: 300,
