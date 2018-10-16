@@ -37,10 +37,7 @@ window.appView = new Vue({
             historyShow: true, // ture if browser window is history, false if browser window is file list
             history: [], // updated by ajax
             filelist: [], // updated by ajax
-            dlnaInfo: { // updated by websocket
-                // CurrentDMR: 'no DMR',
-                // TrackURI: '',
-            },
+            dlnaInfo: {}, // updated by websocket
             positionBarCanUpdate: true, //dlna position bar
             positionBarVal: 0,
             fixBar: {
