@@ -192,6 +192,28 @@ window.appView = new Vue({
                     complete: done
                 });
             },
+            transitionSlideUpBigIn: function (el, done) {
+                Velocity(el, 'stop');
+                Velocity(el, {
+                    opacity: [1, 0],
+                    translateY: [0, 75],
+                    translateZ: 0
+                }, {
+                    duration: 300,
+                    complete: done
+                });
+            },
+            transitionSlideDownBigOut: function (el, done) {
+                Velocity(el, 'stop');
+                Velocity(el, {
+                    opacity: [0, 1],
+                    translateY: 75,
+                    translateZ: 0
+                }, {
+                    duration: 300,
+                    complete: done
+                });
+            },
             removeSelected: function () {
                 if (confirm('Remove ' + this.removeCheckboxList + '?')) {
                     this.removeCheckboxList.forEach(this.remove);
