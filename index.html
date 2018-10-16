@@ -283,47 +283,47 @@
       </div>
       <transition @enter="transitionSlideUpBigIn"
                   @leave="transitionSlideDownBigOut">
-      <div v-show="dlnaMode" class="fixed-bottom text-center default-bg flex-center">
-        <div class="card-body col-sm-12 col-md-8 col-lg-6 col-xl-4">
-          <h6 class="card-subtitle text-muted">${ dlnaInfo.CurrentTransportState }</h6>
-          <h6 v-show="dlnaInfo.RelTime" class="card-title my-2">
-            ${ dlnaInfo.RelTime} / ${ dlnaInfo.TrackDuration }
-          </h6>
-          <input class="position-bar mb-3 mt-1"
-                 v-model.number="positionBarVal"
-                 type="range"
-                 min="0"
-                 :max="positionBarMax"
-                 @change="positionSeek"
-                 @input="positionShow">
-          <b-btn-toolbar justify class="my-2 text-center">
-            <b-btn-group>
-              <b-btn class="mx-1" variant="outline-warning" v-tap="volDown">
-                  <i class="oi oi-volume-low"></i>
-              </b-btn>
-            </b-btn-group>
-            <b-btn-group>
-              <b-btn variant="outline-success" @click="server.dlna({opt: 'play'})">
-                  <i class="oi oi-media-play"></i>
-              </b-btn>
-              <b-btn class="ml-1" variant="outline-danger" @click="server.dlna({opt: 'pause'})">
-                  <i class="oi oi-media-pause"></i>
-              </b-btn>
-              <b-btn class="ml-1" variant="outline-danger" @click="server.dlna({opt: 'stop'})">
-                  <i class="oi oi-media-stop"></i>
-              </b-btn>
-              <b-btn class="ml-1" variant="outline-success" @click="server.dlna_next()">
-                  <i class="oi oi-media-step-forward"></i>
-              </b-btn>
-            </b-btn-group>
-            <b-btn-group>
-              <b-btn class="mx-1" variant="outline-warning" v-tap="volUp">
-                <i class="oi oi-volume-high"></i>
-              </b-btn>
-            </b-btn-group>
-          </b-btn-toolbar>
+        <div v-show="dlnaMode" class="fixed-bottom text-center default-bg flex-center">
+          <div class="card-body col-sm-12 col-md-8 col-lg-6 col-xl-4">
+            <h6 class="card-subtitle text-muted">${ dlnaInfo.CurrentTransportState }</h6>
+            <h6 v-show="dlnaInfo.RelTime" class="card-title my-2">
+              ${ dlnaInfo.RelTime} / ${ dlnaInfo.TrackDuration }
+            </h6>
+            <input class="position-bar mb-3 mt-1"
+                   v-model.number="positionBarVal"
+                   type="range"
+                   min="0"
+                   :max="positionBarMax"
+                   @change="positionSeek"
+                   @input="positionShow">
+            <b-btn-toolbar justify class="my-2 text-center">
+              <b-btn-group>
+                <b-btn class="mx-1" variant="outline-warning" v-tap="volDown">
+                    <i class="oi oi-volume-low"></i>
+                </b-btn>
+              </b-btn-group>
+              <b-btn-group>
+                <b-btn variant="outline-success" @click="server.dlna({opt: 'play'})">
+                    <i class="oi oi-media-play"></i>
+                </b-btn>
+                <b-btn class="ml-1" variant="outline-danger" @click="server.dlna({opt: 'pause'})">
+                    <i class="oi oi-media-pause"></i>
+                </b-btn>
+                <b-btn class="ml-1" variant="outline-danger" @click="server.dlna({opt: 'stop'})">
+                    <i class="oi oi-media-stop"></i>
+                </b-btn>
+                <b-btn class="ml-1" variant="outline-success" @click="server.dlna_next()">
+                    <i class="oi oi-media-step-forward"></i>
+                </b-btn>
+              </b-btn-group>
+              <b-btn-group>
+                <b-btn class="mx-1" variant="outline-warning" v-tap="volUp">
+                  <i class="oi oi-volume-high"></i>
+                </b-btn>
+              </b-btn-group>
+            </b-btn-toolbar>
           </div>
-      </div>
+        </div>
       </transition>
       <!-- dlna interface end -->
     </div>
