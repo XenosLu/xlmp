@@ -157,28 +157,6 @@ window.appView = new Vue({
                     complete: done
                 });
             },
-            transitionSlideLeftBigIn: function (el, done) {
-                Velocity(el, 'stop');
-                Velocity(el, {
-                    opacity: [1, 0],
-                    translateX: [0, -75],
-                    translateZ: 0
-                }, {
-                    duration: 300,
-                    complete: done
-                });
-            },
-            transitionSlideLeftBigOut: function (el, done) {
-                Velocity(el, 'stop');
-                Velocity(el, {
-                    opacity: [0, 1],
-                    translateX: -75,
-                    translateZ: 0
-                }, {
-                    duration: 300,
-                    complete: done
-                });
-            },
             transitionSlideUpBigIn: function (el, done) {
                 Velocity(el, 'stop');
                 Velocity(el, {
@@ -197,6 +175,13 @@ window.appView = new Vue({
                     translateY: 75,
                     translateZ: 0
                 }, {
+                    duration: 300,
+                    complete: done
+                });
+            },
+           transitionTada: function (el, done) {
+                Velocity(el, 'stop');
+                Velocity(el, 'callout.pulse', {
                     duration: 300,
                     complete: done
                 });
