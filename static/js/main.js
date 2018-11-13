@@ -494,9 +494,9 @@ function JsonRpcWs() {
 }
 
 
-if (window.appView.devMode)
-    var server = JsonRpcWs();
-else
+// if (window.appView.devMode)
+    // var server = JsonRpcWs();
+// else
     var server = JsonRpc({
             url: '/api',
             callback: window.appView.out
