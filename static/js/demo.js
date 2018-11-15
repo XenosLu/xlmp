@@ -80,3 +80,21 @@ window.appView.history = [{
         'exist': false
     }
 ];
+
+
+window.appView.filelist = [{
+        'filename': 'sample.mp4',
+        'type': 'mp4',
+        'path': 'sample.mp4',
+        'si
+        ze': '0B'
+    }, {
+        'filename': 'test.mp4',
+        'type': 'mp4',
+        'path': 'test.mp4',
+        'size':
+        '80.5MB'
+    }
+];
+
+
