@@ -434,6 +434,11 @@ window.appView = new Vue({
         },
     });
 
+    
+var server = JsonRpc({
+        url: '/api',
+        callback: window.appView.out
+    });
 
 function webSocketLink(options) {
     var ws = new ReconnectingWebSocket(options.url);
@@ -497,7 +502,4 @@ function JsonRpcWs() {
 // if (window.appView.devMode)
     // var server = JsonRpcWs();
 // else
-    var server = JsonRpc({
-            url: '/api',
-            callback: window.appView.out
-        });
+
