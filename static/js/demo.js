@@ -86,8 +86,7 @@ window.appView.filelist = [{
         'filename': 'sample.mp4',
         'type': 'mp4',
         'path': 'sample.mp4',
-        'si
-        ze': '0B'
+        'size': '0B'
     }, {
         'filename': 'test.mp4',
         'type': 'mp4',
