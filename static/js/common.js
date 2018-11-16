@@ -44,7 +44,7 @@ function offset_value(current, value, max) {
  * json rpc
  * @param options{url,callback}
  */
-function JsonRpc(options) {
+function JsonRpcOld(options) {
     return new Proxy(function () {}, {
         get: function (target, method, receiver) {
             var errorCallback = options.callback;

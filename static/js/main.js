@@ -216,7 +216,8 @@ window.appView = new Vue({
                 }
             },
             volUp: function (obj) {
-                server.dlna_vol(['up']);
+                // server.dlna_vol(['up']);
+                serverNew.dlna_vol('up').then(console.log).catch(console.log);
             },
             volDown: function (obj) {
                 server.dlna_vol(['down']);
@@ -497,7 +498,9 @@ function JsonRpcWs() {
 // if (window.appView.devMode)
     // var server = JsonRpcWs();
 // else
-    var server = JsonRpc({
-            url: '/api',
-            callback: window.appView.out
-        });
+var server = JsonRpcOld({
+        url: '/api',
+        callback: window.appView.out
+    });
+
+var serverNew = JsonRpc('/api');

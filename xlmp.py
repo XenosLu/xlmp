@@ -136,10 +136,9 @@ class DMRTracker(Thread):
                 logging.debug('searching DMR')
                 self.discover_dmr()
                 if LinkWebSocketHandler.users:
-                    sleep_time = 1
+                    sleep_time = 2
                 else:
                     sleep_time = 5
-                logging.info(sleep_time)
                 yield from asyncio.sleep(sleep_time)
                 # yield from asyncio.sleep(2.5)
 
