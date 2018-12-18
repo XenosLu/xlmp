@@ -1,6 +1,6 @@
 # xlmp - Xenos' Light media player
 
-[![](https://images.microbadger.com/badges/version/xenocider/xlmp.svg)](https://microbadger.com/images/xenocider/xlmp "Get your own version badge on microbadger.com")
+[![version](https://images.microbadger.com/badges/version/xenocider/xlmp.svg)](https://microbadger.com/images/xenocider/xlmp "Get your own version badge on microbadger.com")
 [![](https://images.microbadger.com/badges/image/xenocider/xlmp.svg)](https://microbadger.com/images/xenocider/xlmp "Get your own image badge on microbadger.com")
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/xenocider/xlmp.svg)](https://hub.docker.com/r/xenocider/xlmp/ "Docker Pulls")
