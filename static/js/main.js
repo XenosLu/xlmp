@@ -348,6 +348,12 @@ window.appView = new Vue({
                 this.out(ratex + 'X');
                 this.$refs.video.playbackRate = ratex;
             },
+            seek: function (position) {
+                if (this.dlnaMode)
+                    server.dlna_seek({position: secondToTime(position)});
+                else if (this.wpMode)
+                    his.$refs.video.currentTime = position;
+            },
             videosave: function () {
                 this.video.lastplaytime = new Date().getTime(); //to detect if video is playing
                 if (this.$refs.video.readyState === 4 && Math.floor(Math.random() * 99) > 70) //randomly save play position
