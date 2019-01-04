@@ -349,10 +349,10 @@ window.appView = new Vue({
                 this.$refs.video.playbackRate = ratex;
             },
             seek: function (position) {
-                if (this.dlnaMode)
-                    server.dlna_seek({position: secondToTime(position)});
-                else if (this.wpMode)
-                    his.$refs.video.currentTime = position;
+              if (this.dlnaMode)
+                server.dlna_seek({position: secondToTime(position)});
+              else if (this.wpMode)
+                this.$refs.video.currentTime = position;
             },
             videosave: function () {
                 this.video.lastplaytime = new Date().getTime(); //to detect if video is playing

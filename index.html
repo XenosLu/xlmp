@@ -106,14 +106,14 @@
               <b-dropdown-item v-if="devMode" @click="server.test()">test</b-dropdown-item>
             </b-nav-item-dropdown>
           <!-- dlna seek menu -->
-            <b-nav-item-dropdown v-show="dlnaMode" right>
+            <b-nav-item-dropdown v-show="dlnaMode || wpMode" right>
               <template slot="button-content">
                 Seek
               </template>
-              <b-dropdown-item @click="server.dlna_seek({position: '00:00:15'})">00:15</b-dropdown-item>
-              <b-dropdown-item @click="server.dlna_seek({position: '00:00:29'})">00:30</b-dropdown-item>
-              <b-dropdown-item @click="server.dlna_seek({position: '00:01:00'})">01:00</b-dropdown-item>
-              <b-dropdown-item @click="server.dlna_seek({position: '00:01:30'})">01:30</b-dropdown-item>
+              <b-dropdown-item @click="seek(15)">00:15</b-dropdown-item>
+              <b-dropdown-item @click="seek(29)">00:30</b-dropdown-item>
+              <b-dropdown-item @click="seek(60)">01:00</b-dropdown-item>
+              <b-dropdown-item @click="seek(90)">01:30</b-dropdown-item>
             </b-nav-item-dropdown>
           <!-- dlna seek menu end -->
             <b-nav-item v-show="wpMode" @click="videoSizeToggle">${ video.sizeBtnText }</b-nav-item>
