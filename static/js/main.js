@@ -285,11 +285,6 @@ window.appView = new Vue({
                     }
                 }
             },
-            // showModal: function () {
-                // this.browserShow = !this.browserShow;
-                // if (this.browserShow && this.historyShow)
-                    // this.showHistory();
-            // },
             historyCallBack: function (data) {
                 this.history = data;
             },
