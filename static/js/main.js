@@ -253,10 +253,6 @@ window.appView = new Vue({
                         }, 2100);
                 }
             },
-            // dlnaToogle: function () {
-                // this.mode = this.mode !== '' ? '' : 'DLNA';
-                // localStorage.mode = this.mode;
-            // },
             videoAdapt: function () {
                 if (this.wpMode) {
                     var wHeight = window.innerHeight;
