@@ -105,18 +105,8 @@
               <b-dropdown-item v-if="devMode" @click="server.self_update()">update</b-dropdown-item>
               <b-dropdown-item v-if="devMode" @click="server.test()">test</b-dropdown-item>
             </b-nav-item-dropdown>
-          <!-- dlna seek menu -->
-            <b-nav-item-dropdown v-show="dlnaMode || wpMode" right>
-              <template slot="button-content">
-                Seek
-              </template>
-              <b-dropdown-item @click="seek(15)">00:15</b-dropdown-item>
-              <b-dropdown-item @click="seek(29)">00:30</b-dropdown-item>
-              <b-dropdown-item @click="seek(60)">01:00</b-dropdown-item>
-              <b-dropdown-item @click="seek(90)">01:30</b-dropdown-item>
-            </b-nav-item-dropdown>
-          <!-- dlna seek menu end -->
             <b-nav-item v-show="wpMode" @click="videoSizeToggle">${ video.sizeBtnText }</b-nav-item>
+            <!-- web player rate menu -->
             <b-nav-item-dropdown v-show="wpMode" right>
               <template slot="button-content">
                 Rate
@@ -131,6 +121,18 @@
               <b-dropdown-item @click="rate(2)">2X</b-dropdown-item>
               <b-dropdown-item @click="rate(2.5)">2.5X</b-dropdown-item>
             </b-nav-item-dropdown>
+            <!-- web player rate menu end -->
+            <!-- seek menu -->
+            <b-nav-item-dropdown v-show="dlnaMode || wpMode" right>
+              <template slot="button-content">
+                Seek
+              </template>
+              <b-dropdown-item @click="seek(15)">00:15</b-dropdown-item>
+              <b-dropdown-item @click="seek(29)">00:30</b-dropdown-item>
+              <b-dropdown-item @click="seek(60)">01:00</b-dropdown-item>
+              <b-dropdown-item @click="seek(90)">01:30</b-dropdown-item>
+            </b-nav-item-dropdown>
+            <!-- seek menu end -->
           </b-navbar-nav>
         </b-collapse>
       </b-navbar>
@@ -315,7 +317,7 @@
       <!-- dlna interface end -->
     </div>
     <footer class="text-center">
-      <small class="text-muted">&copy;2016-2018 Xenos' Light Media Player</small>
+      <small class="text-muted">&copy;2016-2019 Xenos' Light Media Player</small>
     </footer>
   </body>
   <script src="/static/js/velocity.min.js"></script>
