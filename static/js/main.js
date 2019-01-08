@@ -365,7 +365,7 @@ window.appView = new Vue({
             },
             videoload: function () {
                 this.videoAdapt();
-                this.out('adpat');
+                this.out('adapt');
                 this.$refs.video.currentTime = Math.max(this.wpPosition - 0.5, 0);
                 this.output.smallText = "Play from";
             },
