@@ -49,6 +49,8 @@ function JsonRpcOld(options) {
         get: function (target, method, receiver) {
             var errorCallback = options.callback;
             return function (params, callback) {
+                if (callback == null)
+                    callback = ()=>{}
                 if (typeof(callback) == "undefined")
                     callback = options.callback;
                 var json_data = {

@@ -371,6 +371,7 @@ window.appView = new Vue({
                 this.out('adapt');
                 this.$refs.video.currentTime = Math.max(this.wpPosition - 0.5, 0);
                 this.output.smallText = "Play from";
+				this.$refs.video.volume = LocalStorage.volume;
             },
             videoseek: function () { //show position when changed
                 this.out(secondToTime(this.$refs.video.currentTime) + '/' + secondToTime(this.$refs.video.duration));
