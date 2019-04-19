@@ -65,7 +65,7 @@ window.appView = new Vue({
 					console.log(this.dlnaInfo.CurrentDMR.indexOf('小米AI音箱')!==-1);
                     if (typeof(this.dlnaInfo.CurrentDMR) === "undefined")
                         this.mode = '';
-                    else if(this.dlnaInfo.CurrentDMR.indexOf('小米AI音箱')!==-1)
+                    else if(this.dlnaInfo.CurrentDMR.indexOf('小米AI音箱')===-1)
                         this.mode = 'DLNA';
                 }
             },
