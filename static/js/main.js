@@ -231,6 +231,7 @@ window.appView = new Vue({
                 this.open(target.getAttribute('data-path'), target.getAttribute('data-type'));
             },
             showFixBar: function () { // show fix bar and then hide
+				console.log('show nav')
                 this.fixBar.show = true;
                 if (this.fixBar.timerId) {
                     clearTimeout(this.fixBar.timerId);
