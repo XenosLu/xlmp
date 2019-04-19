@@ -363,6 +363,8 @@ window.appView = new Vue({
                         position: this.$refs.video.currentTime,
                         duration: this.$refs.video.duration,
                     }, null);
+				LocalStorage.volume = this.$refs.video.volume;
+				console.log(this.$refs.video.volume)
             },
             videoload: function () {
                 this.videoAdapt();
