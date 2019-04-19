@@ -257,6 +257,8 @@
              @loadeddata="videoload"
              @progress="videoprogress"
 			 @volumechange="volumechange"
+			 @pause="fixBar.show = true"
+			 @play="fixBar.show = false"
              :key="video.src"
              :src="'/video/' + video.src"
              poster controls preload="meta">
