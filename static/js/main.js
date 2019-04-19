@@ -64,7 +64,7 @@ window.appView = new Vue({
                 if (!this.wpMode) {
                     if (typeof(this.dlnaInfo.CurrentDMR) === "undefined")
                         this.mode = '';
-                    else
+                    else if(this.dlnaInfo.CurrentDMR.indexOf('小米AI音箱')!==-1)
                         this.mode = 'DLNA';
                 }
             },
@@ -84,10 +84,10 @@ window.appView = new Vue({
                 this.editMode = false;
             },
             'dlnaInfo.RelTime': function () {
-                console.log('reltime update');
+                // console.log('reltime update');
                 if (this.positionBarCanUpdate)
                     this.positionBarVal = timeToSecond(this.dlnaInfo.RelTime);
-                console.log(this.positionBarVal);
+                // console.log(this.positionBarVal);
             },
             mode: function () {
                 if (this.dlnaMode) {
