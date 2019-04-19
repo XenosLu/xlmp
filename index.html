@@ -256,6 +256,7 @@
              @loadedmetadata  ="videoAdapt"
              @loadeddata="videoload"
              @progress="videoprogress"
+			 @volumechange="volumechange"
              :key="video.src"
              :src="'/video/' + video.src"
              poster controls preload="meta">

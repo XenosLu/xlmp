@@ -365,6 +365,9 @@ window.appView = new Vue({
                     }, null);
 				localStorage.volume = this.$refs.video.volume;
             },
+			volumechange: function () {
+				console.log(this.$refs.video.volume)
+			},
             videoload: function () {
                 this.videoAdapt();
                 this.out('adapt');
