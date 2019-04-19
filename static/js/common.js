@@ -65,7 +65,6 @@ function JsonRpcOld(options) {
                     else
                         errorCallback(response.data.error);
                 }).catch(function (error) {
-					console.log(error);
                     errorCallback(error.response.statusText);
                 });
             };
