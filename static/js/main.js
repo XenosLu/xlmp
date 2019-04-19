@@ -62,7 +62,6 @@ window.appView = new Vue({
             'dlnaInfo.CurrentDMR': function () {
                 console.log(this.dlnaInfo.CurrentDMR);
                 if (!this.wpMode) {
-					console.log(this.dlnaInfo.CurrentDMR.indexOf('小米AI音箱')!==-1);
                     if (typeof(this.dlnaInfo.CurrentDMR) === "undefined")
                         this.mode = '';
                     else if(this.dlnaInfo.CurrentDMR.indexOf('小米AI音箱')===-1)
