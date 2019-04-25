@@ -60,7 +60,7 @@ window.appView = new Vue({
         },
         watch: {
             'dlnaInfo.CurrentDMR': function () {
-                console.log(this.dlnaInfo.CurrentDMR);
+                // console.log(this.dlnaInfo.CurrentDMR);
                 if (!this.wpMode) {
                     if (typeof(this.dlnaInfo.CurrentDMR) === "undefined")
                         this.mode = '';
@@ -324,7 +324,7 @@ window.appView = new Vue({
                 return true;
             },
             playInWeb: function (obj) {
-                console.log(obj);
+                // console.log(obj);
                 if (!this.checkFileExist(obj)) {
                     this.out(obj + ' not exist');
                     return;
@@ -363,10 +363,10 @@ window.appView = new Vue({
                         position: this.$refs.video.currentTime,
                         duration: this.$refs.video.duration,
                     }, null);
-				localStorage.volume = this.$refs.video.volume;
             },
 			volumechange: function () {
 				console.log(this.$refs.video.volume)
+				localStorage.volume = this.$refs.video.volume;
 			},
             videoload: function () {
                 this.videoAdapt();
