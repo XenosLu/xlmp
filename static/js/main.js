@@ -501,9 +501,12 @@ function JsonRpcWs() {
 // if (window.appView.devMode)
     // var server = JsonRpcWs();
 // else
+    /*
 var server = JsonRpcOld({
         url: '/api',
         callback: window.appView.out
     });
+*/
+var server = JsonRpcWs()
 
 var serverNew = JsonRpc('/api');
