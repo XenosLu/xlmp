@@ -220,7 +220,8 @@ window.appView = new Vue({
                 serverNew.dlna_vol('up').then(console.log).catch(console.log);
             },
             volDown: function (obj) {
-                server.dlna_vol(['down']);
+                serverNew.dlna_vol('down').then(console.log).catch(console.log);
+                //server.dlna_vol(['down']);
             },
             pressOpen: function (obj) {
                 var target = obj.target.tagName === 'TD' ? obj.target : obj.target.parentNode;
@@ -294,10 +295,12 @@ window.appView = new Vue({
                 this.filelist = data;
             },
             remove: function (obj) {
-                server.remove_history({src: obj}, this.historyCallBack);
+                serverNew.remove_history({src: obj}).then(this.historyCallBack).catch(console.log);
+                //server.remove_history({src: obj}, this.historyCallBack);
             },
             move: function (obj) {
-                server.file_move({src: obj}, this.fileSystemCallBack);
+                serverNew.file_move({src: obj}).then(this.fileSystemCallBack).catch(console.log);
+                //server.file_move({src: obj}, this.fileSystemCallBack);
                 if (this.historyShow)
                     this.showHistory();
             },
