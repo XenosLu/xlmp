@@ -497,6 +497,31 @@ function JsonRpcWs() {
     });
 }
 
+function JsonRpcWs2() {
+    return new Proxy(function () {}, {
+        get: function (target, method, receiver) {
+            return function () {
+                var json_data = {
+                    jsonrpc: '2.0',
+                    method: method,
+                    params: Array.prototype.slice.call(arguments),
+                    id: Math.floor(Math.random() * 9999)
+                };
+                connApi.send(JSON.stringify(json_data));
+                methods[json_data.id] = callback;
+                return new Promise(function (resolve, reject) {
+                    axios.post(url, json_data).then(response => {
+                        if (response.data.hasOwnProperty('result'))
+                            resolve(response.data.result);
+                        else
+                            reject(response.data.error);
+                    }).catch(error => reject(error.response.statusText))
+                });
+            }
+        }
+    });
+}
+
 
 // if (window.appView.devMode)
     // var server = JsonRpcWs();
@@ -509,4 +534,5 @@ var server = JsonRpcOld({
 */
 var server = JsonRpcWs()
 
-var serverNew = JsonRpc('/api');
+//var serverNew = JsonRpc('/api');
+var serverNew = JsonRpc('/api', jsonrpcAxios);
