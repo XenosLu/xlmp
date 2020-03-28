@@ -295,11 +295,11 @@ window.appView = new Vue({
                 this.filelist = data;
             },
             remove: function (obj) {
-                serverNew.remove_history({src: obj}).then(this.historyCallBack).catch(console.log);
+                serverNew.remove_history(obj).then(this.historyCallBack).catch(console.log);
                 //server.remove_history({src: obj}, this.historyCallBack);
             },
             move: function (obj) {
-                serverNew.file_move({src: obj}).then(this.fileSystemCallBack).catch(console.log);
+                serverNew.file_move(obj).then(this.fileSystemCallBack).catch(console.log);
                 //server.file_move({src: obj}, this.fileSystemCallBack);
                 if (this.historyShow)
                     this.showHistory();
