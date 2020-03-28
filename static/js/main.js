@@ -480,6 +480,33 @@ var connApi = webSocketLink({
         }
     });
 
+var connApi2 = webSocketLink({
+        url: 'ws://' + window.location.host + '/link',
+        onmessage: function (data) {
+            console.log(data);
+            var errorCallback = window.appView.out;
+            if (data.hasOwnProperty('jsonrpc')) {
+                if (data.hasOwnProperty('result')) {
+                    var callback = methods[data.id];
+                    delete methods[data.id];
+                    if (typeof(callback.resolve) === 'undefined')
+                        callback.resolve = window.appView.out;
+                    if (callback)
+                        callback.resolve(data.result);
+                } else
+                    errorCallback(data.error);
+            } else
+                window.appView.dlnaInfo = data;
+        },
+        onclose: function () {
+            Vue.set(window.appView.dlnaInfo, 'CurrentTransportState', 'disconnected');
+            console.log('disconnected');
+        },
+        onopen: function () {
+            window.appView.out('connected');
+        }
+    });
+    
 function JsonRpcWs() {
     return new Proxy(function () {}, {
         get: function (target, method, receiver) {
@@ -496,7 +523,12 @@ function JsonRpcWs() {
         }
     });
 }
-
+function jsonrpcWS(url, jsonData) {
+    return new Promise(function (resolve, reject) {
+        connApi2.send(JSON.stringify(jsonData));
+        methods[json_data.id] = {resolve.resolve, reject.reject};
+    });
+}
 function JsonRpcWs2() {
     return new Proxy(function () {}, {
         get: function (target, method, receiver) {
