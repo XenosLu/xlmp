@@ -286,7 +286,8 @@ window.appView = new Vue({
                 this.history = data;
             },
             showHistory: function () {
-                server.list_history({}, this.historyCallBack);
+                //server.list_history({}, this.historyCallBack);
+                serverNew.list_history().then(this.historyCallBack).catch(console.log);
                 this.historyShow = true;
             },
             fileSystemCallBack: function (data) {
@@ -452,6 +453,7 @@ function webSocketLink(options) {
 }
 
 var methods = {};
+var methods2 = {};
 
 var connApi = webSocketLink({
         url: 'ws://' + window.location.host + '/link',
@@ -487,9 +489,12 @@ var connApi2 = webSocketLink({
             var errorCallback = window.appView.out;
             if (data.hasOwnProperty('jsonrpc')) {
                 if (data.hasOwnProperty('result')) {
-                    var callback = methods[data.id];
-                    delete methods[data.id];
+                    var callback = methods2[data.id];
+                    delete methods2[data.id];
+                    console.log(callback)
+                    console.log(callback.resolve)
                     if (typeof(callback.resolve) === 'undefined')
+                        //var callback = {}
                         callback.resolve = window.appView.out;
                     if (callback)
                         callback.resolve(data.result);
@@ -523,36 +528,13 @@ function JsonRpcWs() {
         }
     });
 }
-function jsonrpcWS(url, jsonData) {
+function jsonrpcWS2(url, jsonData) {
     return new Promise(function (resolve, reject) {
         connApi2.send(JSON.stringify(jsonData));
-        methods[json_data.id] = {resolve.resolve, reject.reject};
+        methods2[jsonData.id] = {resolve:resolve, reject:reject};
     });
 }
-function JsonRpcWs2() {
-    return new Proxy(function () {}, {
-        get: function (target, method, receiver) {
-            return function () {
-                var json_data = {
-                    jsonrpc: '2.0',
-                    method: method,
-                    params: Array.prototype.slice.call(arguments),
-                    id: Math.floor(Math.random() * 9999)
-                };
-                connApi.send(JSON.stringify(json_data));
-                methods[json_data.id] = callback;
-                return new Promise(function (resolve, reject) {
-                    axios.post(url, json_data).then(response => {
-                        if (response.data.hasOwnProperty('result'))
-                            resolve(response.data.result);
-                        else
-                            reject(response.data.error);
-                    }).catch(error => reject(error.response.statusText))
-                });
-            }
-        }
-    });
-}
+
 
 
 // if (window.appView.devMode)
@@ -567,4 +549,5 @@ var server = JsonRpcOld({
 var server = JsonRpcWs()
 
 //var serverNew = JsonRpc('/api');
-var serverNew = JsonRpc('/api', jsonrpcAxios);
+//var serverNew = JsonRpc('/api', jsonrpcAxios);
+var serverNew = JsonRpc('/api', jsonrpcWS2);
