@@ -217,10 +217,10 @@ window.appView = new Vue({
             },
             volUp: function (obj) {
                 // server.dlna_vol(['up']);
-                serverNew.dlna_vol('up').then(console.log).catch(console.log);
+                serverNew.dlna_vol('up').then(window.appView.out).catch(window.appView.out);
             },
             volDown: function (obj) {
-                serverNew.dlna_vol('down').then(console.log).catch(console.log);
+                serverNew.dlna_vol('down').then(window.appView.out).catch(window.appView.out);
                 //server.dlna_vol(['down']);
             },
             pressOpen: function (obj) {
@@ -288,18 +288,18 @@ window.appView = new Vue({
             },
             showHistory: function () {
                 //server.list_history({}, this.historyCallBack);
-                serverNew.list_history().then(this.historyCallBack).catch(console.log);
+                serverNew.list_history().then(this.historyCallBack).catch(window.appView.out);
                 this.historyShow = true;
             },
             fileSystemCallBack: function (data) {
                 this.filelist = data;
             },
             remove: function (obj) {
-                serverNew.remove_history(obj).then(this.historyCallBack).catch(console.log);
+                serverNew.remove_history(obj).then(this.historyCallBack).catch(window.appView.out);
                 //server.remove_history({src: obj}, this.historyCallBack);
             },
             move: function (obj) {
-                serverNew.file_move(obj).then(this.fileSystemCallBack).catch(console.log);
+                serverNew.file_move(obj).then(this.fileSystemCallBack).catch(window.appView.out);
                 //server.file_move({src: obj}, this.fileSystemCallBack);
                 if (this.historyShow)
                     this.showHistory();
@@ -308,14 +308,16 @@ window.appView = new Vue({
                 switch (type) {
                 case "folder":
                     this.historyShow = false;
-                    server.file_list({path: obj}, this.fileSystemCallBack);
+                    serverNew.file_list(obj).then(this.fileSystemCallBack).catch(window.appView.out);
+                    //server.file_list({path: obj}, this.fileSystemCallBack);
                     break;
                 case "mp4":
                     if (!this.dlnaMode)
                         this.playInWeb(obj);
                 case "video":
                     if (this.dlnaMode)
-                        server.dlna_load({src: obj, host: window.location.host});
+                        serverNew.dlna_load(obj, window.location.host).then(window.appView.out).catch(window.appView.out);
+                        //server.dlna_load({src: obj, host: window.location.host});
                     break;
                 default:
                 }
@@ -338,11 +340,13 @@ window.appView = new Vue({
                 this.browserShow = false;
             },
             setDmr: function (dmr) {
-                server.dlna_set_dmr({dmr: dmr}, () => {this.mode='DLNA';});
+                serverNew.dlna_set_dmr(dmr).then(() => {this.mode='DLNA';}).catch(window.appView.out);
+                //server.dlna_set_dmr({dmr: dmr}, () => {this.mode='DLNA';});
             },
             positionSeek: function () {
                 var position = secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBarVal, this.positionBarMax));
-                server.dlna_seek({position: position});
+                serverNew.dlna_seek(position).then(window.appView.out).catch(window.appView.out);
+                //server.dlna_seek({position: position});
                 this.positionBarCanUpdate = true;
             },
             positionShow: function () {
@@ -355,18 +359,22 @@ window.appView = new Vue({
             },
             seek: function (position) {
               if (this.dlnaMode)
-                server.dlna_seek({position: secondToTime(position)});
+                  serverNew.dlna_seek(secondToTime(position)).then(window.appView.out).catch(window.appView.out);
+                  //server.dlna_seek({position: secondToTime(position)});
               else if (this.wpMode)
-                this.$refs.video.currentTime = position;
+                  this.$refs.video.currentTime = position;
             },
             videosave: function () {
                 this.video.lastplaytime = new Date().getTime(); //to detect if video is playing
                 if (this.$refs.video.readyState === 4 && Math.floor(Math.random() * 99) > 70) //randomly save play position
+                    serverNew.save_history(this.video.src, this.$refs.video.currentTime, this.$refs.video.duration).catch(window.appView.out);
+                    /*
                     server.save_history({
                         src: this.video.src,
                         position: this.$refs.video.currentTime,
                         duration: this.$refs.video.duration,
                     }, null);
+                    */
             },
 			volumechange: function () {
 				console.log(this.$refs.video.volume)
@@ -404,7 +412,8 @@ window.appView = new Vue({
                 newtime = Math.min(newtime, this.positionBarMax);
                 this.out(secondToTime(newtime));
                 if (obj.type.indexOf("swipe") != -1) {
-                    server.dlna_seek({position: secondToTime(newtime)});
+                    serverNew.dlna_seek(secondToTime(newtime)).then(window.appView.out).catch(window.appView.out);
+                    //server.dlna_seek({position: secondToTime(newtime)});
                     console.log('swipe');
                 } else
                     console.log('pan');
