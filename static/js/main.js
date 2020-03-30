@@ -447,17 +447,16 @@ function webSocketLink(options) {
 }
 
 var methods = {};
-var methods2 = {};
 
-var connApi2 = webSocketLink({
+var connApi = webSocketLink({
         url: 'ws://' + window.location.host + '/link',
         onmessage: function (data) {
             console.log(data);
             var errorCallback = window.appView.out;
             if (data.hasOwnProperty('jsonrpc')) {
                 if (data.hasOwnProperty('result')) {
-                    var callback = methods2[data.id];
-                    delete methods2[data.id];
+                    var callback = methods[data.id];
+                    delete methods[data.id];
                     console.log(callback)
                     console.log(callback.resolve)
                     if (typeof(callback.resolve) === 'undefined')
@@ -480,10 +479,10 @@ var connApi2 = webSocketLink({
     });
     
 
-function jsonrpcWS2(url, jsonData) {
+function jsonrpcWS(url, jsonData) {
     return new Promise(function (resolve, reject) {
-        connApi2.send(JSON.stringify(jsonData));
-        methods2[jsonData.id] = {resolve:resolve, reject:reject};
+        connApi.send(JSON.stringify(jsonData));
+        methods[jsonData.id] = {resolve:resolve, reject:reject};
     });
 }
 
@@ -491,4 +490,4 @@ function jsonrpcWS2(url, jsonData) {
 var server = JsonRpcWs()
 
 //var serverNew = JsonRpc('/api', jsonrpcAxios);
-var serverNew = JsonRpc('/api', jsonrpcWS2);
+var serverNew = JsonRpc('/api', jsonrpcWS);
