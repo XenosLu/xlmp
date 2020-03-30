@@ -216,12 +216,10 @@ window.appView = new Vue({
                 }
             },
             volUp: function (obj) {
-                // server.dlna_vol(['up']);
                 serverNew.dlna_vol('up').then(window.appView.out).catch(window.appView.out);
             },
             volDown: function (obj) {
                 serverNew.dlna_vol('down').then(window.appView.out).catch(window.appView.out);
-                //server.dlna_vol(['down']);
             },
             pressOpen: function (obj) {
                 var target = obj.target.tagName === 'TD' ? obj.target : obj.target.parentNode;
@@ -287,7 +285,6 @@ window.appView = new Vue({
                 this.history = data;
             },
             showHistory: function () {
-                //server.list_history({}, this.historyCallBack);
                 serverNew.list_history().then(this.historyCallBack).catch(window.appView.out);
                 this.historyShow = true;
             },
@@ -296,11 +293,9 @@ window.appView = new Vue({
             },
             remove: function (obj) {
                 serverNew.remove_history(obj).then(this.historyCallBack).catch(window.appView.out);
-                //server.remove_history({src: obj}, this.historyCallBack);
             },
             move: function (obj) {
                 serverNew.file_move(obj).then(this.fileSystemCallBack).catch(window.appView.out);
-                //server.file_move({src: obj}, this.fileSystemCallBack);
                 if (this.historyShow)
                     this.showHistory();
             },
@@ -309,7 +304,6 @@ window.appView = new Vue({
                 case "folder":
                     this.historyShow = false;
                     serverNew.file_list(obj).then(this.fileSystemCallBack).catch(window.appView.out);
-                    //server.file_list({path: obj}, this.fileSystemCallBack);
                     break;
                 case "mp4":
                     if (!this.dlnaMode)
@@ -317,7 +311,6 @@ window.appView = new Vue({
                 case "video":
                     if (this.dlnaMode)
                         serverNew.dlna_load(obj, window.location.host).then(window.appView.out).catch(window.appView.out);
-                        //server.dlna_load({src: obj, host: window.location.host});
                     break;
                 default:
                 }
@@ -341,12 +334,10 @@ window.appView = new Vue({
             },
             setDmr: function (dmr) {
                 serverNew.dlna_set_dmr(dmr).then(() => {this.mode='DLNA';}).catch(window.appView.out);
-                //server.dlna_set_dmr({dmr: dmr}, () => {this.mode='DLNA';});
             },
             positionSeek: function () {
                 var position = secondToTime(offset_value(timeToSecond(this.dlnaInfo.RelTime), this.positionBarVal, this.positionBarMax));
                 serverNew.dlna_seek(position).then(window.appView.out).catch(window.appView.out);
-                //server.dlna_seek({position: position});
                 this.positionBarCanUpdate = true;
             },
             positionShow: function () {
@@ -360,7 +351,6 @@ window.appView = new Vue({
             seek: function (position) {
               if (this.dlnaMode)
                   serverNew.dlna_seek(secondToTime(position)).then(window.appView.out).catch(window.appView.out);
-                  //server.dlna_seek({position: secondToTime(position)});
               else if (this.wpMode)
                   this.$refs.video.currentTime = position;
             },
@@ -368,13 +358,6 @@ window.appView = new Vue({
                 this.video.lastplaytime = new Date().getTime(); //to detect if video is playing
                 if (this.$refs.video.readyState === 4 && Math.floor(Math.random() * 99) > 70) //randomly save play position
                     serverNew.save_history(this.video.src, this.$refs.video.currentTime, this.$refs.video.duration).catch(window.appView.out);
-                    /*
-                    server.save_history({
-                        src: this.video.src,
-                        position: this.$refs.video.currentTime,
-                        duration: this.$refs.video.duration,
-                    }, null);
-                    */
             },
 			volumechange: function () {
 				console.log(this.$refs.video.volume)
@@ -413,7 +396,6 @@ window.appView = new Vue({
                 this.out(secondToTime(newtime));
                 if (obj.type.indexOf("swipe") != -1) {
                     serverNew.dlna_seek(secondToTime(newtime)).then(window.appView.out).catch(window.appView.out);
-                    //server.dlna_seek({position: secondToTime(newtime)});
                     console.log('swipe');
                 } else
                     console.log('pan');
@@ -467,33 +449,6 @@ function webSocketLink(options) {
 var methods = {};
 var methods2 = {};
 
-var connApi = webSocketLink({
-        url: 'ws://' + window.location.host + '/link',
-        onmessage: function (data) {
-            console.log(data);
-            var errorCallback = window.appView.out;
-            if (data.hasOwnProperty('jsonrpc')) {
-                if (data.hasOwnProperty('result')) {
-                    var callback = methods[data.id];
-                    delete methods[data.id];
-                    if (typeof(callback) === 'undefined')
-                        callback = window.appView.out;
-                    if (callback)
-                        callback(data.result);
-                } else
-                    errorCallback(data.error);
-            } else
-                window.appView.dlnaInfo = data;
-        },
-        onclose: function () {
-            Vue.set(window.appView.dlnaInfo, 'CurrentTransportState', 'disconnected');
-            console.log('disconnected');
-        },
-        onopen: function () {
-            window.appView.out('connected');
-        }
-    });
-
 var connApi2 = webSocketLink({
         url: 'ws://' + window.location.host + '/link',
         onmessage: function (data) {
@@ -524,22 +479,7 @@ var connApi2 = webSocketLink({
         }
     });
     
-function JsonRpcWs() {
-    return new Proxy(function () {}, {
-        get: function (target, method, receiver) {
-            return function (params, callback) {
-                var json_data = {
-                    jsonrpc: '2.0',
-                    method: method,
-                    params: params,
-                    id: Math.floor(Math.random() * 9999)
-                };
-                connApi.send(JSON.stringify(json_data));
-                methods[json_data.id] = callback;
-            }
-        }
-    });
-}
+
 function jsonrpcWS2(url, jsonData) {
     return new Promise(function (resolve, reject) {
         connApi2.send(JSON.stringify(jsonData));
@@ -548,12 +488,6 @@ function jsonrpcWS2(url, jsonData) {
 }
 
 
-    /*
-var server = JsonRpcOld({
-        url: '/api',
-        callback: window.appView.out
-    });
-*/
 var server = JsonRpcWs()
 
 //var serverNew = JsonRpc('/api', jsonrpcAxios);
