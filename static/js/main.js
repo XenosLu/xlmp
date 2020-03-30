@@ -60,7 +60,6 @@ window.appView = new Vue({
         },
         watch: {
             'dlnaInfo.CurrentDMR': function () {
-                // console.log(this.dlnaInfo.CurrentDMR);
                 if (!this.wpMode) {
                     if (typeof(this.dlnaInfo.CurrentDMR) === "undefined")
                         this.mode = '';
@@ -323,7 +322,6 @@ window.appView = new Vue({
                 return true;
             },
             playInWeb: function (obj) {
-                // console.log(obj);
                 if (!this.checkFileExist(obj)) {
                     this.out(obj + ' not exist');
                     return;
@@ -457,10 +455,7 @@ var connApi = webSocketLink({
                 if (data.hasOwnProperty('result')) {
                     var callback = methods[data.id];
                     delete methods[data.id];
-                    console.log(callback)
-                    console.log(callback.resolve)
                     if (typeof(callback.resolve) === 'undefined')
-                        //var callback = {}
                         callback.resolve = window.appView.out;
                     if (callback)
                         callback.resolve(data.result);
@@ -487,6 +482,5 @@ function jsonrpcWS(jsonData) {
 }
 
 
-//const server = JsonRpc('/api', jsonrpcAxios);
 //const server = JsonRpc(jsonrpcAxios('/api'));
 const server = JsonRpc(jsonrpcWS);
