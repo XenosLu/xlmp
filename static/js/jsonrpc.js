@@ -1,47 +1,51 @@
 // export default JsonRpc
 /*
-Xenocider 2018
-depend on axios.js
+Xenocider 2018-2020
+depend on axios.js or jquery
  **sample
-const server = JsonRpc('/api')
+const server = JsonRpc(jsonrpcAxios('/api'));
+//const server = JsonRpc(jsonrpcJquery('/api'));
 server.test(args).then(callback).catch(failcallback)
  */
 
 //var axios = require('axios')
-
-function jsonrpcAxios(url, jsonData) {
-    return new Promise((resolve, reject) => {
-      axios.post(url, jsonData).then(response => {
-        if (response.data.hasOwnProperty('result')) {
-          resolve(response.data.result)
-        } else {
-          reject(response.data.error)
-        }
-      }).catch(error => reject(error.response.statusText))
-    })
+function jsonrpcAxios(url) {
+    return function (jsonData) {
+        return new Promise((resolve, reject) => {
+          axios.post(url, jsonData).then(response => {
+            if (response.data.hasOwnProperty('result')) {
+              resolve(response.data.result)
+            } else {
+              reject(response.data.error)
+            }
+          }).catch(error => reject(error.response.statusText))
+        })
+    }
 }
 
-function jsonrpcJquery(url, jsonData) {
-    return new Promise(function (resolve, reject) {
-        $.ajax({
-            url: url,
-            data: JSON.stringify(jsonData),
-            dataType: 'json',
-            type: 'post',
-            success: function (data) {
-                if (data.hasOwnProperty('result'))
-                    resolve(data.result);
-                else
-                    reject(data.error)
-            },
-            error: function (data) {
-                reject(data.statusText)
-            },
+function jsonrpcJquery(url) {
+    return function (jsonData) {
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                url: url,
+                data: JSON.stringify(jsonData),
+                dataType: 'json',
+                type: 'post',
+                success: function (data) {
+                    if (data.hasOwnProperty('result'))
+                        resolve(data.result);
+                    else
+                        reject(data.error)
+                },
+                error: function (data) {
+                    reject(data.statusText)
+                },
+            });
         });
-    });
+    }
 }
 
-function JsonRpc(url, middlewareFunction) {
+function JsonRpc(middlewareFunction) {
   return new Proxy(() => { }, {
     get: function (target, method, receiver) {
       return function () {
@@ -51,7 +55,7 @@ function JsonRpc(url, middlewareFunction) {
           params: Array.prototype.slice.call(arguments),
           id: Math.floor(Math.random() * 9999)
         }
-        return middlewareFunction(url, jsonData)
+        return middlewareFunction(jsonData)
       }
     }
   })

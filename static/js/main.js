@@ -487,5 +487,6 @@ function jsonrpcWS(url, jsonData) {
 }
 
 
-//var server = JsonRpc('/api', jsonrpcAxios);
-var server = JsonRpc('/api', jsonrpcWS);
+//const server = JsonRpc('/api', jsonrpcAxios);
+//const server = JsonRpc(jsonrpcAxios('/api'));
+const server = JsonRpc(jsonrpcWS);
