@@ -487,7 +487,5 @@ function jsonrpcWS(url, jsonData) {
 }
 
 
-var server = JsonRpcWs()
-
 //var serverNew = JsonRpc('/api', jsonrpcAxios);
 var serverNew = JsonRpc('/api', jsonrpcWS);
