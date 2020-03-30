@@ -548,10 +548,6 @@ function jsonrpcWS2(url, jsonData) {
 }
 
 
-
-// if (window.appView.devMode)
-    // var server = JsonRpcWs();
-// else
     /*
 var server = JsonRpcOld({
         url: '/api',
@@ -560,6 +556,5 @@ var server = JsonRpcOld({
 */
 var server = JsonRpcWs()
 
-//var serverNew = JsonRpc('/api');
 //var serverNew = JsonRpc('/api', jsonrpcAxios);
 var serverNew = JsonRpc('/api', jsonrpcWS2);
