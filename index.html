@@ -53,7 +53,7 @@
                 DLNA Mode
               </b-dropdown-item>
               <b-dropdown-divider></b-dropdown-divider>
-              <b-dropdown-item @click="serverNew.dlna_search().catch(window.appView.out)">
+              <b-dropdown-item @click="server.dlna_search().catch(window.appView.out)">
                 <i class="oi oi-magnifying-glass"></i>
                 Search Media Renderer
               </b-dropdown-item>
@@ -98,12 +98,12 @@
               <template slot="button-content">
                 <i class="oi oi-cog"></i>Maintainance
               </template>
-              <b-dropdown-item @click="serverNew.db_backup().then(window.appView.out).catch(window.appView.out)">backup</b-dropdown-item>
-              <b-dropdown-item @click="serverNew.db_restore().then(window.appView.out).catch(window.appView.out)">restore</b-dropdown-item>
+              <b-dropdown-item @click="server.db_backup().then(window.appView.out).catch(window.appView.out)">backup</b-dropdown-item>
+              <b-dropdown-item @click="server.db_restore().then(window.appView.out).catch(window.appView.out)">restore</b-dropdown-item>
               <b-dropdown-divider v-if="devMode"></b-dropdown-divider>
               <b-dropdown-item v-if="devMode" disabled>Develop Options</b-dropdown-item>
-              <b-dropdown-item v-if="devMode" @click="serverNew.self_update().then(window.appView.out).catch(window.appView.out)">update</b-dropdown-item>
-              <b-dropdown-item v-if="devMode" @click="serverNew.test().then(window.appView.out)">test</b-dropdown-item>
+              <b-dropdown-item v-if="devMode" @click="server.self_update().then(window.appView.out).catch(window.appView.out)">update</b-dropdown-item>
+              <b-dropdown-item v-if="devMode" @click="server.test().then(window.appView.out)">test</b-dropdown-item>
               <b-dropdown-item v-if="devMode" @click="fixBar.show = false">hide nav</b-dropdown-item>
             </b-nav-item-dropdown>
             <b-nav-item v-show="wpMode" @click="videoSizeToggle">${ video.sizeBtnText }</b-nav-item>
@@ -174,7 +174,7 @@
                       <b-dropdown-item @click="open(item.fullpath, 'mp4')">
                         <i class="oi oi-media-play"></i> Play
                       </b-dropdown-item>
-                      <b-dropdown-item @click="serverNew.dlna_next(item.fullpath, window.location.host).then(window.appView.out).catch(window.appView.out)" v-if="devMode">
+                      <b-dropdown-item @click="server.dlna_next(item.fullpath, window.location.host).then(window.appView.out).catch(window.appView.out)" v-if="devMode">
                         <i class="oi oi-media-step-forward"></i> Play next through DLNA
                       </b-dropdown-item>
                       <b-dropdown-item @click="open(item.path, 'folder')">
@@ -297,16 +297,16 @@
                 </b-btn>
               </b-btn-group>
               <b-btn-group>
-                <b-btn variant="outline-success" @click="serverNew.dlna('play').then(window.appView.out).catch(window.appView.out)">
+                <b-btn variant="outline-success" @click="server.dlna('play').then(window.appView.out).catch(window.appView.out)">
                     <i class="oi oi-media-play"></i>
                 </b-btn>
-                <b-btn class="ml-1" variant="outline-danger" @click="serverNew.dlna('pause').then(window.appView.out).catch(window.appView.out)">
+                <b-btn class="ml-1" variant="outline-danger" @click="server.dlna('pause').then(window.appView.out).catch(window.appView.out)">
                     <i class="oi oi-media-pause"></i>
                 </b-btn>
-                <b-btn class="ml-1" variant="outline-danger" @click="serverNew.dlna('stop').then(window.appView.out).catch(window.appView.out)">
+                <b-btn class="ml-1" variant="outline-danger" @click="server.dlna('stop').then(window.appView.out).catch(window.appView.out)">
                     <i class="oi oi-media-stop"></i>
                 </b-btn>
-                <b-btn class="ml-1" variant="outline-success" @click="serverNew.dlna_next().then(window.appView.out).catch(window.appView.out)">
+                <b-btn class="ml-1" variant="outline-success" @click="server.dlna_next().then(window.appView.out).catch(window.appView.out)">
                     <i class="oi oi-media-step-forward"></i>
                 </b-btn>
               </b-btn-group>
