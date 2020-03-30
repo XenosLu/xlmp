@@ -479,7 +479,7 @@ var connApi = webSocketLink({
     });
     
 
-function jsonrpcWS(url, jsonData) {
+function jsonrpcWS(jsonData) {
     return new Promise(function (resolve, reject) {
         connApi.send(JSON.stringify(jsonData));
         methods[jsonData.id] = {resolve:resolve, reject:reject};
