@@ -105,7 +105,7 @@
               <b-dropdown-item v-if="devMode" @click="server.self_update().then(window.appView.out).catch(window.appView.out)">update</b-dropdown-item>
               <b-dropdown-item v-if="devMode" @click="server.test().then(window.appView.out)">test</b-dropdown-item>
               <b-dropdown-item v-if="devMode" @click="fixBar.show = false">hide nav</b-dropdown-item>
-              <b-dropdown-item v-if="devMode" @click="const server = JsonRpc(jsonrpcAxios('/api'))">use ajax</b-dropdown-item>
+              <b-dropdown-item v-if="devMode" @click="var server = JsonRpc(jsonrpcAxios('/api'))">use ajax</b-dropdown-item>
             </b-nav-item-dropdown>
             <b-nav-item v-show="wpMode" @click="videoSizeToggle">${ video.sizeBtnText }</b-nav-item>
             <!-- web player rate menu -->
