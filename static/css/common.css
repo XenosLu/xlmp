@@ -31,16 +31,23 @@ footer {
     width: 20%;
 }
 .width-80 {
-    width: 80%;
+    width: 79.5%;
 }
 .width-100 {
-    width: 100%;
+    width: 99.5%;
 }
     .left-board{
         background: #eee;
         height: 100%;
         float: left;
         background: #cba;
+    }
+    .board-middle{
+        float:left;
+        width: 0.5%;
+        height: 100%;
+        background: #fff;
+        overflow: hidden;
     }
     .right-board{
         position: relative;
