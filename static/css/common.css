@@ -40,10 +40,9 @@ footer {
     font-size: 0.5em;
 }
 .left-board{
-    background: #eee;
     height: 100%;
     float: left;
-    background: #cba;
+    background: #abc;
     overflow: hidden;
 }
 .board-middle{
