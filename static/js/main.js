@@ -24,7 +24,7 @@ function touchWebPlayer() {
 
 window.appView = new Vue({
         delimiters: ['${', '}'],
-        el: '#v-main',
+        el: '#v-app',
         data: {
             devMode: true, // develop mode switch
             allSelected: false,
@@ -57,6 +57,7 @@ window.appView = new Vue({
             },
             isIos: null,
             icon: icon,
+            boardShow: false,
         },
         watch: {
             'dlnaInfo.CurrentDMR': function () {

@@ -16,7 +16,7 @@
     <title>Light Media Player</title>
   </head>
   <body>
-    <div id="v-main" class="flex-center">
+    <div id="v-app" class="flex-center">
       <!-- output box -->
       <x-transition-fade>
         <div v-if="output.show" :key="output.text+Math.random()" class="output-container justify-content-center flex-center position-fixed">
@@ -102,6 +102,7 @@
               <b-dropdown-item @click="server.db_restore().then(window.appView.out).catch(window.appView.out)">restore</b-dropdown-item>
               <b-dropdown-divider v-if="devMode"></b-dropdown-divider>
               <b-dropdown-item v-if="devMode" disabled>Develop Options</b-dropdown-item>
+              <b-dropdown-item v-if="devMode" @click="boardShow = !boardShow">board show</b-dropdown-item>
               <b-dropdown-item v-if="devMode" @click="server.self_update().then(window.appView.out).catch(window.appView.out)">update</b-dropdown-item>
               <b-dropdown-item v-if="devMode" @click="server.test().then(window.appView.out)">test</b-dropdown-item>
               <b-dropdown-item v-if="devMode" @click="fixBar.show = false">hide nav</b-dropdown-item>
@@ -248,23 +249,27 @@
       </transition>
       <!-- dropdown window end -->
       <!-- video -->
-      <div class="main-content">
-      <video webkit-playsinline="true"
-             playsinline=""
-             v-if="wpMode"
-             ref="video"
-             @timeupdate="videosave"
-             @seeking="videoseek"
-             @error="videoerror"
-             @loadedmetadata  ="videoAdapt"
-             @loadeddata="videoload"
-             @progress="videoprogress"
-			 @volumechange="volumechange"
-             :key="video.src"
-             :src="'/video/' + video.src"
-             poster controls preload="meta">
-        No video support!
-      </video>
+      <div class="main">
+        <div class="left-board" :class="boardShow ? 'width-20' : 'width-0'">
+        </div>
+        <div class="right-board" :class="boardShow ? 'width-80' : 'width-100'">
+          <video webkit-playsinline="true"
+                 playsinline=""
+                 v-if="wpMode"
+                 ref="video"
+                 @timeupdate="videosave"
+                 @seeking="videoseek"
+                 @error="videoerror"
+                 @loadedmetadata  ="videoAdapt"
+                 @loadeddata="videoload"
+                 @progress="videoprogress"
+		    	 @volumechange="volumechange"
+                 :key="video.src"
+                 :src="'/video/' + video.src"
+                 poster controls preload="meta">
+            No video support!
+          </video>
+        </div>
       </div>
       <!-- video end-->
       <!-- dlna interface -->
