@@ -22,7 +22,7 @@ footer {
 	width: 100%;
 	top: 56px;
 	bottom: 2em;
-    background: #abc;
+    /* background: #abc; */
 }
 .width-0 {
     width: 0%;
@@ -52,13 +52,13 @@ footer {
         float:left;
         width: 0.5%;
         height: 100%;
-        background: #fff;
+        /*background: #fff;*/
         overflow: hidden;
     }
     .right-board{
         position: relative;
         height: 100%;
-        background: #aad;
+
         float: left;
     }
 video {
