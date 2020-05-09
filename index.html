@@ -248,6 +248,7 @@
       </transition>
       <!-- dropdown window end -->
       <!-- video -->
+      <div class="main-content">
       <video webkit-playsinline="true"
              playsinline=""
              v-if="wpMode"
@@ -259,13 +260,12 @@
              @loadeddata="videoload"
              @progress="videoprogress"
 			 @volumechange="volumechange"
-			 @pause="fixBar.show = true"
-			 @play="fixBar.show = false"
              :key="video.src"
              :src="'/video/' + video.src"
              poster controls preload="meta">
         No video support!
       </video>
+      </div>
       <!-- video end-->
       <!-- dlna interface -->
       <div v-if="dlnaMode && dlnaInfo.TrackURI" class="text-center col-sm-10 col-md-8 col-lg-6 col-xl-4">

@@ -236,7 +236,7 @@ window.appView = new Vue({
                     this.fixBar.timerId = null;
                 }
                 this.fixBar.timerId = setTimeout(() => {
-                        this.fixBar.show = false;
+                        //this.fixBar.show = false;
                     }, 3500);
             },
             out: function (str) {
@@ -267,6 +267,8 @@ window.appView = new Vue({
                     }
                     this.$refs.video.style.width = width;
                     this.$refs.video.style.height = height;
+                    this.$refs.video.style.width = '100%';
+                    this.$refs.video.style.height = '100%';
                 }
             },
             videoSizeToggle: function () {
@@ -404,7 +406,7 @@ window.appView = new Vue({
             this.isIos = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
             this.isIos = true;
             if (!this.isIos) {
-                this.fixBar.show = false;
+                //this.fixBar.show = false;
                 document.onmousemove = this.showFixBar;
             }
             axios.defaults.timeout = 1999;
