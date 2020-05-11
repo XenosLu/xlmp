@@ -175,6 +175,9 @@
                       <b-dropdown-item @click="open(item.fullpath, 'mp4')">
                         <i class="oi oi-media-play"></i> Play
                       </b-dropdown-item>
+                      <b-dropdown-item @click="playNext(item.fullpath)">
+                        <i class="oi oi-media-play"></i> Play Next
+                      </b-dropdown-item>
                       <b-dropdown-item @click="server.dlna_next(item.fullpath, window.location.host).then(window.appView.out).catch(window.appView.out)" v-if="devMode">
                         <i class="oi oi-media-step-forward"></i> Play next through DLNA
                       </b-dropdown-item>
@@ -250,6 +253,9 @@
       <!-- video -->
       <div class="main">
         <div class="left-board" :class="boardShow ? 'width-20' : 'width-0'">
+          <div>
+            <button class="btn btn-outline-secondary">test</button>
+          </div>
         </div>
         <div class="board-middle">
           <button class="btn btn-outline-secondary middle-button" @click="boardShow = !boardShow">

@@ -595,6 +595,7 @@ def test():
     return 'test message'
 
 
+@JsonRpc.method
 def get_next_file(src):  # not strict enough
     """get next related video file"""
     logging.info(src)

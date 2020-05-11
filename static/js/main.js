@@ -317,6 +317,9 @@ window.appView = new Vue({
                 default:
                 }
             },
+            playNext: function (obj) {
+                server.get_next_file(obj).then(this.playInWeb).catch(window.appView.out);
+            },
             checkFileExist: function (obj) {
                 for (var item in this.history) {
                     if (this.history[item].filename === obj)
