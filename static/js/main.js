@@ -68,10 +68,6 @@ window.appView = new Vue({
                         this.mode = 'DLNA';
                 }
             },
-            // editMode: function () {
-                // this.allSelected = false;
-                // this.removeCheckboxList = [];
-            // },
             historyShow: function () {
                 this.allSelected = false;
                 // this.moveCheckboxList = [];
