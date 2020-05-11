@@ -176,7 +176,7 @@
                         <i class="oi oi-media-play"></i> Play
                       </b-dropdown-item>
                       <b-dropdown-item @click="playNext(item.fullpath)">
-                        <i class="oi oi-media-play"></i> Play Next
+                        <i class="oi oi-media-step-forward"></i> Play Next in web
                       </b-dropdown-item>
                       <b-dropdown-item @click="server.dlna_next(item.fullpath, window.location.host).then(window.appView.out).catch(window.appView.out)" v-if="devMode">
                         <i class="oi oi-media-step-forward"></i> Play next through DLNA
