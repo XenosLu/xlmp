@@ -61,6 +61,12 @@ class History:
         if position:
             return position[0][0]
         return 0
+        
+    def clear(self):
+        """clear all history, no longer needed"""
+        self.run_sql('delete from history')
+        return list_history()
+
 
 def hist_load(name):
     """load history from database"""
@@ -550,11 +556,7 @@ def list_history():
         for s in HISTORY.run_sql('select * from history order by LATEST_DATE desc')]
 
 
-# @JsonRpc.method
-def clear_history():
-    """clear all history, no longer needed"""
-    HISTORY.run_sql('delete from history')
-    return list_history()
+
 
 
 @JsonRpc.method
