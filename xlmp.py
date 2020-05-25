@@ -31,6 +31,45 @@ VIDEO_PATH = 'media'  # media file path
 HISTORY_DB_FILE = '%s/.history.db' % VIDEO_PATH  # history db file
 
 
+class History:
+    db_file = HISTORY_DB_FILE
+
+    def __init__(self):
+        """initialize DataBase"""
+        self.run_sql('''create table if not exists history
+                    (FILENAME text PRIMARY KEY not null,
+                    POSITION float not null,
+                    DURATION float, LATEST_DATE datetime not null);''')
+
+    def run_sql(self, sql, *args):
+        """run sql through sqlite3"""
+        with sqlite3.connect(self.db_file) as conn:
+            try:
+                cursor = conn.execute(sql, args)
+                ret = cursor.fetchall()
+                cursor.close()
+                if cursor.rowcount > 0:
+                    conn.commit()
+            except Exception as exc:
+                logging.warning(str(exc))
+                ret = ()
+        return ret
+
+    def load(self, name):
+        """load history from database"""
+        position = self.run_sql('select POSITION from history where FILENAME=?', name)
+        if position:
+            return position[0][0]
+        return 0
+
+def hist_load(name):
+    """load history from database"""
+    position = HISTORY.run_sql('select POSITION from history where FILENAME=?', name)
+    if position:
+        return position[0][0]
+    return 0
+
+
 class DMRTracker(Thread):
     """DLNA Digital Media Renderer tracker thread with coroutine"""
 
@@ -40,7 +79,6 @@ class DMRTracker(Thread):
         self._load_inprogess = Event()
         self.loop_playback = Event()
         self.state = {}  # DMR device state
-        # self.state = {'CurrentDMR': 'no DMR'}  # DMR device state
         self.dmr = None  # DMR device object
         self.all_devices = []  # DMR device list
         self.url_prefix = None
@@ -237,7 +275,7 @@ class DMRTracker(Thread):
         return True
 
 
-def run_sql(sql, *args):
+def run_sql_OLD(sql, *args):
     """run sql through sqlite3"""
     with sqlite3.connect(HISTORY_DB_FILE) as conn:
         try:
@@ -282,12 +320,7 @@ def get_size(path):
     return '%.1f%sB' % (size/1024.0**power, unit[power])
 
 
-def hist_load(name):
-    """load history from database"""
-    position = run_sql('select POSITION from history where FILENAME=?', name)
-    if position:
-        return position[0][0]
-    return 0
+
 
 
 def check_dmr_exist(func):
@@ -503,7 +536,7 @@ def save_history(src, position, duration):
     """save play history to database"""
     if float(position) < 10:
         return
-    run_sql('''replace into history (FILENAME, POSITION, DURATION, LATEST_DATE)
+    HISTORY.run_sql('''replace into history (FILENAME, POSITION, DURATION, LATEST_DATE)
                values(? , ?, ?, DateTime('now', 'localtime'));''', src, position, duration)
 
 
@@ -514,13 +547,13 @@ def list_history():
         {'filename': os.path.basename(s[0]), 'fullpath': s[0], 'position': s[1], 'duration': s[2],
          'latest_date': s[3], 'path': os.path.dirname(s[0]),
          'exist': os.path.exists('%s/%s' % (VIDEO_PATH, s[0]))}
-        for s in run_sql('select * from history order by LATEST_DATE desc')]
+        for s in HISTORY.run_sql('select * from history order by LATEST_DATE desc')]
 
 
 # @JsonRpc.method
 def clear_history():
     """clear all history, no longer needed"""
-    run_sql('delete from history')
+    HISTORY.run_sql('delete from history')
     return list_history()
 
 
@@ -528,7 +561,7 @@ def clear_history():
 def remove_history(src):
     """remove an item from history"""
     logging.info(src)
-    run_sql('delete from history where FILENAME=?', unquote(src))
+    HISTORY.run_sql('delete from history where FILENAME=?', unquote(src))
     return list_history()
 
 
@@ -662,12 +695,9 @@ APP = tornado.web.Application(HANDLERS, **SETTINGS)
 # initialize dlna threader
 TRACKER = DMRTracker()
 
+HISTORY = History()
+
 if __name__ == '__main__':
-    # initialize DataBase
-    run_sql('''create table if not exists history
-                    (FILENAME text PRIMARY KEY not null,
-                    POSITION float not null,
-                    DURATION float, LATEST_DATE datetime not null);''')
     TRACKER.start()
     # if sys.platform == 'win32':
         # os.system('start http://127.0.0.1:8888/')
