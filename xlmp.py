@@ -214,7 +214,8 @@ class DMRTracker(Thread):
             if self.loadonce(url):
                 logging.info('Loaded url: %s successed', unquote(url))
                 src = unquote(re.sub('http://.*/video/', '', url))
-                position = hist_load(src)
+                # position = hist_load(src)
+                position = HISTORY.load(src)
                 if position:
                     self.dmr.seek(second_to_time(position))
                     logging.info('Loaded position: %s', second_to_time(position))
