@@ -282,21 +282,6 @@ class DMRTracker(Thread):
         return True
 
 
-def run_sql_OLD(sql, *args):
-    """run sql through sqlite3"""
-    with sqlite3.connect(HISTORY_DB_FILE) as conn:
-        try:
-            cursor = conn.execute(sql, args)
-            ret = cursor.fetchall()
-            cursor.close()
-            if cursor.rowcount > 0:
-                conn.commit()
-        except Exception as exc:
-            logging.warning(str(exc))
-            ret = ()
-    return ret
-
-
 def second_to_time(second):
     """ Turn time in seconds into "hh:mm:ss" format
 
