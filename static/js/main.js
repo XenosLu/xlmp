@@ -314,7 +314,11 @@ window.appView = new Vue({
                 }
             },
             playNext: function (obj) {
-                server.get_next_file(obj).then(this.playInWeb).catch(window.appView.out);
+                
+                if(this.dlnaMode)
+                    server.dlna_next(item.fullpath, window.location.host).then(window.appView.out).catch(window.appView.out)
+                else
+                    server.get_next_file(obj).then(this.playInWeb).catch(window.appView.out);
             },
             checkFileExist: function (obj) {
                 for (var item in this.history) {
