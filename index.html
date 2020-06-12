@@ -259,17 +259,27 @@
           <!-- <div v-show="dlnaMode || wpMode"> -->
           <div>
             <b-button-group vertical>
-              <b-button disabled>Seek:</b-button>
-              <b-button @click="seek(15)">00:15</b-button>
-              <b-button @click="seek(29)">00:30</b-button>
-              <b-button @click="seek(44)">00:45</b-button>
-              <b-button @click="seek(60)">01:00</b-button>
-              <b-button @click="seek(90)">01:30</b-button>
+              <b-btn @click="playNext(video.src)">
+                <i class="oi oi-media-step-forward"></i> Play Next
+              </b-btn>
+              <b-dropdown right text="Seek">
+                <b-dropdown-item @click="seek(15)">00:15</b-dropdown-item>
+                <b-dropdown-item @click="seek(29)">00:30</b-dropdown-item>
+                <b-dropdown-item @click="seek(44)">00:45</b-dropdown-item>
+                <b-dropdown-item @click="seek(60)">01:00</b-dropdown-item>
+                <b-dropdown-item @click="seek(90)">01:30</b-dropdown-item>
+              <!-- <b-dropdown-divider></b-dropdown-divider> -->
+              </b-dropdown>
+
+              <!-- <b-button disabled>Seek:</b-button> -->
+              <!-- <b-button @click="seek(15)">00:15</b-button> -->
+              <!-- <b-button @click="seek(29)">00:30</b-button> -->
+              <!-- <b-button @click="seek(44)">00:45</b-button> -->
+              <!-- <b-button @click="seek(60)">01:00</b-button> -->
+              <!-- <b-button @click="seek(90)">01:30</b-button> -->
             </b-button-group>
             <div>
-            <b-btn @click="playNext(video.src)">
-              <i class="oi oi-media-step-forward"></i> Play Next
-            </b-btn>
+
             </div>
           </div>
         </div>
