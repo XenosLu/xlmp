@@ -34,6 +34,9 @@
             <i v-show="!browserShow" class="oi oi-list"></i>
             <i v-show="browserShow" class="oi oi-x"></i>
           </b-btn>
+          <b-btn variant="outline-secondary" title="new" :pressed.sync="boardShow">
+            <i class="oi" :class="boardShow ? 'oi-caret-left' : 'oi-caret-right'"></i>
+          </b-btn>
           <!-- dlna dmr menu -->
             <b-dropdown v-show="!wpMode" variant="outline-dark">
               <template slot="button-content">
@@ -254,7 +257,7 @@
       <div class="main">
         <div class="left-board" :class="boardShow ? 'width-20' : 'width-0'">
           <div>
-            <button class="btn btn-outline-secondary">test</button>
+            <button class="btn btn-outline-secondary">comming soon</button>
           </div>
         </div>
         <div class="board-middle">
