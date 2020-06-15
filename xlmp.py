@@ -145,8 +145,8 @@ class DMRTracker(Thread):
         # future.add_done_callback(callback)
         return future.result()  # block
 
-    @asyncio.coroutine
-    def main_loop(self):
+    # @asyncio.coroutine
+    async def main_loop(self):
         """main async loop"""
         failure = 0
         while True:
@@ -157,10 +157,10 @@ class DMRTracker(Thread):
                 if transport_state:
                     sleep(0.1)
                     if transport_state == 'STOPPED' and self.loop_playback.isSet():
-                        yield from asyncio.sleep(0.5)
+                        await asyncio.sleep(0.5)
                         if not self.loadnext():
                             self.loop_playback.clear()
-                    yield
+                    # yield
                     if self._get_position_info():
                         sleep(0.1)
                         if failure > 0:
@@ -174,7 +174,7 @@ class DMRTracker(Thread):
                         # self.state = {'CurrentDMR': 'no DMR'}
                         self.state = {}
                         self.dmr = None
-                yield from asyncio.sleep(0.7)
+                await asyncio.sleep(0.7)
                 sleep(0.1)
             else:
                 logging.debug('searching DMR')
@@ -183,7 +183,7 @@ class DMRTracker(Thread):
                     sleep_time = 2
                 else:
                     sleep_time = 5
-                yield from asyncio.sleep(sleep_time)
+                await asyncio.sleep(sleep_time)
                 # yield from asyncio.sleep(2.5)
 
     def run(self):
@@ -203,8 +203,9 @@ class DMRTracker(Thread):
         logging.info('coroutine loaded')
         return True
 
-    @asyncio.coroutine
-    def _load_coroutine(self, url):
+    # @asyncio.coroutine
+    # def _load_coroutine(self, url):
+    async def _load_coroutine(self, url):
         """load videdo in coroutine"""
         failure = 0
         while failure < 3:
