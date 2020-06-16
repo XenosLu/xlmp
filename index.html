@@ -262,6 +262,9 @@
               <b-btn @click="playNext(video.src)">
                 <i class="oi oi-media-step-forward"></i> Play Next
               </b-btn>
+              <b-btn @click="seek(44)">
+                seek: 45
+              </b-btn>
               <b-dropdown right text="Seek">
                 <b-dropdown-item @click="seek(15)">00:15</b-dropdown-item>
                 <b-dropdown-item @click="seek(29)">00:30</b-dropdown-item>
