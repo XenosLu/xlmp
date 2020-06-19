@@ -358,6 +358,14 @@ window.appView = new Vue({
               else if (this.wpMode)
                   this.$refs.video.currentTime = position;
             },
+            fastforward: function () {
+                position = timeToSecond(this.dlnaInfo.RelTime) + 15
+                server.dlna_seek(secondToTime(position)).then(window.appView.out).catch(window.appView.out);
+            },
+            fastbackward: function () {
+                position = timeToSecond(this.dlnaInfo.RelTime) - 15
+                server.dlna_seek(secondToTime(position)).then(window.appView.out).catch(window.appView.out);
+            },
             videosave: function () {
                 this.video.lastplaytime = new Date().getTime(); //to detect if video is playing
                 if (this.$refs.video.readyState === 4 && Math.floor(Math.random() * 99) > 70) //randomly save play position
