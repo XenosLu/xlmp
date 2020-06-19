@@ -312,10 +312,6 @@ def get_size(path):
     power = min(int(math.floor(math.log(size, 1024))), 9)
     return '%.1f%sB' % (size/1024.0**power, unit[power])
 
-
-
-
-
 def check_dmr_exist(func):
     """Decorator: check DMR is available before do something relate to DLNA"""
     def wrapper(*args, **kwargs):
