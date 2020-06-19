@@ -331,7 +331,10 @@
                 </b-btn>
               </b-btn-group>
               <b-btn-group>
-                <b-btn variant="outline-success" @click="server.dlna('play').then(window.appView.out).catch(window.appView.out)">
+                <b-btn variant="outline-success" @click="fastbackward()">
+                    <i class="oi oi-media-skip-backward"></i>
+                </b-btn>
+                <b-btn class="ml-1" variant="outline-success" @click="server.dlna('play').then(window.appView.out).catch(window.appView.out)">
                     <i class="oi oi-media-play"></i>
                 </b-btn>
                 <b-btn class="ml-1" variant="outline-danger" @click="server.dlna('pause').then(window.appView.out).catch(window.appView.out)">
@@ -342,9 +345,6 @@
                 </b-btn>
                 <b-btn class="ml-1" variant="outline-success" @click="fastforward()">
                     <i class="oi oi-media-skip-forward"></i>
-                </b-btn>
-                <b-btn class="ml-1" variant="outline-success" @click="fastbackward()">
-                    <i class="oi oi-media-skip-backward"></i>
                 </b-btn>
                 <b-btn class="ml-1" variant="outline-success" @click="server.dlna_next().then(window.appView.out).catch(window.appView.out)">
                     <i class="oi oi-media-step-forward"></i>

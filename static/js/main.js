@@ -359,11 +359,11 @@ window.appView = new Vue({
                   this.$refs.video.currentTime = position;
             },
             fastforward: function () {
-                position = timeToSecond(this.dlnaInfo.RelTime) + 15
+                var position = timeToSecond(this.dlnaInfo.RelTime) + 15
                 server.dlna_seek(secondToTime(position)).then(window.appView.out).catch(window.appView.out);
             },
             fastbackward: function () {
-                position = timeToSecond(this.dlnaInfo.RelTime) - 15
+                var position = timeToSecond(this.dlnaInfo.RelTime) - 15
                 server.dlna_seek(secondToTime(position)).then(window.appView.out).catch(window.appView.out);
             },
             videosave: function () {
