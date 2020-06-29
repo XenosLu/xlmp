@@ -469,6 +469,7 @@ class JsonRpc():
 def dlna_vol(opt):
     """dlna volume adjuster"""
     vol = int(TRACKER.dmr.get_volume())
+    logging.info('current vol: %s' % vol)
     if opt == 'up':
         vol += 1
     elif opt == 'down':
