@@ -477,7 +477,7 @@ def dlna_vol(opt):
     if not 0 <= vol <= 100:
         return 'Volume range exceeded'
     if TRACKER.dmr.volume(vol):
-        return str(vol)
+        return str(TRACKER.dmr.get_volume())
     return False
 
 
