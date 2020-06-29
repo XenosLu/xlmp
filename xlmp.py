@@ -472,8 +472,10 @@ def dlna_vol(opt):
     logging.info('current vol: %s' % vol)
     if opt == 'up':
         vol += 1
-        if vol == 53:  # workaround for kodi
+        if vol == 53:  # workaround for kodi: for unknown reason when you set vol to 53, it will be 52, and 59 will be 58
             vol = 54
+        if vol == 59:
+            vol = 60
     elif opt == 'down':
         vol -= 1
     if not 0 <= vol <= 100:
