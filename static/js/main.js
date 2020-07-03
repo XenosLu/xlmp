@@ -89,7 +89,7 @@ window.appView = new Vue({
                 if (this.dlnaMode) {
                     window.document.title = "DMC - Light Media Player";
                 } else if (this.wpMode) {
-                    window.document.title = this.video.src + " - Light Media Player";
+                    window.document.title = "▶" + this.video.src + " - Light Media Player";
                     touchWebPlayer();
                 } else
                     window.document.title = "Light Media Player";
