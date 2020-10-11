@@ -250,6 +250,7 @@ class DMRTracker(Thread):
             logging.info('send stop')
             self.dmr.stop()
             logging.info('Waiting for DMR stopped...')
+            logging.info(self._get_transport_state())
             sleep(1)
         if self.dmr.set_current_media(url):
             logging.info('Loaded %s', unquote(url))
