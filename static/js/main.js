@@ -121,8 +121,8 @@ window.appView = new Vue({
         methods: {
             bright200: function () {
                 this.video.style.WebkitFilter="brightness(200%)"
-                this.video.style.WebkitFilter="contrast(50%)"
-            }
+                // this.video.style.WebkitFilter="contrast(50%)"
+            },
             test: function (obj, obj2) {
                 // console.log("test " + obj);
                 // this.out('test' + obj);
