@@ -328,7 +328,7 @@
                    @change="positionSeek"
                    @input="positionShow">
             <b-btn-toolbar justify class="my-2 text-center">
-              <b-btn-group>
+              <b-btn-group class="m-1">
                 <b-btn class="mx-1" variant="outline-warning" v-tap="volDown">
                     <i class="oi oi-volume-low"></i>
                 </b-btn>
@@ -337,7 +337,7 @@
                 </b-btn>
               </b-btn-group>
               <b-btn-group>
-                <b-btn variant="outline-success" @click="fastbackward()">
+                <b-btn class="btn-lg" variant="outline-success" @click="fastbackward()">
                     <i class="oi oi-media-skip-backward"></i>
                 </b-btn>
                 <b-btn class="ml-1 btn-lg" variant="outline-success" @click="server.dlna('play').then(window.appView.out).catch(window.appView.out)">
@@ -352,7 +352,7 @@
                 <b-btn class="ml-1 btn-lg" variant="outline-success" @click="fastforward()">
                     <i class="oi oi-media-skip-forward"></i>
                 </b-btn>
-                <b-btn class="ml-1 btn-lg" variant="outline-success" @click="server.dlna_next().then(window.appView.out).catch(window.appView.out)">
+                <b-btn class="ml-1" variant="outline-success" @click="server.dlna_next().then(window.appView.out).catch(window.appView.out)">
                     <i class="oi oi-media-step-forward"></i>
                 </b-btn>
               </b-btn-group>
