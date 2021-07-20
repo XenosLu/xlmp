@@ -197,11 +197,14 @@ class DMRTracker(Thread):
         if not self.url_prefix:
             return False
         url = '%s%s' % (self.url_prefix, quote(src))
+        self.play(url)
+        return True
+
+    def play(self, url):
         self._url = url
         self._load_inprogess.set()
         asyncio.run_coroutine_threadsafe(self._load_coroutine(url), self._loop)
         logging.info('coroutine loaded')
-        return True
 
     # @asyncio.coroutine
     # def _load_coroutine(self, url):
@@ -569,6 +572,13 @@ def dlna_load(src, host):
     TRACKER.url_prefix = 'http://%s/video/' % host
     TRACKER.load(src)
     return 'loading %s' % src
+
+@JsonRpc.method
+@check_dmr_exist
+def dlna_play(url):
+    """load a url through DMR"""
+    TRACKER.play(url)
+    return 'loading %s' % url
 
 
 @JsonRpc.method
