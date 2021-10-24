@@ -7,6 +7,8 @@
 [![Docker Stars](https://img.shields.io/docker/stars/xenocider/xlmp.svg)](https://hub.docker.com/r/xenocider/xlmp/ "Docker Stars")
 [![Docker Automated](https://img.shields.io/docker/automated/xenocider/xlmp.svg)](https://hub.docker.com/r/xenocider/xlmp/ "Docker Automated")
 
+[![Auto Build Docker](https://github.com/XenosLu/xlmp/actions/workflows/main.yml/badge.svg)](https://github.com/XenosLu/xlmp/actions/workflows/main.yml)
+
 Updated in 2018.02.08
 
 
