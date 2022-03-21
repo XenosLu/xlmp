@@ -110,6 +110,11 @@
               <b-dropdown-item v-if="devMode" @click="fixBar.show = false">hide nav</b-dropdown-item>
               <b-dropdown-item v-if="devMode" @click="window.server = JsonRpc(jsonrpcAxios('/api'))">use ajax</b-dropdown-item>
             </b-nav-item-dropdown>
+            
+            <b-nav-item v-show="wpMode" @click="playNext(video.src)">
+              <i class="oi oi-media-step-forward"></i> Next
+            </b-nav-item>
+            
             <b-nav-item v-show="wpMode" @click="videoSizeToggle">${ video.sizeBtnText }</b-nav-item>
             <!-- web player rate menu -->
             <b-nav-item-dropdown v-show="wpMode" right>
@@ -121,6 +126,7 @@
               <b-dropdown-divider></b-dropdown-divider>
               <b-dropdown-item @click="rate(1)">1X</b-dropdown-item>
               <b-dropdown-divider></b-dropdown-divider>
+              <b-dropdown-item @click="rate(1.25)">1.25X</b-dropdown-item>
               <b-dropdown-item @click="rate(1.5)">1.5X</b-dropdown-item>
               <b-dropdown-item @click="rate(1.75)">1.75X</b-dropdown-item>
               <b-dropdown-item @click="rate(2)">2X</b-dropdown-item>
