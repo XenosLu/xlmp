@@ -449,11 +449,12 @@ window.appView = new Vue({
     });
 
 
-const nextVideo = document.querySelector('#nextVideo');
-nextVideo.addEventListener('click', e => {
-    //console.log(window.appView.$refs.video.src)
-    window.appView.playNext(window.appView.$refs.video.src)
-})
+// const nextVideo = document.querySelector('#nextVideo');
+// nextVideo.addEventListener('click', e => {
+    // //console.log(window.appView.$refs.video.src)
+    // // window.appView.playNext(window.appView.$refs.video.src)
+    // window.appView.playNext(window.appView.video.src)
+// })
 
 function webSocketLink(options) {
     var ws = new ReconnectingWebSocket(options.url);

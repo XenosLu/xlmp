@@ -315,7 +315,11 @@
                  poster controls preload="meta">
             No video support!
           </video>
-          <div id="nextVideo"><i class="oi oi-media-step-forward"></i></div>
+          <div id="nextVideo">
+            <b-btn size="sm" @click="playNext(video.src)">
+              <i class="oi oi-media-step-forward"></i>
+            </b-btn>
+          </div>
         </div>
       </div>
       <!-- video end-->
