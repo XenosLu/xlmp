@@ -317,7 +317,6 @@ window.appView = new Vue({
                 }
             },
             playNext: function (obj) {
-                
                 if(this.dlnaMode)
                     server.dlna_next(item.fullpath, window.location.host).then(window.appView.out).catch(window.appView.out)
                 else
