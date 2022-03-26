@@ -1,3 +1,31 @@
+#nextVideo {
+  position: absolute;
+  top: 0.45em;
+  left: 5.8em;
+  width: 2em;
+  height: 1.8em;
+  opacity: 0;
+  transition: opacity .3s ease;
+  /* cursor: pointer; */
+  
+  /* Additional styles just to increase visual appeal */
+  border-radius: 18%;
+  background: #888888;
+  color: #cccccc;
+  /* font-weight: bold; */
+  line-height: 200%;
+  text-align: center;
+  /* End */
+}
+
+video:hover~#nextVideo {
+  opacity: 1;
+}
+
+#nextVideo:hover {
+  opacity: 1;
+}
+
 body {
     background-color: #F1F2F6;
     -webkit-user-select: none;
