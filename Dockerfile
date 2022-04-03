@@ -27,6 +27,5 @@ EXPOSE 80
 # media folder:
 VOLUME /xlmp/media
 
-# ENTRYPOINT ["/bin/sh", "/xlmp/docker/docker-entrypoint.sh"]
 # CMD ["/usr/bin/supervisord", "-c", "/xlmp/docker/supervisord.conf"]
 CMD ["/bin/s6-svscan", "/xlmp/docker/s6/"]
