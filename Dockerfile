@@ -1,5 +1,5 @@
 ## xlmp
-FROM xenocider/image:python3.8.3
+FROM python:3.8.13-alpine3.14
 LABEL maintainer="xenos <xenos.lu@gmail.com>"
 
             # runit \
