@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /usr/bin/python3 /xlmp/xlmp.py
+exec python3 /xlmp/xlmp.py
