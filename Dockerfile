@@ -10,9 +10,8 @@ RUN apk add --no-cache \
             s6 &&\
     pip3 install tornado==5.1.1 &&\
     pip3 install xmltodict==0.11.0 &&\
-    mkdir -p /run/nginx &&\
     rm -f /etc/nginx/http.d/default.conf
-
+#     mkdir -p /run/nginx &&\
 # copy nginx config file
 COPY docker/xlmp.conf /etc/nginx/http.d/
 
