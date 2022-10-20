@@ -11,7 +11,7 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
-    uses: XenosLu/image/.github/workflows/build.yml@master
+    uses: XenosLu/img/.github/workflows/multi_build.yml@main
     with:
       username: xenocider
     secrets:
