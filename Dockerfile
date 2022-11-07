@@ -21,7 +21,7 @@ COPY docker/deploy /usr/local/bin
 # git clone
 RUN git clone https://github.com/XenosLu/xlmp.git /xlmp
 
-EXPOSE 80
+EXPOSE 20080
 
 # media folder:
 VOLUME /xlmp/media
