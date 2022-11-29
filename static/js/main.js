@@ -9,7 +9,8 @@ var icon = {
 function getShortName(path) {
     var pathList = path.split('/')
     var fileName = pathList[pathList.length - 1]
-    var shortName = fileName.replace(/\[.*\]/g, "")
+    var shortName = fileName.replace(/\[.*?\]/g, "")
+    
     return shortName
 }
 
