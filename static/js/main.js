@@ -6,9 +6,11 @@ var icon = {
     other: "oi-file"
 };
 
-function getFilename(path) {
+function getShortName(path) {
     var pathList = path.split('/')
-    return pathList[pathList.length - 1]
+    var fileName = pathList[pathList.length - 1]
+    var shortName = fileName.replace(/\[.*\]/g, "")
+    return shortName
 }
 
 function touchWebPlayer() {
