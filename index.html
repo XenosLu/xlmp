@@ -86,9 +86,9 @@
           </b-btn-group>
         </transition>
         <transition @enter="transitionPulse">
-          <b-btn-group v-show="!browserShow && video.src" class="mx-1">
-            <b-nav-text>${ video.src }</b-nav-text>
-          </b-btn-group>
+          <!-- <b-btn-group v-show="!browserShow && video.src" class="mx-1"> -->
+            <b-nav-text style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" class="mx-2" v-show="!browserShow && video.src">${ video.src }</b-nav-text>
+          <!-- </b-btn-group> -->
         </transition>
         <!-- browser menu end -->
         <b-btn v-show="browserShow" :pressed.sync="editMode" variant="outline-dark">
