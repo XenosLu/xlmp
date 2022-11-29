@@ -6,6 +6,12 @@ var icon = {
     other: "oi-file"
 };
 
+function getFilename(path)
+{
+    var pathList=path.split('/')
+    return pathList[pathList.length-1]
+}
+
 function touchWebPlayer() {
     var hammertimeVideo = new Hammer(document);
     hammertimeVideo.on("panleft panright swipeleft swiperight", function (ev) {
