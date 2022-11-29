@@ -8,7 +8,7 @@ var icon = {
 
 function getFilename(path) {
     var pathList = path.split('/')
-        return pathList[pathList.length - 1]
+    return pathList[pathList.length - 1]
 }
 
 function touchWebPlayer() {
