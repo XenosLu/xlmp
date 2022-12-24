@@ -518,7 +518,13 @@ function jsonrpcWS(jsonData) {
 var server = JsonRpc(jsonrpcWS);
 
 function fullscreenEnter() {
-    document.querySelector(".right-board").requestFullscreen()
+    var board = document.querySelector(".right-board");
+    if (board.requestFullscreen) {
+        board.requestFullscreen();
+    }
+    else if (board.webkitRequestFullScreen) {
+        board.webkitRequestFullScreen();
+    }
 }
 function fullscreenExit() {
     document.exitFullscreen()
