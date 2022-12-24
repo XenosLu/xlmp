@@ -516,3 +516,10 @@ function jsonrpcWS(jsonData) {
 
 //const server = JsonRpc(jsonrpcAxios('/api'));
 var server = JsonRpc(jsonrpcWS);
+
+function fullscreenEnter() {
+    document.querySelector(".right-board").requestFullscreen()
+}
+function fullscreenExit() {
+    document.exitFullscreen()
+}
