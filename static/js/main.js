@@ -13,6 +13,8 @@ function getShortName(path) {
     return shortName
 }
 
+const isIos = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+
 function touchWebPlayer() {
     var hammertimeVideo = new Hammer(document);
     hammertimeVideo.on("panleft panright swipeleft swiperight", function (ev) {
@@ -426,9 +428,9 @@ window.appView = new Vue({
         },
         created: function () {
             window.onresize = this.videoAdapt;
-            this.isIos = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-            this.isIos = true;
-            if (!this.isIos) {
+            //this.isIos = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+            //this.isIos = true;
+            if (!isIos) {
                 //this.fixBar.show = false;
                 document.onmousemove = this.showFixBar;
             }
@@ -519,13 +521,13 @@ var server = JsonRpc(jsonrpcWS);
 
 function fullscreenEnter() {
     var board = document.querySelector(".right-board");
-    if (board.requestFullscreen) {
+    if (isIos) {
+        board.webkitRequestFullScreen();
+    }
+    else if (board.requestFullscreen) {
         board.requestFullscreen();
     }
     else if (board.webkitRequestFullScreen) {
-        board.webkitRequestFullScreen();
-    }
-    else if (board.webkitEnterFullscreen) {
         board.webkitRequestFullScreen();
     }
 }
