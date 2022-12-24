@@ -525,6 +525,9 @@ function fullscreenEnter() {
     else if (board.webkitRequestFullScreen) {
         board.webkitRequestFullScreen();
     }
+    else if (board.webkitEnterFullscreen) {
+        board.webkitRequestFullScreen();
+    }
 }
 function fullscreenExit() {
     document.exitFullscreen()
