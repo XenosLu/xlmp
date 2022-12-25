@@ -132,8 +132,10 @@ window.appView = new Vue({
                 // this.video.style.WebkitFilter="contrast(50%)"
             },
             test: function (obj, obj2) {
-                // console.log("test " + obj);
-                // this.out('test' + obj);
+                const notificatonNew = document.querySelector("video");
+                
+                const shadowroot = notificatonNew.attachShadow({mode:'open'});
+                this.out('test ' + shadowroot);
             },
             transitionBounceIn: function (el, done) {
                 Velocity(el, 'stop');
